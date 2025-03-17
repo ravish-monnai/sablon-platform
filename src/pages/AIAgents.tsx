@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Edit2, Shield, Users, FileCheck, AlertTriangle, CreditCard } from "lucide-react"
+import { Plus, Edit2, Shield, Users, FileCheck, AlertTriangle, CreditCard, BrainCircuit } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 
@@ -39,9 +39,16 @@ const AIAgents = () => {
               <span>Cases/day:</span>
               <span className="font-medium">78</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-2">
               <span>Avg. resolution time:</span>
               <span className="font-medium">3.2 mins</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>Model:</span>
+              <span className="font-medium flex items-center">
+                <BrainCircuit className="h-3 w-3 mr-1 text-[#9b87f5]" />
+                GPT-4o
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
@@ -68,9 +75,16 @@ const AIAgents = () => {
               <span>Cases/day:</span>
               <span className="font-medium">142</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-2">
               <span>Avg. resolution time:</span>
               <span className="font-medium">1.8 mins</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>Model:</span>
+              <span className="font-medium flex items-center">
+                <BrainCircuit className="h-3 w-3 mr-1 text-[#33C3F0]" />
+                Claude 3 Sonnet
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
@@ -97,9 +111,16 @@ const AIAgents = () => {
               <span>Cases/day:</span>
               <span className="font-medium">45</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-2">
               <span>Avg. resolution time:</span>
               <span className="font-medium">5.7 mins</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>Model:</span>
+              <span className="font-medium flex items-center">
+                <BrainCircuit className="h-3 w-3 mr-1 text-[#F97316]" />
+                Llama 3.1 70B
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
@@ -126,9 +147,16 @@ const AIAgents = () => {
               <span>Cases/day:</span>
               <span className="font-medium">63</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-2">
               <span>Avg. resolution time:</span>
               <span className="font-medium">8.4 mins</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>Model:</span>
+              <span className="font-medium flex items-center">
+                <BrainCircuit className="h-3 w-3 mr-1 text-[#D946EF]" />
+                GPT-4o Mini
+              </span>
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
