@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { 
@@ -291,18 +290,15 @@ const CaseReview = () => {
       </div>
 
       <Tabs defaultValue="summary" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-5 mb-4">
+        <TabsList className="grid grid-cols-4 mb-4">
           <TabsTrigger value="summary" className="flex items-center">
-            <FileText className="h-4 w-4 mr-2" /> Summary
+            <BrainCircuit className="h-4 w-4 mr-2" /> Summary & Analysis
           </TabsTrigger>
           <TabsTrigger value="identity" className="flex items-center">
             <User className="h-4 w-4 mr-2" /> Identity
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center">
             <Activity className="h-4 w-4 mr-2" /> Activity
-          </TabsTrigger>
-          <TabsTrigger value="ai-reasoning" className="flex items-center">
-            <BrainCircuit className="h-4 w-4 mr-2" /> AI Reasoning
           </TabsTrigger>
           <TabsTrigger value="network" className="flex items-center">
             <Network className="h-4 w-4 mr-2" /> Network
@@ -311,6 +307,7 @@ const CaseReview = () => {
 
         <TabsContent value="summary" className="space-y-4">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+            {/* Case Overview card */}
             <div className="lg:col-span-2">
               <Card>
                 <CardHeader className="pb-2">
@@ -376,10 +373,54 @@ const CaseReview = () => {
                       </div>
                     </div>
                   )}
+
+                  {/* AI Reasoning section - Moved from the separate tab */}
+                  <div className="mt-6">
+                    <Separator className="my-4" />
+                    <div className="flex items-center mb-3">
+                      <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                      <h3 className="font-medium text-[#9b87f5]">AI Analysis</h3>
+                    </div>
+                    <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
+                      <div className="flex items-start mb-3">
+                        <Cpu className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
+                        <div>
+                          <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
+                          <p className="text-sm mt-1">{caseData.reasoning}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 grid grid-cols-2 gap-4">
+                      {caseData.decisionFactors.map((factor: any, idx: number) => (
+                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
+                          <div>
+                            <p className="font-medium">{factor.factor}</p>
+                            <p className="text-xs text-muted-foreground">Weight: {factor.weight * 100}%</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+                              <div 
+                                className={`h-full ${
+                                  factor.score >= 80 ? "bg-red-500" :
+                                  factor.score >= 60 ? "bg-red-400" :
+                                  factor.score >= 40 ? "bg-amber-400" :
+                                  "bg-green-500"
+                                }`} 
+                                style={{ width: `${factor.score}%` }}
+                              ></div>
+                            </div>
+                            <span className="text-xs font-medium">{factor.score}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </CardContent>
               </Card>
             </div>
 
+            {/* Case Info card */}
             <Card>
               <CardHeader className="pb-2">
                 <div className="flex items-center">
@@ -431,6 +472,47 @@ const CaseReview = () => {
                       {caseData.riskLevel === "High" && "Manual review is recommended."}
                       {caseData.riskLevel === "Critical" && "Rejection is recommended."}
                     </p>
+                  </div>
+
+                  {/* Key Risk Indicators section - Moved from the AI tab */}
+                  <Separator className="my-3" />
+                  <h3 className="font-medium mb-2">Key Risk Indicators</h3>
+                  <div className="space-y-2">
+                    {[
+                      {
+                        name: "Identity Consistency",
+                        status: caseData.riskScore < 60 ? "pass" : "flag",
+                        details: caseData.riskScore < 60 
+                          ? "All identity information is consistent with our records." 
+                          : "There are inconsistencies in the provided identity information."
+                      },
+                      {
+                        name: "Document Authenticity",
+                        status: caseData.documents[0].verified ? "pass" : "flag",
+                        details: caseData.documents[0].verified
+                          ? "Document verification passed all security checks."
+                          : "Document verification found potential issues with authenticity."
+                      },
+                      {
+                        name: "Behavioral Patterns",
+                        status: caseData.riskScore < 70 ? "pass" : "flag",
+                        details: caseData.riskScore < 70
+                          ? "User behavior is consistent with historical patterns."
+                          : "Unusual behavior detected in recent activities."
+                      }
+                    ].map((indicator, idx) => (
+                      <div key={idx} className="flex items-start p-2 border rounded-md">
+                        {indicator.status === "pass" ? (
+                          <UserCheck className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                        ) : (
+                          <UserX className="h-5 w-5 mr-2 text-amber-500 mt-0.5" />
+                        )}
+                        <div>
+                          <p className="font-medium">{indicator.name}</p>
+                          <p className="text-sm text-muted-foreground">{indicator.details}</p>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </CardContent>
@@ -607,99 +689,6 @@ const CaseReview = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="ai-reasoning" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center">
-                <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                <CardTitle className="text-lg">AI Analysis</CardTitle>
-              </div>
-              <CardDescription>
-                Generated by our fraud detection AI agent
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
-                  <div className="flex items-start mb-3">
-                    <Cpu className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
-                    <div>
-                      <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
-                      <p className="text-sm mt-1">{caseData.reasoning}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  {caseData.decisionFactors.map((factor: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                      <div>
-                        <p className="font-medium">{factor.factor}</p>
-                        <p className="text-xs text-muted-foreground">Weight: {factor.weight * 100}%</p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                          <div 
-                            className={`h-full ${
-                              factor.score >= 80 ? "bg-red-500" :
-                              factor.score >= 60 ? "bg-red-400" :
-                              factor.score >= 40 ? "bg-amber-400" :
-                              "bg-green-500"
-                            }`} 
-                            style={{ width: `${factor.score}%` }}
-                          ></div>
-                        </div>
-                        <span className="text-xs font-medium">{factor.score}</span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <div>
-                  <h3 className="font-medium mb-2">Key Risk Indicators</h3>
-                  <div className="space-y-2">
-                    {[
-                      {
-                        name: "Identity Consistency",
-                        status: caseData.riskScore < 60 ? "pass" : "flag",
-                        details: caseData.riskScore < 60 
-                          ? "All identity information is consistent with our records." 
-                          : "There are inconsistencies in the provided identity information."
-                      },
-                      {
-                        name: "Document Authenticity",
-                        status: caseData.documents[0].verified ? "pass" : "flag",
-                        details: caseData.documents[0].verified
-                          ? "Document verification passed all security checks."
-                          : "Document verification found potential issues with authenticity."
-                      },
-                      {
-                        name: "Behavioral Patterns",
-                        status: caseData.riskScore < 70 ? "pass" : "flag",
-                        details: caseData.riskScore < 70
-                          ? "User behavior is consistent with historical patterns."
-                          : "Unusual behavior detected in recent activities."
-                      }
-                    ].map((indicator, idx) => (
-                      <div key={idx} className="flex items-start p-2 border rounded-md">
-                        {indicator.status === "pass" ? (
-                          <UserCheck className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        ) : (
-                          <UserX className="h-5 w-5 mr-2 text-amber-500 mt-0.5" />
-                        )}
-                        <div>
-                          <p className="font-medium">{indicator.name}</p>
-                          <p className="text-sm text-muted-foreground">{indicator.details}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
         <TabsContent value="network" className="space-y-4">
           <Card>
             <CardHeader className="pb-2">
@@ -744,28 +733,4 @@ const CaseReview = () => {
 
       {actionDialog.isOpen && (
         <CaseActionDialog
-          isOpen={actionDialog.isOpen}
-          actionType={actionDialog.actionType}
-          onClose={closeActionDialog}
-          caseData={caseData}
-        />
-      )}
-
-      <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
-        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
-          <SheetHeader>
-            <SheetTitle>Case Chat Assistant</SheetTitle>
-            <SheetDescription>
-              Chat with our AI assistant about this case
-            </SheetDescription>
-          </SheetHeader>
-          <div className="mt-6">
-            <CaseChat caseData={caseData} />
-          </div>
-        </SheetContent>
-      </Sheet>
-    </div>
-  );
-};
-
-export default CaseReview;
+          caseId
