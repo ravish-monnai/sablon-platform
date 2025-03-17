@@ -1,31 +1,19 @@
 
 import React from 'react';
-import { ReactFlow, Background, Controls } from '@xyflow/react';
+import { ReactFlow, Background, Controls, Node, Edge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
 // Define the expected shape of node data
 interface NodeData {
   label: string;
   description: string;
-  icon?: string;
+  icon?: React.ReactNode;
   type?: string;
 }
 
 interface WorkflowPreviewProps {
-  nodes: Array<{
-    id: string;
-    type?: string;
-    data: NodeData;
-    position: { x: number; y: number };
-    style?: React.CSSProperties;
-  }>;
-  edges: Array<{
-    id: string;
-    source: string;
-    target: string;
-    animated?: boolean;
-    style?: React.CSSProperties;
-  }>;
+  nodes: Array<Node<NodeData>>;
+  edges: Array<Edge>;
 }
 
 const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
@@ -40,10 +28,10 @@ const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
         elementsSelectable={false}
         panOnDrag={false}
         zoomOnScroll={false}
-        style={{ backgroundColor: '#f9fafb' }}
+        className="bg-gray-50"
       >
         <Controls showInteractive={false} />
-        <Background />
+        <Background color="#f0f0f0" gap={16} />
       </ReactFlow>
     </div>
   );

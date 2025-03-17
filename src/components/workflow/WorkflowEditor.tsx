@@ -11,17 +11,20 @@ import {
   Panel
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { Eye, Edit2 } from 'lucide-react';
+import { Eye, Edit2, Database, Brain, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WorkflowPreview from './WorkflowPreview';
 
-// Define a type for the node data to ensure consistency
+// Define the node data type to ensure consistency
 interface NodeData {
   label: string;
   description: string;
-  icon?: string;
+  icon?: React.ReactNode;
   type?: string;
 }
+
+// Custom Node Types
+const nodeTypes = {};
 
 // Initial nodes for the fraud detection workflow
 const initialNodes = [
@@ -30,7 +33,8 @@ const initialNodes = [
     type: 'input',
     data: { 
       label: 'Customer Data Collection',
-      description: 'Collect phone, email, IP address' 
+      description: 'Collect phone, email, IP address',
+      icon: <Database className="text-monnai-blue" size={20} />
     },
     position: { x: 250, y: 0 },
     style: { 
@@ -44,7 +48,8 @@ const initialNodes = [
     id: '2',
     data: { 
       label: 'Fraud Risk Model',
-      description: 'Calculate risk score' 
+      description: 'Calculate risk score',
+      icon: <Brain className="text-monnai-pink" size={20} />
     },
     position: { x: 250, y: 100 },
     style: { width: 200, padding: '10px' }
@@ -53,7 +58,8 @@ const initialNodes = [
     id: '3',
     data: { 
       label: 'Decision Engine',
-      description: 'Auto-approve, auto-reject, or route to review' 
+      description: 'Auto-approve, auto-reject, or route to review',
+      icon: <Brain className="text-monnai-blue" size={20} />
     },
     position: { x: 250, y: 200 },
     style: { width: 200, padding: '10px' }
@@ -63,7 +69,8 @@ const initialNodes = [
     type: 'output',
     data: { 
       label: 'AI-Assisted Review',
-      description: 'Manual review by fraud agents' 
+      description: 'Manual review by fraud agents',
+      icon: <Users className="text-monnai-yellow" size={20} />
     },
     position: { x: 250, y: 300 },
     style: { 
@@ -77,33 +84,33 @@ const initialNodes = [
     data: { 
       label: 'Email Database',
       description: 'Email verification data source',
-      icon: '📧',
+      icon: <Database className="text-monnai-yellow" size={20} />,
       type: 'datasource'
     },
     position: { x: 0, y: 50 },
-    style: { backgroundColor: '#e6f7ff', padding: '10px' }
+    style: { width: 150, backgroundColor: '#fffaed', padding: '10px' }
   },
   {
     id: 'model-1',
     data: { 
       label: 'Fraud Detection Model v2.4',
       description: 'Machine learning model for fraud detection',
-      icon: '🤖',
+      icon: <Brain className="text-monnai-pink" size={20} />,
       type: 'model'
     },
     position: { x: 0, y: 150 },
-    style: { backgroundColor: '#f0f0ff', padding: '10px' }
+    style: { width: 150, backgroundColor: '#fff0f8', padding: '10px' }
   },
   {
     id: 'agent-1',
     data: { 
       label: 'Fraud Risk Agent Team',
       description: 'Human agents for manual review',
-      icon: '👥',
+      icon: <Users className="text-monnai-blue" size={20} />,
       type: 'agent'
     },
     position: { x: 0, y: 250 },
-    style: { backgroundColor: '#fff0f0', padding: '10px' }
+    style: { width: 150, backgroundColor: '#f0f0ff', padding: '10px' }
   }
 ];
 
@@ -162,18 +169,24 @@ const WorkflowEditor = () => {
 
       // Create a description based on the node type
       let description = '';
+      let icon;
+      
       switch (type) {
         case 'datasource':
           description = 'External data source for verification';
+          icon = <Database className="text-monnai-yellow" size={20} />;
           break;
         case 'model':
           description = 'AI/ML model for analysis';
+          icon = <Brain className="text-monnai-pink" size={20} />;
           break;
         case 'agent':
           description = 'Human agent or team for review';
+          icon = <Users className="text-monnai-blue" size={20} />;
           break;
         default:
           description = 'Custom workflow component';
+          icon = null;
       }
 
       const newNode = {
@@ -182,18 +195,20 @@ const WorkflowEditor = () => {
         position,
         data: { 
           label: `New ${type}`,
-          description, // Add the required description field
-          icon: type === 'datasource' ? '📊' : type === 'model' ? '🧠' : '👤',
+          description,
+          icon,
           type
         },
         style: { 
-          width: 150, // Add width to match the style requirements
+          width: 150,
           backgroundColor: type === 'datasource' 
-            ? '#e6f7ff' 
+            ? '#fffaed' 
             : type === 'model' 
-              ? '#f0f0ff' 
-              : '#fff0f0',
-          padding: '10px'
+              ? '#fff0f8' 
+              : '#f0f0ff',
+          padding: '10px',
+          borderRadius: '6px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
         }
       };
 
@@ -228,31 +243,34 @@ const WorkflowEditor = () => {
       <div className="flex justify-between mb-2">
         <div className="flex flex-row space-x-2">
           <div 
-            className="border rounded-md p-2 bg-blue-50 cursor-grab"
+            className="border rounded-md p-2 bg-blue-50 cursor-grab flex items-center"
             draggable
             onDragStart={(event) => {
               event.dataTransfer.setData('application/reactflow/type', 'datasource');
             }}
           >
-            📊 Data Source
+            <Database className="text-monnai-yellow mr-2" size={16} />
+            <span>Data Source</span>
           </div>
           <div 
-            className="border rounded-md p-2 bg-purple-50 cursor-grab"
+            className="border rounded-md p-2 bg-purple-50 cursor-grab flex items-center"
             draggable
             onDragStart={(event) => {
               event.dataTransfer.setData('application/reactflow/type', 'model');
             }}
           >
-            🧠 Model
+            <Brain className="text-monnai-pink mr-2" size={16} />
+            <span>Model</span>
           </div>
           <div 
-            className="border rounded-md p-2 bg-red-50 cursor-grab"
+            className="border rounded-md p-2 bg-red-50 cursor-grab flex items-center"
             draggable
             onDragStart={(event) => {
               event.dataTransfer.setData('application/reactflow/type', 'agent');
             }}
           >
-            👤 Agent
+            <Users className="text-monnai-blue mr-2" size={16} />
+            <span>Agent</span>
           </div>
         </div>
         <Button variant="outline" size="sm" onClick={togglePreviewMode}>
@@ -269,14 +287,27 @@ const WorkflowEditor = () => {
           onDrop={onDrop}
           onDragOver={onDragOver}
           onNodeDragStart={onNodeDragStart}
+          nodeTypes={nodeTypes}
           fitView
+          className="bg-gray-50"
         >
-          <Background />
+          <Background color="#f0f0f0" gap={16} />
           <Controls />
-          <MiniMap />
+          <MiniMap 
+            nodeColor={(node) => {
+              if (node.data.type === 'datasource') return '#fffaed';
+              if (node.data.type === 'model') return '#fff0f8';
+              if (node.data.type === 'agent') return '#f0f0ff';
+              if (node.type === 'input') return '#e6f0ff';
+              if (node.type === 'output') return '#f5f5f5';
+              return '#ffffff';
+            }}
+            zoomable 
+            pannable
+          />
           <Panel position="top-left">
-            <div className="bg-white p-2 rounded shadow-sm text-xs">
-              Drag and drop elements to create your workflow
+            <div className="bg-white p-3 rounded shadow-sm text-xs">
+              <span className="text-monnai-blue font-medium">Monnai</span> Fraud Detection Workflow
             </div>
           </Panel>
         </ReactFlow>
