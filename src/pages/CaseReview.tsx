@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { 
@@ -27,11 +26,12 @@ import {
   User, 
   X, 
   BrainCircuit,
-  Lightbulb
+  Lightbulb,
+  ArrowUp
 } from "lucide-react";
 import CaseChat from "@/components/cases/CaseChat";
+import CaseActionDialog from "@/components/cases/CaseActionDialog";
 
-// Import case data generator from Cases.tsx
 const journeys = [
   "Account Opening", 
   "Transaction Monitoring", 
@@ -40,7 +40,6 @@ const journeys = [
   "Fraud Detection"
 ];
 
-// Generate the same cases as in Cases.tsx
 const generateCases = () => {
   const cases = [];
   const riskLevels = ["Low", "Medium", "High", "Critical"];
@@ -52,20 +51,18 @@ const generateCases = () => {
   };
   
   for (let i = 1; i <= 100; i++) {
-    const journeyIndex = Math.floor(i / 20) % journeys.length; // Distribute evenly across journeys
+    const journeyIndex = Math.floor(i / 20) % journeys.length;
     const journey = journeys[journeyIndex];
     
     const riskIndex = Math.floor(Math.random() * 4);
     const riskLevel = riskLevels[riskIndex];
     
-    // Calculate risk score based on risk level
     let riskScore;
     if (riskLevel === "Low") riskScore = Math.floor(Math.random() * 30) + 10;
     else if (riskLevel === "Medium") riskScore = Math.floor(Math.random() * 20) + 40;
     else if (riskLevel === "High") riskScore = Math.floor(Math.random() * 20) + 65;
     else riskScore = Math.floor(Math.random() * 15) + 85;
     
-    // Status is more likely to be pending for high risk, approved for low risk
     let statusProbability;
     if (riskLevel === "Low") statusProbability = [0.2, 0.7, 0.1];
     else if (riskLevel === "Medium") statusProbability = [0.4, 0.4, 0.2];
@@ -83,14 +80,12 @@ const generateCases = () => {
     
     const status = statuses[statusIndex];
 
-    // Generate additional data for case review
     const email = `customer${i}@example.com`;
     const phone = `+1${Math.floor(Math.random() * 900) + 100}${Math.floor(Math.random() * 900) + 100}${Math.floor(Math.random() * 9000) + 1000}`;
     const ipAddress = `${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}`;
     const deviceId = `DEV-${Math.floor(Math.random() * 1000000)}`;
     const location = ["United States", "Canada", "United Kingdom", "Germany", "France", "Australia", "Japan", "Brazil"][Math.floor(Math.random() * 8)];
     
-    // Add anomaly flags
     const anomalyFlags = [];
     if (riskScore > 60) {
       if (Math.random() > 0.5) anomalyFlags.push("Multiple failed login attempts");
@@ -100,7 +95,6 @@ const generateCases = () => {
       if (Math.random() > 0.9) anomalyFlags.push("Location inconsistency");
     }
     
-    // Generate LLM reasoning based on risk level
     let reasoning = "";
     if (riskLevel === "Low") {
       reasoning = "The customer has a consistent usage pattern and all identity verification steps were completed successfully. The behavioral patterns match historical data, and there are no significant anomalies detected in the recent activities.";
@@ -128,7 +122,6 @@ const generateCases = () => {
       location,
       anomalyFlags,
       reasoning,
-      // Add verification data
       emailVerified: Math.random() > 0.3,
       phoneVerified: Math.random() > 0.4,
       documents: [
@@ -138,7 +131,6 @@ const generateCases = () => {
           score: Math.floor(Math.random() * 30) + (riskLevel === "High" || riskLevel === "Critical" ? 40 : 70)
         }
       ],
-      // Decision factors
       decisionFactors: [
         {
           factor: "Identity Verification",
@@ -174,14 +166,34 @@ const CaseReview = () => {
   const [caseData, setCaseData] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("summary");
+  const [actionDialog, setActionDialog] = useState<{
+    isOpen: boolean;
+    actionType: "approve" | "reject" | "escalate";
+  }>({
+    isOpen: false,
+    actionType: "approve"
+  });
 
   useEffect(() => {
-    // Find the case by ID
     const foundCase = allCases.find(c => c.id === caseId);
     if (foundCase) {
       setCaseData(foundCase);
     }
   }, [caseId]);
+
+  const openActionDialog = (actionType: "approve" | "reject" | "escalate") => {
+    setActionDialog({
+      isOpen: true,
+      actionType
+    });
+  };
+
+  const closeActionDialog = () => {
+    setActionDialog({
+      ...actionDialog,
+      isOpen: false
+    });
+  };
 
   if (!caseData) {
     return (
@@ -199,7 +211,6 @@ const CaseReview = () => {
     );
   }
 
-  // Calculate overall risk score based on decision factors
   const weightedScore = caseData.decisionFactors.reduce(
     (acc: number, factor: { score: number; weight: number }) => 
       acc + factor.score * factor.weight, 
@@ -225,11 +236,29 @@ const CaseReview = () => {
         <div className="flex gap-2">
           {caseData.status === "Pending Review" && (
             <>
-              <Button size="sm" variant="outline" className="border-green-500 text-green-600 hover:bg-green-50">
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-green-500 text-green-600 hover:bg-green-50"
+                onClick={() => openActionDialog("approve")}
+              >
                 <Check className="h-4 w-4 mr-1" /> Approve
               </Button>
-              <Button size="sm" variant="outline" className="border-red-500 text-red-600 hover:bg-red-50">
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-red-500 text-red-600 hover:bg-red-50"
+                onClick={() => openActionDialog("reject")}
+              >
                 <X className="h-4 w-4 mr-1" /> Reject
+              </Button>
+              <Button 
+                size="sm" 
+                variant="outline" 
+                className="border-amber-500 text-amber-600 hover:bg-amber-50"
+                onClick={() => openActionDialog("escalate")}
+              >
+                <ArrowUp className="h-4 w-4 mr-1" /> Escalate
               </Button>
             </>
           )}
@@ -679,8 +708,16 @@ const CaseReview = () => {
           </div>
         </SheetContent>
       </Sheet>
+
+      <CaseActionDialog
+        caseId={caseData.id}
+        actionType={actionDialog.actionType}
+        isOpen={actionDialog.isOpen}
+        onClose={closeActionDialog}
+      />
     </div>
   );
 };
 
 export default CaseReview;
+
