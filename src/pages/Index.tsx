@@ -1,11 +1,64 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
+  const navigate = useNavigate();
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen flex items-center justify-center bg-white">
+      <div className="text-center max-w-3xl px-4">
+        <div className="mb-6">
+          <img 
+            src="/lovable-uploads/b63e774c-c6a1-4d5e-b720-9c788bb548f2.png" 
+            alt="Monnai Brand Colors" 
+            className="mx-auto w-full max-w-lg"
+          />
+        </div>
+        
+        <h1 className="text-5xl font-bold mb-6">
+          <span className="monnai-gradient-text">Monnai</span> AI Risk Decisioning
+        </h1>
+        
+        <p className="text-xl text-gray-600 mb-8">
+          Low-code platform for building, deploying, and monitoring AI-powered risk decisioning workflows
+        </p>
+        
+        <div className="flex flex-col md:flex-row gap-4 justify-center">
+          <Button 
+            onClick={() => navigate("/")}
+            className="bg-monnai-blue hover:bg-monnai-blue/90 text-white"
+          >
+            Go to Dashboard
+          </Button>
+          
+          <Button 
+            onClick={() => navigate("/ai-journeys")}
+            className="monnai-gradient-bg hover:opacity-90 text-white border-none"
+          >
+            Explore AI Journeys
+          </Button>
+        </div>
+        
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="p-6 border rounded-lg shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-monnai-blue mb-4 flex items-center justify-center text-white">1</div>
+            <h3 className="text-xl font-semibold mb-2">Build</h3>
+            <p className="text-gray-600">Create AI-powered decisioning workflows with our intuitive no-code builder</p>
+          </div>
+          
+          <div className="p-6 border rounded-lg shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-monnai-pink mb-4 flex items-center justify-center text-white">2</div>
+            <h3 className="text-xl font-semibold mb-2">Deploy</h3>
+            <p className="text-gray-600">Deploy your models to production with one click</p>
+          </div>
+          
+          <div className="p-6 border rounded-lg shadow-sm">
+            <div className="w-12 h-12 rounded-full bg-monnai-yellow mb-4 flex items-center justify-center text-white">3</div>
+            <h3 className="text-xl font-semibold mb-2">Monitor</h3>
+            <p className="text-gray-600">Track performance and make data-driven decisions</p>
+          </div>
+        </div>
       </div>
     </div>
   );

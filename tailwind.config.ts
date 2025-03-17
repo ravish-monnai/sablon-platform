@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,6 +62,17 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Brand colors
+				"monnai-blue": "#5100ff",
+				"deep-black": "#000000",
+				"clear-white": "#ffffff",
+				"monnai-yellow": "#fb9400",
+				"monnai-pink": "#ff00aa",
+				"monnai-gradient": {
+					from: "#fb9400",
+					via: "#ff00aa",
+					to: "#5100ff"
 				}
 			},
 			borderRadius: {
@@ -89,6 +101,9 @@ export default {
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out'
+			},
+			backgroundImage: {
+				'monnai-gradient': 'linear-gradient(90deg, #fb9400, #ff00aa, #5100ff)'
 			}
 		}
 	},
