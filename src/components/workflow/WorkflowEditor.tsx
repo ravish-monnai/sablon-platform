@@ -15,6 +15,14 @@ import { Eye, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WorkflowPreview from './WorkflowPreview';
 
+// Define a type for the node data to ensure consistency
+interface NodeData {
+  label: string;
+  description: string;
+  icon?: string;
+  type?: string;
+}
+
 // Initial nodes for the fraud detection workflow
 const initialNodes = [
   {
@@ -68,6 +76,7 @@ const initialNodes = [
     id: 'datasource-1',
     data: { 
       label: 'Email Database',
+      description: 'Email verification data source',
       icon: '📧',
       type: 'datasource'
     },
@@ -78,6 +87,7 @@ const initialNodes = [
     id: 'model-1',
     data: { 
       label: 'Fraud Detection Model v2.4',
+      description: 'Machine learning model for fraud detection',
       icon: '🤖',
       type: 'model'
     },
@@ -88,6 +98,7 @@ const initialNodes = [
     id: 'agent-1',
     data: { 
       label: 'Fraud Risk Agent Team',
+      description: 'Human agents for manual review',
       icon: '👥',
       type: 'agent'
     },
@@ -149,16 +160,34 @@ const WorkflowEditor = () => {
         y: event.clientY - event.target.getBoundingClientRect().top,
       };
 
+      // Create a description based on the node type
+      let description = '';
+      switch (type) {
+        case 'datasource':
+          description = 'External data source for verification';
+          break;
+        case 'model':
+          description = 'AI/ML model for analysis';
+          break;
+        case 'agent':
+          description = 'Human agent or team for review';
+          break;
+        default:
+          description = 'Custom workflow component';
+      }
+
       const newNode = {
         id: `${type}-${Date.now()}`,
         type: 'default',
         position,
         data: { 
           label: `New ${type}`,
+          description, // Add the required description field
           icon: type === 'datasource' ? '📊' : type === 'model' ? '🧠' : '👤',
           type
         },
         style: { 
+          width: 150, // Add width to match the style requirements
           backgroundColor: type === 'datasource' 
             ? '#e6f7ff' 
             : type === 'model' 

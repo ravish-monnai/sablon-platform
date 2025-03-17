@@ -3,9 +3,29 @@ import React from 'react';
 import { ReactFlow, Background, Controls } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
+// Define the expected shape of node data
+interface NodeData {
+  label: string;
+  description: string;
+  icon?: string;
+  type?: string;
+}
+
 interface WorkflowPreviewProps {
-  nodes: any[];
-  edges: any[];
+  nodes: Array<{
+    id: string;
+    type?: string;
+    data: NodeData;
+    position: { x: number; y: number };
+    style?: React.CSSProperties;
+  }>;
+  edges: Array<{
+    id: string;
+    source: string;
+    target: string;
+    animated?: boolean;
+    style?: React.CSSProperties;
+  }>;
 }
 
 const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
