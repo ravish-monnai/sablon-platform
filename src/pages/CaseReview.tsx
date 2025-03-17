@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -264,7 +263,6 @@ const CaseReview = () => {
       {isChatOpen && (
         <CaseChat
           caseData={caseData}
-          isOpen={isChatOpen}
           onClose={() => setIsChatOpen(false)}
         />
       )}
