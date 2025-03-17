@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -8,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import WorkflowEditor from "@/components/workflow/WorkflowEditor"
 
 const AIJourneys = () => {
   const [showFraudWorkflow, setShowFraudWorkflow] = useState(false)
@@ -99,7 +99,7 @@ const FraudDetectionWorkflow = ({
 }) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-5xl">
         <DialogHeader>
           <DialogTitle>Fraud Detection Workflow</DialogTitle>
         </DialogHeader>
@@ -114,48 +114,7 @@ const FraudDetectionWorkflow = ({
           </TabsList>
           
           <TabsContent value="overview" className="p-4 border rounded-md">
-            <h3 className="text-lg font-semibold mb-2">Workflow Overview</h3>
-            <p className="mb-4">This workflow processes new customer data through a fraud risk assessment model and determines appropriate actions based on the risk score.</p>
-            
-            <div className="space-y-4">
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-700 font-bold">1</div>
-                <div className="ml-4">
-                  <h4 className="font-medium">Collect Customer Data</h4>
-                  <p className="text-sm text-gray-500">Capture phone number, email and IP address from customer</p>
-                </div>
-              </div>
-              
-              <div className="border-l-2 border-dashed border-gray-300 h-6 ml-5"></div>
-              
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-700 font-bold">2</div>
-                <div className="ml-4">
-                  <h4 className="font-medium">Calculate Fraud Risk Score</h4>
-                  <p className="text-sm text-gray-500">Process data through fraud detection model</p>
-                </div>
-              </div>
-              
-              <div className="border-l-2 border-dashed border-gray-300 h-6 ml-5"></div>
-              
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 font-bold">3</div>
-                <div className="ml-4">
-                  <h4 className="font-medium">Automated Decision</h4>
-                  <p className="text-sm text-gray-500">Auto-approve or reject based on score thresholds</p>
-                </div>
-              </div>
-              
-              <div className="border-l-2 border-dashed border-gray-300 h-6 ml-5"></div>
-              
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-700 font-bold">4</div>
-                <div className="ml-4">
-                  <h4 className="font-medium">Manual Review</h4>
-                  <p className="text-sm text-gray-500">AI-assisted review by fraud agents for medium-risk cases</p>
-                </div>
-              </div>
-            </div>
+            <WorkflowEditor />
           </TabsContent>
           
           <TabsContent value="step1" className="space-y-4 p-4 border rounded-md">
