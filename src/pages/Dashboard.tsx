@@ -123,7 +123,7 @@ const Dashboard = () => {
               </div>
               <div className="flex justify-between">
                 <span>Transactions</span>
-                <span className="font-bold">743</span>
+                <span className="font-bold">7,409</span>
               </div>
             </div>
           </CardContent>
