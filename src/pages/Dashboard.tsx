@@ -54,8 +54,8 @@ const Dashboard = () => {
                 
                 <h4 className="font-medium mt-2">Risk Distribution</h4>
                 
-                <div className="flex items-center justify-center h-40">
-                  <ResponsiveContainer width="100%" height="100%">
+                <div className="h-40">
+                  <ChartContainer config={chartConfig} className="h-full">
                     <PieChart>
                       <Pie
                         data={riskData}
@@ -71,9 +71,9 @@ const Dashboard = () => {
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
-                      <Tooltip content={<ChartTooltipContent />} />
+                      <ChartTooltip content={<ChartTooltipContent />} />
                     </PieChart>
-                  </ResponsiveContainer>
+                  </ChartContainer>
                 </div>
                 
                 <div className="space-y-2 mt-2">
