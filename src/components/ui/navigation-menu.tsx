@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import * as NavigationMenuPrimitive from "@radix-ui/react-navigation-menu"
 import { cva } from "class-variance-authority"
@@ -79,6 +80,37 @@ NavigationMenuContent.displayName = NavigationMenuPrimitive.Content.displayName
 
 const NavigationMenuLink = NavigationMenuPrimitive.Link
 
+// Create a new component that wraps NavigationMenuLink with status indicators
+interface StatusNavigationMenuLinkProps extends React.ComponentPropsWithoutRef<typeof NavigationMenuLink> {
+  isActive?: boolean
+  showStatus?: boolean
+}
+
+const StatusNavigationMenuLink = React.forwardRef<
+  React.ElementRef<typeof NavigationMenuLink>,
+  StatusNavigationMenuLinkProps
+>(({ className, children, isActive = false, showStatus = true, ...props }, ref) => {
+  return (
+    <NavigationMenuLink
+      ref={ref}
+      className={cn(
+        navigationMenuTriggerStyle(),
+        !isActive && "opacity-70",
+        className
+      )}
+      {...props}
+    >
+      <span className="flex items-center gap-2">
+        {children}
+        {showStatus && (
+          <span className={`w-2 h-2 rounded-full ${isActive ? "bg-green-500" : "bg-red-500"}`} />
+        )}
+      </span>
+    </NavigationMenuLink>
+  )
+})
+StatusNavigationMenuLink.displayName = "StatusNavigationMenuLink"
+
 const NavigationMenuViewport = React.forwardRef<
   React.ElementRef<typeof NavigationMenuPrimitive.Viewport>,
   React.ComponentPropsWithoutRef<typeof NavigationMenuPrimitive.Viewport>
@@ -123,6 +155,7 @@ export {
   NavigationMenuContent,
   NavigationMenuTrigger,
   NavigationMenuLink,
+  StatusNavigationMenuLink,
   NavigationMenuIndicator,
   NavigationMenuViewport,
 }

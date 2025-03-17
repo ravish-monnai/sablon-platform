@@ -17,6 +17,23 @@ import DashboardLayout from "./components/dashboard/DashboardLayout";
 
 const queryClient = new QueryClient();
 
+// Define active routes for the application
+export const activeRoutes = {
+  dashboard: true,
+  aiJourneys: true,
+  aiAgents: true,
+  models: true,
+  data: true,
+  cases: false,
+  transactions: {
+    main: true,
+    details: {
+      "TRX-001": true, // Only this transaction has details
+    },
+    new: true,
+  },
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>

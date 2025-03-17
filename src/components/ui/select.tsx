@@ -1,7 +1,7 @@
 
 import * as React from "react"
 import * as SelectPrimitive from "@radix-ui/react-select"
-import { Check, ChevronDown, ChevronUp } from "lucide-react"
+import { Check, ChevronDown, ChevronUp, CircleCheck, CircleX } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -110,10 +110,16 @@ const SelectLabel = React.forwardRef<
 ))
 SelectLabel.displayName = SelectPrimitive.Label.displayName
 
+// Enhanced SelectItem with status indicator
+interface SelectItemProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item> {
+  isActive?: boolean
+  showStatus?: boolean
+}
+
 const SelectItem = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Item>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Item>
->(({ className, children, ...props }, ref) => (
+  SelectItemProps
+>(({ className, children, isActive = false, showStatus = false, ...props }, ref) => (
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
@@ -128,7 +134,16 @@ const SelectItem = React.forwardRef<
       </SelectPrimitive.ItemIndicator>
     </span>
 
-    <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+    <SelectPrimitive.ItemText className="flex items-center gap-2">
+      {children}
+      {showStatus && (
+        isActive ? (
+          <CircleCheck className="h-3.5 w-3.5 text-green-500 ml-1" />
+        ) : (
+          <CircleX className="h-3.5 w-3.5 text-red-500 ml-1" />
+        )
+      )}
+    </SelectPrimitive.ItemText>
   </SelectPrimitive.Item>
 ))
 SelectItem.displayName = SelectPrimitive.Item.displayName

@@ -1,7 +1,7 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -25,10 +25,17 @@ const buttonVariants = cva(
         lg: "h-11 rounded-md px-8",
         icon: "h-10 w-10",
       },
+      // Add status variant for link status
+      status: {
+        active: "after:content-[''] after:ml-1 after:inline-block after:w-2 after:h-2 after:bg-green-500 after:rounded-full",
+        inactive: "after:content-[''] after:ml-1 after:inline-block after:w-2 after:h-2 after:bg-red-500 after:rounded-full",
+        none: "",
+      }
     },
     defaultVariants: {
       variant: "default",
       size: "default",
+      status: "none",
     },
   }
 )
@@ -40,11 +47,11 @@ export interface ButtonProps
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, status, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, status, className }))}
         ref={ref}
         {...props}
       />

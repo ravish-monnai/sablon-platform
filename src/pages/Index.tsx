@@ -1,10 +1,9 @@
+
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { LinkStatus } from "@/components/ui/link-status";
 import MonnaiLogo from "@/components/branding/MonnaiLogo";
 
 const Index = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="w-full max-w-5xl px-4">
@@ -28,19 +27,23 @@ const Index = () => {
           </p>
           
           <div className="flex flex-col md:flex-row gap-4 justify-center">
-            <Button 
-              onClick={() => navigate("/")}
+            <LinkStatus 
+              href="/"
               className="bg-monnai-blue hover:bg-monnai-blue/90 text-white"
+              isActive={true}
+              tooltip="Go to the main dashboard"
             >
               Go to Dashboard
-            </Button>
+            </LinkStatus>
             
-            <Button 
-              onClick={() => navigate("/ai-journeys")}
+            <LinkStatus 
+              href="/ai-journeys"
               className="monnai-gradient-bg hover:opacity-90 text-white border-none"
+              isActive={true}
+              tooltip="Explore AI Journeys"
             >
               Explore AI Journeys
-            </Button>
+            </LinkStatus>
           </div>
           
           <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -61,6 +64,49 @@ const Index = () => {
               <h3 className="text-xl font-semibold mb-2">Monitor</h3>
               <p className="text-gray-600">Track performance and make data-driven decisions</p>
             </div>
+          </div>
+          
+          <div className="mt-12 flex flex-wrap justify-center gap-4">
+            <LinkStatus 
+              href="/models"
+              variant="outline"
+              isActive={true}
+              tooltip="View all risk models"
+            >
+              Explore Models
+            </LinkStatus>
+            <LinkStatus 
+              href="/ai-agents"
+              variant="outline"
+              isActive={true}
+              tooltip="Configure AI agents"
+            >
+              AI Agents
+            </LinkStatus>
+            <LinkStatus 
+              href="/data"
+              variant="outline"
+              isActive={true}
+              tooltip="Manage data sources"
+            >
+              Data Sources
+            </LinkStatus>
+            <LinkStatus 
+              href="/cases"
+              variant="outline"
+              isActive={false}
+              tooltip="Case management coming soon"
+            >
+              Cases
+            </LinkStatus>
+            <LinkStatus 
+              href="/settings"
+              variant="outline"
+              isActive={false}
+              tooltip="Settings page coming soon"
+            >
+              Settings
+            </LinkStatus>
           </div>
           
           <div className="mt-16 p-8 border rounded-lg">
