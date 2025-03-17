@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   Card, CardContent, CardDescription, CardHeader, CardTitle 
 } from "@/components/ui/card";
@@ -9,6 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
 
 interface CaseNetworkTabProps {
   caseData: any;
@@ -17,6 +18,16 @@ interface CaseNetworkTabProps {
 const CaseNetworkTab = ({ caseData }: CaseNetworkTabProps) => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [showMultiCaseAnalysis, setShowMultiCaseAnalysis] = useState(false);
+  const [activeTab, setActiveTab] = useState<string>("single-case");
+  const { toast } = useToast();
+  
+  // Auto-trigger analysis on component mount
+  useEffect(() => {
+    // Optional: Auto-start analysis when the component mounts
+    if (caseData.riskLevel === "High" || caseData.riskLevel === "Critical") {
+      startMultiCaseAnalysis();
+    }
+  }, [caseData.riskLevel]);
   
   // Determine the insight text based on the risk level
   const getNetworkInsight = () => {
@@ -34,6 +45,13 @@ const CaseNetworkTab = ({ caseData }: CaseNetworkTabProps) => {
     setTimeout(() => {
       setIsAnalyzing(false);
       setShowMultiCaseAnalysis(true);
+      setActiveTab("multi-case");
+      
+      toast({
+        title: "Link Analysis Complete",
+        description: "Found 3 potentially related cases with similar patterns.",
+        variant: "default"
+      });
     }, 1500);
   };
 
@@ -77,7 +95,7 @@ const CaseNetworkTab = ({ caseData }: CaseNetworkTabProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="single-case">
+        <Tabs value={activeTab} onValueChange={setActiveTab} defaultValue="single-case">
           <TabsList className="mb-2">
             <TabsTrigger value="single-case">Single Case View</TabsTrigger>
             <TabsTrigger 
