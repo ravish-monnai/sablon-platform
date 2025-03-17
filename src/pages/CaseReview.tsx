@@ -217,7 +217,7 @@ const CaseReview = () => {
           </Button>
           <h1 className="text-2xl font-bold">{caseData.id}</h1>
           <Badge variant={caseData.status === "Pending Review" ? "outline" : 
-                          caseData.status === "Approved" ? "success" : "destructive"}>
+                          caseData.status === "Approved" ? "secondary" : "destructive"}>
             {caseData.status}
           </Badge>
         </div>
@@ -614,7 +614,7 @@ const CaseReview = () => {
                   <p className="text-sm text-muted-foreground">Status</p>
                   <Badge variant={
                     caseData.status === "Pending Review" ? "outline" : 
-                    caseData.status === "Approved" ? "success" : 
+                    caseData.status === "Approved" ? "secondary" : 
                     "destructive"
                   } className="mt-1">
                     {caseData.status}
