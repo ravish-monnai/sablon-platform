@@ -3,12 +3,13 @@ import React from 'react';
 import { ReactFlow, Background, Controls, Node, Edge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
-// Define the expected shape of node data
+// Define the expected shape of node data with index signature
 interface NodeData {
   label: string;
   description: string;
   icon?: React.ReactNode;
   type?: string;
+  [key: string]: unknown; // Add index signature to satisfy Record<string, unknown>
 }
 
 interface WorkflowPreviewProps {
@@ -20,7 +21,7 @@ const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
   return (
     <div className="h-[400px] border rounded-md overflow-hidden">
       <ReactFlow
-        nodes={nodes}
+        nodes={nodes as Node[]}
         edges={edges}
         fitView
         nodesDraggable={false}
