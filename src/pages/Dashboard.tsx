@@ -1,5 +1,5 @@
 
-import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { 
@@ -54,16 +54,29 @@ const Dashboard = () => {
                 
                 <h4 className="font-medium mt-2">Risk Distribution</h4>
                 
-                <ChartContainer config={chartConfig} className="h-48 mt-2">
-                  <BarChart data={riskData} margin={{ top: 5, right: 5, bottom: 5, left: 5 }}>
-                    <XAxis dataKey="name" fontSize={10} />
-                    <YAxis fontSize={10} />
-                    <Tooltip content={<ChartTooltipContent />} />
-                    <Bar dataKey="value" nameKey="name" fill={(entry) => entry.color} radius={[4, 4, 0, 0]} />
-                  </BarChart>
-                </ChartContainer>
+                <div className="flex items-center justify-center h-40">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={riskData}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={30}
+                        outerRadius={60}
+                        paddingAngle={2}
+                        dataKey="value"
+                        nameKey="name"
+                      >
+                        {riskData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip content={<ChartTooltipContent />} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
                 
-                <div className="space-y-2 mt-4">
+                <div className="space-y-2 mt-2">
                   {riskData.map((item) => (
                     <div key={item.name} className="space-y-1">
                       <div className="flex justify-between text-xs">
