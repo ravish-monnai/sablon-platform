@@ -39,23 +39,13 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center">
-        {/* Original logo icon - triangles */}
+        {/* New Monnai icon logo */}
         <div className="mr-2">
-          <svg 
-            viewBox="0 0 100 50" 
-            fill="none" 
-            xmlns="http://www.w3.org/2000/svg"
+          <img 
+            src="/lovable-uploads/033f2774-4372-478c-90aa-fa784395fc40.png" 
+            alt="Monnai Logo" 
             className={iconSizeClasses[size]}
-          >
-            <path 
-              d="M0 50L25 0L50 50H0Z" 
-              fill={variant === 'gradient' ? '#fb9400' : (variant === 'color' ? '#fb9400' : (variant === 'white' ? '#FFFFFF' : '#000000'))}
-            />
-            <path 
-              d="M50 50L75 0L100 50H50Z" 
-              fill={variant === 'gradient' ? '#fb9400' : (variant === 'color' ? '#fb9400' : (variant === 'white' ? '#FFFFFF' : '#000000'))}
-            />
-          </svg>
+          />
         </div>
 
         {/* Text part of logo */}
