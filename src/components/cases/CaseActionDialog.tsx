@@ -15,6 +15,7 @@ interface CaseActionDialogProps {
   actionType: ActionType;
   isOpen: boolean;
   onClose: () => void;
+  caseData?: any; // Added caseData as an optional prop
 }
 
 const actionLabels = {
@@ -41,7 +42,7 @@ const actionLabels = {
   }
 };
 
-const CaseActionDialog = ({ caseId, actionType, isOpen, onClose }: CaseActionDialogProps) => {
+const CaseActionDialog = ({ caseId, actionType, isOpen, onClose, caseData }: CaseActionDialogProps) => {
   const [notes, setNotes] = useState("");
   const [attachments, setAttachments] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);

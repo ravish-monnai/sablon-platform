@@ -108,7 +108,11 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
       for (let j = 0; j < i; j++) {
         if (Math.random() < 0.3) {
           const targetId = `user-${j}`;
-          const targetIsBad = userNodes.find(n => n.id === targetId)?.style?.border?.includes('#fee2e2');
+          // Fixed: using proper type checking instead of includes() on border
+          const targetNode = userNodes.find(n => n.id === targetId);
+          const targetIsBad = targetNode && 
+            typeof targetNode.style?.border === 'string' && 
+            targetNode.style.border.includes('#fee2e2');
           
           userEdges.push({
             id: `e-${userId}-${targetId}`,
@@ -148,7 +152,10 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
         <MiniMap 
           nodeColor={(node) => {
             if (node.id === 'main-user') return '#3b82f6';
-            if (node.style?.border?.includes('#fee2e2')) return '#ef4444';
+            // Fixed: safer type checking for border property
+            if (node.style?.border && 
+                typeof node.style.border === 'string' && 
+                node.style.border.includes('#fee2e2')) return '#ef4444';
             return '#22c55e';
           }}
           maskColor="#f8fafc"
