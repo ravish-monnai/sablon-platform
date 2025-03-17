@@ -95,7 +95,7 @@ const StatusNavigationMenuLink = React.forwardRef<
       ref={ref}
       className={cn(
         navigationMenuTriggerStyle(),
-        !isActive && "opacity-70",
+        isActive ? "text-monnai-blue hover:text-monnai-blue/90" : "opacity-70",
         className
       )}
       {...props}

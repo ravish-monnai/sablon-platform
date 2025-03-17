@@ -67,7 +67,7 @@ export const LinkStatus = React.forwardRef<HTMLAnchorElement, LinkStatusProps>(
         href={href}
         className={cn(
           buttonVariants({ variant, size }),
-          !isWorkingLink && "opacity-70 cursor-not-allowed",
+          isWorkingLink ? "text-monnai-blue hover:text-monnai-blue/90" : "opacity-70 cursor-not-allowed",
           className
         )}
         target="_blank"
@@ -81,7 +81,7 @@ export const LinkStatus = React.forwardRef<HTMLAnchorElement, LinkStatusProps>(
         to={isWorkingLink ? href : "#"}
         className={cn(
           buttonVariants({ variant, size }),
-          !isWorkingLink && "opacity-70 cursor-not-allowed",
+          isWorkingLink ? "text-monnai-blue hover:text-monnai-blue/90" : "opacity-70 cursor-not-allowed",
           className
         )}
         onClick={(e) => !isWorkingLink && e.preventDefault()}

@@ -18,6 +18,8 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // Add active color variant for working links
+        active: "text-monnai-blue hover:text-monnai-blue/90 underline-offset-4 hover:underline",
       },
       size: {
         default: "h-10 px-4 py-2",
@@ -28,7 +30,7 @@ const buttonVariants = cva(
       // Add status variant for link status
       status: {
         active: "after:content-[''] after:ml-1 after:inline-block after:w-2 after:h-2 after:bg-green-500 after:rounded-full",
-        inactive: "after:content-[''] after:ml-1 after:inline-block after:w-2 after:h-2 after:bg-red-500 after:rounded-full",
+        inactive: "after:content-[''] after:ml-1 after:inline-block after:w-2 after:h-2 after:bg-red-500 after:rounded-full opacity-70 cursor-not-allowed",
         none: "",
       }
     },
