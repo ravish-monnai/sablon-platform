@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import MonnaiLogo from "@/components/branding/MonnaiLogo";
@@ -11,6 +10,12 @@ const Index = () => {
       <div className="text-center max-w-3xl px-4">
         <div className="mb-8 flex justify-center">
           <MonnaiLogo variant="gradient" size="lg" />
+        </div>
+        
+        <div className="mb-6 p-4 bg-gradient-to-r from-monnai-yellow/10 via-monnai-pink/10 to-monnai-blue/10 rounded-lg">
+          <h2 className="text-3xl font-bold text-gray-800">
+            Welcome <span className="monnai-gradient-text">xNeo Bank</span>
+          </h2>
         </div>
         
         <h1 className="text-5xl font-bold mb-2">

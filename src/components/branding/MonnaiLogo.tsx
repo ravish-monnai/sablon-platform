@@ -36,7 +36,7 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
 
   return (
     <div className={`flex items-center ${className}`}>
-      {/* Logo icon */}
+      {/* Updated logo icon with smoother, more professional design */}
       <div className="mr-2">
         <svg 
           viewBox="0 0 512 512" 
@@ -51,20 +51,25 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
               <stop offset="100%" stopColor="#5100ff" />
             </linearGradient>
           </defs>
+          {/* Redesigned logo with smoother curves */}
           <path 
-            d="M30 400L235 200L235 400L30 400Z" 
+            d="M128 128L256 256V384H128V128Z" 
             fill={variant === 'gradient' ? 'url(#monnaiGradient)' : (variant === 'color' ? '#fb9400' : (variant === 'white' ? '#FFFFFF' : '#000000'))}
+            strokeWidth="16"
+            strokeLinejoin="round"
           />
           <path 
-            d="M235 400L440 200L440 400L235 400Z" 
+            d="M256 384H384V128L256 256V384Z" 
             fill={variant === 'gradient' ? 'url(#monnaiGradient)' : (variant === 'color' ? '#5100ff' : (variant === 'white' ? '#FFFFFF' : '#000000'))}
+            strokeWidth="16"
+            strokeLinejoin="round"
           />
         </svg>
       </div>
 
       {/* Text part of logo */}
       {showText && (
-        <span className={`font-extrabold text-2xl ${variantClasses[variant]}`}>
+        <span className={`font-extrabold text-2xl tracking-tight ${variantClasses[variant]}`}>
           monnai
         </span>
       )}
