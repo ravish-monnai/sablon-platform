@@ -59,6 +59,47 @@ const Index = () => {
             <p className="text-gray-600">Track performance and make data-driven decisions</p>
           </div>
         </div>
+        
+        <div className="mt-12 p-6 border rounded-lg">
+          <h2 className="text-2xl font-semibold mb-4">Font Showcase</h2>
+          
+          <div className="text-left space-y-4">
+            <div>
+              <h3 className="text-lg font-semibold">Rockford Sans Light</h3>
+              <p className="font-light">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+              <p className="font-light">abcdefghijklmnopqrstuvwxyz</p>
+              <p className="font-light">1234567890 ±!@#$%^&*()_+-=™</p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold">Rockford Sans Regular</h3>
+              <p className="font-normal">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+              <p className="font-normal">abcdefghijklmnopqrstuvwxyz</p>
+              <p className="font-normal">1234567890 ±!@#$%^&*()_+-=™</p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold">Rockford Sans Bold</h3>
+              <p className="font-bold">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+              <p className="font-bold">abcdefghijklmnopqrstuvwxyz</p>
+              <p className="font-bold">1234567890 ±!@#$%^&*()_+-=™</p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold">Rockford Sans Extrabold</h3>
+              <p className="font-extrabold">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+              <p className="font-extrabold">abcdefghijklmnopqrstuvwxyz</p>
+              <p className="font-extrabold">1234567890 ±!@#$%^&*()_+-=™</p>
+            </div>
+            
+            <div>
+              <h3 className="text-lg font-semibold">Rockford Sans Heavy (Black)</h3>
+              <p className="font-black">ABCDEFGHIJKLMNOPQRSTUVWXYZ</p>
+              <p className="font-black">abcdefghijklmnopqrstuvwxyz</p>
+              <p className="font-black">1234567890 ±!@#$%^&*()_+-=™</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
