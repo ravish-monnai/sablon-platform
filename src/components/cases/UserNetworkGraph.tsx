@@ -1,3 +1,4 @@
+
 import React, { useEffect, useMemo } from 'react';
 import { 
   ReactFlow, 
@@ -5,7 +6,8 @@ import {
   Controls, 
   MiniMap,
   Edge,
-  Node
+  Node,
+  NodeProps
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { UserCheck, UserX, User, AlertTriangle, Shield, CreditCard, Building } from 'lucide-react';
@@ -16,11 +18,13 @@ interface UserNetworkGraphProps {
 
 type NodeType = 'user' | 'riskyUser' | 'safeUser' | 'mainUser' | 'financialEntity' | 'business';
 
+// Extend the CustomNodeData to include an index signature
 interface CustomNodeData {
   label: React.ReactNode;
   type: NodeType;
   risk?: number;
   flags?: string[];
+  [key: string]: unknown; // Add this to satisfy Record<string, unknown>
 }
 
 const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
@@ -28,7 +32,7 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
     const numberOfConnections = Math.min(Math.max(Math.floor(caseData.riskScore / 20) + 2, 3), 8);
     const badConnectionRatio = caseData.riskScore / 100;
     
-    const mainNode: Node<CustomNodeData> = {
+    const mainNode: Node = {
       id: 'main-user',
       type: 'default',
       data: { 
@@ -41,7 +45,7 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
           </div>
         ),
         type: 'mainUser'
-      },
+      } as CustomNodeData,
       position: { x: 250, y: 150 },
       style: {
         background: 'white',
@@ -137,7 +141,7 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
           type: entityType.type as NodeType,
           risk: riskScore,
           flags: flags
-        },
+        } as CustomNodeData,
         position: { x, y },
         style: {
           background: 'white',
@@ -166,11 +170,15 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
         const targetIndex = Math.floor(Math.random() * i);
         const targetId = `entity-${targetIndex}`;
         
+        // Check if node exists before accessing its data
+        const targetNode = nodes[targetIndex + 1];
+        const targetRisk = targetNode?.data?.risk as number | undefined;
+        
         edges.push({
           id: `e-${nodeId}-${targetId}`,
           source: nodeId,
           target: targetId,
-          animated: riskScore > 80 && nodes[targetIndex + 1]?.data?.risk > 70,
+          animated: riskScore > 80 && targetRisk !== undefined && targetRisk > 70,
           style: { 
             stroke: isSuspicious ? '#ef4444' : '#22c55e',
             strokeWidth: 1,
@@ -184,6 +192,30 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
     return { nodes, edges };
   }, [caseData]);
 
+  // Custom node tooltip renderer
+  const nodeTooltipRenderer = (node: NodeProps) => {
+    const nodeData = node.data as unknown as CustomNodeData;
+    if (nodeData?.risk && nodeData.risk > 50) {
+      return (
+        <div className="bg-white p-2 rounded shadow-md border text-xs max-w-[200px]">
+          <div className="font-bold">{node.id}</div>
+          <div>Risk Score: {nodeData.risk}</div>
+          {nodeData.flags && nodeData.flags.length > 0 && (
+            <div>
+              <div className="font-semibold mt-1">Flags:</div>
+              <ul className="list-disc pl-3">
+                {nodeData.flags.map((flag, idx) => (
+                  <li key={idx}>{flag}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="h-[400px]">
       <ReactFlow
@@ -195,34 +227,12 @@ const UserNetworkGraph: React.FC<UserNetworkGraphProps> = ({ caseData }) => {
         nodesConnectable={false}
         elementsSelectable={true}
         proOptions={{ hideAttribution: true }}
-        nodeTooltip={(node) => {
-          const nodeData = node.data as CustomNodeData;
-          if (nodeData.risk && nodeData.risk > 50) {
-            return (
-              <div className="bg-white p-2 rounded shadow-md border text-xs max-w-[200px]">
-                <div className="font-bold">{node.id}</div>
-                <div>Risk Score: {nodeData.risk}</div>
-                {nodeData.flags && nodeData.flags.length > 0 && (
-                  <div>
-                    <div className="font-semibold mt-1">Flags:</div>
-                    <ul className="list-disc pl-3">
-                      {nodeData.flags.map((flag, idx) => (
-                        <li key={idx}>{flag}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            );
-          }
-          return null;
-        }}
       >
         <Background color="#f0f0f0" gap={16} />
         <Controls showInteractive={false} />
         <MiniMap 
           nodeColor={(node) => {
-            const data = node.data as CustomNodeData;
+            const data = node.data as unknown as CustomNodeData;
             if (data.type === 'mainUser') return '#3b82f6';
             if (data.type === 'riskyUser') return '#ef4444';
             if (data.type === 'financialEntity') return '#9b87f5';
