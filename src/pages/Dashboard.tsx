@@ -111,15 +111,19 @@ const Dashboard = () => {
             <div className="space-y-2">
               <div className="flex justify-between">
                 <span>Active Models</span>
-                <span className="font-bold">24</span>
+                <span className="font-bold">8</span>
               </div>
               <div className="flex justify-between">
                 <span>AI Journeys</span>
+                <span className="font-bold">5</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Agents</span>
                 <span className="font-bold">12</span>
               </div>
               <div className="flex justify-between">
                 <span>Transactions</span>
-                <span className="font-bold">1,243</span>
+                <span className="font-bold">743</span>
               </div>
             </div>
           </CardContent>
