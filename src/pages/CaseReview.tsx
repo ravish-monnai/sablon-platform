@@ -8,7 +8,6 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -27,7 +26,10 @@ import {
   X, 
   BrainCircuit,
   Lightbulb,
-  ArrowUp
+  ArrowUp,
+  FileText,
+  Activity,
+  FileBox
 } from "lucide-react";
 import CaseChat from "@/components/cases/CaseChat";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
@@ -165,7 +167,6 @@ const CaseReview = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const [caseData, setCaseData] = useState<any>(null);
   const [isChatOpen, setIsChatOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("summary");
   const [actionDialog, setActionDialog] = useState<{
     isOpen: boolean;
     actionType: "approve" | "reject" | "escalate";
@@ -275,328 +276,307 @@ const CaseReview = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="w-full">
-              <TabsTrigger value="summary" className="flex-1">Summary</TabsTrigger>
-              <TabsTrigger value="identity" className="flex-1">Identity</TabsTrigger>
-              <TabsTrigger value="activity" className="flex-1">Activity</TabsTrigger>
-              <TabsTrigger value="reasoning" className="flex-1">AI Reasoning</TabsTrigger>
-            </TabsList>
-            
-            <TabsContent value="summary" className="space-y-6 mt-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Case Overview</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Journey</p>
-                      <p className="font-medium">{caseData.journey}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Date</p>
-                      <p className="font-medium">{caseData.date}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Risk Level</p>
-                      <div className="flex items-center">
-                        <Badge className={`mr-2 ${
-                          caseData.riskLevel === "Critical" ? "bg-red-500" :
-                          caseData.riskLevel === "High" ? "bg-red-400" :
-                          caseData.riskLevel === "Medium" ? "bg-amber-400" :
-                          "bg-green-500"
-                        }`}>
-                          {caseData.riskLevel}
-                        </Badge>
-                        <span className="font-medium">{caseData.riskScore}/100</span>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Status</p>
-                      <p className="font-medium">{caseData.status}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Risk Analysis</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="font-medium">Overall Risk Score</p>
-                        <p className="text-sm text-muted-foreground">Based on weighted factors</p>
-                      </div>
-                      <Badge className={`${
-                        weightedScore >= 80 ? "bg-red-500" :
-                        weightedScore >= 60 ? "bg-red-400" :
-                        weightedScore >= 40 ? "bg-amber-400" :
-                        "bg-green-500"
-                      }`}>
-                        {Math.round(weightedScore)}/100
-                      </Badge>
-                    </div>
-
-                    <Separator />
-
-                    {caseData.decisionFactors.map((factor: any, idx: number) => (
-                      <div key={idx} className="flex items-center justify-between">
-                        <div>
-                          <p className="font-medium">{factor.factor}</p>
-                          <p className="text-sm text-muted-foreground">Weight: {factor.weight * 100}%</p>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
-                            <div 
-                              className={`h-full ${
-                                factor.score >= 80 ? "bg-red-500" :
-                                factor.score >= 60 ? "bg-red-400" :
-                                factor.score >= 40 ? "bg-amber-400" :
-                                "bg-green-500"
-                              }`} 
-                              style={{ width: `${factor.score}%` }}
-                            ></div>
-                          </div>
-                          <span className="text-sm font-medium">{factor.score}</span>
-                        </div>
-                      </div>
-                    ))}
-
-                    {caseData.anomalyFlags.length > 0 && (
-                      <>
-                        <Separator />
-                        <div>
-                          <p className="font-medium mb-2">Anomaly Flags</p>
-                          <div className="space-y-2">
-                            {caseData.anomalyFlags.map((flag: string, idx: number) => (
-                              <div key={idx} className="flex items-center text-sm">
-                                <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
-                                <span>{flag}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="identity" className="space-y-6 mt-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Customer Information</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Name</p>
-                      <div className="flex items-center">
-                        <User className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <p className="font-medium">{caseData.customer}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Email</p>
-                      <div className="flex items-center">
-                        <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <p className="font-medium">{caseData.email}</p>
-                        {caseData.emailVerified ? 
-                          <Badge variant="outline" className="ml-2 text-green-600 border-green-600">Verified</Badge> : 
-                          <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">Unverified</Badge>
-                        }
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Phone</p>
-                      <div className="flex items-center">
-                        <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <p className="font-medium">{caseData.phone}</p>
-                        {caseData.phoneVerified ? 
-                          <Badge variant="outline" className="ml-2 text-green-600 border-green-600">Verified</Badge> : 
-                          <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">Unverified</Badge>
-                        }
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Location</p>
-                      <p className="font-medium">{caseData.location}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Identity Documents</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {caseData.documents.map((doc: any, idx: number) => (
-                      <div key={idx} className="flex items-center justify-between border rounded-md p-3">
-                        <div className="flex items-center">
-                          <File className="h-10 w-10 p-2 mr-3 bg-gray-100 rounded-md text-gray-600" />
-                          <div>
-                            <p className="font-medium">{doc.type}</p>
-                            <p className="text-sm text-muted-foreground">
-                              Verification score: {doc.score}/100
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          {doc.verified ? 
-                            <Badge variant="outline" className="text-green-600 border-green-600">Verified</Badge> : 
-                            <Badge variant="outline" className="text-amber-600 border-amber-600">Verification Issues</Badge>
-                          }
-                          <Button variant="outline" size="sm">
-                            <Download className="h-4 w-4" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="activity" className="space-y-6 mt-6">
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Device Information</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Device ID</p>
-                      <p className="font-medium">{caseData.deviceId}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">IP Address</p>
-                      <p className="font-medium">{caseData.ipAddress}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader className="pb-2">
-                  <CardTitle className="text-lg">Recent Activity</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {[...Array(5)].map((_, idx) => (
-                      <div key={idx} className="flex items-start pb-4 border-b last:border-0 last:pb-0">
-                        <div className="mr-3 mt-0.5">
-                          <Clock className="h-4 w-4 text-muted-foreground" />
-                        </div>
-                        <div className="flex-1">
-                          <p className="font-medium">
-                            {["Login attempt", "Updated profile", "Initiated transaction", "Uploaded document", "Password change"][idx]}
-                          </p>
-                          <p className="text-sm text-muted-foreground">
-                            {new Date(2023, 
-                              Math.floor(Math.random() * 12), 
-                              Math.floor(Math.random() * 28) + 1, 
-                              Math.floor(Math.random() * 24),
-                              Math.floor(Math.random() * 60)
-                            ).toLocaleString()}
-                          </p>
-                        </div>
-                        <Badge variant={idx === 0 && caseData.riskScore > 70 ? "destructive" : "outline"}>
-                          {idx === 0 && caseData.riskScore > 70 ? "Suspicious" : "Normal"}
-                        </Badge>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="reasoning" className="space-y-6 mt-6">
-              <Card>
-                <CardHeader className="pb-2">
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center">
+                <FileText className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                <CardTitle className="text-lg">Summary</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Journey</p>
+                  <p className="font-medium">{caseData.journey}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Date</p>
+                  <p className="font-medium">{caseData.date}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Risk Level</p>
                   <div className="flex items-center">
-                    <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                    <CardTitle className="text-lg">AI Analysis</CardTitle>
+                    <Badge className={`mr-2 ${
+                      caseData.riskLevel === "Critical" ? "bg-red-500" :
+                      caseData.riskLevel === "High" ? "bg-red-400" :
+                      caseData.riskLevel === "Medium" ? "bg-amber-400" :
+                      "bg-green-500"
+                    }`}>
+                      {caseData.riskLevel}
+                    </Badge>
+                    <span className="font-medium">{caseData.riskScore}/100</span>
                   </div>
-                  <CardDescription>
-                    Generated by our fraud detection AI agent
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
-                      <div className="flex items-start mb-3">
-                        <Lightbulb className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
-                        <div>
-                          <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
-                          <p className="text-sm mt-1">{caseData.reasoning}</p>
-                        </div>
-                      </div>
-                    </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Status</p>
+                  <p className="font-medium">{caseData.status}</p>
+                </div>
+              </div>
 
+              <Separator />
+
+              <div className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="font-medium">Overall Risk Score</p>
+                    <p className="text-sm text-muted-foreground">Based on weighted factors</p>
+                  </div>
+                  <Badge className={`${
+                    weightedScore >= 80 ? "bg-red-500" :
+                    weightedScore >= 60 ? "bg-red-400" :
+                    weightedScore >= 40 ? "bg-amber-400" :
+                    "bg-green-500"
+                  }`}>
+                    {Math.round(weightedScore)}/100
+                  </Badge>
+                </div>
+
+                <Separator />
+
+                {caseData.decisionFactors.map((factor: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-between">
                     <div>
-                      <h3 className="font-medium mb-2">Key Risk Indicators</h3>
+                      <p className="font-medium">{factor.factor}</p>
+                      <p className="text-sm text-muted-foreground">Weight: {factor.weight * 100}%</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="w-32 h-2 bg-gray-200 rounded-full overflow-hidden">
+                        <div 
+                          className={`h-full ${
+                            factor.score >= 80 ? "bg-red-500" :
+                            factor.score >= 60 ? "bg-red-400" :
+                            factor.score >= 40 ? "bg-amber-400" :
+                            "bg-green-500"
+                          }`} 
+                          style={{ width: `${factor.score}%` }}
+                        ></div>
+                      </div>
+                      <span className="text-sm font-medium">{factor.score}</span>
+                    </div>
+                  </div>
+                ))}
+
+                {caseData.anomalyFlags.length > 0 && (
+                  <>
+                    <Separator />
+                    <div>
+                      <p className="font-medium mb-2">Anomaly Flags</p>
                       <div className="space-y-2">
-                        {[
-                          {
-                            name: "Identity Consistency",
-                            status: caseData.riskScore < 60 ? "pass" : "flag",
-                            details: caseData.riskScore < 60 
-                              ? "All identity information is consistent with our records." 
-                              : "There are inconsistencies in the provided identity information."
-                          },
-                          {
-                            name: "Document Authenticity",
-                            status: caseData.documents[0].verified ? "pass" : "flag",
-                            details: caseData.documents[0].verified
-                              ? "Document verification passed all security checks."
-                              : "Document verification found potential issues with authenticity."
-                          },
-                          {
-                            name: "Behavioral Patterns",
-                            status: caseData.riskScore < 70 ? "pass" : "flag",
-                            details: caseData.riskScore < 70
-                              ? "User behavior is consistent with historical patterns."
-                              : "Unusual behavior detected in recent activities."
-                          }
-                        ].map((indicator, idx) => (
-                          <div key={idx} className="flex items-start">
-                            {indicator.status === "pass" ? (
-                              <Check className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                            ) : (
-                              <AlertTriangle className="h-5 w-5 mr-2 text-amber-500 mt-0.5" />
-                            )}
-                            <div>
-                              <p className="font-medium">{indicator.name}</p>
-                              <p className="text-sm text-muted-foreground">{indicator.details}</p>
-                            </div>
+                        {caseData.anomalyFlags.map((flag: string, idx: number) => (
+                          <div key={idx} className="flex items-center text-sm">
+                            <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
+                            <span>{flag}</span>
                           </div>
                         ))}
                       </div>
                     </div>
+                  </>
+                )}
+              </div>
+            </CardContent>
+          </Card>
 
-                    <div>
-                      <h3 className="font-medium mb-2">Recommendation</h3>
-                      <div className="bg-gray-100 p-3 rounded-md">
-                        <p className="text-sm">
-                          {caseData.riskLevel === "Low" && "This case has a low risk profile with no significant anomalies. Automated approval is recommended."}
-                          {caseData.riskLevel === "Medium" && "This case has a medium risk profile with some anomalies. Additional verification may be required before approval."}
-                          {caseData.riskLevel === "High" && "This case has a high risk profile with multiple anomalies. Manual review is recommended before making a decision."}
-                          {caseData.riskLevel === "Critical" && "This case has a critical risk profile with significant anomalies. Rejection is recommended pending a thorough investigation."}
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center">
+                <User className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                <CardTitle className="text-lg">Identity</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Name</p>
+                  <div className="flex items-center">
+                    <User className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <p className="font-medium">{caseData.customer}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Email</p>
+                  <div className="flex items-center">
+                    <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <p className="font-medium">{caseData.email}</p>
+                    {caseData.emailVerified ? 
+                      <Badge variant="outline" className="ml-2 text-green-600 border-green-600">Verified</Badge> : 
+                      <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">Unverified</Badge>
+                    }
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Phone</p>
+                  <div className="flex items-center">
+                    <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
+                    <p className="font-medium">{caseData.phone}</p>
+                    {caseData.phoneVerified ? 
+                      <Badge variant="outline" className="ml-2 text-green-600 border-green-600">Verified</Badge> : 
+                      <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">Unverified</Badge>
+                    }
+                  </div>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Location</p>
+                  <p className="font-medium">{caseData.location}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h3 className="font-medium">Identity Documents</h3>
+                {caseData.documents.map((doc: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-between border rounded-md p-3">
+                    <div className="flex items-center">
+                      <File className="h-10 w-10 p-2 mr-3 bg-gray-100 rounded-md text-gray-600" />
+                      <div>
+                        <p className="font-medium">{doc.type}</p>
+                        <p className="text-sm text-muted-foreground">
+                          Verification score: {doc.score}/100
                         </p>
                       </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                      {doc.verified ? 
+                        <Badge variant="outline" className="text-green-600 border-green-600">Verified</Badge> : 
+                        <Badge variant="outline" className="text-amber-600 border-amber-600">Verification Issues</Badge>
+                      }
+                      <Button variant="outline" size="sm">
+                        <Download className="h-4 w-4" />
+                      </Button>
+                    </div>
                   </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center">
+                <Activity className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                <CardTitle className="text-lg">Activity</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-sm text-muted-foreground">Device ID</p>
+                  <p className="font-medium">{caseData.deviceId}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">IP Address</p>
+                  <p className="font-medium">{caseData.ipAddress}</p>
+                </div>
+              </div>
+
+              <Separator />
+
+              <div className="space-y-4">
+                <h3 className="font-medium">Recent Activity</h3>
+                {[...Array(5)].map((_, idx) => (
+                  <div key={idx} className="flex items-start pb-4 border-b last:border-0 last:pb-0">
+                    <div className="mr-3 mt-0.5">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-medium">
+                        {["Login attempt", "Updated profile", "Initiated transaction", "Uploaded document", "Password change"][idx]}
+                      </p>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date(2023, 
+                          Math.floor(Math.random() * 12), 
+                          Math.floor(Math.random() * 28) + 1, 
+                          Math.floor(Math.random() * 24),
+                          Math.floor(Math.random() * 60)
+                        ).toLocaleString()}
+                      </p>
+                    </div>
+                    <Badge variant={idx === 0 && caseData.riskScore > 70 ? "destructive" : "outline"}>
+                      {idx === 0 && caseData.riskScore > 70 ? "Suspicious" : "Normal"}
+                    </Badge>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex items-center">
+                <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                <CardTitle className="text-lg">AI Reasoning</CardTitle>
+              </div>
+              <CardDescription>
+                Generated by our fraud detection AI agent
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
+                  <div className="flex items-start mb-3">
+                    <Lightbulb className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
+                    <div>
+                      <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
+                      <p className="text-sm mt-1">{caseData.reasoning}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-2">Key Risk Indicators</h3>
+                  <div className="space-y-2">
+                    {[
+                      {
+                        name: "Identity Consistency",
+                        status: caseData.riskScore < 60 ? "pass" : "flag",
+                        details: caseData.riskScore < 60 
+                          ? "All identity information is consistent with our records." 
+                          : "There are inconsistencies in the provided identity information."
+                      },
+                      {
+                        name: "Document Authenticity",
+                        status: caseData.documents[0].verified ? "pass" : "flag",
+                        details: caseData.documents[0].verified
+                          ? "Document verification passed all security checks."
+                          : "Document verification found potential issues with authenticity."
+                      },
+                      {
+                        name: "Behavioral Patterns",
+                        status: caseData.riskScore < 70 ? "pass" : "flag",
+                        details: caseData.riskScore < 70
+                          ? "User behavior is consistent with historical patterns."
+                          : "Unusual behavior detected in recent activities."
+                      }
+                    ].map((indicator, idx) => (
+                      <div key={idx} className="flex items-start">
+                        {indicator.status === "pass" ? (
+                          <Check className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
+                        ) : (
+                          <AlertTriangle className="h-5 w-5 mr-2 text-amber-500 mt-0.5" />
+                        )}
+                        <div>
+                          <p className="font-medium">{indicator.name}</p>
+                          <p className="text-sm text-muted-foreground">{indicator.details}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h3 className="font-medium mb-2">Recommendation</h3>
+                  <div className="bg-gray-100 p-3 rounded-md">
+                    <p className="text-sm">
+                      {caseData.riskLevel === "Low" && "This case has a low risk profile with no significant anomalies. Automated approval is recommended."}
+                      {caseData.riskLevel === "Medium" && "This case has a medium risk profile with some anomalies. Additional verification may be required before approval."}
+                      {caseData.riskLevel === "High" && "This case has a high risk profile with multiple anomalies. Manual review is recommended before making a decision."}
+                      {caseData.riskLevel === "Critical" && "This case has a critical risk profile with significant anomalies. Rejection is recommended pending a thorough investigation."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         <div className="space-y-6">
