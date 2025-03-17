@@ -1,13 +1,24 @@
 
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Phone, Mail, Briefcase, DollarSign, MapPin, IdCard, Network, ShieldCheck } from "lucide-react"
+import { Phone, Mail, Briefcase, DollarSign, MapPin, IdCard, Network, ShieldCheck, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { NewDataSourceDialog } from "@/components/data/NewDataSourceDialog"
 
 const Data = () => {
+  const [newSourceDialogOpen, setNewSourceDialogOpen] = useState(false)
+
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-bold mb-6">Data Sources</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold">Data Sources</h1>
+        <Button onClick={() => setNewSourceDialogOpen(true)}>
+          <Plus className="h-5 w-5 mr-2" />
+          New Data Source
+        </Button>
+      </div>
+      
       <p className="text-gray-600 mb-6">
         Connect and manage external data sources for identity verification and fraud prevention.
       </p>
@@ -200,6 +211,11 @@ const Data = () => {
           </CardContent>
         </Card>
       </div>
+
+      <NewDataSourceDialog 
+        open={newSourceDialogOpen} 
+        onOpenChange={setNewSourceDialogOpen} 
+      />
     </div>
   )
 }
