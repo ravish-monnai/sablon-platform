@@ -1,49 +1,21 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle
-} from "@/components/ui/card";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
-  AlertTriangle, 
   ArrowLeft, 
-  Check, 
-  Clock, 
-  Download, 
-  File, 
-  Mail, 
-  MessageSquare, 
-  Phone, 
-  Shield, 
-  User, 
-  X, 
   BrainCircuit,
-  Lightbulb,
-  ArrowUp,
-  FileText,
+  User, 
   Activity,
-  FileBox,
-  Network,
-  UserCheck,
-  UserX,
-  Globe,
-  Smartphone,
-  AlertCircle,
-  HardDrive,
-  Cpu,
-  Info
+  Network
 } from "lucide-react";
 import CaseChat from "@/components/cases/CaseChat";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
-import UserNetworkGraph from "@/components/cases/UserNetworkGraph";
+import CaseHeader from "@/components/case-review/CaseHeader";
+import CaseSummaryTab from "@/components/case-review/CaseSummaryTab";
+import CaseIdentityTab from "@/components/case-review/CaseIdentityTab";
+import CaseActivityTab from "@/components/case-review/CaseActivityTab";
+import CaseNetworkTab from "@/components/case-review/CaseNetworkTab";
 
 const journeys = [
   "Account Opening", 
@@ -224,70 +196,13 @@ const CaseReview = () => {
     );
   }
 
-  const weightedScore = caseData.decisionFactors.reduce(
-    (acc: number, factor: { score: number; weight: number }) => 
-      acc + factor.score * factor.weight, 
-    0
-  );
-
   return (
     <div className="relative">
-      <div className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" asChild>
-            <Link to="/cases">
-              <ArrowLeft className="h-4 w-4 mr-1" /> Back
-            </Link>
-          </Button>
-          <h1 className="text-xl font-bold">{caseData.id}</h1>
-          <Badge variant={caseData.status === "Pending Review" ? "outline" : 
-                          caseData.status === "Approved" ? "secondary" : "destructive"}>
-            {caseData.status === "Pending Review" && <Clock className="h-3 w-3 mr-1" />}
-            {caseData.status === "Approved" && <Check className="h-3 w-3 mr-1" />}
-            {caseData.status === "Rejected" && <X className="h-3 w-3 mr-1" />}
-            {caseData.status}
-          </Badge>
-        </div>
-        
-        <div className="flex gap-2">
-          {caseData.status === "Pending Review" && (
-            <>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="border-green-500 text-green-600 hover:bg-green-50"
-                onClick={() => openActionDialog("approve")}
-              >
-                <Check className="h-4 w-4 mr-1" /> Approve
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="border-red-500 text-red-600 hover:bg-red-50"
-                onClick={() => openActionDialog("reject")}
-              >
-                <X className="h-4 w-4 mr-1" /> Reject
-              </Button>
-              <Button 
-                size="sm" 
-                variant="outline" 
-                className="border-amber-500 text-amber-600 hover:bg-amber-50"
-                onClick={() => openActionDialog("escalate")}
-              >
-                <ArrowUp className="h-4 w-4 mr-1" /> Escalate
-              </Button>
-            </>
-          )}
-          <Button 
-            size="sm" 
-            variant="default" 
-            className="bg-[#9b87f5] hover:bg-[#9b87f5]/90" 
-            onClick={() => setIsChatOpen(true)}
-          >
-            <MessageSquare className="h-4 w-4 mr-1" /> Chat with AI
-          </Button>
-        </div>
-      </div>
+      <CaseHeader 
+        caseData={caseData} 
+        openActionDialog={openActionDialog} 
+        setIsChatOpen={setIsChatOpen}
+      />
 
       <Tabs defaultValue="summary" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList className="grid grid-cols-4 mb-4">
@@ -306,431 +221,41 @@ const CaseReview = () => {
         </TabsList>
 
         <TabsContent value="summary" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Case Overview card */}
-            <div className="lg:col-span-2">
-              <Card>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center">
-                    <FileText className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                    <CardTitle className="text-lg">Case Overview</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-sm text-muted-foreground">Journey</p>
-                      <div className="flex items-center">
-                        <Shield className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <p className="font-medium">{caseData.journey}</p>
-                      </div>
-                    </div>
-                    <div>
-                      <p className="text-sm text-muted-foreground">Date</p>
-                      <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <p className="font-medium">{caseData.date}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                    <div className="flex items-center">
-                      <AlertCircle className={`h-6 w-6 mr-3 ${
-                        caseData.riskLevel === "Critical" ? "text-red-500" :
-                        caseData.riskLevel === "High" ? "text-red-400" :
-                        caseData.riskLevel === "Medium" ? "text-amber-400" :
-                        "text-green-500"
-                      }`} />
-                      <div>
-                        <p className="font-medium">Risk Level: {caseData.riskLevel}</p>
-                        <p className="text-sm text-muted-foreground">Score: {caseData.riskScore}/100</p>
-                      </div>
-                    </div>
-                    <div className="w-24 h-2 bg-gray-200 rounded-full overflow-hidden">
-                      <div 
-                        className={`h-full ${
-                          caseData.riskScore >= 80 ? "bg-red-500" :
-                          caseData.riskScore >= 60 ? "bg-red-400" :
-                          caseData.riskScore >= 40 ? "bg-amber-400" :
-                          "bg-green-500"
-                        }`} 
-                        style={{ width: `${caseData.riskScore}%` }}
-                      ></div>
-                    </div>
-                  </div>
-
-                  {caseData.anomalyFlags.length > 0 && (
-                    <div className="space-y-2">
-                      <p className="font-medium">Anomaly Flags</p>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        {caseData.anomalyFlags.map((flag: string, idx: number) => (
-                          <div key={idx} className="flex items-center text-sm bg-amber-50 text-amber-800 p-2 rounded-md">
-                            <AlertTriangle className="h-4 w-4 mr-2 text-amber-500" />
-                            <span>{flag}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* AI Reasoning section - Moved from the separate tab */}
-                  <div className="mt-6">
-                    <Separator className="my-4" />
-                    <div className="flex items-center mb-3">
-                      <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                      <h3 className="font-medium text-[#9b87f5]">AI Analysis</h3>
-                    </div>
-                    <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
-                      <div className="flex items-start mb-3">
-                        <Cpu className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
-                        <div>
-                          <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
-                          <p className="text-sm mt-1">{caseData.reasoning}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-4 grid grid-cols-2 gap-4">
-                      {caseData.decisionFactors.map((factor: any, idx: number) => (
-                        <div key={idx} className="flex items-center justify-between p-3 bg-gray-50 rounded-md">
-                          <div>
-                            <p className="font-medium">{factor.factor}</p>
-                            <p className="text-xs text-muted-foreground">Weight: {factor.weight * 100}%</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            <div className="w-16 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                              <div 
-                                className={`h-full ${
-                                  factor.score >= 80 ? "bg-red-500" :
-                                  factor.score >= 60 ? "bg-red-400" :
-                                  factor.score >= 40 ? "bg-amber-400" :
-                                  "bg-green-500"
-                                }`} 
-                                style={{ width: `${factor.score}%` }}
-                              ></div>
-                            </div>
-                            <span className="text-xs font-medium">{factor.score}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Case Info card */}
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex items-center">
-                  <Shield className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                  <CardTitle className="text-lg">Case Info</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div>
-                    <p className="text-sm text-muted-foreground">Customer</p>
-                    <p className="font-medium">{caseData.customer}</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">Risk Score</p>
-                    <div className="flex items-center mt-1">
-                      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-                        <div 
-                          className={`h-full ${
-                            caseData.riskScore >= 80 ? "bg-red-500" :
-                            caseData.riskScore >= 60 ? "bg-red-400" :
-                            caseData.riskScore >= 40 ? "bg-amber-400" :
-                            "bg-green-500"
-                          }`} 
-                          style={{ width: `${caseData.riskScore}%` }}
-                        ></div>
-                      </div>
-                      <span className="ml-2 font-medium">{caseData.riskScore}</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">Status</p>
-                    <Badge variant={
-                      caseData.status === "Pending Review" ? "outline" : 
-                      caseData.status === "Approved" ? "secondary" : 
-                      "destructive"
-                    } className="mt-1">
-                      {caseData.status}
-                    </Badge>
-                  </div>
-
-                  <div>
-                    <p className="text-sm text-muted-foreground">Recommendation</p>
-                    <p className="text-sm mt-1 p-2 bg-gray-100 rounded-md">
-                      {caseData.riskLevel === "Low" && "Automated approval is recommended."}
-                      {caseData.riskLevel === "Medium" && "Additional verification may be required."}
-                      {caseData.riskLevel === "High" && "Manual review is recommended."}
-                      {caseData.riskLevel === "Critical" && "Rejection is recommended."}
-                    </p>
-                  </div>
-
-                  {/* Key Risk Indicators section - Moved from the AI tab */}
-                  <Separator className="my-3" />
-                  <h3 className="font-medium mb-2">Key Risk Indicators</h3>
-                  <div className="space-y-2">
-                    {[
-                      {
-                        name: "Identity Consistency",
-                        status: caseData.riskScore < 60 ? "pass" : "flag",
-                        details: caseData.riskScore < 60 
-                          ? "All identity information is consistent with our records." 
-                          : "There are inconsistencies in the provided identity information."
-                      },
-                      {
-                        name: "Document Authenticity",
-                        status: caseData.documents[0].verified ? "pass" : "flag",
-                        details: caseData.documents[0].verified
-                          ? "Document verification passed all security checks."
-                          : "Document verification found potential issues with authenticity."
-                      },
-                      {
-                        name: "Behavioral Patterns",
-                        status: caseData.riskScore < 70 ? "pass" : "flag",
-                        details: caseData.riskScore < 70
-                          ? "User behavior is consistent with historical patterns."
-                          : "Unusual behavior detected in recent activities."
-                      }
-                    ].map((indicator, idx) => (
-                      <div key={idx} className="flex items-start p-2 border rounded-md">
-                        {indicator.status === "pass" ? (
-                          <UserCheck className="h-5 w-5 mr-2 text-green-500 mt-0.5" />
-                        ) : (
-                          <UserX className="h-5 w-5 mr-2 text-amber-500 mt-0.5" />
-                        )}
-                        <div>
-                          <p className="font-medium">{indicator.name}</p>
-                          <p className="text-sm text-muted-foreground">{indicator.details}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <CaseSummaryTab caseData={caseData} />
         </TabsContent>
 
         <TabsContent value="identity" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center">
-                <User className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                <CardTitle className="text-lg">Identity Information</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Name</p>
-                  <div className="flex items-center">
-                    <User className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.customer}</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Email</p>
-                  <div className="flex items-center">
-                    <Mail className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.email}</p>
-                    {caseData.emailVerified ? 
-                      <Badge variant="outline" className="ml-2 text-green-600 border-green-600">
-                        <Check className="h-3 w-3 mr-1" /> Verified
-                      </Badge> : 
-                      <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">
-                        <AlertTriangle className="h-3 w-3 mr-1" /> Unverified
-                      </Badge>
-                    }
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Phone</p>
-                  <div className="flex items-center">
-                    <Phone className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.phone}</p>
-                    {caseData.phoneVerified ? 
-                      <Badge variant="outline" className="ml-2 text-green-600 border-green-600">
-                        <Check className="h-3 w-3 mr-1" /> Verified
-                      </Badge> : 
-                      <Badge variant="outline" className="ml-2 text-amber-600 border-amber-600">
-                        <AlertTriangle className="h-3 w-3 mr-1" /> Unverified
-                      </Badge>
-                    }
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">Location</p>
-                  <div className="flex items-center">
-                    <Globe className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.location}</p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div>
-                <h3 className="font-medium mb-3">Identity Documents</h3>
-                <div className="space-y-3">
-                  {caseData.documents.map((doc: any, idx: number) => (
-                    <div key={idx} className="flex items-center justify-between border rounded-md p-3">
-                      <div className="flex items-center">
-                        <File className="h-10 w-10 p-2 mr-3 bg-gray-100 rounded-md text-gray-600" />
-                        <div>
-                          <p className="font-medium">{doc.type}</p>
-                          <div className="flex items-center">
-                            <p className="text-sm text-muted-foreground mr-2">
-                              Score: {doc.score}/100
-                            </p>
-                            <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-                              <div 
-                                className={`h-full ${
-                                  doc.score >= 80 ? "bg-green-500" :
-                                  doc.score >= 60 ? "bg-amber-400" :
-                                  "bg-red-500"
-                                }`} 
-                                style={{ width: `${doc.score}%` }}
-                              ></div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        {doc.verified ? 
-                          <Badge variant="outline" className="text-green-600 border-green-600">
-                            <Check className="h-3 w-3 mr-1" /> Verified
-                          </Badge> : 
-                          <Badge variant="outline" className="text-amber-600 border-amber-600">
-                            <AlertTriangle className="h-3 w-3 mr-1" /> Issues
-                          </Badge>
-                        }
-                        <Button variant="outline" size="sm">
-                          <Download className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CaseIdentityTab caseData={caseData} />
         </TabsContent>
 
         <TabsContent value="activity" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center">
-                <Activity className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                <CardTitle className="text-lg">Device & Activity</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-muted-foreground">Device ID</p>
-                  <div className="flex items-center">
-                    <Smartphone className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.deviceId}</p>
-                  </div>
-                </div>
-                <div>
-                  <p className="text-sm text-muted-foreground">IP Address</p>
-                  <div className="flex items-center">
-                    <HardDrive className="h-4 w-4 mr-2 text-muted-foreground" />
-                    <p className="font-medium">{caseData.ipAddress}</p>
-                  </div>
-                </div>
-              </div>
-
-              <Separator />
-
-              <div className="space-y-3">
-                <h3 className="font-medium">Recent Activity</h3>
-                {[...Array(5)].map((_, idx) => (
-                  <div key={idx} className="flex items-start p-3 rounded-md bg-gray-50">
-                    <div className="mr-3 mt-0.5 bg-white p-1.5 rounded-full">
-                      <Clock className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex justify-between items-start">
-                        <p className="font-medium">
-                          {["Login attempt", "Updated profile", "Initiated transaction", "Uploaded document", "Password change"][idx]}
-                        </p>
-                        <Badge variant={idx === 0 && caseData.riskScore > 70 ? "destructive" : "outline"} className="text-xs">
-                          {idx === 0 && caseData.riskScore > 70 ? (
-                            <><AlertTriangle className="h-3 w-3 mr-1" /> Suspicious</>
-                          ) : (
-                            <><Check className="h-3 w-3 mr-1" /> Normal</>
-                          )}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">
-                        {new Date(2023, 
-                          Math.floor(Math.random() * 12), 
-                          Math.floor(Math.random() * 28) + 1, 
-                          Math.floor(Math.random() * 24),
-                          Math.floor(Math.random() * 60)
-                        ).toLocaleString()}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+          <CaseActivityTab caseData={caseData} />
         </TabsContent>
 
         <TabsContent value="network" className="space-y-4">
-          <Card>
-            <CardHeader className="pb-2">
-              <div className="flex items-center">
-                <Network className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                <CardTitle className="text-lg">User Network Analysis</CardTitle>
-              </div>
-              <CardDescription>
-                Connections between this user and other entities
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="mb-4">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-medium">Connection Graph</h3>
-                    <p className="text-sm text-muted-foreground">Visualizing how this user is connected to other entities</p>
-                  </div>
-                  <div className="flex items-center space-x-2 text-sm">
-                    <div className="flex items-center">
-                      <span className="w-3 h-3 rounded-full bg-green-500 mr-1"></span>
-                      <span>Good Users</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="w-3 h-3 rounded-full bg-red-500 mr-1"></span>
-                      <span>Bad Users</span>
-                    </div>
-                    <div className="flex items-center">
-                      <span className="w-3 h-3 rounded-full bg-blue-500 mr-1"></span>
-                      <span>Current User</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="border rounded-md p-1 mt-3 bg-gray-50">
-                  <UserNetworkGraph caseData={caseData} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+          <CaseNetworkTab caseData={caseData} />
         </TabsContent>
       </Tabs>
 
       {actionDialog.isOpen && (
         <CaseActionDialog
-          caseId
+          caseId={caseData.id}
+          actionType={actionDialog.actionType}
+          isOpen={actionDialog.isOpen}
+          onClose={closeActionDialog}
+        />
+      )}
+
+      {isChatOpen && (
+        <CaseChat
+          caseId={caseData.id}
+          isOpen={isChatOpen}
+          onClose={() => setIsChatOpen(false)}
+        />
+      )}
+    </div>
+  );
+};
+
+export default CaseReview;
+
