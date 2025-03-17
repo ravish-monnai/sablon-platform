@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { 
@@ -733,4 +734,38 @@ const CaseReview = () => {
                   </div>
                 </div>
                 <div className="border rounded-md p-1 mt-3 bg-gray-50">
-                  <UserNetworkGraph
+                  <UserNetworkGraph caseData={caseData} />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+
+      {actionDialog.isOpen && (
+        <CaseActionDialog
+          isOpen={actionDialog.isOpen}
+          actionType={actionDialog.actionType}
+          onClose={closeActionDialog}
+          caseData={caseData}
+        />
+      )}
+
+      <Sheet open={isChatOpen} onOpenChange={setIsChatOpen}>
+        <SheetContent className="w-full sm:max-w-md overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Case Chat Assistant</SheetTitle>
+            <SheetDescription>
+              Chat with our AI assistant about this case
+            </SheetDescription>
+          </SheetHeader>
+          <div className="mt-6">
+            <CaseChat caseData={caseData} />
+          </div>
+        </SheetContent>
+      </Sheet>
+    </div>
+  );
+};
+
+export default CaseReview;
