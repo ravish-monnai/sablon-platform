@@ -13,6 +13,7 @@ import Models from "./pages/Models";
 import Data from "./pages/Data";
 import Cases from "./pages/Cases";
 import Transactions from "./pages/Transactions";
+import DashboardLayout from "./components/dashboard/DashboardLayout";
 
 const queryClient = new QueryClient();
 
@@ -23,13 +24,41 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/ai-journeys" element={<AIJourneys />} />
-          <Route path="/ai-agents" element={<AIAgents />} />
-          <Route path="/models" element={<Models />} />
-          <Route path="/data" element={<Data />} />
-          <Route path="/cases" element={<Cases />} />
-          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/" element={
+            <DashboardLayout>
+              <Dashboard />
+            </DashboardLayout>
+          } />
+          <Route path="/ai-journeys" element={
+            <DashboardLayout>
+              <AIJourneys />
+            </DashboardLayout>
+          } />
+          <Route path="/ai-agents" element={
+            <DashboardLayout>
+              <AIAgents />
+            </DashboardLayout>
+          } />
+          <Route path="/models" element={
+            <DashboardLayout>
+              <Models />
+            </DashboardLayout>
+          } />
+          <Route path="/data" element={
+            <DashboardLayout>
+              <Data />
+            </DashboardLayout>
+          } />
+          <Route path="/cases" element={
+            <DashboardLayout>
+              <Cases />
+            </DashboardLayout>
+          } />
+          <Route path="/transactions" element={
+            <DashboardLayout>
+              <Transactions />
+            </DashboardLayout>
+          } />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
