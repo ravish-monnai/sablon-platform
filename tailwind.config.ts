@@ -69,10 +69,10 @@ export default {
 				},
 				// Brand colors
 				"monnai-blue": "#5100ff",
-				"deep-black": "#000000",
-				"clear-white": "#ffffff",
 				"monnai-yellow": "#fb9400",
 				"monnai-pink": "#ff00aa",
+				"deep-black": "#000000",
+				"clear-white": "#ffffff",
 				"monnai-gradient": {
 					from: "#fb9400",
 					via: "#ff00aa",

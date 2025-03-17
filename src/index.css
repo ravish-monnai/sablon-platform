@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -44,6 +45,11 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 261 100% 50%;
+    
+    /* Monnai brand colors */
+    --monnai-yellow: 33 100% 49%;
+    --monnai-pink: 330 100% 50%;
+    --monnai-blue: 261 100% 50%;
   }
 
   .dark {
@@ -84,6 +90,11 @@
     --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 261 100% 50%;
+    
+    /* Monnai brand colors remain the same in dark mode */
+    --monnai-yellow: 33 100% 49%;
+    --monnai-pink: 330 100% 50%;
+    --monnai-blue: 261 100% 50%;
   }
 }
 

@@ -8,6 +8,8 @@ import {
   SidebarMenuButton,
   SidebarProvider,
   SidebarInset,
+  SidebarHeader,
+  SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { 
   LayoutDashboard, 
@@ -19,6 +21,7 @@ import {
   CircleDollarSign 
 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
+import MonnaiLogo from "../branding/MonnaiLogo"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -49,6 +52,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <Sidebar variant="sidebar" collapsible="icon">
+          <SidebarHeader className="flex items-center justify-between p-4">
+            <MonnaiLogo variant="gradient" />
+            <SidebarTrigger />
+          </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
               {navItems.map((item) => (
