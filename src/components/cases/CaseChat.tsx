@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -8,6 +7,7 @@ import { BrainCircuit, Send, Bot, User, Lightbulb } from "lucide-react";
 
 interface CaseChatProps {
   caseData: any;
+  onClose: () => void;
 }
 
 interface Message {
@@ -25,7 +25,7 @@ const llmModels = [
   { id: "mixtral-8x7b", name: "Mixtral 8x7B", provider: "Mistral AI" }
 ];
 
-const CaseChat: React.FC<CaseChatProps> = ({ caseData }) => {
+const CaseChat: React.FC<CaseChatProps> = ({ caseData, onClose }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState("gpt-4o");
