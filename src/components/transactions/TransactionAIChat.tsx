@@ -4,10 +4,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BrainCircuit, Send, Bot, User, Lightbulb, X } from "lucide-react";
+import { BrainCircuit, Send, Bot, User, Lightbulb, X, Search, MousePointerClick, Target } from "lucide-react";
 
 interface TransactionAIChatProps {
   onClose: () => void;
+  initialAnalysis?: string;
 }
 
 interface Message {
@@ -25,7 +26,7 @@ const llmModels = [
   { id: "mixtral-8x7b", name: "Mixtral 8x7B", provider: "Mistral AI" }
 ];
 
-const TransactionAIChat: React.FC<TransactionAIChatProps> = ({ onClose }) => {
+const TransactionAIChat: React.FC<TransactionAIChatProps> = ({ onClose, initialAnalysis }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [selectedModel, setSelectedModel] = useState("gpt-4o");
@@ -41,7 +42,27 @@ const TransactionAIChat: React.FC<TransactionAIChatProps> = ({ onClose }) => {
         timestamp: new Date()
       }
     ]);
-  }, []);
+
+    // If an initial analysis was requested, simulate that question
+    if (initialAnalysis) {
+      setTimeout(() => {
+        const analysisMessage = {
+          role: "user" as const,
+          content: `Run ${initialAnalysis} on our transaction data`,
+          timestamp: new Date()
+        };
+        
+        setMessages(prev => [...prev, analysisMessage]);
+        setIsTyping(true);
+        
+        // Simulate AI response after a delay
+        setTimeout(() => {
+          generateAIResponse(analysisMessage.content);
+          setIsTyping(false);
+        }, 1500);
+      }, 500);
+    }
+  }, [initialAnalysis]);
 
   useEffect(() => {
     // Scroll to bottom when messages change
@@ -76,7 +97,7 @@ const TransactionAIChat: React.FC<TransactionAIChatProps> = ({ onClose }) => {
     const lowerInput = userInput.toLowerCase();
 
     if (lowerInput.includes("pattern") || lowerInput.includes("identify pattern")) {
-      aiResponse = "Based on my analysis of transaction patterns, I've identified several recurring behaviors:\n\n1. Increased transaction volume on Fridays (38% higher than other weekdays)\n2. Repeated small transactions from the same source within short timeframes\n3. Correlation between transaction amounts and specific journey types\n\nWould you like me to investigate any of these patterns further?";
+      aiResponse = "Based on my analysis of transaction patterns, I've identified several recurring behaviors:\n\n1. **Recurring Time Patterns**: 38% higher transaction volume on Fridays, with peak hours between 12-2pm and 6-8pm\n\n2. **Sequential Micro-Transactions**: Multiple small transactions (under $20) from the same source within 30-minute windows\n\n3. **Journey-Amount Correlation**: Identity Verification journeys have a 73% higher average transaction value than Account Opening journeys\n\n4. **Device-Journey Pattern**: Mobile transactions are 2.4x more common in Transaction Monitoring journeys than desktop\n\nWould you like me to investigate any of these patterns further?";
     } 
     else if (lowerInput.includes("anomaly") || lowerInput.includes("unusual")) {
       aiResponse = "I've detected several anomalies in the transaction data:\n\n- Transaction TRX-004 shows unusual behavior with failed status and very high risk\n- There's a 215% increase in high-risk transactions in the Identity Verification journey\n- The Average transaction value for Risk Assessment is significantly higher than historical norms\n\nI recommend investigating these anomalies further. Would you like me to elaborate on any specific point?";

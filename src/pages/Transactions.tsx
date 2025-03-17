@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Separator } from "@/components/ui/separator"
 import { LinkStatus } from "@/components/ui/link-status"
 import { Button } from "@/components/ui/button"
-import { Plus, Download, Filter, RefreshCw, Bot, Search, TrendingUp, AlertTriangle, WandSparkles } from "lucide-react"
+import { Plus, Download, Filter, RefreshCw, Bot, Search, TrendingUp, AlertTriangle, WandSparkles, MousePointerClick, Target } from "lucide-react"
 import { 
   Table, 
   TableBody, 
@@ -25,11 +25,15 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import TransactionAIChat from "@/components/transactions/TransactionAIChat"
 import { Badge } from "@/components/ui/badge"
 import { useToast } from "@/hooks/use-toast"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Cell } from "recharts"
 
 const Transactions = () => {
   const [activeJourney, setActiveJourney] = useState("all")
   const [showAIChat, setShowAIChat] = useState(false)
   const [currentAnalysis, setCurrentAnalysis] = useState<string | null>(null)
+  const [showAnalysisResult, setShowAnalysisResult] = useState(false)
+  const [analysisType, setAnalysisType] = useState<string | null>(null)
   const { toast } = useToast()
   
   // Sample transactions data
@@ -40,6 +44,39 @@ const Transactions = () => {
     { id: "TRX-004", date: "2023-10-12", amount: "$50.00", status: "Failed", risk: "Very High", journey: "Risk Assessment" },
     { id: "TRX-005", date: "2023-10-11", amount: "$300.75", status: "Completed", risk: "Low", journey: "Fraud Detection" },
   ]
+  
+  // Pattern recognition data (example)
+  const patternData = [
+    { name: 'Mon', transactions: 32, pattern: 'Low' },
+    { name: 'Tue', transactions: 38, pattern: 'Low' },
+    { name: 'Wed', transactions: 42, pattern: 'Low' },
+    { name: 'Thu', transactions: 45, pattern: 'Medium' },
+    { name: 'Fri', transactions: 65, pattern: 'High' },
+    { name: 'Sat', transactions: 30, pattern: 'Low' },
+    { name: 'Sun', transactions: 22, pattern: 'Low' },
+  ];
+  
+  // Time pattern data
+  const hourlyPatternData = [
+    { hour: '6-8 AM', count: 15, pattern: 'Low' },
+    { hour: '8-10 AM', count: 28, pattern: 'Medium' },
+    { hour: '10-12 PM', count: 42, pattern: 'Medium' },
+    { hour: '12-2 PM', count: 76, pattern: 'High' },
+    { hour: '2-4 PM', count: 35, pattern: 'Medium' },
+    { hour: '4-6 PM', count: 48, pattern: 'Medium' },
+    { hour: '6-8 PM', count: 65, pattern: 'High' },
+    { hour: '8-10 PM', count: 32, pattern: 'Medium' },
+    { hour: '10-12 AM', count: 12, pattern: 'Low' },
+  ];
+  
+  // Value pattern data by journey
+  const journeyValuePatternData = [
+    { journey: 'Account Opening', avg: 105, pattern: 'Medium' },
+    { journey: 'Identity Verification', avg: 182, pattern: 'High' },
+    { journey: 'Risk Assessment', avg: 130, pattern: 'Medium' },
+    { journey: 'Transaction Monitoring', avg: 68, pattern: 'Low' },
+    { journey: 'Fraud Detection', avg: 135, pattern: 'Medium' },
+  ];
   
   // Filter transactions by journey
   const filteredTransactions = activeJourney === "all" 
@@ -52,6 +89,7 @@ const Transactions = () => {
   // Handle running AI analysis
   const runAIAnalysis = (analysisType: string) => {
     setCurrentAnalysis(analysisType)
+    setAnalysisType(analysisType)
     
     // Show loading toast
     toast({
@@ -63,6 +101,7 @@ const Transactions = () => {
     // Simulate analysis completion
     setTimeout(() => {
       setCurrentAnalysis(null)
+      setShowAnalysisResult(true)
       
       // Show completion toast
       toast({
@@ -75,6 +114,15 @@ const Transactions = () => {
       setShowAIChat(true)
     }, 2500)
   }
+  
+  const getPatternColor = (pattern: string) => {
+    switch(pattern) {
+      case 'High': return '#9b87f5';
+      case 'Medium': return '#94a3b8';
+      case 'Low': return '#cbd5e1';
+      default: return '#cbd5e1';
+    }
+  };
   
   return (
     <div className="w-full flex">
@@ -264,6 +312,124 @@ const Transactions = () => {
           </TabsContent>
           
           <TabsContent value="ai-analysis">
+            {showAnalysisResult && analysisType === "Pattern Recognition" && (
+              <Card className="mb-6">
+                <CardHeader className="pb-2">
+                  <div className="flex items-center">
+                    <Target className="h-5 w-5 mr-2 text-[#9b87f5]" />
+                    <CardTitle>Pattern Recognition Results</CardTitle>
+                  </div>
+                  <CardDescription>
+                    AI detected patterns in transaction data
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-6">
+                    <div>
+                      <h3 className="text-sm font-medium mb-2 flex items-center">
+                        <MousePointerClick className="h-4 w-4 mr-1 text-[#9b87f5]" />
+                        Day of Week Pattern
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Transactions show a 38% increase on Fridays compared to other weekdays.
+                      </p>
+                      <div className="h-64 mt-4">
+                        <ChartContainer 
+                          config={{ 
+                            high: { theme: { light: '#9b87f5', dark: '#9b87f5' } },
+                            medium: { theme: { light: '#94a3b8', dark: '#94a3b8' } },
+                            low: { theme: { light: '#cbd5e1', dark: '#cbd5e1' } }
+                          }}
+                        >
+                          <BarChart data={patternData} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
+                            <XAxis dataKey="name" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="transactions" radius={[4, 4, 0, 0]}>
+                              {patternData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={getPatternColor(entry.pattern)} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ChartContainer>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-sm font-medium mb-2 flex items-center">
+                        <MousePointerClick className="h-4 w-4 mr-1 text-[#9b87f5]" />
+                        Time of Day Pattern
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Peak transaction hours occur between 12-2pm and 6-8pm daily.
+                      </p>
+                      <div className="h-64 mt-4">
+                        <ChartContainer 
+                          config={{ 
+                            high: { theme: { light: '#9b87f5', dark: '#9b87f5' } },
+                            medium: { theme: { light: '#94a3b8', dark: '#94a3b8' } },
+                            low: { theme: { light: '#cbd5e1', dark: '#cbd5e1' } }
+                          }}
+                        >
+                          <BarChart data={hourlyPatternData} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
+                            <XAxis dataKey="hour" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="count" radius={[4, 4, 0, 0]}>
+                              {hourlyPatternData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={getPatternColor(entry.pattern)} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ChartContainer>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <h3 className="text-sm font-medium mb-2 flex items-center">
+                        <MousePointerClick className="h-4 w-4 mr-1 text-[#9b87f5]" />
+                        Transaction Value by Journey
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-2">
+                        Identity Verification journeys have 73% higher average values than Account Opening journeys.
+                      </p>
+                      <div className="h-64 mt-4">
+                        <ChartContainer 
+                          config={{ 
+                            high: { theme: { light: '#9b87f5', dark: '#9b87f5' } },
+                            medium: { theme: { light: '#94a3b8', dark: '#94a3b8' } },
+                            low: { theme: { light: '#cbd5e1', dark: '#cbd5e1' } }
+                          }}
+                        >
+                          <BarChart data={journeyValuePatternData} margin={{ top: 10, right: 10, left: 10, bottom: 20 }}>
+                            <XAxis dataKey="journey" />
+                            <YAxis />
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <Bar dataKey="avg" radius={[4, 4, 0, 0]}>
+                              {journeyValuePatternData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={getPatternColor(entry.pattern)} />
+                              ))}
+                            </Bar>
+                          </BarChart>
+                        </ChartContainer>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-blue-50 border border-blue-100 p-4 rounded-md">
+                      <div className="flex items-center mb-2">
+                        <AlertTriangle className="h-5 w-5 text-blue-600 mr-2" />
+                        <h3 className="font-medium">AI Assistant Analysis</h3>
+                      </div>
+                      <p className="text-sm">
+                        The pattern analysis shows distinct transaction behaviors across days, times, and journeys. 
+                        For detailed insights, consult the AI assistant which can analyze these patterns further.
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            )}
+            
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <Card className="hover:shadow-md transition-shadow">
                 <CardHeader className="pb-2">
@@ -360,10 +526,27 @@ const Transactions = () => {
                 <CardDescription>Recent AI-powered transaction analyses</CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="text-center text-muted-foreground py-8">
-                  <p>No recent analyses found.</p>
-                  <p className="text-sm">Run an analysis to see results here.</p>
-                </div>
+                {showAnalysisResult ? (
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between p-3 bg-gray-50 rounded-md border">
+                      <div className="flex items-center gap-2">
+                        <Target className="h-5 w-5 text-[#9b87f5]" />
+                        <div>
+                          <p className="font-medium">Pattern Recognition</p>
+                          <p className="text-xs text-muted-foreground">Completed at {new Date().toLocaleTimeString()}</p>
+                        </div>
+                      </div>
+                      <Badge className="bg-green-100 text-green-800 border-green-200">
+                        Completed
+                      </Badge>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="text-center text-muted-foreground py-8">
+                    <p>No recent analyses found.</p>
+                    <p className="text-sm">Run an analysis to see results here.</p>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
@@ -372,7 +555,10 @@ const Transactions = () => {
       
       {showAIChat && (
         <div className="w-1/3 border-l border-border pl-4 h-[calc(100vh-10rem)] overflow-hidden">
-          <TransactionAIChat onClose={() => setShowAIChat(false)} />
+          <TransactionAIChat 
+            onClose={() => setShowAIChat(false)} 
+            initialAnalysis={analysisType}
+          />
         </div>
       )}
     </div>
