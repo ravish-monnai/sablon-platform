@@ -1,11 +1,154 @@
 
+import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
-import { AlertTriangle, Check, X, Eye, Shield, Filter } from "lucide-react"
+import { AlertTriangle, Check, X, Eye, Shield, Filter, ArrowUpDown } from "lucide-react"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { 
+  Table, 
+  TableHeader, 
+  TableRow, 
+  TableHead, 
+  TableBody, 
+  TableCell 
+} from "@/components/ui/table"
+import { 
+  Pagination, 
+  PaginationContent, 
+  PaginationItem, 
+  PaginationLink, 
+  PaginationNext, 
+  PaginationPrevious 
+} from "@/components/ui/pagination"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+
+// Generate AI journey names
+const journeys = [
+  "Account Opening", 
+  "Transaction Monitoring", 
+  "Identity Verification", 
+  "Risk Assessment",
+  "Fraud Detection"
+]
+
+// Generate 100 cases with random data but fixed pattern distribution
+const generateCases = () => {
+  const cases = []
+  const riskLevels = ["Low", "Medium", "High", "Critical"]
+  const statuses = ["Pending Review", "Approved", "Rejected"]
+  const statusColors = {
+    "Pending Review": "bg-amber-100 text-amber-800",
+    "Approved": "bg-green-100 text-green-800",
+    "Rejected": "bg-red-100 text-red-800"
+  }
+  
+  for (let i = 1; i <= 100; i++) {
+    const journeyIndex = Math.floor(i / 20) % journeys.length // Distribute evenly across journeys
+    const journey = journeys[journeyIndex]
+    
+    const riskIndex = Math.floor(Math.random() * 4)
+    const riskLevel = riskLevels[riskIndex]
+    
+    // Calculate risk score based on risk level
+    let riskScore
+    if (riskLevel === "Low") riskScore = Math.floor(Math.random() * 30) + 10
+    else if (riskLevel === "Medium") riskScore = Math.floor(Math.random() * 20) + 40
+    else if (riskLevel === "High") riskScore = Math.floor(Math.random() * 20) + 65
+    else riskScore = Math.floor(Math.random() * 15) + 85
+    
+    // Status is more likely to be pending for high risk, approved for low risk
+    let statusProbability
+    if (riskLevel === "Low") statusProbability = [0.2, 0.7, 0.1]
+    else if (riskLevel === "Medium") statusProbability = [0.4, 0.4, 0.2]
+    else if (riskLevel === "High") statusProbability = [0.6, 0.2, 0.2]
+    else statusProbability = [0.7, 0.05, 0.25]
+    
+    const rand = Math.random()
+    let statusIndex = 0
+    let sum = statusProbability[0]
+    
+    while (rand > sum && statusIndex < statusProbability.length - 1) {
+      statusIndex++
+      sum += statusProbability[statusIndex]
+    }
+    
+    const status = statuses[statusIndex]
+    
+    cases.push({
+      id: `FR-2023-${1000 + i}`,
+      customer: `Customer ${i}`,
+      journey,
+      riskLevel,
+      riskScore,
+      status,
+      statusColor: statusColors[status],
+      date: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1).toISOString().split('T')[0]
+    })
+  }
+  
+  return cases
+}
+
+const allCases = generateCases()
 
 const Cases = () => {
+  const [activeJourney, setActiveJourney] = useState("all")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [statusFilter, setStatusFilter] = useState("all")
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: null })
+  const casesPerPage = 10
+  
+  // Filter cases by journey and status
+  const filteredCases = allCases.filter(c => {
+    const journeyMatch = activeJourney === "all" || c.journey === activeJourney
+    const statusMatch = statusFilter === "all" || c.status === statusFilter
+    return journeyMatch && statusMatch
+  })
+  
+  // Sort cases
+  const sortedCases = [...filteredCases].sort((a, b) => {
+    if (!sortConfig.key) return 0
+    
+    if (sortConfig.key === "riskScore") {
+      return sortConfig.direction === "ascending" 
+        ? a.riskScore - b.riskScore
+        : b.riskScore - a.riskScore
+    }
+    
+    if (sortConfig.key === "date") {
+      return sortConfig.direction === "ascending" 
+        ? new Date(a.date) - new Date(b.date)
+        : new Date(b.date) - new Date(a.date)
+    }
+    
+    // Default string comparison
+    return sortConfig.direction === "ascending" 
+      ? a[sortConfig.key].localeCompare(b[sortConfig.key])
+      : b[sortConfig.key].localeCompare(a[sortConfig.key])
+  })
+  
+  // Calculate pagination
+  const totalPages = Math.ceil(sortedCases.length / casesPerPage)
+  const indexOfLastCase = currentPage * casesPerPage
+  const indexOfFirstCase = indexOfLastCase - casesPerPage
+  const currentCases = sortedCases.slice(indexOfFirstCase, indexOfLastCase)
+  
+  // Handle sorting
+  const requestSort = (key) => {
+    let direction = 'ascending'
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending'
+    }
+    setSortConfig({ key, direction })
+  }
+  
+  // Count cases per journey
+  const journeyCounts = journeys.reduce((acc, journey) => {
+    acc[journey] = allCases.filter(c => c.journey === journey).length
+    return acc
+  }, {})
+  
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
@@ -14,15 +157,15 @@ const Cases = () => {
           <Button variant="outline" size="sm">
             <Filter className="mr-2 h-4 w-4" /> Filter
           </Button>
-          <Select defaultValue="all">
+          <Select value={statusFilter} onValueChange={setStatusFilter}>
             <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All Cases</SelectItem>
-              <SelectItem value="pending">Pending Review</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
+              <SelectItem value="Pending Review">Pending Review</SelectItem>
+              <SelectItem value="Approved">Approved</SelectItem>
+              <SelectItem value="Rejected">Rejected</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -30,192 +173,226 @@ const Cases = () => {
       
       <Separator className="my-6" />
       
-      <div className="grid grid-cols-1 gap-4">
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex justify-between">
-              <div>
-                <CardTitle className="text-lg flex items-center">
-                  <Shield className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                  Case #FR-2023-0548
-                </CardTitle>
-                <CardDescription>Account opening - High value transaction</CardDescription>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Pending Review</span>
-                <span className="text-sm font-medium">Risk Score: 62</span>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <h3 className="text-sm font-medium mb-1">Customer Info</h3>
-                <p className="text-sm">John Smith</p>
-                <p className="text-sm text-muted-foreground">john.smith@example.com</p>
-                <p className="text-sm text-muted-foreground">+1 (555) 123-4567</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Flags</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-red-600">• Multiple access locations</span>
-                  <span className="text-xs text-red-600">• New device</span>
-                  <span className="text-xs text-amber-600">• Unusual transaction amount</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Identity Verification</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-green-600">• Passport verified</span>
-                  <span className="text-xs text-green-600">• Email verified</span>
-                  <span className="text-xs text-amber-600">• Phone pending</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Data Sources</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-green-600">• Email reputation: Good</span>
-                  <span className="text-xs text-amber-600">• Phone data: Limited history</span>
-                  <span className="text-xs text-red-600">• Network graph: Suspicious connections</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="outline" size="sm">
-                <Eye className="mr-2 h-4 w-4" /> Review Details
-              </Button>
-              <Button variant="outline" size="sm" className="border-green-500 text-green-600 hover:bg-green-50">
-                <Check className="mr-2 h-4 w-4" /> Approve
-              </Button>
-              <Button variant="outline" size="sm" className="border-red-500 text-red-600 hover:bg-red-50">
-                <X className="mr-2 h-4 w-4" /> Reject
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+      <Tabs defaultValue="all" onValueChange={setActiveJourney}>
+        <TabsList className="mb-4">
+          <TabsTrigger value="all">
+            All Cases ({allCases.length})
+          </TabsTrigger>
+          {journeys.map(journey => (
+            <TabsTrigger key={journey} value={journey}>
+              {journey} ({journeyCounts[journey]})
+            </TabsTrigger>
+          ))}
+        </TabsList>
         
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex justify-between">
-              <div>
-                <CardTitle className="text-lg flex items-center">
-                  <Shield className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                  Case #FR-2023-0547
-                </CardTitle>
-                <CardDescription>Account modification - Password reset</CardDescription>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="px-2 py-1 bg-amber-100 text-amber-800 text-xs rounded-full">Pending Review</span>
-                <span className="text-sm font-medium">Risk Score: 45</span>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <h3 className="text-sm font-medium mb-1">Customer Info</h3>
-                <p className="text-sm">Sarah Johnson</p>
-                <p className="text-sm text-muted-foreground">sarah.j@example.com</p>
-                <p className="text-sm text-muted-foreground">+1 (555) 987-6543</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Flags</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-amber-600">• Login from new location</span>
-                  <span className="text-xs text-amber-600">• Multiple failed attempts</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Identity Verification</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-green-600">• Driver's license verified</span>
-                  <span className="text-xs text-green-600">• Email verified</span>
-                  <span className="text-xs text-green-600">• Phone verified</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Data Sources</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-green-600">• Email reputation: Excellent</span>
-                  <span className="text-xs text-green-600">• Phone data: Consistent history</span>
-                  <span className="text-xs text-amber-600">• Network graph: Minor anomalies</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="outline" size="sm">
-                <Eye className="mr-2 h-4 w-4" /> Review Details
-              </Button>
-              <Button variant="outline" size="sm" className="border-green-500 text-green-600 hover:bg-green-50">
-                <Check className="mr-2 h-4 w-4" /> Approve
-              </Button>
-              <Button variant="outline" size="sm" className="border-red-500 text-red-600 hover:bg-red-50">
-                <X className="mr-2 h-4 w-4" /> Reject
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+        <TabsContent value="all">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Case ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>
+                  <div className="flex items-center cursor-pointer" onClick={() => requestSort('journey')}>
+                    Journey
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center cursor-pointer" onClick={() => requestSort('riskScore')}>
+                    Risk Score
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center cursor-pointer" onClick={() => requestSort('status')}>
+                    Status
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </div>
+                </TableHead>
+                <TableHead>
+                  <div className="flex items-center cursor-pointer" onClick={() => requestSort('date')}>
+                    Date
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                  </div>
+                </TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {currentCases.map((caseItem) => (
+                <TableRow key={caseItem.id}>
+                  <TableCell className="font-medium">
+                    <div className="flex items-center">
+                      <Shield className="h-4 w-4 mr-2 text-[#9b87f5]" />
+                      {caseItem.id}
+                    </div>
+                  </TableCell>
+                  <TableCell>{caseItem.customer}</TableCell>
+                  <TableCell>{caseItem.journey}</TableCell>
+                  <TableCell>
+                    <span className={`rounded-full px-2 py-1 text-xs ${
+                      caseItem.riskScore >= 80 ? "bg-red-100 text-red-800" :
+                      caseItem.riskScore >= 60 ? "bg-amber-100 text-amber-800" :
+                      caseItem.riskScore >= 40 ? "bg-yellow-100 text-yellow-800" :
+                      "bg-green-100 text-green-800"
+                    }`}>
+                      {caseItem.riskScore}
+                    </span>
+                  </TableCell>
+                  <TableCell>
+                    <span className={`rounded-full px-2 py-1 text-xs ${caseItem.statusColor}`}>
+                      {caseItem.status}
+                    </span>
+                  </TableCell>
+                  <TableCell>{caseItem.date}</TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex justify-end space-x-2">
+                      <Button variant="outline" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      {caseItem.status === "Pending Review" && (
+                        <>
+                          <Button variant="outline" size="sm" className="border-green-500 text-green-600 hover:bg-green-50">
+                            <Check className="h-4 w-4" />
+                          </Button>
+                          <Button variant="outline" size="sm" className="border-red-500 text-red-600 hover:bg-red-50">
+                            <X className="h-4 w-4" />
+                          </Button>
+                        </>
+                      )}
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+          
+          <Pagination className="mt-4">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious 
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className={currentPage === 1 ? "opacity-50 pointer-events-none" : ""}
+                />
+              </PaginationItem>
+              
+              {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                let pageNum = i + 1
+                if (totalPages > 5 && currentPage > 3) {
+                  pageNum = currentPage - 3 + i
+                  if (pageNum > totalPages) pageNum = totalPages - (4 - i)
+                }
+                
+                return (
+                  <PaginationItem key={i}>
+                    <PaginationLink 
+                      isActive={currentPage === pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                    >
+                      {pageNum}
+                    </PaginationLink>
+                  </PaginationItem>
+                )
+              })}
+              
+              <PaginationItem>
+                <PaginationNext 
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  className={currentPage === totalPages ? "opacity-50 pointer-events-none" : ""}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        </TabsContent>
         
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex justify-between">
-              <div>
-                <CardTitle className="text-lg flex items-center">
-                  <Shield className="h-5 w-5 mr-2 text-[#9b87f5]" />
-                  Case #FR-2023-0546
-                </CardTitle>
-                <CardDescription>New transaction - International transfer</CardDescription>
-              </div>
-              <div className="flex items-center space-x-2">
-                <span className="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Rejected</span>
-                <span className="text-sm font-medium">Risk Score: 87</span>
-              </div>
-            </div>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <div>
-                <h3 className="text-sm font-medium mb-1">Customer Info</h3>
-                <p className="text-sm">Michael Lee</p>
-                <p className="text-sm text-muted-foreground">mike.lee@example.com</p>
-                <p className="text-sm text-muted-foreground">+1 (555) 456-7890</p>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Flags</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-red-600">• High-risk country</span>
-                  <span className="text-xs text-red-600">• Multiple accounts</span>
-                  <span className="text-xs text-red-600">• Unusual transaction pattern</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Identity Verification</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-amber-600">• ID document anomalies</span>
-                  <span className="text-xs text-green-600">• Email verified</span>
-                  <span className="text-xs text-red-600">• Phone verification failed</span>
-                </div>
-              </div>
-              <div>
-                <h3 className="text-sm font-medium mb-1">Data Sources</h3>
-                <div className="flex flex-col space-y-1">
-                  <span className="text-xs text-amber-600">• Email reputation: Recent creation</span>
-                  <span className="text-xs text-red-600">• Phone data: Mismatched location</span>
-                  <span className="text-xs text-red-600">• Network graph: Known fraud connections</span>
-                </div>
-              </div>
-            </div>
-            <div className="flex justify-end space-x-2 mt-4">
-              <Button variant="outline" size="sm">
-                <Eye className="mr-2 h-4 w-4" /> Review Details
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                <AlertTriangle className="mr-2 h-4 w-4" /> Rejected by Fraud Agent
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+        {journeys.map(journey => (
+          <TabsContent key={journey} value={journey}>
+            <Card>
+              <CardHeader>
+                <CardTitle>{journey} Cases</CardTitle>
+                <CardDescription>
+                  Review all {journey.toLowerCase()} fraud cases
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Case ID</TableHead>
+                      <TableHead>Customer</TableHead>
+                      <TableHead>
+                        <div className="flex items-center cursor-pointer" onClick={() => requestSort('riskScore')}>
+                          Risk Score
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </div>
+                      </TableHead>
+                      <TableHead>
+                        <div className="flex items-center cursor-pointer" onClick={() => requestSort('status')}>
+                          Status
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </div>
+                      </TableHead>
+                      <TableHead>
+                        <div className="flex items-center cursor-pointer" onClick={() => requestSort('date')}>
+                          Date
+                          <ArrowUpDown className="ml-2 h-4 w-4" />
+                        </div>
+                      </TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentCases.map((caseItem) => (
+                      <TableRow key={caseItem.id}>
+                        <TableCell className="font-medium">
+                          <div className="flex items-center">
+                            <Shield className="h-4 w-4 mr-2 text-[#9b87f5]" />
+                            {caseItem.id}
+                          </div>
+                        </TableCell>
+                        <TableCell>{caseItem.customer}</TableCell>
+                        <TableCell>
+                          <span className={`rounded-full px-2 py-1 text-xs ${
+                            caseItem.riskScore >= 80 ? "bg-red-100 text-red-800" :
+                            caseItem.riskScore >= 60 ? "bg-amber-100 text-amber-800" :
+                            caseItem.riskScore >= 40 ? "bg-yellow-100 text-yellow-800" :
+                            "bg-green-100 text-green-800"
+                          }`}>
+                            {caseItem.riskScore}
+                          </span>
+                        </TableCell>
+                        <TableCell>
+                          <span className={`rounded-full px-2 py-1 text-xs ${caseItem.statusColor}`}>
+                            {caseItem.status}
+                          </span>
+                        </TableCell>
+                        <TableCell>{caseItem.date}</TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex justify-end space-x-2">
+                            <Button variant="outline" size="sm">
+                              <Eye className="h-4 w-4" />
+                            </Button>
+                            {caseItem.status === "Pending Review" && (
+                              <>
+                                <Button variant="outline" size="sm" className="border-green-500 text-green-600 hover:bg-green-50">
+                                  <Check className="h-4 w-4" />
+                                </Button>
+                                <Button variant="outline" size="sm" className="border-red-500 text-red-600 hover:bg-red-50">
+                                  <X className="h-4 w-4" />
+                                </Button>
+                              </>
+                            )}
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          </TabsContent>
+        ))}
+      </Tabs>
     </div>
   )
 }
