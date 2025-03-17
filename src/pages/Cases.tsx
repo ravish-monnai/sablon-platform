@@ -22,6 +22,7 @@ import {
   PaginationPrevious 
 } from "@/components/ui/pagination"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Link } from "react-router-dom"
 
 // Generate AI journey names
 const journeys = [
@@ -96,7 +97,7 @@ const Cases = () => {
   const [activeJourney, setActiveJourney] = useState("all")
   const [currentPage, setCurrentPage] = useState(1)
   const [statusFilter, setStatusFilter] = useState("all")
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: null })
+  const [sortConfig, setSortConfig] = useState<{ key: string | null, direction: string | null }>({ key: null, direction: null })
   const casesPerPage = 10
   
   // Filter cases by journey and status
@@ -118,14 +119,14 @@ const Cases = () => {
     
     if (sortConfig.key === "date") {
       return sortConfig.direction === "ascending" 
-        ? new Date(a.date) - new Date(b.date)
-        : new Date(b.date) - new Date(a.date)
+        ? new Date(a.date).getTime() - new Date(b.date).getTime()
+        : new Date(b.date).getTime() - new Date(a.date).getTime()
     }
     
     // Default string comparison
     return sortConfig.direction === "ascending" 
-      ? a[sortConfig.key].localeCompare(b[sortConfig.key])
-      : b[sortConfig.key].localeCompare(a[sortConfig.key])
+      ? a[sortConfig.key as keyof typeof a].toString().localeCompare(b[sortConfig.key as keyof typeof b].toString())
+      : b[sortConfig.key as keyof typeof b].toString().localeCompare(a[sortConfig.key as keyof typeof a].toString())
   })
   
   // Calculate pagination
@@ -135,7 +136,7 @@ const Cases = () => {
   const currentCases = sortedCases.slice(indexOfFirstCase, indexOfLastCase)
   
   // Handle sorting
-  const requestSort = (key) => {
+  const requestSort = (key: string) => {
     let direction = 'ascending'
     if (sortConfig.key === key && sortConfig.direction === 'ascending') {
       direction = 'descending'
@@ -147,7 +148,7 @@ const Cases = () => {
   const journeyCounts = journeys.reduce((acc, journey) => {
     acc[journey] = allCases.filter(c => c.journey === journey).length
     return acc
-  }, {})
+  }, {} as Record<string, number>)
   
   return (
     <div className="w-full">
@@ -247,8 +248,10 @@ const Cases = () => {
                   <TableCell>{caseItem.date}</TableCell>
                   <TableCell className="text-right">
                     <div className="flex justify-end space-x-2">
-                      <Button variant="outline" size="sm">
-                        <Eye className="h-4 w-4" />
+                      <Button variant="outline" size="sm" asChild>
+                        <Link to={`/case-review/${caseItem.id}`}>
+                          <Eye className="h-4 w-4" />
+                        </Link>
                       </Button>
                       {caseItem.status === "Pending Review" && (
                         <>
@@ -369,8 +372,10 @@ const Cases = () => {
                         <TableCell>{caseItem.date}</TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end space-x-2">
-                            <Button variant="outline" size="sm">
-                              <Eye className="h-4 w-4" />
+                            <Button variant="outline" size="sm" asChild>
+                              <Link to={`/case-review/${caseItem.id}`}>
+                                <Eye className="h-4 w-4" />
+                              </Link>
                             </Button>
                             {caseItem.status === "Pending Review" && (
                               <>

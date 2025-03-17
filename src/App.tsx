@@ -12,6 +12,7 @@ import AIAgents from "./pages/AIAgents";
 import Models from "./pages/Models";
 import Data from "./pages/Data";
 import Cases from "./pages/Cases";
+import CaseReview from "./pages/CaseReview";
 import Transactions from "./pages/Transactions";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 
@@ -24,7 +25,8 @@ export const activeRoutes = {
   aiAgents: true,
   models: true,
   data: true,
-  cases: false,
+  cases: true,
+  caseReview: true,
   transactions: {
     main: true,
     details: {
@@ -69,6 +71,11 @@ const App = () => (
           <Route path="/cases" element={
             <DashboardLayout>
               <Cases />
+            </DashboardLayout>
+          } />
+          <Route path="/case-review/:caseId" element={
+            <DashboardLayout>
+              <CaseReview />
             </DashboardLayout>
           } />
           <Route path="/transactions" element={
