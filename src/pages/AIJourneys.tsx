@@ -2,7 +2,7 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus } from "lucide-react"
+import { Plus, Pencil } from "lucide-react"
 
 const AIJourneys = () => {
   return (
@@ -27,14 +27,17 @@ const AIJourneys = () => {
               <span>Status:</span>
               <span className="font-medium text-green-600">Active</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-4">
               <span>Last modified:</span>
               <span className="font-medium">2 days ago</span>
             </div>
+            <Button variant="outline" size="sm" className="w-full">
+              <Pencil className="mr-2 h-4 w-4" /> Edit Journey
+            </Button>
           </CardContent>
         </Card>
         
-        <Card>
+        <Card className="border-2 border-blue-200">
           <CardHeader>
             <CardTitle>Fraud Detection</CardTitle>
             <CardDescription>Real-time transaction monitoring</CardDescription>
@@ -44,10 +47,13 @@ const AIJourneys = () => {
               <span>Status:</span>
               <span className="font-medium text-green-600">Active</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-4">
               <span>Last modified:</span>
               <span className="font-medium">5 days ago</span>
             </div>
+            <Button size="sm" className="w-full">
+              <Pencil className="mr-2 h-4 w-4" /> Edit Journey
+            </Button>
           </CardContent>
         </Card>
         
@@ -61,10 +67,13 @@ const AIJourneys = () => {
               <span>Status:</span>
               <span className="font-medium text-amber-600">Draft</span>
             </div>
-            <div className="flex justify-between text-sm">
+            <div className="flex justify-between text-sm mb-4">
               <span>Last modified:</span>
               <span className="font-medium">1 week ago</span>
             </div>
+            <Button variant="outline" size="sm" className="w-full">
+              <Pencil className="mr-2 h-4 w-4" /> Edit Journey
+            </Button>
           </CardContent>
         </Card>
       </div>
