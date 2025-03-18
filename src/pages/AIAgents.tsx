@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -7,6 +6,8 @@ import { useLocation } from "react-router-dom"
 import AgentCard from "@/components/agents/AgentCard"
 import AgentEditors from "@/components/agents/AgentEditors"
 import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentListData"
+import { Dialog, DialogContent } from "@/components/ui/dialog"
+import AgentBuilder from "@/components/agents/AgentBuilder"
 
 const AIAgents = () => {
   // Customer agent editing states
@@ -46,13 +47,27 @@ const AIAgents = () => {
   
   const agentsToDisplay = viewMode === "internal" ? monnaiAgents : customerAgents
   
+  const [isBuilderOpen, setIsBuilderOpen] = useState(false);
+  const [builderAgentType, setBuilderAgentType] = useState("");
+  
+  const handleCreateAgent = () => {
+    setBuilderAgentType("new");
+    setIsBuilderOpen(true);
+  };
+  
+  const handleSaveAgent = (config: any) => {
+    // Here we would handle saving the agent configuration
+    console.log("Saving agent configuration:", config);
+    setIsBuilderOpen(false);
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">AI Agents</h1>
         <div className="flex gap-4">
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> Deploy Agent
+          <Button onClick={handleCreateAgent}>
+            <Plus className="mr-2 h-4 w-4" /> Create Agent
           </Button>
         </div>
       </div>
@@ -90,6 +105,15 @@ const AIAgents = () => {
         setIsEditingModelManagementAgent={setIsEditingModelManagementAgent}
         setIsEditingObservabilityAgent={setIsEditingObservabilityAgent}
       />
+      
+      <Dialog open={isBuilderOpen} onOpenChange={setIsBuilderOpen}>
+        <DialogContent className="max-w-6xl">
+          <AgentBuilder 
+            agentType={builderAgentType}
+            onSave={handleSaveAgent}
+          />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
