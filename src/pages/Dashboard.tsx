@@ -17,7 +17,18 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useLocation } from "react-router-dom";
-import { LayoutDashboard, Activity, Bot, FileCode, Database } from "lucide-react";
+import { 
+  LayoutDashboard, 
+  Activity, 
+  Bot, 
+  FileCode, 
+  Database, 
+  AlertTriangle,
+  MapPin,
+  Clock,
+  AlertCircle
+} from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const Dashboard = () => {
   const location = useLocation();
@@ -32,6 +43,36 @@ const Dashboard = () => {
     { name: "Very High", value: 0.92, color: "#ef4444" },
   ];
 
+  const trafficAlerts = [
+    {
+      id: 1,
+      severity: "critical",
+      title: "API Rate Limiting Triggered",
+      description: "Multiple clients experiencing rate limiting in North America region",
+      time: "10 minutes ago",
+      icon: AlertTriangle,
+      color: "#ea384c"
+    },
+    {
+      id: 2,
+      severity: "warning",
+      title: "Increased Latency Detected",
+      description: "Identity verification services showing 35% increased response time",
+      time: "25 minutes ago",
+      icon: Clock,
+      color: "#F97316"
+    },
+    {
+      id: 3,
+      severity: "info",
+      title: "Traffic Spike in EU Region",
+      description: "Unusual traffic pattern detected from European IPs (43% above normal)",
+      time: "1 hour ago",
+      icon: MapPin,
+      color: "#8B5CF6"
+    }
+  ];
+
   const chartConfig = {
     veryLow: { color: "#10b981" },
     low: { color: "#06b6d4" },
@@ -41,6 +82,7 @@ const Dashboard = () => {
   };
 
   if (viewMode === "customer") {
+    
     return (
       <div className="w-full">
         <h1 className="text-3xl font-bold mb-6">AI Risk Decisioning Platform</h1>
@@ -184,6 +226,30 @@ const Dashboard = () => {
         </TabsList>
 
         <TabsContent value="global-traffic" className="w-full">
+          {/* Traffic Alerts Section */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold mb-3 flex items-center">
+              <AlertCircle className="mr-2 h-5 w-5 text-red-500" />
+              Traffic Alerts
+            </h2>
+            <div className="space-y-3">
+              {trafficAlerts.map(alert => (
+                <Alert key={alert.id} className="border-l-4" style={{ borderLeftColor: alert.color }}>
+                  <div className="flex items-start">
+                    <alert.icon className="h-5 w-5 mr-2" style={{ color: alert.color }} />
+                    <div>
+                      <AlertTitle className="text-sm font-semibold flex items-center justify-between">
+                        {alert.title}
+                        <span className="text-xs font-normal text-muted-foreground">{alert.time}</span>
+                      </AlertTitle>
+                      <AlertDescription className="text-xs">{alert.description}</AlertDescription>
+                    </div>
+                  </div>
+                </Alert>
+              ))}
+            </div>
+          </div>
+          
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
               <CardHeader>
@@ -293,6 +359,7 @@ const Dashboard = () => {
           </div>
         </TabsContent>
 
+        
         <TabsContent value="operational-agents" className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
@@ -733,90 +800,3 @@ const Dashboard = () => {
                       Healthy
                     </span>
                   </div>
-                </div>
-                <div className="mt-3 p-2 bg-amber-50 rounded-md text-xs text-amber-700 border border-amber-100">
-                  <strong>Notice:</strong> Database cluster performance optimization in progress
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Resource Utilization</CardTitle>
-                <CardDescription>System-wide resource stats</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <div className="flex justify-between mb-1 text-sm">
-                      <span>CPU Usage</span>
-                      <span>62%</span>
-                    </div>
-                    <Progress value={62} className="h-1.5" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1 text-sm">
-                      <span>Memory Usage</span>
-                      <span>74%</span>
-                    </div>
-                    <Progress value={74} className="h-1.5" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1 text-sm">
-                      <span>Storage Usage</span>
-                      <span>51%</span>
-                    </div>
-                    <Progress value={51} className="h-1.5" />
-                  </div>
-                  <div>
-                    <div className="flex justify-between mb-1 text-sm">
-                      <span>Network Bandwidth</span>
-                      <span>68%</span>
-                    </div>
-                    <Progress value={68} className="h-1.5" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            
-            <Card>
-              <CardHeader>
-                <CardTitle>Recent Alerts</CardTitle>
-                <CardDescription>System notifications and warnings</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3 text-sm">
-                  <div className="border-l-2 border-amber-500 pl-3 py-1">
-                    <p className="font-medium">Database Cluster</p>
-                    <p className="text-muted-foreground">High read latency detected on node 3</p>
-                    <p className="text-xs text-muted-foreground">Today, 09:42 AM</p>
-                  </div>
-                  
-                  <div className="border-l-2 border-green-500 pl-3 py-1">
-                    <p className="font-medium">API Gateway</p>
-                    <p className="text-muted-foreground">Rate limiting triggered for Client #2876</p>
-                    <p className="text-xs text-muted-foreground">Today, 08:15 AM</p>
-                  </div>
-                  
-                  <div className="border-l-2 border-red-500 pl-3 py-1">
-                    <p className="font-medium">Authentication Services</p>
-                    <p className="text-muted-foreground">Multiple failed login attempts detected</p>
-                    <p className="text-xs text-muted-foreground">Yesterday, 11:32 PM</p>
-                  </div>
-                  
-                  <div className="border-l-2 border-blue-500 pl-3 py-1">
-                    <p className="font-medium">Storage Cluster</p>
-                    <p className="text-muted-foreground">Automatic scaling completed successfully</p>
-                    <p className="text-xs text-muted-foreground">Yesterday, 04:17 PM</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-};
-
-export default Dashboard;
