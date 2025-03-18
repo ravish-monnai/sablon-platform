@@ -4,11 +4,11 @@ import { ReactNode } from 'react';
 // Define the node data type to ensure consistency
 export interface NodeData {
   label: string;
-  description: string;
+  type: string;
   icon?: ReactNode;
-  type?: string;
+  description?: string;
   modelType?: string;
-  [key: string]: unknown; // Add index signature to satisfy Record<string, unknown>
+  [key: string]: unknown;
 }
 
 export interface DragItemProps {
@@ -17,4 +17,3 @@ export interface DragItemProps {
   label: string;
   data?: Record<string, any>;
 }
-

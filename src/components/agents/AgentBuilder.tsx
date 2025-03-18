@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import WorkflowFlow from '../workflow/WorkflowFlow';
 import DraggableItem from '../workflow/DraggableItem';
+import { NodeData } from '../workflow/types';
 
 interface AgentBuilderProps {
   agentType: string;
@@ -40,9 +41,11 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         y: event.clientY - event.target.getBoundingClientRect().top,
       };
 
-      let data = {
+      const data: NodeData = {
         label: `New ${type}`,
         type,
+        icon: undefined,
+        description: '',
       };
 
       // Customize node appearance based on type
