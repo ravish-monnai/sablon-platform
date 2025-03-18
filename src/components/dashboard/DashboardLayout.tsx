@@ -38,22 +38,31 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const currentPath = location.pathname
   const [viewMode, setViewMode] = useState<"customer" | "internal">("customer")
   
-  // Navigation items with routes and icons
-  const navItems = [
+  // Customer view navigation items
+  const customerNavItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
     { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
-    { label: "AI Agents", path: "/ai-agents", icon: Bot },
-    { label: "Models", path: "/models", icon: FileCode },
-    { label: "Data", path: "/data", icon: Database },
     { label: "Cases", path: "/cases", icon: FileText },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: CircleDollarSign },
+  ]
+  
+  // Monnai internal view navigation items
+  const monnaiNavItems = [
+    { label: "Operations Dashboard", path: "/", icon: LayoutDashboard },
+    { label: "AI Agents", path: "/ai-agents", icon: Bot },
+    { label: "Models", path: "/models", icon: FileCode },
+    { label: "Data", path: "/data", icon: Database },
+    { label: "All Transactions", path: "/transactions", icon: CircleDollarSign },
   ]
   
   // Function to determine if a nav item is active
   const isActive = (path: string) => {
     return currentPath === path || currentPath.startsWith(`${path}/`)
   }
+
+  // Get the appropriate navigation items based on view mode
+  const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems
 
   return (
     <SidebarProvider>
