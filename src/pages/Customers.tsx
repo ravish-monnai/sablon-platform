@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import {
   Table,
@@ -37,8 +36,8 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
+import CustomerProfile from "@/components/customers/CustomerProfile";
 
-// Generate sample customer data
 const generateSampleCustomers = () => {
   const countries = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Japan", "Brazil"];
   const statuses = ["Active", "Suspended", "Under Review"];
@@ -64,20 +63,17 @@ const generateSampleCustomers = () => {
     const customerTypeIndex = Math.floor(Math.random() * customerTypes.length);
     const customerType = customerTypes[customerTypeIndex];
     
-    // Generate a random risk score based on risk level
     let riskScore;
     if (riskLevel === "Low") riskScore = Math.floor(Math.random() * 20) + 10;
     else if (riskLevel === "Medium") riskScore = Math.floor(Math.random() * 20) + 30;
     else if (riskLevel === "High") riskScore = Math.floor(Math.random() * 15) + 65;
     else riskScore = Math.floor(Math.random() * 15) + 85;
     
-    // Generate a random phone number in US format
     const phoneArea = Math.floor(Math.random() * 900) + 100;
     const phonePrefix = Math.floor(Math.random() * 900) + 100;
     const phoneLine = Math.floor(Math.random() * 9000) + 1000;
     const phoneNumber = `+1 (${phoneArea}) ${phonePrefix}-${phoneLine}`;
     
-    // Generate a random registration date within the last 2 years
     const now = new Date();
     const twoYearsAgo = new Date();
     twoYearsAgo.setFullYear(now.getFullYear() - 2);
@@ -85,7 +81,6 @@ const generateSampleCustomers = () => {
       twoYearsAgo.getTime() + Math.random() * (now.getTime() - twoYearsAgo.getTime())
     ).toISOString().split('T')[0];
 
-    // Generate alerts count based on risk level
     let alertsCount;
     if (riskLevel === "Low") alertsCount = Math.floor(Math.random() * 2);
     else if (riskLevel === "Medium") alertsCount = Math.floor(Math.random() * 3) + 1;
@@ -114,7 +109,6 @@ const generateSampleCustomers = () => {
   return customers;
 };
 
-// Sample customer data
 const sampleCustomers = generateSampleCustomers();
 
 export default function Customers() {
@@ -123,8 +117,9 @@ export default function Customers() {
   const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const [selectedKycStatus, setSelectedKycStatus] = useState<string | null>(null);
   const [currentTab, setCurrentTab] = useState("all");
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // Filter customers based on search query and filters
   const filteredCustomers = sampleCustomers.filter((c) => {
     const searchRegex = new RegExp(searchQuery, "i");
     const matchesSearch =
@@ -146,7 +141,6 @@ export default function Customers() {
     return matchesSearch && matchesRiskLevel && matchesStatus && matchesKycStatus;
   });
   
-  // Filter customers based on current tab
   const tabFilteredCustomers = filteredCustomers.filter(c => {
     if (currentTab === "all") return true;
     if (currentTab === "high-risk") return c.riskLevel === "High" || c.riskLevel === "Critical";
@@ -154,6 +148,11 @@ export default function Customers() {
     if (currentTab === "alerts") return c.alertsCount > 0;
     return true;
   });
+
+  const handleViewProfile = (customerId: string) => {
+    setSelectedCustomerId(customerId);
+    setIsProfileOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -361,7 +360,9 @@ export default function Customers() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View Profile</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewProfile(c.id)}>
+                              View Profile
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Edit Details</DropdownMenuItem>
                             <DropdownMenuItem>Risk Assessment</DropdownMenuItem>
                             <DropdownMenuItem>View Cases</DropdownMenuItem>
@@ -378,7 +379,6 @@ export default function Customers() {
         </TabsContent>
         
         <TabsContent value="high-risk" className="space-y-4">
-          {/* Same content as "all" tab but pre-filtered for high risk customers */}
           <div className="flex space-x-2">
             <div className="relative flex-1">
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
@@ -501,7 +501,9 @@ export default function Customers() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View Profile</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewProfile(c.id)}>
+                              View Profile
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Edit Details</DropdownMenuItem>
                             <DropdownMenuItem>Risk Assessment</DropdownMenuItem>
                             <DropdownMenuItem>View Cases</DropdownMenuItem>
@@ -518,7 +520,6 @@ export default function Customers() {
         </TabsContent>
         
         <TabsContent value="kyc-pending">
-          {/* Similar content as other tabs but for KYC pending customers */}
           <div className="border rounded-md">
             <Table>
               <TableHeader>
@@ -610,7 +611,9 @@ export default function Customers() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View Profile</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewProfile(c.id)}>
+                              View Profile
+                            </DropdownMenuItem>
                             <DropdownMenuItem>Request Documents</DropdownMenuItem>
                             <DropdownMenuItem>Reject KYC</DropdownMenuItem>
                           </DropdownMenuContent>
@@ -625,7 +628,6 @@ export default function Customers() {
         </TabsContent>
         
         <TabsContent value="alerts">
-          {/* Similar content as other tabs but for customers with alerts */}
           <div className="border rounded-md">
             <Table>
               <TableHeader>
@@ -688,7 +690,9 @@ export default function Customers() {
                           <DropdownMenuContent align="end">
                             <DropdownMenuLabel>Actions</DropdownMenuLabel>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem>View Profile</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleViewProfile(c.id)}>
+                              View Profile
+                            </DropdownMenuItem>
                             <DropdownMenuItem>View Transactions</DropdownMenuItem>
                             <DropdownMenuItem>Create Case</DropdownMenuItem>
                             <DropdownMenuItem>Dismiss Alerts</DropdownMenuItem>
@@ -703,6 +707,12 @@ export default function Customers() {
           </div>
         </TabsContent>
       </Tabs>
+      
+      <CustomerProfile 
+        customerId={selectedCustomerId}
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+      />
     </div>
   );
 }
