@@ -15,6 +15,7 @@ import { NodeData } from './types';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import ModelConfigDialog from '../models/ModelConfigDialog';
+import AIWorkflowHelper from './AIWorkflowHelper';
 
 // Custom Node with Model Configuration
 const ModelNode = ({ data, isConnectable }) => {
@@ -151,6 +152,24 @@ const WorkflowEditor: React.FC = () => {
     // Handle node drag start if needed
   };
 
+  const handleAddAINodes = (newNodes) => {
+    // Add the AI-suggested nodes to the workflow
+    setNodes((nds) => [...nds, ...newNodes]);
+    
+    // Create edges between the nodes (simple linear connection)
+    const newEdges = [];
+    for (let i = 0; i < newNodes.length - 1; i++) {
+      newEdges.push({
+        id: `e-${newNodes[i].id}-${newNodes[i+1].id}`,
+        source: newNodes[i].id,
+        target: newNodes[i+1].id,
+        type: 'default',
+      });
+    }
+    
+    setEdges((eds) => [...eds, ...newEdges]);
+  };
+
   if (isPreviewMode) {
     return (
       <div className="h-full">
@@ -165,10 +184,13 @@ const WorkflowEditor: React.FC = () => {
 
   return (
     <div className="h-full">
-      <WorkflowToolbar
-        isPreviewMode={isPreviewMode}
-        togglePreviewMode={togglePreviewMode}
-      />
+      <div className="flex justify-between mb-2">
+        <WorkflowToolbar
+          isPreviewMode={isPreviewMode}
+          togglePreviewMode={togglePreviewMode}
+        />
+        <AIWorkflowHelper onAddNodes={handleAddAINodes} />
+      </div>
       <WorkflowFlow
         nodes={nodes}
         edges={edges}

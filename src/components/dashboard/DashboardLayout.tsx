@@ -1,3 +1,4 @@
+
 import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
@@ -31,6 +32,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import MonnaiLogo from "../branding/MonnaiLogo"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
+import AIAssistant from "../ai-assistant/AIAssistant"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -142,6 +144,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </div>
         </SidebarInset>
       </div>
+      
+      {/* AI Assistant component */}
+      <AIAssistant />
     </SidebarProvider>
   )
 }
