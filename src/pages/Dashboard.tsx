@@ -47,7 +47,7 @@ const Dashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              <h3 className="font-semibold text-base">Payjoy Fraud Risk Assessment - March 2025</h3>
+              <h3 className="font-semibold text-base">Fraud Risk Assessment - March 2025</h3>
               <div className="space-y-3 text-sm">
                 <p>Daily avg: 7,409 transactions (peak: 9,933)</p>
                 <p>Avg risk score: <span className="font-medium">33.09/100</span></p>
