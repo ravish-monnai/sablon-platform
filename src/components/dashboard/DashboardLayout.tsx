@@ -1,5 +1,5 @@
 
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -19,10 +19,14 @@ import {
   FileCode, 
   FileText, 
   CircleDollarSign,
-  Users
+  Users,
+  UserRound,
+  Building2
 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import MonnaiLogo from "../branding/MonnaiLogo"
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -32,6 +36,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   const currentPath = location.pathname
+  const [viewMode, setViewMode] = useState<"customer" | "internal">("customer")
   
   // Navigation items with routes and icons
   const navItems = [
@@ -54,9 +59,28 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
         <Sidebar variant="sidebar" collapsible="icon">
-          <SidebarHeader className="flex items-center justify-between p-4">
-            <MonnaiLogo variant="gradient" />
-            <SidebarTrigger />
+          <SidebarHeader className="flex flex-col p-4 gap-4">
+            <div className="flex items-center justify-between">
+              <MonnaiLogo variant="gradient" />
+              <SidebarTrigger />
+            </div>
+            
+            {/* View Mode Toggle */}
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <UserRound className={`h-4 w-4 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
+                <Label htmlFor="view-mode-toggle" className="text-sm">Customer</Label>
+              </div>
+              <Switch 
+                id="view-mode-toggle" 
+                checked={viewMode === "internal"}
+                onCheckedChange={(checked) => setViewMode(checked ? "internal" : "customer")}
+              />
+              <div className="flex items-center space-x-2">
+                <Building2 className={`h-4 w-4 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
+                <Label htmlFor="view-mode-toggle" className="text-sm">Monnai</Label>
+              </div>
+            </div>
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>

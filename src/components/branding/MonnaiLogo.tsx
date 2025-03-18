@@ -7,6 +7,7 @@ type MonnaiLogoProps = {
   variant?: 'gradient' | 'color' | 'white' | 'black';
   size?: 'sm' | 'md' | 'lg';
   showSlogan?: boolean;
+  compact?: boolean;
 }
 
 const MonnaiLogo: React.FC<MonnaiLogoProps> = ({ 
@@ -14,7 +15,8 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
   showText = true,
   variant = 'gradient',
   size = 'md',
-  showSlogan = false
+  showSlogan = false,
+  compact = false
 }) => {
   const sizeClasses = {
     sm: 'h-6',
@@ -36,15 +38,22 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
     lg: 'h-10 w-20'
   };
 
+  // Adjusted sizes for compact mode
+  const compactIconSizeClasses = {
+    sm: 'h-4 w-8',
+    md: 'h-5 w-10',
+    lg: 'h-8 w-16'
+  };
+
   return (
     <div className={`flex flex-col ${className}`}>
       <div className="flex items-center">
         {/* New Monnai icon logo */}
-        <div className="mr-2">
+        <div className={compact ? "" : "mr-2"}>
           <img 
             src="/lovable-uploads/033f2774-4372-478c-90aa-fa784395fc40.png" 
             alt="Monnai Logo" 
-            className={iconSizeClasses[size]}
+            className={compact ? compactIconSizeClasses[size] : iconSizeClasses[size]}
           />
         </div>
 
