@@ -5,6 +5,7 @@ import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
 import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
 import DataAnalysisAgentEditor from "@/components/agents/DataAnalysisAgentEditor"
+import ModelManagementAgentEditor from "@/components/agents/ModelManagementAgentEditor"
 
 interface AgentEditorsProps {
   // Customer agents
@@ -118,6 +119,19 @@ const AgentEditors = ({
             </SheetDescription>
           </SheetHeader>
           <DataAnalysisAgentEditor onClose={() => setIsEditingDataAnalysisAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Model Management Agent Editor */}
+      <Sheet open={isEditingModelManagementAgent} onOpenChange={setIsEditingModelManagementAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure Model Management Agent</SheetTitle>
+            <SheetDescription>
+              Customize model lifecycle, deployment strategies, and monitoring settings for your model management agent.
+            </SheetDescription>
+          </SheetHeader>
+          <ModelManagementAgentEditor onClose={() => setIsEditingModelManagementAgent(false)} />
         </SheetContent>
       </Sheet>
     </>
