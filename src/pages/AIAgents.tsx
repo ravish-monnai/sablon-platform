@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Plus } from "lucide-react"
@@ -9,10 +9,19 @@ import AgentEditors from "@/components/agents/AgentEditors"
 import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentListData"
 
 const AIAgents = () => {
+  // Customer agent editing states
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
   const [isEditingUnderwriterAgent, setIsEditingUnderwriterAgent] = useState(false)
   const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
+  
+  // Monnai agent editing states
+  const [isEditingDataAnalysisAgent, setIsEditingDataAnalysisAgent] = useState(false)
+  const [isEditingPOCAgent, setIsEditingPOCAgent] = useState(false)
+  const [isEditingBillingAgent, setIsEditingBillingAgent] = useState(false)
+  const [isEditingFeatureEngineeringAgent, setIsEditingFeatureEngineeringAgent] = useState(false)
+  const [isEditingModelManagementAgent, setIsEditingModelManagementAgent] = useState(false)
+  const [isEditingObservabilityAgent, setIsEditingObservabilityAgent] = useState(false)
   
   // Read view mode from URL params set by DashboardLayout
   const location = useLocation()
@@ -26,7 +35,14 @@ const AIAgents = () => {
     setIsEditingCollectionAgent
   )
   
-  const monnaiAgents = getMonnaiAgents()
+  const monnaiAgents = getMonnaiAgents(
+    setIsEditingDataAnalysisAgent,
+    setIsEditingPOCAgent,
+    setIsEditingBillingAgent,
+    setIsEditingFeatureEngineeringAgent,
+    setIsEditingModelManagementAgent,
+    setIsEditingObservabilityAgent
+  )
   
   const agentsToDisplay = viewMode === "internal" ? monnaiAgents : customerAgents
   
@@ -50,6 +66,7 @@ const AIAgents = () => {
       </div>
 
       <AgentEditors 
+        // Customer agent editing states
         isEditingFraudAgent={isEditingFraudAgent}
         isEditingKYCAgent={isEditingKYCAgent}
         isEditingUnderwriterAgent={isEditingUnderwriterAgent}
@@ -58,6 +75,20 @@ const AIAgents = () => {
         setIsEditingKYCAgent={setIsEditingKYCAgent}
         setIsEditingUnderwriterAgent={setIsEditingUnderwriterAgent}
         setIsEditingCollectionAgent={setIsEditingCollectionAgent}
+        
+        // Monnai agent editing states
+        isEditingDataAnalysisAgent={isEditingDataAnalysisAgent}
+        isEditingPOCAgent={isEditingPOCAgent}
+        isEditingBillingAgent={isEditingBillingAgent}
+        isEditingFeatureEngineeringAgent={isEditingFeatureEngineeringAgent}
+        isEditingModelManagementAgent={isEditingModelManagementAgent}
+        isEditingObservabilityAgent={isEditingObservabilityAgent}
+        setIsEditingDataAnalysisAgent={setIsEditingDataAnalysisAgent}
+        setIsEditingPOCAgent={setIsEditingPOCAgent}
+        setIsEditingBillingAgent={setIsEditingBillingAgent}
+        setIsEditingFeatureEngineeringAgent={setIsEditingFeatureEngineeringAgent}
+        setIsEditingModelManagementAgent={setIsEditingModelManagementAgent}
+        setIsEditingObservabilityAgent={setIsEditingObservabilityAgent}
       />
     </div>
   )

@@ -12,6 +12,7 @@ export type AgentType = {
   casesPerDay: number;
   resolutionTime: string;
   model: string;
+  onEdit?: () => void;
 }
 
 export type CustomerAgentType = AgentType & {
@@ -57,11 +58,11 @@ const AgentCard = ({ agent, viewMode }: AgentCardProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {viewMode === "customer" && (
+        {agent.onEdit && (
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => (agent as CustomerAgentType).onEdit()}
+            onClick={agent.onEdit}
           >
             <Edit2 className="mr-2 h-4 w-4" /> Configure
           </Button>

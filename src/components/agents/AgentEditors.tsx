@@ -1,12 +1,13 @@
 
-import { useState } from "react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
 import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
+import DataAnalysisAgentEditor from "@/components/agents/DataAnalysisAgentEditor"
 
 interface AgentEditorsProps {
+  // Customer agents
   isEditingFraudAgent: boolean;
   isEditingKYCAgent: boolean;
   isEditingUnderwriterAgent: boolean;
@@ -15,9 +16,24 @@ interface AgentEditorsProps {
   setIsEditingKYCAgent: (value: boolean) => void;
   setIsEditingUnderwriterAgent: (value: boolean) => void;
   setIsEditingCollectionAgent: (value: boolean) => void;
+  
+  // Monnai agents
+  isEditingDataAnalysisAgent?: boolean;
+  isEditingPOCAgent?: boolean;
+  isEditingBillingAgent?: boolean;
+  isEditingFeatureEngineeringAgent?: boolean;
+  isEditingModelManagementAgent?: boolean;
+  isEditingObservabilityAgent?: boolean;
+  setIsEditingDataAnalysisAgent?: (value: boolean) => void;
+  setIsEditingPOCAgent?: (value: boolean) => void;
+  setIsEditingBillingAgent?: (value: boolean) => void;
+  setIsEditingFeatureEngineeringAgent?: (value: boolean) => void;
+  setIsEditingModelManagementAgent?: (value: boolean) => void;
+  setIsEditingObservabilityAgent?: (value: boolean) => void;
 }
 
 const AgentEditors = ({
+  // Customer agents
   isEditingFraudAgent,
   isEditingKYCAgent,
   isEditingUnderwriterAgent,
@@ -25,10 +41,25 @@ const AgentEditors = ({
   setIsEditingFraudAgent,
   setIsEditingKYCAgent,
   setIsEditingUnderwriterAgent,
-  setIsEditingCollectionAgent
+  setIsEditingCollectionAgent,
+  
+  // Monnai agents
+  isEditingDataAnalysisAgent = false,
+  isEditingPOCAgent = false,
+  isEditingBillingAgent = false,
+  isEditingFeatureEngineeringAgent = false,
+  isEditingModelManagementAgent = false,
+  isEditingObservabilityAgent = false,
+  setIsEditingDataAnalysisAgent = () => {},
+  setIsEditingPOCAgent = () => {},
+  setIsEditingBillingAgent = () => {},
+  setIsEditingFeatureEngineeringAgent = () => {},
+  setIsEditingModelManagementAgent = () => {},
+  setIsEditingObservabilityAgent = () => {}
 }: AgentEditorsProps) => {
   return (
     <>
+      {/* Customer Agent Editors */}
       <Sheet open={isEditingFraudAgent} onOpenChange={setIsEditingFraudAgent}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
@@ -74,6 +105,19 @@ const AgentEditors = ({
             </SheetDescription>
           </SheetHeader>
           <CollectionAgentEditor onClose={() => setIsEditingCollectionAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Monnai Agent Editors */}
+      <Sheet open={isEditingDataAnalysisAgent} onOpenChange={setIsEditingDataAnalysisAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure Data Analysis Agent</SheetTitle>
+            <SheetDescription>
+              Customize data sources, analysis methods, and output formats for your data analysis agent.
+            </SheetDescription>
+          </SheetHeader>
+          <DataAnalysisAgentEditor onClose={() => setIsEditingDataAnalysisAgent(false)} />
         </SheetContent>
       </Sheet>
     </>

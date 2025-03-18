@@ -1,5 +1,4 @@
-
-import { CustomerAgentType, MonnaiAgentType } from "./AgentCard"
+import { MonnaiAgentType, CustomerAgentType } from "./AgentCard"
 import { 
   Shield, Users, CreditCard, UserCheck,
   Search, Flag, Wallet, Sliders, Layers, Activity 
@@ -55,7 +54,14 @@ export const getCustomerAgents = (
   ]
 }
 
-export const getMonnaiAgents = (): MonnaiAgentType[] => {
+export const getMonnaiAgents = (
+  setIsEditingDataAnalysisAgent?: (value: boolean) => void,
+  setIsEditingPOCAgent?: (value: boolean) => void,
+  setIsEditingBillingAgent?: (value: boolean) => void,
+  setIsEditingFeatureEngineeringAgent?: (value: boolean) => void,
+  setIsEditingModelManagementAgent?: (value: boolean) => void,
+  setIsEditingObservabilityAgent?: (value: boolean) => void
+): MonnaiAgentType[] => {
   return [
     {
       title: "Data Analysis Agent",
@@ -64,7 +70,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Running",
       casesPerDay: 92,
       resolutionTime: "2.8 mins",
-      model: "Claude 3 Opus"
+      model: "Claude 3 Opus",
+      onEdit: setIsEditingDataAnalysisAgent ? () => setIsEditingDataAnalysisAgent(true) : undefined
     },
     {
       title: "POC Agent",
@@ -73,7 +80,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Running",
       casesPerDay: 18,
       resolutionTime: "15.3 mins",
-      model: "GPT-4o"
+      model: "GPT-4o",
+      onEdit: setIsEditingPOCAgent ? () => setIsEditingPOCAgent(true) : undefined
     },
     {
       title: "Billing Agent",
@@ -82,7 +90,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Running",
       casesPerDay: 156,
       resolutionTime: "1.2 mins",
-      model: "Llama 3.1 70B"
+      model: "Llama 3.1 70B",
+      onEdit: setIsEditingBillingAgent ? () => setIsEditingBillingAgent(true) : undefined
     },
     {
       title: "Feature Engineering Agent",
@@ -91,7 +100,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Idle",
       casesPerDay: 34,
       resolutionTime: "7.5 mins",
-      model: "GPT-4o"
+      model: "GPT-4o",
+      onEdit: setIsEditingFeatureEngineeringAgent ? () => setIsEditingFeatureEngineeringAgent(true) : undefined
     },
     {
       title: "Model Management Agent",
@@ -100,7 +110,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Running",
       casesPerDay: 43,
       resolutionTime: "4.8 mins",
-      model: "Claude 3 Sonnet"
+      model: "Claude 3 Sonnet",
+      onEdit: setIsEditingModelManagementAgent ? () => setIsEditingModelManagementAgent(true) : undefined
     },
     {
       title: "Observability & Monitoring",
@@ -109,7 +120,8 @@ export const getMonnaiAgents = (): MonnaiAgentType[] => {
       status: "Running",
       casesPerDay: 217,
       resolutionTime: "0.8 mins",
-      model: "Llama 3.1 405B"
+      model: "Llama 3.1 405B",
+      onEdit: setIsEditingObservabilityAgent ? () => setIsEditingObservabilityAgent(true) : undefined
     }
   ]
 }
