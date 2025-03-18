@@ -1,16 +1,20 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Pencil } from "lucide-react"
+import { Plus, Pencil, Settings } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import WorkflowEditor from "@/components/workflow/WorkflowEditor"
+import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
+import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 
 const AIJourneys = () => {
   const [showFraudWorkflow, setShowFraudWorkflow] = useState(false)
+  const [showKYCConfig, setShowKYCConfig] = useState(false)
   
   return (
     <div className="w-full">
@@ -83,9 +87,40 @@ const AIJourneys = () => {
             </Button>
           </CardContent>
         </Card>
+        
+        {/* New KYC Compliance Agent Card */}
+        <Card className="border-2 border-purple-200">
+          <CardHeader>
+            <CardTitle>KYC Compliance Agent</CardTitle>
+            <CardDescription>Automated identity verification and compliance</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Status:</span>
+              <span className="font-medium text-green-600">Active</span>
+            </div>
+            <div className="flex justify-between text-sm mb-4">
+              <span>Last modified:</span>
+              <span className="font-medium">1 day ago</span>
+            </div>
+            <Button size="sm" className="w-full" onClick={() => setShowKYCConfig(true)}>
+              <Settings className="mr-2 h-4 w-4" /> Configure Agent
+            </Button>
+          </CardContent>
+        </Card>
       </div>
 
       <FraudDetectionWorkflow open={showFraudWorkflow} onOpenChange={setShowFraudWorkflow} />
+      
+      {/* KYC Compliance Agent Configuration Dialog */}
+      <Dialog open={showKYCConfig} onOpenChange={setShowKYCConfig}>
+        <DialogContent className="max-w-5xl">
+          <DialogHeader>
+            <DialogTitle>KYC Compliance Agent Configuration</DialogTitle>
+          </DialogHeader>
+          <KYCAgentEditor onClose={() => setShowKYCConfig(false)} />
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
