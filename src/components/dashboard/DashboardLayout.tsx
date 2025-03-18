@@ -42,6 +42,9 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const customerNavItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
     { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
+    { label: "AI Agents", path: "/ai-agents", icon: Bot },
+    { label: "Models", path: "/models", icon: FileCode },
+    { label: "Data", path: "/data", icon: Database },
     { label: "Cases", path: "/cases", icon: FileText },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: CircleDollarSign },
@@ -50,9 +53,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   // Monnai internal view navigation items
   const monnaiNavItems = [
     { label: "Operations Dashboard", path: "/", icon: LayoutDashboard },
+    { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
     { label: "AI Agents", path: "/ai-agents", icon: Bot },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
+    { label: "Cases", path: "/cases", icon: FileText },
+    { label: "Customers", path: "/customers", icon: Users },
     { label: "All Transactions", path: "/transactions", icon: CircleDollarSign },
   ]
   
