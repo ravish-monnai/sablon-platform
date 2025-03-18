@@ -12,9 +12,56 @@ import WorkflowToolbar from './WorkflowToolbar';
 import WorkflowFlow from './WorkflowFlow';
 import { initialNodes, initialEdges } from './initialWorkflowData';
 import { NodeData } from './types';
+import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import ModelConfigDialog from '../models/ModelConfigDialog';
+
+// Custom Node with Model Configuration
+const ModelNode = ({ data, isConnectable }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  return (
+    <>
+      <div className="custom-node flex flex-col bg-white border border-gray-200 shadow-sm rounded-md" style={{ width: 150 }}>
+        <div className="p-2 flex items-center">
+          {data.icon}
+          <div className="ml-1 font-medium text-sm truncate">{data.label}</div>
+        </div>
+        <div className="p-2 pt-0 text-xs text-gray-500">{data.description}</div>
+        {data.type === 'model' && (
+          <div className="p-2 pt-0">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-xs h-6"
+              onClick={() => setIsOpen(true)}
+            >
+              Configure
+            </Button>
+          </div>
+        )}
+      </div>
+      
+      {data.type === 'model' && (
+        <Dialog open={isOpen} onOpenChange={setIsOpen}>
+          <DialogContent className="max-w-4xl">
+            <ModelConfigDialog 
+              open={isOpen} 
+              onOpenChange={setIsOpen}
+              modelName={data.label}
+              modelType="binary" 
+            />
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
+  );
+};
 
 // Custom Node Types
-const nodeTypes = {};
+const nodeTypes = {
+  default: ModelNode,
+};
 
 const WorkflowEditor: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);

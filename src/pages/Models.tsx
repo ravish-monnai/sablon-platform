@@ -1,16 +1,35 @@
 
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Plus, Brain, ChartLine, ChartBar } from "lucide-react"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Plus, Brain, ChartLine, ChartBar } from "lucide-react";
+import ModelConfigDialog from "@/components/models/ModelConfigDialog";
 
 const Models = () => {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedModel, setSelectedModel] = useState({
+    name: "",
+    type: ""
+  });
+
+  const handleModelClick = (name: string, type: string) => {
+    setSelectedModel({
+      name,
+      type
+    });
+    setIsDialogOpen(true);
+  };
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">Models</h1>
-        <Button>
+        <Button onClick={() => {
+          setSelectedModel({ name: "New Model", type: "binary" });
+          setIsDialogOpen(true);
+        }}>
           <Plus className="mr-2 h-4 w-4" /> Add Model
         </Button>
       </div>
@@ -26,7 +45,10 @@ const Models = () => {
           <Separator className="my-6" />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Card className="hover:shadow-md transition-shadow">
+            <Card 
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleModelClick("Fraud Risk Model", "binary")}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center">
@@ -57,7 +79,10 @@ const Models = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-md transition-shadow">
+            <Card 
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleModelClick("Underwriting Model", "regression")}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center">
@@ -88,7 +113,10 @@ const Models = () => {
               </CardContent>
             </Card>
             
-            <Card className="hover:shadow-md transition-shadow">
+            <Card 
+              className="hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => handleModelClick("Collections Optimization Model", "multiclass")}
+            >
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <CardTitle className="flex items-center">
@@ -124,7 +152,10 @@ const Models = () => {
         <TabsContent value="my-models">
           <div className="flex flex-col items-center justify-center h-40 border border-dashed rounded-md">
             <p className="text-gray-500 mb-4">You don't have any custom models yet</p>
-            <Button variant="outline">
+            <Button variant="outline" onClick={() => {
+              setSelectedModel({ name: "New Model", type: "binary" });
+              setIsDialogOpen(true);
+            }}>
               <Plus className="mr-2 h-4 w-4" /> Create Model
             </Button>
           </div>
@@ -137,8 +168,15 @@ const Models = () => {
           </div>
         </TabsContent>
       </Tabs>
-    </div>
-  )
-}
 
-export default Models
+      <ModelConfigDialog 
+        open={isDialogOpen} 
+        onOpenChange={setIsDialogOpen}
+        modelName={selectedModel.name}
+        modelType={selectedModel.type}
+      />
+    </div>
+  );
+};
+
+export default Models;
