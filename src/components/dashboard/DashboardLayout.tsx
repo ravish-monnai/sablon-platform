@@ -1,3 +1,4 @@
+
 import { ReactNode, useState } from "react"
 import {
   Sidebar,
@@ -20,7 +21,13 @@ import {
   CircleDollarSign,
   Users,
   UserRound,
-  Building2
+  Building2,
+  Search,
+  Flag,
+  Wallet,
+  Sliders,
+  Layers,
+  Activity
 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import MonnaiLogo from "../branding/MonnaiLogo"
