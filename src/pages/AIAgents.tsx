@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -13,6 +14,7 @@ const AIAgents = () => {
   // Customer agent editing states
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
+  const [isEditingBankStatementAgent, setIsEditingBankStatementAgent] = useState(false)
   const [isEditingUnderwriterAgent, setIsEditingUnderwriterAgent] = useState(false)
   const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
   
@@ -33,7 +35,8 @@ const AIAgents = () => {
     setIsEditingFraudAgent, 
     setIsEditingKYCAgent, 
     setIsEditingUnderwriterAgent, 
-    setIsEditingCollectionAgent
+    setIsEditingCollectionAgent,
+    setIsEditingBankStatementAgent
   )
   
   const monnaiAgents = getMonnaiAgents(
@@ -84,10 +87,12 @@ const AIAgents = () => {
         // Customer agent editing states
         isEditingFraudAgent={isEditingFraudAgent}
         isEditingKYCAgent={isEditingKYCAgent}
+        isEditingBankStatementAgent={isEditingBankStatementAgent}
         isEditingUnderwriterAgent={isEditingUnderwriterAgent}
         isEditingCollectionAgent={isEditingCollectionAgent}
         setIsEditingFraudAgent={setIsEditingFraudAgent}
         setIsEditingKYCAgent={setIsEditingKYCAgent}
+        setIsEditingBankStatementAgent={setIsEditingBankStatementAgent}
         setIsEditingUnderwriterAgent={setIsEditingUnderwriterAgent}
         setIsEditingCollectionAgent={setIsEditingCollectionAgent}
         

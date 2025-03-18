@@ -4,6 +4,7 @@ import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
 import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
+import BankStatementAgentEditor from "@/components/agents/BankStatementAgentEditor"
 import DataAnalysisAgentEditor from "@/components/agents/DataAnalysisAgentEditor"
 import ModelManagementAgentEditor from "@/components/agents/ModelManagementAgentEditor"
 
@@ -13,10 +14,12 @@ interface AgentEditorsProps {
   isEditingKYCAgent: boolean;
   isEditingUnderwriterAgent: boolean;
   isEditingCollectionAgent: boolean;
+  isEditingBankStatementAgent: boolean;
   setIsEditingFraudAgent: (value: boolean) => void;
   setIsEditingKYCAgent: (value: boolean) => void;
   setIsEditingUnderwriterAgent: (value: boolean) => void;
   setIsEditingCollectionAgent: (value: boolean) => void;
+  setIsEditingBankStatementAgent: (value: boolean) => void;
   
   // Monnai agents
   isEditingDataAnalysisAgent?: boolean;
@@ -39,10 +42,12 @@ const AgentEditors = ({
   isEditingKYCAgent,
   isEditingUnderwriterAgent,
   isEditingCollectionAgent,
+  isEditingBankStatementAgent,
   setIsEditingFraudAgent,
   setIsEditingKYCAgent,
   setIsEditingUnderwriterAgent,
   setIsEditingCollectionAgent,
+  setIsEditingBankStatementAgent,
   
   // Monnai agents
   isEditingDataAnalysisAgent = false,
@@ -82,6 +87,18 @@ const AgentEditors = ({
             </SheetDescription>
           </SheetHeader>
           <KYCAgentEditor onClose={() => setIsEditingKYCAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={isEditingBankStatementAgent} onOpenChange={setIsEditingBankStatementAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure Bank Statement Analyzer</SheetTitle>
+            <SheetDescription>
+              Customize income verification, expense categorization, and analysis settings for your bank statement agent.
+            </SheetDescription>
+          </SheetHeader>
+          <BankStatementAgentEditor onClose={() => setIsEditingBankStatementAgent(false)} />
         </SheetContent>
       </Sheet>
 

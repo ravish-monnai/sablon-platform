@@ -1,6 +1,7 @@
+
 import { MonnaiAgentType, CustomerAgentType } from "./AgentCard"
 import { 
-  Shield, Users, CreditCard, UserCheck,
+  Shield, Users, CreditCard, UserCheck, FileText,
   Search, Flag, Wallet, Sliders, Layers, Activity 
 } from "lucide-react"
 
@@ -8,7 +9,8 @@ export const getCustomerAgents = (
   setIsEditingFraudAgent: (value: boolean) => void,
   setIsEditingKYCAgent: (value: boolean) => void,
   setIsEditingUnderwriterAgent: (value: boolean) => void,
-  setIsEditingCollectionAgent: (value: boolean) => void
+  setIsEditingCollectionAgent: (value: boolean) => void,
+  setIsEditingBankStatementAgent: (value: boolean) => void
 ): CustomerAgentType[] => {
   return [
     {
@@ -30,6 +32,16 @@ export const getCustomerAgents = (
       resolutionTime: "2.5 mins",
       model: "Claude 3 Opus",
       onEdit: () => setIsEditingKYCAgent(true)
+    },
+    {
+      title: "Bank Statement Analyzer",
+      description: "Analyzes bank statements for income verification and spending patterns",
+      icon: <FileText className="mr-2 h-5 w-5 text-[#10B981]" />,
+      status: "Running",
+      casesPerDay: 92,
+      resolutionTime: "4.1 mins",
+      model: "GPT-4o",
+      onEdit: () => setIsEditingBankStatementAgent(true)
     },
     {
       title: "Underwriter",
