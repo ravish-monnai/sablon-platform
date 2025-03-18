@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerFooter } from "@/components/ui/drawer";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
@@ -9,14 +8,13 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { useMobile } from "@/hooks/use-mobile";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { 
   UserRound, Mail, Phone, MapPin, Calendar, AlertTriangle, ShieldAlert, 
   CreditCard, Building, FileText, CheckCircle, XCircle, Clock, Briefcase,
   Globe, BarChart4, DollarSign, Flag, CircleUser
 } from "lucide-react";
 
-// Define the customer type
 interface CustomerData {
   id: string;
   name: string;
@@ -65,12 +63,10 @@ interface CustomerProfileProps {
 export default function CustomerProfile({ customerId, isOpen, onClose }: CustomerProfileProps) {
   const [customer, setCustomer] = useState<CustomerData | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
-  const isMobile = useMobile();
+  const isMobile = useIsMobile();
 
-  // Simulate fetching customer data
   useEffect(() => {
     if (customerId) {
-      // In a real app, fetch data from API
       const mockCustomer: CustomerData = {
         id: customerId,
         name: `Customer ${customerId.split('-')[1]}`,
@@ -121,7 +117,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     return null;
   }
 
-  // Determine the risk color based on risk level
   const getRiskColor = (level: string) => {
     switch (level) {
       case "Low": return "bg-green-100 text-green-800";
@@ -132,7 +127,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     }
   };
 
-  // Determine the status badge variant
   const getStatusVariant = (status: string) => {
     switch (status) {
       case "Active": return "success";
@@ -142,7 +136,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     }
   };
 
-  // Determine the KYC status badge variant
   const getKycVariant = (status: string) => {
     switch (status) {
       case "Verified": return "success";
@@ -152,7 +145,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     }
   };
 
-  // Render check status icon
   const renderCheckStatus = (status: "passed" | "failed" | "pending") => {
     switch (status) {
       case "passed": return <CheckCircle className="h-4 w-4 text-green-500" />;
@@ -161,7 +153,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     }
   };
 
-  // Content of the profile
   const profileContent = (
     <Tabs defaultValue="overview" value={activeTab} onValueChange={setActiveTab} className="w-full">
       <TabsList className="grid grid-cols-4">
@@ -462,7 +453,6 @@ export default function CustomerProfile({ customerId, isOpen, onClose }: Custome
     </Tabs>
   );
 
-  // Render different UI components based on screen size
   if (isMobile) {
     return (
       <Drawer open={isOpen} onOpenChange={onClose}>
