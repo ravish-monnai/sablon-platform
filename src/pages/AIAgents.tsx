@@ -1,5 +1,4 @@
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -12,7 +11,8 @@ import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
 import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 type CustomerAgentType = {
   title: string;
@@ -42,15 +42,25 @@ const AIAgents = () => {
   const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
   const [viewMode, setViewMode] = useState<"customer" | "internal">("customer")
   
-  // Get the current view mode from URL search params
   const location = useLocation()
+  const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
   const viewModeParam = searchParams.get("viewMode")
   
-  // If viewModeParam is 'internal', set viewMode to 'internal', otherwise default to 'customer'
-  const currentViewMode = viewModeParam === "internal" ? "internal" : "customer"
+  useEffect(() => {
+    const mode = viewModeParam === "internal" ? "internal" : "customer"
+    setViewMode(mode)
+  }, [viewModeParam])
   
-  // Define the Monnai internal agents
+  const handleViewModeChange = (value: string) => {
+    const newMode = value as "customer" | "internal"
+    setViewMode(newMode)
+    
+    const params = new URLSearchParams(location.search)
+    params.set("viewMode", newMode)
+    navigate({ search: params.toString() })
+  }
+  
   const monnaiAgents: MonnaiAgentType[] = [
     {
       title: "Data Analysis Agent",
@@ -108,7 +118,6 @@ const AIAgents = () => {
     }
   ];
   
-  // Define the customer agents (existing)
   const customerAgents: CustomerAgentType[] = [
     {
       title: "Fraud Review Agent",
@@ -152,18 +161,25 @@ const AIAgents = () => {
     }
   ];
   
-  // Determine which agents to display based on view mode from localStorage
-  const viewModeFromStorage = localStorage.getItem('viewMode');
-  const displayViewMode = viewModeFromStorage === "internal" ? "internal" : "customer";
-  const agentsToDisplay = displayViewMode === "internal" ? monnaiAgents : customerAgents;
+  const agentsToDisplay = viewMode === "internal" ? monnaiAgents : customerAgents;
   
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">AI Agents</h1>
-        <Button>
-          <Plus className="mr-2 h-4 w-4" /> Deploy Agent
-        </Button>
+        <div className="flex gap-4">
+          <ToggleGroup type="single" value={viewMode} onValueChange={handleViewModeChange}>
+            <ToggleGroupItem value="customer" aria-label="Customer View">
+              Customer Agents
+            </ToggleGroupItem>
+            <ToggleGroupItem value="internal" aria-label="Internal View">
+              Monnai Agents
+            </ToggleGroupItem>
+          </ToggleGroup>
+          <Button>
+            <Plus className="mr-2 h-4 w-4" /> Deploy Agent
+          </Button>
+        </div>
       </div>
       
       <Separator className="my-6" />
@@ -200,25 +216,20 @@ const AIAgents = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => {
-                  // Only show configure functionality for customer agents
-                  if (displayViewMode === "customer") {
-                    // Since we defined the proper types, TypeScript knows onEdit exists on CustomerAgentType
-                    (agent as CustomerAgentType).onEdit();
-                  }
-                }}
-              >
-                <Edit2 className="mr-2 h-4 w-4" /> Configure
-              </Button>
+              {viewMode === "customer" && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => (agent as CustomerAgentType).onEdit()}
+                >
+                  <Edit2 className="mr-2 h-4 w-4" /> Configure
+                </Button>
+              )}
             </CardFooter>
           </Card>
         ))}
       </div>
 
-      {/* Fraud Agent Editor Sheet */}
       <Sheet open={isEditingFraudAgent} onOpenChange={setIsEditingFraudAgent}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
@@ -231,7 +242,6 @@ const AIAgents = () => {
         </SheetContent>
       </Sheet>
 
-      {/* KYC Agent Editor Sheet */}
       <Sheet open={isEditingKYCAgent} onOpenChange={setIsEditingKYCAgent}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
@@ -244,7 +254,6 @@ const AIAgents = () => {
         </SheetContent>
       </Sheet>
 
-      {/* Underwriter Agent Editor Sheet */}
       <Sheet open={isEditingUnderwriterAgent} onOpenChange={setIsEditingUnderwriterAgent}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
@@ -257,7 +266,6 @@ const AIAgents = () => {
         </SheetContent>
       </Sheet>
 
-      {/* Collection Agent Editor Sheet */}
       <Sheet open={isEditingCollectionAgent} onOpenChange={setIsEditingCollectionAgent}>
         <SheetContent className="sm:max-w-2xl overflow-y-auto">
           <SheetHeader>
