@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -11,11 +10,12 @@ import { Badge } from "@/components/ui/badge";
 import { 
   FileText, CreditCard, ChartBar, Users, PlusCircle, 
   ArrowUpDown, Banknote, AreaChart, Building, Check,
-  PlayCircle, X
+  PlayCircle, X, AlertTriangle, ShieldCheck
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface BankStatementAgentEditorProps {
   onClose: () => void;
@@ -61,6 +61,15 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     // Simulate API call with timeout
     setTimeout(() => {
       const sampleResult = {
+        riskScore: {
+          score: 35,
+          level: "Low Risk",
+          factors: [
+            { name: "Stable Income", impact: "Positive" },
+            { name: "Positive Cash Flow", impact: "Positive" },
+            { name: "Large Irregular Transaction", impact: "Negative" }
+          ]
+        },
         incomeVerification: {
           status: "success",
           totalIncome: 5250.00,
@@ -107,6 +116,12 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
       setIsTestInProgress(false);
       toast.success("Bank statement analysis completed successfully");
     }, 2500);
+  };
+  
+  const getRiskScoreColor = (score: number) => {
+    if (score <= 35) return "bg-green-100 text-green-800";
+    if (score <= 65) return "bg-yellow-100 text-yellow-800";
+    return "bg-red-100 text-red-800";
   };
   
   return (
@@ -394,8 +409,41 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
             
             {testResult && (
               <div className="space-y-6">
+                {testResult.riskScore && (
+                  <Card className="overflow-hidden border-0 shadow-lg">
+                    <div className={`p-4 ${getRiskScoreColor(testResult.riskScore.score)}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center">
+                          <ShieldCheck className="mr-2 h-5 w-5" />
+                          <h3 className="font-medium">Risk Assessment</h3>
+                        </div>
+                        <div className="flex items-center">
+                          <span className="font-bold text-lg mr-2">{testResult.riskScore.score}</span>
+                          <Badge variant="outline" className={getRiskScoreColor(testResult.riskScore.score)}>
+                            {testResult.riskScore.level}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                    <CardContent className="pt-4">
+                      <div className="space-y-3">
+                        <h4 className="text-sm font-medium">Contributing Factors</h4>
+                        <div className="space-y-2">
+                          {testResult.riskScore.factors.map((factor, i) => (
+                            <div key={i} className="flex items-center justify-between p-2 border rounded-md">
+                              <span className="text-sm">{factor.name}</span>
+                              <Badge variant={factor.impact === "Positive" ? "success" : "warning"}>
+                                {factor.impact}
+                              </Badge>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
+                
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Income Verification */}
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between mb-4">
@@ -424,7 +472,6 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                     </CardContent>
                   </Card>
                   
-                  {/* Expense Categories */}
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between mb-4">
@@ -453,7 +500,6 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                     </CardContent>
                   </Card>
                   
-                  {/* Recurring Payments */}
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between mb-4">
@@ -477,7 +523,6 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                     </CardContent>
                   </Card>
                   
-                  {/* Cash Flow Analysis */}
                   <Card>
                     <CardContent className="pt-6">
                       <div className="flex items-center justify-between mb-4">
@@ -506,7 +551,6 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                     </CardContent>
                   </Card>
                   
-                  {/* Abnormal Transactions */}
                   {testResult.abnormalTransactions.identified.length > 0 && (
                     <Card className="col-span-1 md:col-span-2">
                       <CardContent className="pt-6">
@@ -555,6 +599,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                       The applicant shows healthy financial patterns with stable income sources and responsible spending habits.
                       Monthly income of $5,250.00 exceeds expenses by $1,200.00, resulting in a positive cash flow and 22.8% savings rate.
                       One abnormal transaction was identified but appears to be a one-time event rather than a pattern of concern.
+                      Overall risk score: {testResult.riskScore?.score || "N/A"} ({testResult.riskScore?.level || "N/A"})
                     </p>
                   </div>
                 </div>
