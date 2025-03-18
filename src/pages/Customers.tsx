@@ -18,7 +18,8 @@ import {
   MapPin, 
   Calendar, 
   AlertTriangle,
-  ShieldAlert 
+  ShieldAlert,
+  Network
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -37,6 +38,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import CustomerProfile from "@/components/customers/CustomerProfile";
+import CustomerNetworkGraph from "@/components/customers/CustomerNetworkGraph";
 
 const generateSampleCustomers = () => {
   const countries = ["United States", "Canada", "United Kingdom", "Australia", "Germany", "France", "Japan", "Brazil"];
@@ -119,6 +121,7 @@ export default function Customers() {
   const [currentTab, setCurrentTab] = useState("all");
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isNetworkGraphOpen, setIsNetworkGraphOpen] = useState(false);
 
   const filteredCustomers = sampleCustomers.filter((c) => {
     const searchRegex = new RegExp(searchQuery, "i");
@@ -163,7 +166,16 @@ export default function Customers() {
             View and manage all customers processed by the risk platform
           </p>
         </div>
-        <Button>Add Customer</Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={() => setIsNetworkGraphOpen(true)}
+            className="flex items-center gap-2"
+          >
+            <Network className="h-4 w-4" /> Graph Analysis
+          </Button>
+          <Button>Add Customer</Button>
+        </div>
       </div>
 
       <Tabs defaultValue="all" value={currentTab} onValueChange={setCurrentTab}>
@@ -712,6 +724,12 @@ export default function Customers() {
         customerId={selectedCustomerId}
         isOpen={isProfileOpen}
         onClose={() => setIsProfileOpen(false)}
+      />
+      
+      <CustomerNetworkGraph
+        open={isNetworkGraphOpen}
+        onClose={() => setIsNetworkGraphOpen(false)}
+        customers={sampleCustomers}
       />
     </div>
   );
