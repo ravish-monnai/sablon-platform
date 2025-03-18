@@ -14,6 +14,27 @@ import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
 import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
 import { useLocation } from "react-router-dom"
 
+type CustomerAgentType = {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  status: string;
+  casesPerDay: number;
+  resolutionTime: string;
+  model: string;
+  onEdit: () => void;
+};
+
+type MonnaiAgentType = {
+  title: string;
+  description: string;
+  icon: JSX.Element;
+  status: string;
+  casesPerDay: number;
+  resolutionTime: string;
+  model: string;
+};
+
 const AIAgents = () => {
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
@@ -30,7 +51,7 @@ const AIAgents = () => {
   const currentViewMode = viewModeParam === "internal" ? "internal" : "customer"
   
   // Define the Monnai internal agents
-  const monnaiAgents = [
+  const monnaiAgents: MonnaiAgentType[] = [
     {
       title: "Data Analysis Agent",
       description: "Analyzes large datasets to extract insights and patterns",
@@ -88,7 +109,7 @@ const AIAgents = () => {
   ];
   
   // Define the customer agents (existing)
-  const customerAgents = [
+  const customerAgents: CustomerAgentType[] = [
     {
       title: "Fraud Review Agent",
       description: "Reviews suspicious transactions and identifies potential fraud",
@@ -183,9 +204,10 @@ const AIAgents = () => {
                 variant="outline" 
                 size="sm" 
                 onClick={() => {
-                  // Only access onEdit if it exists (only on customer agents)
-                  if (displayViewMode === "customer" && 'onEdit' in agent) {
-                    agent.onEdit();
+                  // Only show configure functionality for customer agents
+                  if (displayViewMode === "customer") {
+                    // Since we defined the proper types, TypeScript knows onEdit exists on CustomerAgentType
+                    (agent as CustomerAgentType).onEdit();
                   }
                 }}
               >
