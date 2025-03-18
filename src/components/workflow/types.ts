@@ -7,6 +7,7 @@ export interface NodeData {
   description: string;
   icon?: ReactNode;
   type?: string;
+  modelType?: string;
   [key: string]: unknown; // Add index signature to satisfy Record<string, unknown>
 }
 
@@ -14,4 +15,6 @@ export interface DragItemProps {
   type: string;
   icon: ReactNode;
   label: string;
+  data?: Record<string, any>;
 }
+

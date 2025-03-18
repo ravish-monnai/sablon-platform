@@ -49,7 +49,7 @@ const ModelNode = ({ data, isConnectable }) => {
               open={isOpen} 
               onOpenChange={setIsOpen}
               modelName={data.label}
-              modelType="binary" 
+              modelType={data.modelType || "binary"} 
             />
           </DialogContent>
         </Dialog>
@@ -94,6 +94,7 @@ const WorkflowEditor: React.FC = () => {
       // Create a description based on the node type
       let description = '';
       let icon;
+      let modelType = 'binary'; // Default model type for model nodes
       
       switch (type) {
         case 'datasource':
@@ -121,7 +122,8 @@ const WorkflowEditor: React.FC = () => {
           label: `New ${type}`,
           description,
           icon,
-          type
+          type,
+          modelType: type === 'model' ? modelType : undefined
         },
         style: { 
           width: 150,
