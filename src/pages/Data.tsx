@@ -2,12 +2,110 @@
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Phone, Mail, Briefcase, DollarSign, MapPin, IdCard, Network, ShieldCheck, Plus } from "lucide-react"
+import { Phone, Mail, Briefcase, DollarSign, MapPin, IdCard, Network, ShieldCheck, Plus, Settings } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { NewDataSourceDialog } from "@/components/data/NewDataSourceDialog"
+import { DataSourceConfigDialog } from "@/components/data/DataSourceConfigDialog"
 
 const Data = () => {
   const [newSourceDialogOpen, setNewSourceDialogOpen] = useState(false)
+  const [configDialogOpen, setConfigDialogOpen] = useState(false)
+  const [selectedDataSource, setSelectedDataSource] = useState<{
+    id: string;
+    name: string;
+    description: string;
+    icon: React.ReactNode;
+    active: boolean;
+    type: string;
+  } | undefined>(undefined)
+
+  const dataSources = [
+    {
+      id: "phone-basic",
+      name: "Phone Basic",
+      description: "Phone number validation, carrier data, line type",
+      icon: <Phone className="h-5 w-5 mr-2 text-blue-500" />,
+      active: true,
+      type: "Phone Basic"
+    },
+    {
+      id: "phone-social",
+      name: "Phone Social",
+      description: "Social profiles, usage patterns, reputation data",
+      icon: <Phone className="h-5 w-5 mr-2 text-indigo-500" />,
+      active: true,
+      type: "Phone Social"
+    },
+    {
+      id: "email-basic",
+      name: "Email Basic",
+      description: "Email validation, domain info, deliverability",
+      icon: <Mail className="h-5 w-5 mr-2 text-blue-500" />,
+      active: true,
+      type: "Email Basic"
+    },
+    {
+      id: "email-social",
+      name: "Email Social",
+      description: "Linked social accounts, registration info, reputation",
+      icon: <Mail className="h-5 w-5 mr-2 text-indigo-500" />,
+      active: true,
+      type: "Email Social"
+    },
+    {
+      id: "employment",
+      name: "Employment",
+      description: "Employment verification, work history, position",
+      icon: <Briefcase className="h-5 w-5 mr-2 text-purple-500" />,
+      active: false,
+      type: "Employment"
+    },
+    {
+      id: "income",
+      name: "Income",
+      description: "Income verification, bank transaction analysis",
+      icon: <DollarSign className="h-5 w-5 mr-2 text-green-500" />,
+      active: false,
+      type: "Income"
+    },
+    {
+      id: "ip-intelligence",
+      name: "IP Intelligence",
+      description: "Geolocation, proxy detection, risk scoring",
+      icon: <MapPin className="h-5 w-5 mr-2 text-red-500" />,
+      active: true,
+      type: "IP Intelligence"
+    },
+    {
+      id: "identity",
+      name: "Identity",
+      description: "ID document verification, biometric matching",
+      icon: <IdCard className="h-5 w-5 mr-2 text-amber-500" />,
+      active: true,
+      type: "Identity"
+    },
+    {
+      id: "network-graph",
+      name: "Network Graph",
+      description: "Connections between users, entities, transactions",
+      icon: <Network className="h-5 w-5 mr-2 text-blue-600" />,
+      active: true,
+      type: "Network Graph"
+    },
+    {
+      id: "global-security",
+      name: "Global Security Data",
+      description: "Sanctions lists, PEP screening, adverse media",
+      icon: <ShieldCheck className="h-5 w-5 mr-2 text-gray-500" />,
+      active: false,
+      type: "Global Security"
+    }
+  ]
+
+  const handleConfigureClick = (dataSource) => {
+    setSelectedDataSource(dataSource)
+    setConfigDialogOpen(true)
+  }
 
   return (
     <div className="w-full">
@@ -25,196 +123,51 @@ const Data = () => {
       <Separator className="my-6" />
       
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Phone Data Sources */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Phone className="h-5 w-5 mr-2 text-blue-500" />
-              <CardTitle className="text-lg">Phone Basic</CardTitle>
-            </div>
-            <CardDescription>Phone number validation, carrier data, line type</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
+        {dataSources.map((dataSource) => (
+          <Card key={dataSource.id}>
+            <CardHeader className="pb-3">
               <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
+                {dataSource.icon}
+                <CardTitle className="text-lg">{dataSource.name}</CardTitle>
               </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Phone className="h-5 w-5 mr-2 text-indigo-500" />
-              <CardTitle className="text-lg">Phone Social</CardTitle>
-            </div>
-            <CardDescription>Social profiles, usage patterns, reputation data</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
+              <CardDescription>{dataSource.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <span className={`${dataSource.active ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'} text-xs px-2 py-1 rounded`}>
+                    {dataSource.active ? 'Active' : 'Available'}
+                  </span>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleConfigureClick(dataSource)}
+                >
+                  {dataSource.active ? (
+                    <>
+                      <Settings className="h-4 w-4 mr-2" />
+                      Configure
+                    </>
+                  ) : (
+                    'Connect'
+                  )}
+                </Button>
               </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Email Data Sources */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Mail className="h-5 w-5 mr-2 text-blue-500" />
-              <CardTitle className="text-lg">Email Basic</CardTitle>
-            </div>
-            <CardDescription>Email validation, domain info, deliverability</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
-              </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Mail className="h-5 w-5 mr-2 text-indigo-500" />
-              <CardTitle className="text-lg">Email Social</CardTitle>
-            </div>
-            <CardDescription>Linked social accounts, registration info, reputation</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
-              </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Employment & Income */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Briefcase className="h-5 w-5 mr-2 text-purple-500" />
-              <CardTitle className="text-lg">Employment</CardTitle>
-            </div>
-            <CardDescription>Employment verification, work history, position</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Available</span>
-              </div>
-              <Button variant="outline" size="sm">Connect</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <DollarSign className="h-5 w-5 mr-2 text-green-500" />
-              <CardTitle className="text-lg">Income</CardTitle>
-            </div>
-            <CardDescription>Income verification, bank transaction analysis</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Available</span>
-              </div>
-              <Button variant="outline" size="sm">Connect</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* IP & Identity */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <MapPin className="h-5 w-5 mr-2 text-red-500" />
-              <CardTitle className="text-lg">IP Intelligence</CardTitle>
-            </div>
-            <CardDescription>Geolocation, proxy detection, risk scoring</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
-              </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <IdCard className="h-5 w-5 mr-2 text-amber-500" />
-              <CardTitle className="text-lg">Identity</CardTitle>
-            </div>
-            <CardDescription>ID document verification, biometric matching</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
-              </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Network Graph */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <Network className="h-5 w-5 mr-2 text-blue-600" />
-              <CardTitle className="text-lg">Network Graph</CardTitle>
-            </div>
-            <CardDescription>Connections between users, entities, transactions</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded">Active</span>
-              </div>
-              <Button variant="outline" size="sm">Configure</Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Add Global Security Data */}
-        <Card>
-          <CardHeader className="pb-3">
-            <div className="flex items-center">
-              <ShieldCheck className="h-5 w-5 mr-2 text-gray-500" />
-              <CardTitle className="text-lg">Global Security Data</CardTitle>
-            </div>
-            <CardDescription>Sanctions lists, PEP screening, adverse media</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between items-center">
-              <div className="flex items-center">
-                <span className="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded">Available</span>
-              </div>
-              <Button variant="outline" size="sm">Connect</Button>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <NewDataSourceDialog 
         open={newSourceDialogOpen} 
         onOpenChange={setNewSourceDialogOpen} 
+      />
+
+      <DataSourceConfigDialog
+        open={configDialogOpen}
+        onOpenChange={setConfigDialogOpen}
+        dataSource={selectedDataSource}
       />
     </div>
   )
