@@ -3,7 +3,7 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Edit2, Shield, Users, FileCheck, AlertTriangle, CreditCard, BrainCircuit, UserCheck } from "lucide-react"
+import { Plus, Edit2, Shield, Users, CreditCard, BrainCircuit, UserCheck } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
@@ -92,42 +92,6 @@ const AIAgents = () => {
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button variant="outline" size="sm" onClick={() => setIsEditingKYCAgent(true)}>
-              <Edit2 className="mr-2 h-4 w-4" /> Configure
-            </Button>
-          </CardFooter>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <div className="flex items-center">
-              <FileCheck className="mr-2 h-5 w-5 text-[#33C3F0]" />
-              <CardTitle>Compliance Review</CardTitle>
-            </div>
-            <CardDescription>Monitors compliance with regulations and policies</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="flex justify-between text-sm mb-2">
-              <span>Status:</span>
-              <span className="font-medium text-green-600">Running</span>
-            </div>
-            <div className="flex justify-between text-sm mb-2">
-              <span>Cases/day:</span>
-              <span className="font-medium">142</span>
-            </div>
-            <div className="flex justify-between text-sm mb-2">
-              <span>Avg. resolution time:</span>
-              <span className="font-medium">1.8 mins</span>
-            </div>
-            <div className="flex justify-between text-sm">
-              <span>Model:</span>
-              <span className="font-medium flex items-center">
-                <BrainCircuit className="h-3 w-3 mr-1 text-[#33C3F0]" />
-                Claude 3 Sonnet
-              </span>
-            </div>
-          </CardContent>
-          <CardFooter className="flex justify-end">
-            <Button variant="outline" size="sm">
               <Edit2 className="mr-2 h-4 w-4" /> Configure
             </Button>
           </CardFooter>
