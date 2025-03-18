@@ -18,7 +18,8 @@ import {
   Database, 
   FileCode, 
   FileText, 
-  CircleDollarSign 
+  CircleDollarSign,
+  Users
 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import MonnaiLogo from "../branding/MonnaiLogo"
@@ -40,6 +41,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
     { label: "Cases", path: "/cases", icon: FileText },
+    { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: CircleDollarSign },
   ]
   
