@@ -1,4 +1,3 @@
-
 import { ReactNode, useState } from "react"
 import {
   Sidebar,
@@ -57,8 +56,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { label: "AI Agents", path: "/ai-agents", icon: Bot },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { label: "Cases", path: "/cases", icon: FileText },
-    { label: "Customers", path: "/customers", icon: Users },
     { label: "All Transactions", path: "/transactions", icon: CircleDollarSign },
   ]
   
