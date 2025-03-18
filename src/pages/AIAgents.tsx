@@ -179,7 +179,16 @@ const AIAgents = () => {
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button variant="outline" size="sm" onClick={() => displayViewMode === "customer" && agent.onEdit && agent.onEdit()}>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => {
+                  // Only access onEdit if it exists (only on customer agents)
+                  if (displayViewMode === "customer" && 'onEdit' in agent) {
+                    agent.onEdit();
+                  }
+                }}
+              >
                 <Edit2 className="mr-2 h-4 w-4" /> Configure
               </Button>
             </CardFooter>
