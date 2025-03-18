@@ -10,9 +10,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
   FileText, CreditCard, ChartBar, Users, PlusCircle, 
-  ArrowUpDown, Banknote, AreaChart, Building, Check
+  ArrowUpDown, Banknote, AreaChart, Building, Check,
+  PlayCircle, X
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import { toast } from "sonner";
 
 interface BankStatementAgentEditorProps {
   onClose: () => void;
@@ -32,6 +35,9 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
   
   const [llmModel, setLLMModel] = useState("gpt-4o");
   const [confidenceThreshold, setConfidenceThreshold] = useState([80]);
+  const [isTestDialogOpen, setIsTestDialogOpen] = useState(false);
+  const [testResult, setTestResult] = useState<any>(null);
+  const [isTestInProgress, setIsTestInProgress] = useState(false);
   
   const handleToggleFeature = (feature: string) => {
     setEnabledFeatures(prev => ({
@@ -48,9 +54,80 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     });
     onClose();
   };
+
+  const runTestWithSample = () => {
+    setIsTestInProgress(true);
+    
+    // Simulate API call with timeout
+    setTimeout(() => {
+      const sampleResult = {
+        incomeVerification: {
+          status: "success",
+          totalIncome: 5250.00,
+          recurringIncome: [
+            { source: "ACME Corp", amount: 4500.00, frequency: "Monthly" },
+            { source: "Side Gig LLC", amount: 750.00, frequency: "Monthly" }
+          ]
+        },
+        expenseCategories: {
+          status: "success",
+          categories: [
+            { name: "Housing", total: 1800.00, percentage: 38 },
+            { name: "Utilities", total: 450.00, percentage: 9 },
+            { name: "Food", total: 750.00, percentage: 16 },
+            { name: "Transportation", total: 350.00, percentage: 7 },
+            { name: "Entertainment", total: 500.00, percentage: 11 },
+            { name: "Misc", total: 900.00, percentage: 19 }
+          ]
+        },
+        recurringPayments: {
+          status: "success",
+          identified: [
+            { name: "Netflix", amount: 14.99, category: "Entertainment" },
+            { name: "Gym Membership", amount: 49.99, category: "Health" },
+            { name: "Phone Bill", amount: 95.00, category: "Utilities" },
+            { name: "Car Insurance", amount: 120.00, category: "Insurance" }
+          ]
+        },
+        cashFlowAnalysis: {
+          status: "success",
+          netCashFlow: 1200.00,
+          savingsRate: 22.8,
+          volatility: "Low"
+        },
+        abnormalTransactions: {
+          status: "success",
+          identified: [
+            { date: "2023-10-15", amount: 1200.00, description: "Unusual large withdrawal", risk: "Medium" }
+          ]
+        }
+      };
+      
+      setTestResult(sampleResult);
+      setIsTestInProgress(false);
+      toast.success("Bank statement analysis completed successfully");
+    }, 2500);
+  };
   
   return (
     <div className="mt-6 space-y-6">
+      <div className="flex justify-between">
+        <div>
+          <h3 className="text-lg font-medium">Bank Statement Analyzer Configuration</h3>
+          <p className="text-sm text-muted-foreground">
+            Configure how your AI agent analyzes customer bank statements
+          </p>
+        </div>
+        <Button 
+          variant="outline" 
+          onClick={() => setIsTestDialogOpen(true)}
+          className="flex items-center gap-2"
+        >
+          <PlayCircle className="h-4 w-4" />
+          Test with Sample
+        </Button>
+      </div>
+      
       <Tabs defaultValue="features">
         <TabsList className="grid grid-cols-3 mb-4">
           <TabsTrigger value="features">Features</TabsTrigger>
@@ -282,6 +359,220 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
         <Button variant="outline" onClick={onClose}>Cancel</Button>
         <Button onClick={handleSave}>Save Configuration</Button>
       </div>
+
+      {/* Test with Sample Dialog */}
+      <Dialog open={isTestDialogOpen} onOpenChange={setIsTestDialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Bank Statement Analyzer Test</DialogTitle>
+            <DialogDescription>
+              Test your bank statement analyzer configuration with a sample statement
+            </DialogDescription>
+          </DialogHeader>
+          
+          <div className="py-4">
+            {!testResult && !isTestInProgress && (
+              <div className="flex flex-col items-center justify-center py-8 space-y-4">
+                <FileText className="h-16 w-16 text-muted-foreground" />
+                <p className="text-center text-muted-foreground">
+                  Run a test to see how your bank statement analyzer would process a real customer statement.
+                  <br />
+                  This will process a pre-defined sample bank statement with your current configuration.
+                </p>
+                <Button onClick={runTestWithSample} className="mt-4">
+                  Run Test Analysis
+                </Button>
+              </div>
+            )}
+            
+            {isTestInProgress && (
+              <div className="flex flex-col items-center justify-center py-12 space-y-4">
+                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
+                <p className="text-center">Analyzing sample bank statement...</p>
+              </div>
+            )}
+            
+            {testResult && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {/* Income Verification */}
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <Banknote className="mr-2 h-5 w-5 text-green-500" />
+                          <h3 className="font-medium">Income Verification</h3>
+                        </div>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Success</Badge>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Total Income:</span>
+                          <span className="font-medium">${testResult.incomeVerification.totalIncome.toFixed(2)}</span>
+                        </div>
+                        <Separator />
+                        <div className="space-y-2">
+                          <span className="text-sm text-muted-foreground">Recurring Income:</span>
+                          {testResult.incomeVerification.recurringIncome.map((income: any, i: number) => (
+                            <div key={i} className="flex justify-between text-sm">
+                              <span>{income.source}</span>
+                              <span>${income.amount.toFixed(2)} ({income.frequency})</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  {/* Expense Categories */}
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <CreditCard className="mr-2 h-5 w-5 text-purple-500" />
+                          <h3 className="font-medium">Expense Categories</h3>
+                        </div>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Success</Badge>
+                      </div>
+                      <div className="space-y-2">
+                        {testResult.expenseCategories.categories.map((category: any, i: number) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <div className="w-2 h-2 rounded-full bg-primary" style={{ 
+                                backgroundColor: ['#10B981', '#8B5CF6', '#F97316', '#FB7185', '#4DA3FF', '#D946EF'][i % 6] 
+                              }}></div>
+                              <span>{category.name}</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span>${category.total.toFixed(2)}</span>
+                              <span className="text-xs text-muted-foreground">({category.percentage}%)</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  {/* Recurring Payments */}
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <ArrowUpDown className="mr-2 h-5 w-5 text-blue-500" />
+                          <h3 className="font-medium">Recurring Payments</h3>
+                        </div>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Success</Badge>
+                      </div>
+                      <div className="space-y-2">
+                        {testResult.recurringPayments.identified.map((payment: any, i: number) => (
+                          <div key={i} className="flex justify-between text-sm">
+                            <div className="flex items-center gap-2">
+                              <span>{payment.name}</span>
+                              <Badge variant="outline" className="text-xs">{payment.category}</Badge>
+                            </div>
+                            <span>${payment.amount.toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  {/* Cash Flow Analysis */}
+                  <Card>
+                    <CardContent className="pt-6">
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center">
+                          <AreaChart className="mr-2 h-5 w-5 text-amber-500" />
+                          <h3 className="font-medium">Cash Flow Analysis</h3>
+                        </div>
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Success</Badge>
+                      </div>
+                      <div className="space-y-3">
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Net Cash Flow:</span>
+                          <span className="font-medium text-green-600">+${testResult.cashFlowAnalysis.netCashFlow.toFixed(2)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Savings Rate:</span>
+                          <span className="font-medium">{testResult.cashFlowAnalysis.savingsRate}%</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-sm text-muted-foreground">Volatility:</span>
+                          <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                            {testResult.cashFlowAnalysis.volatility}
+                          </Badge>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  {/* Abnormal Transactions */}
+                  {testResult.abnormalTransactions.identified.length > 0 && (
+                    <Card className="col-span-1 md:col-span-2">
+                      <CardContent className="pt-6">
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center">
+                            <FileText className="mr-2 h-5 w-5 text-red-500" />
+                            <h3 className="font-medium">Abnormal Transactions</h3>
+                          </div>
+                          <Badge variant="outline" className="bg-amber-50 text-amber-700 border-amber-200">
+                            {testResult.abnormalTransactions.identified.length} Found
+                          </Badge>
+                        </div>
+                        <div className="space-y-2">
+                          {testResult.abnormalTransactions.identified.map((transaction: any, i: number) => (
+                            <div key={i} className="flex items-center justify-between p-2 border rounded-md">
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium">{transaction.date}</span>
+                                  <span className="text-sm">{transaction.description}</span>
+                                </div>
+                              </div>
+                              <div className="flex items-center gap-4">
+                                <span>${transaction.amount.toFixed(2)}</span>
+                                <Badge variant={
+                                  transaction.risk === "Low" ? "outline" : 
+                                  transaction.risk === "Medium" ? "secondary" : "destructive"
+                                }>
+                                  {transaction.risk} Risk
+                                </Badge>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+                
+                <div className="pt-4">
+                  <div className="border rounded-md p-4 bg-muted/30">
+                    <div className="flex items-center mb-2">
+                      <Check className="h-5 w-5 text-green-500 mr-2" />
+                      <span className="font-medium">Analysis Summary</span>
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      The applicant shows healthy financial patterns with stable income sources and responsible spending habits.
+                      Monthly income of $5,250.00 exceeds expenses by $1,200.00, resulting in a positive cash flow and 22.8% savings rate.
+                      One abnormal transaction was identified but appears to be a one-time event rather than a pattern of concern.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+          
+          <DialogFooter>
+            {testResult && (
+              <Button variant="outline" onClick={() => setTestResult(null)} className="mr-auto">
+                <X className="h-4 w-4 mr-2" />
+                Clear Results
+              </Button>
+            )}
+            <Button variant="outline" onClick={() => setIsTestDialogOpen(false)}>Close</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
