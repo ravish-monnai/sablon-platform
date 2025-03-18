@@ -19,7 +19,8 @@ import {
   Calendar, 
   AlertTriangle,
   ShieldAlert,
-  Network
+  Network,
+  Building2
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
@@ -122,6 +123,7 @@ export default function Customers() {
   const [selectedCustomerId, setSelectedCustomerId] = useState<string | null>(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isNetworkGraphOpen, setIsNetworkGraphOpen] = useState(false);
+  const [viewMode, setViewMode] = useState<"customer" | "internal">("internal");
 
   const filteredCustomers = sampleCustomers.filter((c) => {
     const searchRegex = new RegExp(searchQuery, "i");
@@ -177,6 +179,22 @@ export default function Customers() {
           <Button>Add Customer</Button>
         </div>
       </div>
+
+      <Tabs 
+        defaultValue="internal" 
+        value={viewMode} 
+        onValueChange={(value) => setViewMode(value as "customer" | "internal")}
+        className="w-full mb-4"
+      >
+        <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsTrigger value="customer" className="flex items-center">
+            <UserRound className="h-4 w-4 mr-2" /> Customer View
+          </TabsTrigger>
+          <TabsTrigger value="internal" className="flex items-center">
+            <Building2 className="h-4 w-4 mr-2" /> Internal View
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
 
       <Tabs defaultValue="all" value={currentTab} onValueChange={setCurrentTab}>
         <TabsList>
