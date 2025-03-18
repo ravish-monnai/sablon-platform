@@ -1,10 +1,9 @@
-
 import { useState } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { LinkStatus } from "@/components/ui/link-status"
 import { Button } from "@/components/ui/button"
-import { Plus, Download, Filter, RefreshCw, Bot, Search, TrendingUp, AlertTriangle, WandSparkles, MousePointerClick, Target } from "lucide-react"
+import { Plus, Download, Filter, RefreshCw, Bot, Search, TrendingUp, AlertTriangle, WandSparkles, MousePointerClick, Target, Wallet } from "lucide-react"
 import { 
   Table, 
   TableBody, 
@@ -50,7 +49,7 @@ const Transactions = () => {
     { name: 'Mon', transactions: 32, pattern: 'Low' },
     { name: 'Tue', transactions: 38, pattern: 'Low' },
     { name: 'Wed', transactions: 42, pattern: 'Low' },
-    { name: 'Thu', transactions: 45, pattern: 'Medium' },
+    { name: 'Thu', transactions: 45, pattern: 'Low' },
     { name: 'Fri', transactions: 65, pattern: 'High' },
     { name: 'Sat', transactions: 30, pattern: 'Low' },
     { name: 'Sun', transactions: 22, pattern: 'Low' },

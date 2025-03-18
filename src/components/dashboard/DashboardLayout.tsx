@@ -1,4 +1,3 @@
-
 import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
@@ -18,7 +17,6 @@ import {
   Database, 
   FileCode, 
   FileText, 
-  CircleDollarSign,
   Users,
   UserRound,
   Building2,
@@ -43,27 +41,23 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const navigate = useNavigate()
   const currentPath = location.pathname
   
-  // Get view mode from URL
   const searchParams = new URLSearchParams(location.search)
   const viewModeParam = searchParams.get("viewMode")
   const [viewMode, setViewMode] = useState<"customer" | "internal">(
     viewModeParam === "internal" ? "internal" : "customer"
   )
   
-  // Update URL when view mode changes
   const updateViewModeInURL = (newMode: "customer" | "internal") => {
     const params = new URLSearchParams(location.search)
     params.set("viewMode", newMode)
     navigate({ pathname: location.pathname, search: params.toString() })
   }
   
-  // Effect to update viewMode when URL changes
   useEffect(() => {
     const mode = viewModeParam === "internal" ? "internal" : "customer"
     setViewMode(mode)
   }, [viewModeParam])
   
-  // Customer view navigation items
   const customerNavItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
     { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
@@ -72,25 +66,22 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     { label: "Data", path: "/data", icon: Database },
     { label: "Cases", path: "/cases", icon: FileText },
     { label: "Customers", path: "/customers", icon: Users },
-    { label: "Transactions", path: "/transactions", icon: CircleDollarSign },
+    { label: "Transactions", path: "/transactions", icon: Wallet },
   ]
   
-  // Monnai internal view navigation items
   const monnaiNavItems = [
     { label: "Operations Dashboard", path: "/", icon: LayoutDashboard },
     { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
     { label: "AI Agents", path: "/ai-agents", icon: Bot },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { label: "All Transactions", path: "/transactions", icon: CircleDollarSign },
+    { label: "All Transactions", path: "/transactions", icon: Wallet },
   ]
   
-  // Function to determine if a nav item is active
   const isActive = (path: string) => {
     return currentPath === path || currentPath.startsWith(`${path}/`)
   }
 
-  // Get the appropriate navigation items based on view mode
   const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems
 
   return (
@@ -103,7 +94,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <SidebarTrigger />
             </div>
             
-            {/* Global View Mode Toggle */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <UserRound className={`h-4 w-4 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
@@ -132,7 +122,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                     tooltip={item.label}
                     isActive={isActive(item.path)}
                     onClick={() => {
-                      // Preserve the viewMode when navigating
                       const params = new URLSearchParams();
                       params.set("viewMode", viewMode);
                       navigate({ pathname: item.path, search: params.toString() });
