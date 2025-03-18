@@ -1,8 +1,9 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Pencil, Settings } from "lucide-react"
+import { Plus, Pencil, Settings, UserCheck } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
@@ -12,6 +13,7 @@ import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 
 const AIJourneys = () => {
   const [showFraudWorkflow, setShowFraudWorkflow] = useState(false)
+  const [showOnboardingWorkflow, setShowOnboardingWorkflow] = useState(false)
   
   return (
     <div className="w-full">
@@ -25,7 +27,7 @@ const AIJourneys = () => {
       <Separator className="my-6" />
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <Card>
+        <Card className="border-2 border-blue-200">
           <CardHeader>
             <CardTitle>Customer Onboarding</CardTitle>
             <CardDescription>Risk assessment for new customers</CardDescription>
@@ -39,13 +41,13 @@ const AIJourneys = () => {
               <span>Last modified:</span>
               <span className="font-medium">2 days ago</span>
             </div>
-            <Button variant="outline" size="sm" className="w-full">
+            <Button size="sm" className="w-full" onClick={() => setShowOnboardingWorkflow(true)}>
               <Pencil className="mr-2 h-4 w-4" /> Edit Journey
             </Button>
           </CardContent>
         </Card>
         
-        <Card className="border-2 border-blue-200">
+        <Card>
           <CardHeader>
             <CardTitle>Fraud Detection</CardTitle>
             <CardDescription>Real-time transaction monitoring</CardDescription>
@@ -59,7 +61,7 @@ const AIJourneys = () => {
               <span>Last modified:</span>
               <span className="font-medium">5 days ago</span>
             </div>
-            <Button size="sm" className="w-full" onClick={() => setShowFraudWorkflow(true)}>
+            <Button variant="outline" size="sm" className="w-full" onClick={() => setShowFraudWorkflow(true)}>
               <Pencil className="mr-2 h-4 w-4" /> Edit Journey
             </Button>
           </CardContent>
@@ -87,7 +89,242 @@ const AIJourneys = () => {
       </div>
 
       <FraudDetectionWorkflow open={showFraudWorkflow} onOpenChange={setShowFraudWorkflow} />
+      <OnboardingWorkflow open={showOnboardingWorkflow} onOpenChange={setShowOnboardingWorkflow} />
     </div>
+  )
+}
+
+const OnboardingWorkflow = ({ 
+  open, 
+  onOpenChange 
+}: { 
+  open: boolean, 
+  onOpenChange: (open: boolean) => void 
+}) => {
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-5xl">
+        <DialogHeader>
+          <DialogTitle>Customer Onboarding Workflow</DialogTitle>
+        </DialogHeader>
+        
+        <Tabs defaultValue="overview" className="w-full">
+          <TabsList className="grid grid-cols-5 mb-4">
+            <TabsTrigger value="overview">Overview</TabsTrigger>
+            <TabsTrigger value="step1">Step 1: Collection</TabsTrigger>
+            <TabsTrigger value="step2">Step 2: KYC</TabsTrigger>
+            <TabsTrigger value="step3">Step 3: Risk Score</TabsTrigger>
+            <TabsTrigger value="step4">Step 4: Decision</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="overview" className="p-4 border rounded-md">
+            <WorkflowEditor />
+          </TabsContent>
+          
+          <TabsContent value="step1" className="space-y-4 p-4 border rounded-md">
+            <h3 className="text-lg font-semibold mb-2">Step 1: Customer Data Collection</h3>
+            <p className="mb-4">Configure the initial customer data collection forms and processes.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Onboarding Form Title</label>
+                <Input defaultValue="Customer Registration" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Form Description</label>
+                <Input defaultValue="Please provide your information to create an account" />
+              </div>
+            </div>
+            
+            <div className="border p-4 rounded-md bg-gray-50 mt-4">
+              <h4 className="font-medium mb-3">Required Information</h4>
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <span>Full Name</span>
+                  <span className="text-green-600">✓ Required</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Email Address</span>
+                  <span className="text-green-600">✓ Required</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Phone Number</span>
+                  <span className="text-green-600">✓ Required</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Date of Birth</span>
+                  <span className="text-green-600">✓ Required</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Address</span>
+                  <span className="text-green-600">✓ Required</span>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="step2" className="space-y-4 p-4 border rounded-md">
+            <h3 className="text-lg font-semibold mb-2">Step 2: KYC Verification</h3>
+            <p className="mb-4">Know Your Customer verification process using the KYC Compliance Agent.</p>
+            
+            <div className="border p-4 rounded-md bg-gray-50">
+              <div className="flex items-center mb-4">
+                <UserCheck className="mr-2 h-5 w-5 text-[#D946EF]" />
+                <h4 className="font-medium">KYC Compliance Agent</h4>
+              </div>
+              
+              <p className="text-sm mb-4">
+                The KYC Compliance Agent automates identity verification and document processing to 
+                ensure regulatory compliance during customer onboarding.
+              </p>
+              
+              <div className="p-3 bg-white border rounded-md mb-4">
+                <div className="font-medium">Agent Status</div>
+                <div className="flex justify-between items-center mt-2">
+                  <span className="text-sm">Current status:</span>
+                  <span className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Active</span>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-sm">Model:</span>
+                  <span className="text-sm">Claude 3 Opus</span>
+                </div>
+                <div className="flex justify-between items-center mt-1">
+                  <span className="text-sm">Average processing time:</span>
+                  <span className="text-sm">2.5 minutes</span>
+                </div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <h4 className="text-sm font-medium mb-3">Verification Methods</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="document-verification" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="document-verification" className="text-sm">Document Verification</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="facial-verification" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="facial-verification" className="text-sm">Facial Verification</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="liveness-detection" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="liveness-detection" className="text-sm">Liveness Detection</label>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <h4 className="text-sm font-medium mb-3">Compliance Checks</h4>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="aml-screening" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="aml-screening" className="text-sm">AML Screening</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="pep-screening" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="pep-screening" className="text-sm">PEP Screening</label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <input type="checkbox" id="sanctions-screening" className="rounded border-gray-300" defaultChecked />
+                    <label htmlFor="sanctions-screening" className="text-sm">Sanctions Screening</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="step3" className="space-y-4 p-4 border rounded-md">
+            <h3 className="text-lg font-semibold mb-2">Step 3: Risk Scoring</h3>
+            <p className="mb-4">Risk assessment based on KYC verification results and other factors.</p>
+            
+            <div className="border p-4 rounded-md bg-gray-50">
+              <h4 className="font-medium mb-3">Risk Model Configuration</h4>
+              <div className="p-3 bg-white border rounded flex items-center justify-between mb-4">
+                <div>
+                  <div className="font-medium">Onboarding Risk Model v1.5</div>
+                  <div className="text-sm text-gray-500">Comprehensive customer risk assessment</div>
+                </div>
+                <div className="text-sm bg-green-100 text-green-800 px-2 py-1 rounded">Active</div>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Low Risk Threshold</label>
+                <Input type="number" defaultValue="25" />
+                <p className="text-xs text-gray-500 mt-1">Scores below this are considered low risk</p>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">High Risk Threshold</label>
+                <Input type="number" defaultValue="75" />
+                <p className="text-xs text-gray-500 mt-1">Scores above this are considered high risk</p>
+              </div>
+            </div>
+            
+            <div className="mt-4">
+              <label className="block text-sm font-medium mb-1">Risk Factors</label>
+              <div className="border rounded-md p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span>KYC verification results</span>
+                  <span className="font-medium">35% weight</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Geographic risk</span>
+                  <span className="font-medium">20% weight</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Customer profile</span>
+                  <span className="font-medium">25% weight</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Behavioral patterns</span>
+                  <span className="font-medium">20% weight</span>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="step4" className="space-y-4 p-4 border rounded-md">
+            <h3 className="text-lg font-semibold mb-2">Step 4: Decision</h3>
+            <p className="mb-4">Configure decision logic based on risk assessment.</p>
+            
+            <div className="grid grid-cols-1 gap-4">
+              <div className="border p-4 rounded-md bg-green-50">
+                <h4 className="font-medium mb-2 text-green-800">Auto-Approval Criteria</h4>
+                <p className="text-sm mb-3">Customers meeting these criteria will be automatically approved</p>
+                <div className="bg-white p-3 rounded border border-green-200">
+                  <div className="font-medium">Risk Score &lt; 25</div>
+                  <div className="text-sm text-gray-600 mt-1">Customers with risk scores below 25 will be automatically approved</div>
+                </div>
+              </div>
+              
+              <div className="border p-4 rounded-md bg-amber-50">
+                <h4 className="font-medium mb-2 text-amber-800">Enhanced Due Diligence</h4>
+                <p className="text-sm mb-3">Customers meeting these criteria will require additional verification</p>
+                <div className="bg-white p-3 rounded border border-amber-200">
+                  <div className="font-medium">25 ≤ Risk Score ≤ 75</div>
+                  <div className="text-sm text-gray-600 mt-1">Customers with risk scores between 25 and 75 will need additional verification</div>
+                </div>
+              </div>
+              
+              <div className="border p-4 rounded-md bg-red-50">
+                <h4 className="font-medium mb-2 text-red-800">Auto-Rejection Criteria</h4>
+                <p className="text-sm mb-3">Customers meeting these criteria will be automatically rejected</p>
+                <div className="bg-white p-3 rounded border border-red-200">
+                  <div className="font-medium">Risk Score &gt; 75</div>
+                  <div className="text-sm text-gray-600 mt-1">Customers with risk scores above 75 will be automatically rejected</div>
+                </div>
+              </div>
+            </div>
+          </TabsContent>
+        </Tabs>
+        
+        <div className="flex justify-end space-x-2 mt-4">
+          <Button variant="outline">Cancel</Button>
+          <Button>Save Changes</Button>
+        </div>
+      </DialogContent>
+    </Dialog>
   )
 }
 
