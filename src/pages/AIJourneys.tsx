@@ -1,19 +1,211 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Pencil, Settings, UserCheck } from "lucide-react"
+import { Plus, Pencil, Settings, UserCheck, LayoutTemplate, PlayCircle, CheckCircle, XCircle, Eye, Lock, Globe } from "lucide-react"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { Badge } from "@/components/ui/badge"
 import WorkflowEditor from "@/components/workflow/WorkflowEditor"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
+import { useLocation } from "react-router-dom"
+import ViewToggle from "@/components/agents/ViewToggle"
 
 const AIJourneys = () => {
   const [showFraudWorkflow, setShowFraudWorkflow] = useState(false)
   const [showOnboardingWorkflow, setShowOnboardingWorkflow] = useState(false)
+  const [createJourneyOpen, setCreateJourneyOpen] = useState(false)
+  
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const viewMode = searchParams.get("viewMode") === "internal" ? "internal" : "customer";
+  
+  const [monnaiActiveTab, setMonnaiActiveTab] = useState("templates")
+  
+  const [showTestDialog, setShowTestDialog] = useState(false)
+  const [selectedTemplateForTest, setSelectedTemplateForTest] = useState("")
+  
+  const templateJourneys = [
+    {
+      id: "loan-application",
+      title: "Loan Application",
+      description: "Risk assessment for loan applications",
+      lastModified: "1 day ago",
+      status: "draft",
+      testStatus: null
+    },
+    {
+      id: "suspicious-activity",
+      title: "Suspicious Activity Detection",
+      description: "Monitor and detect suspicious account activity",
+      lastModified: "3 days ago",
+      status: "draft",
+      testStatus: "success"
+    },
+    {
+      id: "merchant-onboarding",
+      title: "Merchant Onboarding",
+      description: "Risk assessment for new merchant accounts",
+      lastModified: "5 days ago",
+      status: "draft",
+      testStatus: "failed"
+    }
+  ]
+  
+  const productionJourneys = [
+    {
+      id: "customer-onboarding",
+      title: "Customer Onboarding",
+      description: "Risk assessment for new customers",
+      lastModified: "2 days ago",
+      status: "active",
+      customerVisible: true
+    },
+    {
+      id: "fraud-detection",
+      title: "Fraud Detection",
+      description: "Real-time transaction monitoring",
+      lastModified: "5 days ago",
+      status: "active",
+      customerVisible: true
+    },
+    {
+      id: "credit-risk",
+      title: "Credit Risk Scoring",
+      description: "Automated credit risk assessment",
+      lastModified: "1 week ago",
+      status: "draft",
+      customerVisible: false
+    }
+  ]
+  
+  const handleTestJourney = (templateId) => {
+    setSelectedTemplateForTest(templateId)
+    setShowTestDialog(true)
+  }
+  
+  const handlePromoteToProduction = (templateId) => {
+    console.log("Promoting template to production:", templateId)
+  }
+  
+  if (viewMode === "internal") {
+    return (
+      <div className="w-full">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-3xl font-bold">AI Journeys</h1>
+          <Button onClick={() => setCreateJourneyOpen(true)}>
+            <Plus className="mr-2 h-4 w-4" /> Create Journey
+          </Button>
+        </div>
+        
+        <Tabs value={monnaiActiveTab} onValueChange={setMonnaiActiveTab} className="w-full">
+          <TabsList className="mb-6">
+            <TabsTrigger value="templates">
+              <LayoutTemplate className="mr-2 h-4 w-4" /> Journey Templates
+            </TabsTrigger>
+            <TabsTrigger value="production">
+              <Globe className="mr-2 h-4 w-4" /> Production Journeys
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="templates">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {templateJourneys.map(journey => (
+                <Card key={journey.id} className="border-2 border-slate-200">
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <CardTitle>{journey.title}</CardTitle>
+                      {journey.testStatus === "success" && (
+                        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                          <CheckCircle className="mr-1 h-3 w-3" /> Test Passed
+                        </Badge>
+                      )}
+                      {journey.testStatus === "failed" && (
+                        <Badge variant="outline" className="bg-red-50 text-red-700 border-red-200">
+                          <XCircle className="mr-1 h-3 w-3" /> Test Failed
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription>{journey.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Status:</span>
+                      <span className="font-medium text-amber-600">Template</span>
+                    </div>
+                    <div className="flex justify-between text-sm mb-4">
+                      <span>Last modified:</span>
+                      <span className="font-medium">{journey.lastModified}</span>
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <Button size="sm" variant="outline" onClick={() => handleTestJourney(journey.id)} className="flex justify-center">
+                        <PlayCircle className="mr-2 h-4 w-4" /> Test Journey
+                      </Button>
+                      <Button size="sm" onClick={() => handlePromoteToProduction(journey.id)} className="flex justify-center" disabled={journey.testStatus !== "success"}>
+                        <Globe className="mr-2 h-4 w-4" /> Promote to Production
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="production">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {productionJourneys.map(journey => (
+                <Card key={journey.id} className={journey.customerVisible ? "border-2 border-blue-200" : ""}>
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <CardTitle>{journey.title}</CardTitle>
+                      {journey.customerVisible ? (
+                        <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
+                          <Globe className="mr-1 h-3 w-3" /> Customer Visible
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200">
+                          <Lock className="mr-1 h-3 w-3" /> Internal Only
+                        </Badge>
+                      )}
+                    </div>
+                    <CardDescription>{journey.description}</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex justify-between text-sm mb-2">
+                      <span>Status:</span>
+                      <span className={`font-medium ${journey.status === "active" ? "text-green-600" : "text-amber-600"}`}>
+                        {journey.status === "active" ? "Active" : "Draft"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm mb-4">
+                      <span>Last modified:</span>
+                      <span className="font-medium">{journey.lastModified}</span>
+                    </div>
+                    <div className="flex flex-col space-y-2">
+                      <Button 
+                        size="sm" 
+                        variant={journey.id === "customer-onboarding" ? "default" : "outline"} 
+                        onClick={() => journey.id === "customer-onboarding" ? setShowOnboardingWorkflow(true) : journey.id === "fraud-detection" ? setShowFraudWorkflow(true) : null}
+                      >
+                        <Pencil className="mr-2 h-4 w-4" /> Edit Journey
+                      </Button>
+                      {!journey.customerVisible && (
+                        <Button size="sm" variant="outline">
+                          <Eye className="mr-2 h-4 w-4" /> Make Customer Visible
+                        </Button>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
+      </div>
+    )
+  }
   
   return (
     <div className="w-full">
@@ -90,6 +282,114 @@ const AIJourneys = () => {
 
       <FraudDetectionWorkflow open={showFraudWorkflow} onOpenChange={setShowFraudWorkflow} />
       <OnboardingWorkflow open={showOnboardingWorkflow} onOpenChange={setShowOnboardingWorkflow} />
+      
+      <Dialog open={showTestDialog} onOpenChange={setShowTestDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Test Journey Template</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div className="text-sm">
+              <p className="mb-2">Testing journey: <span className="font-medium">{
+                templateJourneys.find(j => j.id === selectedTemplateForTest)?.title || ""
+              }</span></p>
+              <p>This will simulate the journey with test data to verify its functionality before promoting to production.</p>
+            </div>
+            
+            <div className="border rounded-md p-4 bg-slate-50">
+              <h3 className="font-medium mb-2">Test Configuration</h3>
+              <div className="grid grid-cols-1 gap-4">
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Test Data Source</label>
+                  <select className="w-full px-3 py-2 border rounded-md">
+                    <option>Synthetic Test Data</option>
+                    <option>Historical Anonymized Data</option>
+                    <option>Mock API Responses</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-1 block">Test Scope</label>
+                  <div className="space-y-2">
+                    <div className="flex items-center">
+                      <input type="checkbox" id="test-validation" className="mr-2" defaultChecked />
+                      <label htmlFor="test-validation" className="text-sm">Input Validation</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input type="checkbox" id="test-logic" className="mr-2" defaultChecked />
+                      <label htmlFor="test-logic" className="text-sm">Decision Logic</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input type="checkbox" id="test-api" className="mr-2" defaultChecked />
+                      <label htmlFor="test-api" className="text-sm">API Integration</label>
+                    </div>
+                    <div className="flex items-center">
+                      <input type="checkbox" id="test-performance" className="mr-2" defaultChecked />
+                      <label htmlFor="test-performance" className="text-sm">Performance Metrics</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={() => setShowTestDialog(false)}>Cancel</Button>
+            <Button onClick={() => setShowTestDialog(false)}>Run Test</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+      <Dialog open={createJourneyOpen} onOpenChange={setCreateJourneyOpen}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create New Journey</DialogTitle>
+          </DialogHeader>
+          
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium mb-1 block">Journey Name</label>
+              <Input placeholder="Enter journey name" />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">Description</label>
+              <Textarea placeholder="Describe the purpose of this journey" />
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">Journey Type</label>
+              <select className="w-full px-3 py-2 border rounded-md">
+                <option>Customer Onboarding</option>
+                <option>Fraud Detection</option>
+                <option>Credit Risk Assessment</option>
+                <option>Transaction Monitoring</option>
+                <option>Custom Journey</option>
+              </select>
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium mb-1 block">Initial Status</label>
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center">
+                  <input type="radio" id="status-template" name="status" className="mr-2" defaultChecked />
+                  <label htmlFor="status-template" className="text-sm">Template</label>
+                </div>
+                <div className="flex items-center">
+                  <input type="radio" id="status-draft" name="status" className="mr-2" />
+                  <label htmlFor="status-draft" className="text-sm">Draft</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="flex justify-end space-x-2">
+            <Button variant="outline" onClick={() => setCreateJourneyOpen(false)}>Cancel</Button>
+            <Button onClick={() => setCreateJourneyOpen(false)}>Create</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
