@@ -7,10 +7,14 @@ import { Plus, Edit2, Shield, Users, CreditCard, BrainCircuit, UserCheck } from 
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
 import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
+import UnderwriterAgentEditor from "@/components/agents/UnderwriterAgentEditor"
+import CollectionAgentEditor from "@/components/agents/CollectionAgentEditor"
 
 const AIAgents = () => {
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
+  const [isEditingUnderwriterAgent, setIsEditingUnderwriterAgent] = useState(false)
+  const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
   
   return (
     <div className="w-full">
@@ -127,7 +131,7 @@ const AIAgents = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setIsEditingUnderwriterAgent(true)}>
               <Edit2 className="mr-2 h-4 w-4" /> Configure
             </Button>
           </CardFooter>
@@ -163,7 +167,7 @@ const AIAgents = () => {
             </div>
           </CardContent>
           <CardFooter className="flex justify-end">
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => setIsEditingCollectionAgent(true)}>
               <Edit2 className="mr-2 h-4 w-4" /> Configure
             </Button>
           </CardFooter>
@@ -193,6 +197,32 @@ const AIAgents = () => {
             </SheetDescription>
           </SheetHeader>
           <KYCAgentEditor onClose={() => setIsEditingKYCAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Underwriter Agent Editor Sheet */}
+      <Sheet open={isEditingUnderwriterAgent} onOpenChange={setIsEditingUnderwriterAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure Underwriter Agent</SheetTitle>
+            <SheetDescription>
+              Customize risk assessment, credit evaluation, and approval criteria for your underwriting agent.
+            </SheetDescription>
+          </SheetHeader>
+          <UnderwriterAgentEditor onClose={() => setIsEditingUnderwriterAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* Collection Agent Editor Sheet */}
+      <Sheet open={isEditingCollectionAgent} onOpenChange={setIsEditingCollectionAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure Collection Agent</SheetTitle>
+            <SheetDescription>
+              Customize communication strategies, payment options, and recovery workflows for your collection agent.
+            </SheetDescription>
+          </SheetHeader>
+          <CollectionAgentEditor onClose={() => setIsEditingCollectionAgent(false)} />
         </SheetContent>
       </Sheet>
     </div>
