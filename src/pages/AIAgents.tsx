@@ -3,12 +3,14 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { Plus, Edit2, Shield, Users, FileCheck, AlertTriangle, CreditCard, BrainCircuit } from "lucide-react"
+import { Plus, Edit2, Shield, Users, FileCheck, AlertTriangle, CreditCard, BrainCircuit, UserCheck } from "lucide-react"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet"
 import FraudAgentEditor from "@/components/agents/FraudAgentEditor"
+import KYCAgentEditor from "@/components/agents/KYCAgentEditor"
 
 const AIAgents = () => {
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
+  const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
   
   return (
     <div className="w-full">
@@ -53,6 +55,43 @@ const AIAgents = () => {
           </CardContent>
           <CardFooter className="flex justify-end">
             <Button variant="outline" size="sm" onClick={() => setIsEditingFraudAgent(true)}>
+              <Edit2 className="mr-2 h-4 w-4" /> Configure
+            </Button>
+          </CardFooter>
+        </Card>
+        
+        {/* KYC Compliance Agent Card - moved from AIJourneys */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center">
+              <UserCheck className="mr-2 h-5 w-5 text-[#D946EF]" />
+              <CardTitle>KYC Compliance Agent</CardTitle>
+            </div>
+            <CardDescription>Automated identity verification and compliance</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Status:</span>
+              <span className="font-medium text-green-600">Running</span>
+            </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Cases/day:</span>
+              <span className="font-medium">124</span>
+            </div>
+            <div className="flex justify-between text-sm mb-2">
+              <span>Avg. resolution time:</span>
+              <span className="font-medium">2.5 mins</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span>Model:</span>
+              <span className="font-medium flex items-center">
+                <BrainCircuit className="h-3 w-3 mr-1 text-[#D946EF]" />
+                Claude 3 Opus
+              </span>
+            </div>
+          </CardContent>
+          <CardFooter className="flex justify-end">
+            <Button variant="outline" size="sm" onClick={() => setIsEditingKYCAgent(true)}>
               <Edit2 className="mr-2 h-4 w-4" /> Configure
             </Button>
           </CardFooter>
@@ -177,6 +216,19 @@ const AIAgents = () => {
             </SheetDescription>
           </SheetHeader>
           <FraudAgentEditor onClose={() => setIsEditingFraudAgent(false)} />
+        </SheetContent>
+      </Sheet>
+
+      {/* KYC Agent Editor Sheet */}
+      <Sheet open={isEditingKYCAgent} onOpenChange={setIsEditingKYCAgent}>
+        <SheetContent className="sm:max-w-2xl overflow-y-auto">
+          <SheetHeader>
+            <SheetTitle>Configure KYC Compliance Agent</SheetTitle>
+            <SheetDescription>
+              Customize identity verification, compliance checks, and document processing for your KYC agent.
+            </SheetDescription>
+          </SheetHeader>
+          <KYCAgentEditor onClose={() => setIsEditingKYCAgent(false)} />
         </SheetContent>
       </Sheet>
     </div>
