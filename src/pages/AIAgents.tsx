@@ -3,10 +3,9 @@ import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Plus } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import AgentCard from "@/components/agents/AgentCard"
 import AgentEditors from "@/components/agents/AgentEditors"
-import ViewToggle from "@/components/agents/ViewToggle"
 import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentListData"
 
 const AIAgents = () => {
@@ -14,28 +13,11 @@ const AIAgents = () => {
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
   const [isEditingUnderwriterAgent, setIsEditingUnderwriterAgent] = useState(false)
   const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
-  const [viewMode, setViewMode] = useState<"customer" | "internal">("customer")
   
+  // Read view mode from URL params set by DashboardLayout
   const location = useLocation()
-  const navigate = useNavigate()
   const searchParams = new URLSearchParams(location.search)
-  const viewModeParam = searchParams.get("viewMode")
-  
-  useEffect(() => {
-    const mode = viewModeParam === "internal" ? "internal" : "customer"
-    setViewMode(mode)
-  }, [viewModeParam])
-  
-  const handleViewModeChange = (value: string) => {
-    if (value) {
-      const newMode = value as "customer" | "internal"
-      setViewMode(newMode)
-      
-      const params = new URLSearchParams(location.search)
-      params.set("viewMode", newMode)
-      navigate({ search: params.toString() })
-    }
-  }
+  const viewMode = searchParams.get("viewMode") === "internal" ? "internal" : "customer"
   
   const customerAgents = getCustomerAgents(
     setIsEditingFraudAgent, 
@@ -53,7 +35,6 @@ const AIAgents = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">AI Agents</h1>
         <div className="flex gap-4">
-          <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
           <Button>
             <Plus className="mr-2 h-4 w-4" /> Deploy Agent
           </Button>

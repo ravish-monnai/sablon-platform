@@ -1,5 +1,5 @@
 
-import { ReactNode, useState } from "react"
+import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
   SidebarContent,
@@ -42,7 +42,26 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const location = useLocation()
   const navigate = useNavigate()
   const currentPath = location.pathname
-  const [viewMode, setViewMode] = useState<"customer" | "internal">("customer")
+  
+  // Get view mode from URL
+  const searchParams = new URLSearchParams(location.search)
+  const viewModeParam = searchParams.get("viewMode")
+  const [viewMode, setViewMode] = useState<"customer" | "internal">(
+    viewModeParam === "internal" ? "internal" : "customer"
+  )
+  
+  // Update URL when view mode changes
+  const updateViewModeInURL = (newMode: "customer" | "internal") => {
+    const params = new URLSearchParams(location.search)
+    params.set("viewMode", newMode)
+    navigate({ pathname: location.pathname, search: params.toString() })
+  }
+  
+  // Effect to update viewMode when URL changes
+  useEffect(() => {
+    const mode = viewModeParam === "internal" ? "internal" : "customer"
+    setViewMode(mode)
+  }, [viewModeParam])
   
   // Customer view navigation items
   const customerNavItems = [
@@ -84,7 +103,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <SidebarTrigger />
             </div>
             
-            {/* View Mode Toggle */}
+            {/* Global View Mode Toggle */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
                 <UserRound className={`h-4 w-4 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
@@ -93,7 +112,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               <Switch 
                 id="view-mode-toggle" 
                 checked={viewMode === "internal"}
-                onCheckedChange={(checked) => setViewMode(checked ? "internal" : "customer")}
+                onCheckedChange={(checked) => {
+                  const newMode = checked ? "internal" : "customer";
+                  setViewMode(newMode);
+                  updateViewModeInURL(newMode);
+                }}
               />
               <div className="flex items-center space-x-2">
                 <Building2 className={`h-4 w-4 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
@@ -108,7 +131,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                   <SidebarMenuButton
                     tooltip={item.label}
                     isActive={isActive(item.path)}
-                    onClick={() => navigate(item.path)}
+                    onClick={() => {
+                      // Preserve the viewMode when navigating
+                      const params = new URLSearchParams();
+                      params.set("viewMode", viewMode);
+                      navigate({ pathname: item.path, search: params.toString() });
+                    }}
                   >
                     <item.icon className="mr-2" />
                     <span>{item.label}</span>
