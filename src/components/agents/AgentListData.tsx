@@ -1,4 +1,3 @@
-
 import { MonnaiAgentType, CustomerAgentType } from "./AgentCard"
 import { 
   Shield, Users, CreditCard, UserCheck, FileText,
@@ -42,26 +41,6 @@ export const getCustomerAgents = (
       resolutionTime: "4.1 mins",
       model: "GPT-4o",
       onEdit: () => setIsEditingBankStatementAgent(true)
-    },
-    {
-      title: "Underwriter",
-      description: "Evaluates and assesses credit risk",
-      icon: <CreditCard className="mr-2 h-5 w-5 text-[#F97316]" />,
-      status: "Idle",
-      casesPerDay: 45,
-      resolutionTime: "5.7 mins",
-      model: "Llama 3.1 70B",
-      onEdit: () => setIsEditingUnderwriterAgent(true)
-    },
-    {
-      title: "Collection Agent",
-      description: "Manages past-due accounts and recovery",
-      icon: <Users className="mr-2 h-5 w-5 text-[#D946EF]" />,
-      status: "Running",
-      casesPerDay: 63,
-      resolutionTime: "8.4 mins",
-      model: "GPT-4o Mini",
-      onEdit: () => setIsEditingCollectionAgent(true)
     }
   ]
 }

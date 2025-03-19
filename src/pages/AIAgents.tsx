@@ -15,8 +15,6 @@ const AIAgents = () => {
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
   const [isEditingBankStatementAgent, setIsEditingBankStatementAgent] = useState(false)
-  const [isEditingUnderwriterAgent, setIsEditingUnderwriterAgent] = useState(false)
-  const [isEditingCollectionAgent, setIsEditingCollectionAgent] = useState(false)
   
   // Monnai agent editing states
   const [isEditingDataAnalysisAgent, setIsEditingDataAnalysisAgent] = useState(false)
@@ -34,9 +32,10 @@ const AIAgents = () => {
   const customerAgents = getCustomerAgents(
     setIsEditingFraudAgent, 
     setIsEditingKYCAgent, 
-    setIsEditingUnderwriterAgent, 
-    setIsEditingCollectionAgent,
-    setIsEditingBankStatementAgent
+    setIsEditingBankStatementAgent,
+    // still passing these functions but they won't be used
+    () => {}, // placeholder for setIsEditingUnderwriterAgent 
+    () => {}  // placeholder for setIsEditingCollectionAgent
   )
   
   const monnaiAgents = getMonnaiAgents(
@@ -88,13 +87,13 @@ const AIAgents = () => {
         isEditingFraudAgent={isEditingFraudAgent}
         isEditingKYCAgent={isEditingKYCAgent}
         isEditingBankStatementAgent={isEditingBankStatementAgent}
-        isEditingUnderwriterAgent={isEditingUnderwriterAgent}
-        isEditingCollectionAgent={isEditingCollectionAgent}
+        isEditingUnderwriterAgent={false}
+        isEditingCollectionAgent={false}
         setIsEditingFraudAgent={setIsEditingFraudAgent}
         setIsEditingKYCAgent={setIsEditingKYCAgent}
         setIsEditingBankStatementAgent={setIsEditingBankStatementAgent}
-        setIsEditingUnderwriterAgent={setIsEditingUnderwriterAgent}
-        setIsEditingCollectionAgent={setIsEditingCollectionAgent}
+        setIsEditingUnderwriterAgent={() => {}}
+        setIsEditingCollectionAgent={() => {}}
         
         // Monnai agent editing states
         isEditingDataAnalysisAgent={isEditingDataAnalysisAgent}
