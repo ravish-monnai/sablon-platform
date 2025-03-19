@@ -5,7 +5,7 @@ import { Settings } from "lucide-react";
 
 interface JourneyHeaderProps {
   title: ReactNode;
-  description: string;
+  description?: string;
   isViewOnly?: boolean;
 }
 
@@ -14,7 +14,7 @@ const JourneyHeader: React.FC<JourneyHeaderProps> = ({ title, description, isVie
     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
       <div>
         <h2 className="text-2xl font-bold">{title}</h2>
-        <p className="text-muted-foreground">{description}</p>
+        {description && <p className="text-muted-foreground">{description}</p>}
       </div>
       {!isViewOnly && (
         <div>

@@ -5,11 +5,7 @@ import JourneyHeader from "./components/JourneyHeader";
 import OverviewTab from "./components/OverviewTab";
 import ExecutionHistoryTab from "./components/ExecutionHistoryTab";
 import { useMarket } from "@/contexts/MarketContext";
-import { 
-  Bot, 
-  EyeIcon
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
+import { Bot } from "lucide-react";
 
 interface BankStatementJourneyProps {
   isViewOnly?: boolean;
@@ -29,15 +25,8 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
               <span>Bank Statement Analyzer Agent</span>
             </div>
           }
-          description={`AI-powered analysis for bank statements${selectedMarket !== 'Global' ? ` in ${selectedMarket}` : ''}`}
+          isViewOnly={isViewOnly}
         />
-        
-        {isViewOnly && (
-          <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
-            <EyeIcon className="h-4 w-4" />
-            View Only
-          </Badge>
-        )}
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>

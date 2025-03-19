@@ -1,8 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { ChevronLeft, EyeIcon } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import IndianBankStatementJourney from "./IndianBankStatementJourney";
 
 interface JourneyDetailProps {
@@ -25,15 +24,8 @@ const JourneyDetail: React.FC<JourneyDetailProps> = ({
           onClick={onBackToList}
         >
           <ChevronLeft className="mr-1 h-4 w-4" />
-          Back to Journeys
+          Back to Agent
         </Button>
-        
-        {isViewOnly && (
-          <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
-            <EyeIcon className="h-4 w-4" />
-            View Only
-          </Badge>
-        )}
       </div>
       
       {(selectedJourney === "bank-statement-analyzer" || selectedJourney === "india-bank-statement-analyzer") && 
