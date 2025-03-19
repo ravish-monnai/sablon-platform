@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   DollarSign, Wallet, CreditCard, ShieldAlert, 
-  ThumbsUp, Bot, FileText 
+  ThumbsUp, AlertCircle 
 } from "lucide-react";
 import SummaryDashboard from "./dashboard/SummaryDashboard";
 import FeatureCategoryTable from "./dashboard/FeatureCategoryTable";
@@ -63,7 +63,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         
         <FeatureCategoryTable 
           title="Risk Profiling" 
-          icon={<ShieldAlert className="h-5 w-5 text-red-600" />}
+          icon={<AlertCircle className="h-5 w-5 text-red-600" />}
           data={[
             { name: "Risk Score", value: featureValues.riskProfile.score, status: "Medium Risk" },
             { name: "Overdrafts (Last 3 Months)", value: featureValues.riskProfile.overdrafts, status: "Medium Risk" },
@@ -87,24 +87,6 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
           data={[
             ...featureValues.fraudDetection.verificationSignals,
             ...featureValues.fraudDetection.incomeManipulation
-          ]}
-        />
-        
-        <FeatureCategoryTable 
-          title="Automated Underwriting" 
-          icon={<Bot className="h-5 w-5 text-blue-600" />}
-          data={[
-            ...featureValues.automatedUnderwriting.accelerationMetrics,
-            ...featureValues.automatedUnderwriting.standardizedCriteria
-          ]}
-        />
-        
-        <FeatureCategoryTable 
-          title="Regulatory Compliance" 
-          icon={<FileText className="h-5 w-5 text-indigo-600" />}
-          data={[
-            ...featureValues.regulatoryCompliance.kycVerification,
-            ...featureValues.regulatoryCompliance.amlMonitoring
           ]}
         />
       </div>
