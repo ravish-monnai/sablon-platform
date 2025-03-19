@@ -14,7 +14,7 @@ const Index = () => {
         <div className="text-center max-w-3xl mx-auto">
           <div className="mb-6 p-4 bg-gradient-to-r from-monnai-yellow/10 via-monnai-pink/10 to-monnai-blue/10 rounded-lg">
             <h2 className="text-3xl font-bold text-gray-800">
-              Welcome <span className="monnai-gradient-text">xNeo Bank</span>
+              Welcome to <span className="monnai-gradient-text">Monnai AI Risk Decisioning</span>
             </h2>
           </div>
           
