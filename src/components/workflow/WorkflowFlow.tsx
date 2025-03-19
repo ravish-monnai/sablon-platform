@@ -9,14 +9,15 @@ import {
   EdgeLabelRenderer,
   Node,
   NodeTypes,
-  Edge
+  Edge,
+  NodeProps
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { NodeData } from './types';
 
 // Custom Node component to display the icon
-const CustomNode = ({ data, id, selected }: { data: any; id: string; selected: boolean }) => {
-  // Default color if not specified
+const CustomNode = ({ data, id, selected }: NodeProps<NodeData>) => {
+  // Use the same styling as in the journey steps tab
   const backgroundColor = data.color || getNodeColorByType(data.type);
   const statusBorder = getStatusBorder(data.status);
   
@@ -50,7 +51,7 @@ const CustomNode = ({ data, id, selected }: { data: any; id: string; selected: b
   );
 };
 
-// Helper functions for node styling
+// Helper functions for node styling - update to match journey-steps/utils.ts
 const getNodeColorByType = (type: string): string => {
   switch(type) {
     case 'rule':
@@ -59,7 +60,7 @@ const getNodeColorByType = (type: string): string => {
       return '#e879f9'; // pink
     case 'data':
     case 'datasource':
-      return '#facc15'; // yellow
+      return '#ffcc1d'; // yellow - updated to match journey color
     case 'notification':
       return '#22c55e'; // green
     case 'alert':
@@ -67,10 +68,11 @@ const getNodeColorByType = (type: string): string => {
     case 'agent':
       return '#8b5cf6'; // purple
     default:
-      return '#64748b'; // slate
+      return '#2bbfe0'; // default blue from journey steps
   }
 };
 
+// Match the status border styling from journey steps
 const getStatusBorder = (status?: string): string => {
   switch(status) {
     case 'completed':
@@ -140,15 +142,13 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         <Controls />
         <MiniMap 
           nodeColor={(node) => {
-            if (node.data.type === 'datasource' || node.data.type === 'data') return '#facc15';
+            if (node.data.type === 'datasource' || node.data.type === 'data') return '#ffcc1d';
             if (node.data.type === 'model') return '#e879f9';
             if (node.data.type === 'agent') return '#8b5cf6';
             if (node.data.type === 'rule') return '#3b82f6';
             if (node.data.type === 'notification') return '#22c55e';
             if (node.data.type === 'alert') return '#ef4444';
-            if (node.type === 'input') return '#3b82f6';
-            if (node.type === 'output') return '#f5f5f5';
-            return '#64748b';
+            return '#2bbfe0';
           }}
           zoomable 
           pannable

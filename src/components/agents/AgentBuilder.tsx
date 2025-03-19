@@ -78,10 +78,6 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         type: 'default',
         position,
         data,
-        style: {
-          padding: '10px',
-          borderRadius: '8px'
-        }
       };
 
       setNodes((nds) => nds.concat(newNode));
