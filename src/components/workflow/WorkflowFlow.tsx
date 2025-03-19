@@ -5,7 +5,8 @@ import {
   Background, 
   Controls, 
   MiniMap,
-  Panel
+  Panel,
+  EdgeLabelRenderer
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 
@@ -32,6 +33,13 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   onNodeDragStart,
   nodeTypes
 }) => {
+  // Custom edge with labels
+  const edgeOptions = {
+    style: { strokeWidth: 2 },
+    labelBgStyle: { fill: 'white', fillOpacity: 0.8 },
+    labelStyle: { fill: '#333', fontSize: 12 }
+  };
+
   return (
     <div className="h-[400px] border rounded-md overflow-hidden">
       <ReactFlow
@@ -44,6 +52,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         onDragOver={onDragOver}
         onNodeDragStart={onNodeDragStart}
         nodeTypes={nodeTypes}
+        defaultEdgeOptions={edgeOptions}
         fitView
         className="bg-gray-50"
       >
@@ -63,7 +72,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         />
         <Panel position="top-left">
           <div className="bg-white p-3 rounded shadow-sm text-xs">
-            <span className="text-monnai-blue font-medium">Monnai</span> Fraud Detection Workflow
+            <span className="text-monnai-blue font-medium">Monnai</span> Bank Statement Analysis Journey
           </div>
         </Panel>
       </ReactFlow>
