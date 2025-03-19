@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { useMarket } from "@/contexts/MarketContext";
 import CaseListTable from "@/components/cases/CaseListTable";
 import CaseFilters from "@/components/cases/CaseFilters";
-import BankStatementInsights from "@/components/cases/BankStatementInsights";
 import CasesLinkAnalysis from "@/components/cases/CasesLinkAnalysis";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import IndianBankStatementAnalyzer from "@/components/cases/IndianBankStatementAnalyzer";
@@ -56,9 +55,8 @@ const Cases = () => {
       </div>
 
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="list">Case List</TabsTrigger>
-          <TabsTrigger value="bank-statement">Bank Statement Analysis</TabsTrigger>
           <TabsTrigger value="network">Network Analysis</TabsTrigger>
         </TabsList>
         
@@ -90,11 +88,6 @@ const Cases = () => {
             </CardContent>
           </Card>
           
-          {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
-        </TabsContent>
-        
-        <TabsContent value="bank-statement" className="space-y-4">
-          <BankStatementInsights />
           {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
         </TabsContent>
         
