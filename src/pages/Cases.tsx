@@ -37,7 +37,22 @@ import IndianBankStatementAnalyzer from "@/components/cases/IndianBankStatementA
 import { useNavigate } from "react-router-dom";
 import { useMarket } from "@/contexts/MarketContext";
 
-const bankStatementCases = [
+interface CaseItem {
+  id: string;
+  customer: string;
+  customerId: string;
+  type: string;
+  status: string;
+  created: string;
+  source: string;
+  alert: string;
+  market?: string;
+  bank?: string;
+  riskScore?: number;
+  agentAssigned: string;
+}
+
+const bankStatementCases: CaseItem[] = [
   {
     id: "CASE-245",
     customer: "John Smith",
@@ -110,7 +125,7 @@ const bankStatementCases = [
   },
 ];
 
-const indianBankStatementCases = [
+const indianBankStatementCases: CaseItem[] = [
   {
     id: "CASE-IN-123",
     customer: "Raj Patel",
@@ -183,7 +198,7 @@ const indianBankStatementCases = [
   },
 ];
 
-const allCases = [
+const allCases: CaseItem[] = [
   ...bankStatementCases,
   ...indianBankStatementCases,
   {
@@ -195,6 +210,8 @@ const allCases = [
     created: "May 10, 2023",
     source: "Transaction Monitoring",
     alert: "Multiple rapid transfers",
+    market: "US",
+    bank: "N/A",
     agentAssigned: "Michael B."
   },
   {
@@ -206,6 +223,8 @@ const allCases = [
     created: "May 9, 2023",
     source: "KYC Verification",
     alert: "Document inconsistency",
+    market: "Global",
+    bank: "N/A",
     agentAssigned: "Unassigned"
   }
 ];
@@ -214,7 +233,7 @@ const Cases = () => {
   const navigate = useNavigate();
   const { selectedMarket } = useMarket();
   const [showDialog, setShowDialog] = useState(false);
-  const [selectedCase, setSelectedCase] = useState<any>(null);
+  const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
   const [filterType, setFilterType] = useState("all");
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   
@@ -232,7 +251,7 @@ const Cases = () => {
     return cases;
   };
 
-  const handleCaseAction = (caseData: any) => {
+  const handleCaseAction = (caseData: CaseItem) => {
     setSelectedCase(caseData);
     setShowDialog(true);
   };
