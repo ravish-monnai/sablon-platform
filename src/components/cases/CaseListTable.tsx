@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -44,6 +45,37 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
     );
   }
 
+  // Function to determine risk level badge variant
+  const getRiskLevelVariant = (riskLevel: string | undefined) => {
+    if (!riskLevel) return "outline";
+    
+    switch (riskLevel.toLowerCase()) {
+      case "critical":
+      case "high":
+        return "destructive";
+      case "medium":
+        return "secondary";
+      case "low":
+        return "outline";
+      default:
+        return "outline";
+    }
+  };
+
+  // Function to determine status badge color classes
+  const getStatusColorClass = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending review":
+        return "bg-amber-100 text-amber-800";
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
+      default:
+        return "";
+    }
+  };
+
   return (
     <div className="rounded-md border overflow-hidden">
       <Table>
@@ -63,16 +95,18 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
             <TableRow key={caseItem.id}>
               <TableCell className="font-medium">{caseItem.id}</TableCell>
               <TableCell>{caseItem.customer}</TableCell>
-              <TableCell>{caseItem.journey || 'N/A'}</TableCell>
+              <TableCell>
+                {caseItem.journey ? (
+                  <Badge variant="outline" className="font-normal">
+                    {caseItem.journey}
+                  </Badge>
+                ) : (
+                  "N/A"
+                )}
+              </TableCell>
               <TableCell>
                 <Badge
-                  variant={
-                    caseItem.riskLevel === "Critical" || caseItem.riskLevel === "High"
-                      ? "destructive"
-                      : caseItem.riskLevel === "Medium"
-                      ? "secondary"
-                      : "outline"
-                  }
+                  variant={getRiskLevelVariant(caseItem.riskLevel)}
                   className="flex w-fit items-center gap-1"
                 >
                   {caseItem.riskLevel === "Low" && <CheckCircle className="h-3 w-3" />}
@@ -85,11 +119,11 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
               </TableCell>
               <TableCell>
                 <Badge
-                  className={`${caseItem.statusColor || ''} flex w-fit items-center gap-1`}
+                  className={`${getStatusColorClass(caseItem.status)} flex w-fit items-center gap-1`}
                 >
-                  {caseItem.status === "Pending Review" && <Clock className="h-3 w-3" />}
-                  {caseItem.status === "Approved" && <CheckCircle className="h-3 w-3" />}
-                  {caseItem.status === "Rejected" && <AlertTriangle className="h-3 w-3" />}
+                  {caseItem.status.toLowerCase() === "pending review" && <Clock className="h-3 w-3" />}
+                  {caseItem.status.toLowerCase() === "approved" && <CheckCircle className="h-3 w-3" />}
+                  {caseItem.status.toLowerCase() === "rejected" && <AlertTriangle className="h-3 w-3" />}
                   {caseItem.status}
                 </Badge>
               </TableCell>
