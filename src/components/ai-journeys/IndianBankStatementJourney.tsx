@@ -1,11 +1,11 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ArrowUpRight, Calendar, FileBarChart, PieChart, AlertTriangle, Download, Filter } from "lucide-react";
+import { ArrowUpRight, Calendar, FileBarChart, PieChart, AlertTriangle, Download, Filter, Settings } from "lucide-react";
+import FeaturesTab from "./FeaturesTab";
 
 const IndianBankStatementJourney = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -23,15 +23,17 @@ const IndianBankStatementJourney = () => {
             Export Data
           </Button>
           <Button size="sm">
+            <Settings className="mr-2 h-4 w-4" />
             Configure Agent
           </Button>
         </div>
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-4 w-full max-w-md">
+        <TabsList className="grid grid-cols-5 w-full max-w-3xl">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="cases">Cases</TabsTrigger>
+          <TabsTrigger value="features">Features</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
           <TabsTrigger value="logs">Logs</TabsTrigger>
         </TabsList>
@@ -248,6 +250,10 @@ const IndianBankStatementJourney = () => {
               </div>
             </Card>
           </div>
+        </TabsContent>
+        
+        <TabsContent value="features" className="pt-4">
+          <FeaturesTab />
         </TabsContent>
         
         <TabsContent value="settings" className="pt-4">
