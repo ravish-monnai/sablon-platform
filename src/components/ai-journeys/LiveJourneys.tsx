@@ -1,29 +1,17 @@
 import React, { useState } from "react";
-import { useMarket } from "@/contexts/MarketContext";
 import JourneyList from "./JourneyList";
 import JourneyDetail from "./JourneyDetail";
 import { journeysByMarket } from "./journeyData";
 
 const LiveJourneys = () => {
-  const { selectedMarket } = useMarket();
   const [selectedJourney, setSelectedJourney] = useState<string | null>(null);
 
-  // Get all journeys - now includes Indian Bank Statement Analyzer by default
+  // Get all journeys - only onboarding fraud detection and bank statement analysis
   const getJourneys = () => {
-    // Get the global journeys
+    // Get global journeys
     const globalJourneys = journeysByMarket['Global'];
     
-    // Get the Indian Bank Statement Analyzer journey
-    const indianBankStatementJourney = journeysByMarket['India'].find(
-      journey => journey.id === 'india-bank-statement-analyzer'
-    );
-    
-    // Combine global journeys with the Indian Bank Statement Analyzer journey
-    const combinedJourneys = indianBankStatementJourney 
-      ? [...globalJourneys, indianBankStatementJourney] 
-      : globalJourneys;
-    
-    return combinedJourneys;
+    return globalJourneys;
   };
 
   const liveJourneys = getJourneys();
