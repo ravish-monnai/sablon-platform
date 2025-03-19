@@ -3,21 +3,14 @@ import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import JourneyHeader from "./components/JourneyHeader";
 import OverviewTab from "./components/OverviewTab";
-import CasesTab from "./components/CasesTab";
-import SettingsTab from "./components/SettingsTab";
-import LogsTab from "./components/LogsTab";
-import FeaturesTab from "./FeaturesTab";
+import ExecutionHistoryTab from "./components/ExecutionHistoryTab";
 import { useMarket } from "@/contexts/MarketContext";
 import { 
   Bot, 
   EyeIcon, 
   ArrowDownToLine, 
-  ArrowRightLeft, 
-  FileText, 
   ShieldAlert, 
   UserCheck, 
-  CheckCircle, 
-  AlertTriangle,
   Database,
   Wrench,
   ScanSearch
@@ -125,13 +118,10 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
       </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid grid-cols-6 w-full max-w-4xl">
+        <TabsList className="grid grid-cols-3 w-full max-w-2xl">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="steps">Journey Steps</TabsTrigger>
-          <TabsTrigger value="cases">Cases</TabsTrigger>
-          <TabsTrigger value="features">Features</TabsTrigger>
-          <TabsTrigger value="settings" disabled={isViewOnly}>Settings</TabsTrigger>
-          <TabsTrigger value="logs">Logs</TabsTrigger>
+          <TabsTrigger value="execution-history">Execution History</TabsTrigger>
         </TabsList>
         
         <TabsContent value="overview">
@@ -142,20 +132,8 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
           <JourneyStepsTab steps={journeySteps} />
         </TabsContent>
         
-        <TabsContent value="cases">
-          <CasesTab />
-        </TabsContent>
-        
-        <TabsContent value="features" className="pt-4">
-          <FeaturesTab />
-        </TabsContent>
-        
-        <TabsContent value="settings">
-          <SettingsTab isViewOnly={isViewOnly} />
-        </TabsContent>
-        
-        <TabsContent value="logs">
-          <LogsTab />
+        <TabsContent value="execution-history">
+          <ExecutionHistoryTab />
         </TabsContent>
       </Tabs>
     </div>
