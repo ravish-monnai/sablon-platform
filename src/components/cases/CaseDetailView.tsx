@@ -1,5 +1,4 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { 
   Card, 
   CardContent, 
@@ -39,12 +38,16 @@ import {
   ShieldAlert
 } from "lucide-react";
 
+import BankStatementFeatures from "../bank-statement/BankStatementFeatures";
+
 interface CaseDetailViewProps {
   caseData: any;
   onClose: () => void;
 }
 
 const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) => {
+  const [activeFeatureTab, setActiveFeatureTab] = useState("income-verification");
+  
   // Sample transaction data
   const transactionData = [
     { category: "Salary", amount: 45000, type: "income" },
@@ -263,153 +266,23 @@ const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) =>
         </TabsContent>
 
         <TabsContent value="bank-features" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Income Verification */}
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex items-center">
-                  <Wallet className="h-5 w-5 mr-2 text-amber-500" />
-                  <CardTitle className="text-base">Income Verification</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Regular Income Detected</span>
-                    <Badge variant="outline" className="bg-green-50 text-green-700">Yes</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Income Consistency</span>
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700">85%</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Multiple Income Streams</span>
-                    <Badge variant="outline" className="bg-amber-50 text-amber-700">{Math.random() > 0.5 ? 'Yes' : 'No'}</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Stated vs. Detected Income</span>
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700">{Math.floor(Math.random() * 20) + 90}% Match</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Cash Flow Assessment */}
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex items-center">
-                  <ChartLine className="h-5 w-5 mr-2 text-blue-500" />
-                  <CardTitle className="text-base">Cash Flow Assessment</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Monthly Net Cash Flow</span>
-                    <Badge variant="outline" className="bg-green-50 text-green-700">₹{Math.floor(Math.random() * 20000) + 10000}</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Expense to Income Ratio</span>
-                    <Badge variant="outline" className="bg-blue-50 text-blue-700">{Math.floor(Math.random() * 30) + 50}%</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Balance Volatility</span>
-                    <Badge variant="outline" className="bg-amber-50 text-amber-700">{Math.floor(Math.random() * 30) + 10}%</Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Cash Buffer Days</span>
-                    <Badge variant="outline" className="bg-purple-50 text-purple-700">{Math.floor(Math.random() * 40) + 20} days</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Fraud Detection */}
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex items-center">
-                  <ShieldAlert className="h-5 w-5 mr-2 text-red-500" />
-                  <CardTitle className="text-base">Fraud Detection</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Identity Match Score</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.7 ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                      {Math.floor(Math.random() * 20) + 80}%
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Suspicious Transactions</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.7 ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                      {Math.random() > 0.7 ? `${Math.floor(Math.random() * 5) + 1} detected` : 'None'}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Unusual Activity Pattern</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.8 ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                      {Math.random() > 0.8 ? 'Yes' : 'No'}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Digital Footprint Consistency</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.75 ? 'bg-amber-50 text-amber-700' : 'bg-green-50 text-green-700'}`}>
-                      {Math.floor(Math.random() * 30) + 70}%
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Risk Profiling */}
-            <Card>
-              <CardHeader className="pb-2">
-                <div className="flex items-center">
-                  <AlertTriangle className="h-5 w-5 mr-2 text-orange-500" />
-                  <CardTitle className="text-base">Risk Profiling</CardTitle>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-3">
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Account Management Score</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.3 ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700'}`}>
-                      {Math.floor(Math.random() * 20) + 70}/100
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Payment Risk Level</span>
-                    <Badge variant="outline" className={`${
-                      Math.random() > 0.7 ? 'bg-red-50 text-red-700' : 
-                      Math.random() > 0.4 ? 'bg-amber-50 text-amber-700' : 
-                      'bg-green-50 text-green-700'}`}>
-                      {Math.random() > 0.7 ? 'High' : Math.random() > 0.4 ? 'Medium' : 'Low'}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">High-Risk Transactions</span>
-                    <Badge variant="outline" className={`${Math.random() > 0.7 ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'}`}>
-                      {Math.random() > 0.7 ? `${Math.floor(Math.random() * 3) + 1} detected` : 'None'}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-sm">Financial Stress Indicators</span>
-                    <Badge variant="outline" className={`${
-                      Math.random() > 0.7 ? 'bg-red-50 text-red-700' : 
-                      Math.random() > 0.4 ? 'bg-amber-50 text-amber-700' : 
-                      'bg-green-50 text-green-700'}`}>
-                      {Math.random() > 0.7 ? 'High' : Math.random() > 0.4 ? 'Medium' : 'Low'}
-                    </Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+          <Tabs value={activeFeatureTab} onValueChange={setActiveFeatureTab}>
+            <TabsList className="flex flex-wrap h-auto py-2 overflow-auto mb-4">
+              <TabsTrigger value="income-verification">Income Verification</TabsTrigger>
+              <TabsTrigger value="cash-flow">Cash Flow Assessment</TabsTrigger>
+              <TabsTrigger value="debt-service">Debt Service Coverage</TabsTrigger>
+              <TabsTrigger value="risk-profiling">Risk Profiling</TabsTrigger>
+              <TabsTrigger value="alternative-credit">Alternative Credit</TabsTrigger>
+              <TabsTrigger value="fraud-detection">Fraud Detection</TabsTrigger>
+              <TabsTrigger value="automated-underwriting">Automated Underwriting</TabsTrigger>
+              <TabsTrigger value="regulatory">Regulatory Compliance</TabsTrigger>
+            </TabsList>
+            
+            <BankStatementFeatures activeTab={activeFeatureTab} />
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="transactions" className="space-y-6">
-          {/* Transactions Analysis Card */}
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center">
@@ -497,8 +370,7 @@ const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) =>
           </Card>
         </TabsContent>
 
-        <TabsContent value="ai-reasoning">
-          {/* AI Analysis Card */}
+        <TabsContent value="ai-reasoning" className="space-y-6">
           <Card>
             <CardHeader className="pb-2">
               <div className="flex items-center">
