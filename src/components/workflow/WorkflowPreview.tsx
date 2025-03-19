@@ -2,7 +2,7 @@
 import React from 'react';
 import { ReactFlow, Background, Controls, Node, Edge, NodeProps } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { NodeData } from './types';
+import { NodeData, WorkflowNode } from './types';
 
 // Helper functions for node styling
 const getNodeColorByType = (type: string): string => {
@@ -39,10 +39,13 @@ const getStatusBorder = (status?: string): string => {
 };
 
 // Custom Node component to display the icon in preview mode
-const PreviewNode = ({ data, id }: NodeProps<NodeData>) => {
+const PreviewNode = ({ data, id }: NodeProps) => {
+  // Type assertion for the data prop
+  const nodeData = data as NodeData;
+  
   // Default color if not specified
-  const backgroundColor = data.color || getNodeColorByType(data.type);
-  const statusBorder = getStatusBorder(data.status);
+  const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
+  const statusBorder = getStatusBorder(nodeData.status);
   
   return (
     <div 
@@ -54,34 +57,34 @@ const PreviewNode = ({ data, id }: NodeProps<NodeData>) => {
         minHeight: '90px'
       }}
     >
-      {data.icon && (
+      {nodeData.icon && (
         <div className="rounded-full bg-white p-2 mb-2 shadow-sm">
-          {data.icon}
+          {nodeData.icon}
         </div>
       )}
-      <div className="text-sm font-medium text-white">{data.label}</div>
-      {data.description && (
-        <div className="text-xs text-white opacity-80 mt-1 text-center">{data.description}</div>
+      <div className="text-sm font-medium text-white">{nodeData.label}</div>
+      {nodeData.description && (
+        <div className="text-xs text-white opacity-80 mt-1 text-center">{nodeData.description}</div>
       )}
       
       {/* Node identifier badge */}
       <div className="absolute -top-2 -right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center border border-gray-200 shadow-sm">
-        <span className="text-xs font-bold">{id.split('-')[1] || '1'}</span>
+        <span className="text-xs font-bold">{id && typeof id === 'string' ? id.split('-')[1] || '1' : '1'}</span>
       </div>
     </div>
   );
 };
 
 interface WorkflowPreviewProps {
-  nodes: Array<Node<NodeData>>;
+  nodes: Array<Node>;
   edges: Array<Edge>;
 }
 
 const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
-  // Define node types for preview mode
+  // Define node types for preview mode, properly typed for ReactFlow
   const nodeTypes = {
     default: PreviewNode
-  };
+  } as const;
 
   // Custom edge with labels
   const edgeOptions = {
@@ -93,7 +96,7 @@ const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
   return (
     <div className="h-[400px] border rounded-md overflow-hidden">
       <ReactFlow
-        nodes={nodes as Node[]}
+        nodes={nodes}
         edges={edges}
         fitView
         nodesDraggable={false}

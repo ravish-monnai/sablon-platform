@@ -13,13 +13,16 @@ import {
   NodeProps
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { NodeData } from './types';
+import { NodeData, WorkflowNode } from './types';
 
 // Custom Node component to display the icon
-const CustomNode = ({ data, id, selected }: NodeProps<NodeData>) => {
+const CustomNode = ({ data, id, selected }: NodeProps) => {
+  // Type assertion to ensure TypeScript understands this is NodeData
+  const nodeData = data as NodeData;
+  
   // Use the same styling as in the journey steps tab
-  const backgroundColor = data.color || getNodeColorByType(data.type);
-  const statusBorder = getStatusBorder(data.status);
+  const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
+  const statusBorder = getStatusBorder(nodeData.status);
   
   return (
     <div 
@@ -33,19 +36,19 @@ const CustomNode = ({ data, id, selected }: NodeProps<NodeData>) => {
         transform: selected ? 'scale(1.05)' : 'scale(1)'
       }}
     >
-      {data.icon && (
+      {nodeData.icon && (
         <div className="rounded-full bg-white p-2 mb-2 shadow-sm">
-          {data.icon}
+          {nodeData.icon}
         </div>
       )}
-      <div className="text-sm font-medium text-white">{data.label}</div>
-      {data.description && (
-        <div className="text-xs text-white opacity-80 mt-1 text-center">{data.description}</div>
+      <div className="text-sm font-medium text-white">{nodeData.label}</div>
+      {nodeData.description && (
+        <div className="text-xs text-white opacity-80 mt-1 text-center">{nodeData.description}</div>
       )}
       
       {/* Node identifier badge */}
       <div className="absolute -top-2 -right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center border border-gray-200 shadow-sm">
-        <span className="text-xs font-bold">{id.split('-')[1] || '1'}</span>
+        <span className="text-xs font-bold">{id && typeof id === 'string' ? id.split('-')[1] || '1' : '1'}</span>
       </div>
     </div>
   );
@@ -116,11 +119,11 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     labelStyle: { fill: '#333', fontSize: 12 }
   };
 
-  // Combine custom nodeTypes with our default node
+  // Define nodeTypes properly matching ReactFlow expectations
   const combinedNodeTypes = {
     ...nodeTypes,
     default: CustomNode
-  };
+  } as NodeTypes;
 
   return (
     <div className="h-[400px] border rounded-md overflow-hidden">
@@ -142,12 +145,13 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         <Controls />
         <MiniMap 
           nodeColor={(node) => {
-            if (node.data.type === 'datasource' || node.data.type === 'data') return '#ffcc1d';
-            if (node.data.type === 'model') return '#e879f9';
-            if (node.data.type === 'agent') return '#8b5cf6';
-            if (node.data.type === 'rule') return '#3b82f6';
-            if (node.data.type === 'notification') return '#22c55e';
-            if (node.data.type === 'alert') return '#ef4444';
+            const nodeData = node.data as NodeData;
+            if (nodeData.type === 'datasource' || nodeData.type === 'data') return '#ffcc1d';
+            if (nodeData.type === 'model') return '#e879f9';
+            if (nodeData.type === 'agent') return '#8b5cf6';
+            if (nodeData.type === 'rule') return '#3b82f6';
+            if (nodeData.type === 'notification') return '#22c55e';
+            if (nodeData.type === 'alert') return '#ef4444';
             return '#2bbfe0';
           }}
           zoomable 

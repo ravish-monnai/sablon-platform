@@ -1,10 +1,9 @@
 
 import React, { useState, useCallback } from 'react';
-import { useNodesState, useEdgesState, addEdge } from '@xyflow/react';
+import { useNodesState, useEdgesState, addEdge, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { Brain, Database, MessageSquare, GitBranch, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import WorkflowFlow from '../workflow/WorkflowFlow';
 import DraggableItem from '../workflow/DraggableItem';
 import { NodeData } from '../workflow/types';
@@ -46,7 +45,6 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         label: `New ${type}`,
         type,
         description: '',
-        icon: undefined,
       };
 
       // Customize node appearance based on type
@@ -131,7 +129,7 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
             onConnect={onConnect}
             onDrop={onDrop}
             onDragOver={onDragOver}
-            nodeTypes={{}}
+            nodeTypes={{} as NodeTypes}
             onNodeDragStart={() => {}}
           />
         </div>
