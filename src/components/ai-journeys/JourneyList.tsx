@@ -19,7 +19,10 @@ const JourneyList: React.FC<JourneyListProps> = ({
       {showAgentTitle && (
         <div className="flex justify-between items-center">
           <div>
-            <h2 className="text-2xl font-bold">Live Agents</h2>
+            <h2 className="text-2xl font-bold">Live Journeys</h2>
+            <p className="text-muted-foreground">
+              Active AI journey workflows in production
+            </p>
           </div>
         </div>
       )}
