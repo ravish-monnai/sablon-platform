@@ -12,18 +12,24 @@ interface UseCaseFilteringResult {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
   filteredCases: CaseItem[];
+  allBankStatementCases: CaseItem[];
 }
 
 export const useCaseFiltering = ({ selectedMarket }: UseCaseFilteringProps): UseCaseFilteringResult => {
   const [filterType, setFilterType] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
+  // Combine all bank statement cases
+  const allBankStatementCases = useMemo(() => {
+    return [...bankStatementCases, ...indianBankStatementCases];
+  }, []);
+
   const filteredCases = useMemo(() => {
     // First filter by type
     let cases = filterType === "all" 
       ? allCases 
       : filterType === "bank-statement" 
-        ? [...bankStatementCases, ...indianBankStatementCases]
+        ? allBankStatementCases
         : allCases.filter(c => c.type.toLowerCase() === filterType);
     
     // Then filter by market
@@ -44,13 +50,14 @@ export const useCaseFiltering = ({ selectedMarket }: UseCaseFilteringProps): Use
     }
     
     return cases;
-  }, [filterType, selectedMarket, searchQuery]);
+  }, [filterType, selectedMarket, searchQuery, allBankStatementCases]);
 
   return {
     filterType,
     setFilterType,
     searchQuery,
     setSearchQuery,
-    filteredCases
+    filteredCases,
+    allBankStatementCases
   };
 };

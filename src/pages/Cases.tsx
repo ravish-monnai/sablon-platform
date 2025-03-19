@@ -56,10 +56,12 @@ const Cases = () => {
       </div>
 
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="list">Case List</TabsTrigger>
+          <TabsTrigger value="bank-statement">Bank Statement Analysis</TabsTrigger>
           <TabsTrigger value="network">Network Analysis</TabsTrigger>
         </TabsList>
+        
         <TabsContent value="list" className="space-y-4">
           <Card>
             <CardHeader className="pb-3">
@@ -89,11 +91,13 @@ const Cases = () => {
           </Card>
           
           {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
-          
-          {(filterType === "bank-statement" || filterType === "all") && (
-            <BankStatementInsights />
-          )}
         </TabsContent>
+        
+        <TabsContent value="bank-statement" className="space-y-4">
+          <BankStatementInsights />
+          {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
+        </TabsContent>
+        
         <TabsContent value="network">
           <Card className="h-[80vh]">
             <CardContent className="p-0">
