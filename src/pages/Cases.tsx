@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +33,9 @@ import {
 } from "lucide-react";
 import CasesLinkAnalysis from "@/components/cases/CasesLinkAnalysis";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
+import IndianBankStatementAnalyzer from "@/components/cases/IndianBankStatementAnalyzer";
 import { useNavigate } from "react-router-dom";
+import { useMarket } from "@/contexts/MarketContext";
 
 const bankStatementCases = [
   {
@@ -108,8 +110,82 @@ const bankStatementCases = [
   },
 ];
 
+const indianBankStatementCases = [
+  {
+    id: "CASE-IN-123",
+    customer: "Raj Patel",
+    customerId: "C20045",
+    type: "Bank Statement",
+    status: "High Risk",
+    created: "Aug 10, 2023",
+    source: "Indian Bank Statement Analyzer",
+    alert: "Multiple UPI transactions",
+    market: "India",
+    bank: "HDFC Bank",
+    riskScore: 89,
+    agentAssigned: "Unassigned"
+  },
+  {
+    id: "CASE-IN-122",
+    customer: "Priya Sharma",
+    customerId: "C20044",
+    type: "Bank Statement",
+    status: "High Risk",
+    created: "Aug 9, 2023",
+    source: "Indian Bank Statement Analyzer",
+    alert: "Large cash deposits",
+    market: "India",
+    bank: "SBI",
+    riskScore: 91,
+    agentAssigned: "Amit K."
+  },
+  {
+    id: "CASE-IN-121",
+    customer: "Kiran Mehta",
+    customerId: "C20043",
+    type: "Bank Statement",
+    status: "Medium Risk",
+    created: "Aug 8, 2023",
+    source: "Indian Bank Statement Analyzer",
+    alert: "Income inconsistency",
+    market: "India",
+    bank: "ICICI Bank",
+    riskScore: 65,
+    agentAssigned: "Unassigned"
+  },
+  {
+    id: "CASE-IN-120",
+    customer: "Rahul Verma",
+    customerId: "C20042",
+    type: "Bank Statement",
+    status: "Low Risk",
+    created: "Aug 7, 2023",
+    source: "Indian Bank Statement Analyzer",
+    alert: "Minor discrepancy",
+    market: "India",
+    bank: "Axis Bank",
+    riskScore: 30,
+    agentAssigned: "Neha S."
+  },
+  {
+    id: "CASE-IN-119",
+    customer: "Anita Desai",
+    customerId: "C20041",
+    type: "Bank Statement",
+    status: "High Risk",
+    created: "Aug 6, 2023",
+    source: "Indian Bank Statement Analyzer",
+    alert: "UPI fraud pattern",
+    market: "India",
+    bank: "Yes Bank",
+    riskScore: 88,
+    agentAssigned: "Unassigned"
+  },
+];
+
 const allCases = [
   ...bankStatementCases,
+  ...indianBankStatementCases,
   {
     id: "CASE-237",
     customer: "Sarah Johnson",
@@ -136,16 +212,25 @@ const allCases = [
 
 const Cases = () => {
   const navigate = useNavigate();
+  const { selectedMarket } = useMarket();
   const [showDialog, setShowDialog] = useState(false);
   const [selectedCase, setSelectedCase] = useState<any>(null);
   const [filterType, setFilterType] = useState("all");
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   
-  const filteredCases = filterType === "all" 
-    ? allCases 
-    : filterType === "bank-statement" 
-      ? bankStatementCases
-      : allCases.filter(c => c.type.toLowerCase() === filterType);
+  const filteredCases = () => {
+    let cases = filterType === "all" 
+      ? allCases 
+      : filterType === "bank-statement" 
+        ? [...bankStatementCases, ...indianBankStatementCases]
+        : allCases.filter(c => c.type.toLowerCase() === filterType);
+    
+    if (selectedMarket !== 'Global') {
+      cases = cases.filter(c => c.market === selectedMarket);
+    }
+    
+    return cases;
+  };
 
   const handleCaseAction = (caseData: any) => {
     setSelectedCase(caseData);
@@ -155,6 +240,8 @@ const Cases = () => {
   const handleCaseView = (caseId: string) => {
     navigate(`/case-review/${caseId}`);
   };
+
+  const showIndianAnalyzer = selectedMarket === 'India' || selectedMarket === 'Global';
 
   return (
     <div className="container mx-auto p-6">
@@ -177,7 +264,9 @@ const Cases = () => {
                 <div>
                   <CardTitle>All Cases</CardTitle>
                   <CardDescription>
-                    Review and manage cases that require attention
+                    {selectedMarket === 'Global' 
+                      ? 'Review and manage cases that require attention'
+                      : `Review and manage ${selectedMarket} cases that require attention`}
                   </CardDescription>
                 </div>
                 <div className="flex gap-2">
@@ -213,12 +302,13 @@ const Cases = () => {
                       <th className="p-2 font-medium">Status</th>
                       <th className="p-2 font-medium">Created</th>
                       <th className="p-2 font-medium">Source</th>
+                      <th className="p-2 font-medium">Bank</th>
                       <th className="p-2 font-medium">Assigned</th>
                       <th className="p-2 font-medium">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredCases.map((caseItem) => (
+                    {filteredCases().map((caseItem) => (
                       <tr key={caseItem.id} className="border-b">
                         <td className="p-2 font-medium">{caseItem.id}</td>
                         <td className="p-2">
@@ -257,6 +347,7 @@ const Cases = () => {
                           </div>
                         </td>
                         <td className="p-2">{caseItem.source}</td>
+                        <td className="p-2">{caseItem.bank || "-"}</td>
                         <td className="p-2">
                           {caseItem.agentAssigned === "Unassigned" ? (
                             <Badge variant="outline">Unassigned</Badge>
@@ -289,6 +380,8 @@ const Cases = () => {
               </div>
             </CardContent>
           </Card>
+          
+          {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
           
           {filterType === "bank-statement" || filterType === "all" ? (
             <Card>
