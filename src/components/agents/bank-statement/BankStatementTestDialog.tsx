@@ -1,182 +1,177 @@
 
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Label } from "@/components/ui/label";
-import { FileText, MapPin, X } from "lucide-react";
-import { toast } from "sonner";
-import BankStatementTestResults from "./BankStatementTestResults";
-import { useMarket } from "@/contexts/MarketContext";
+import React, { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
+import { Market } from '@/contexts/MarketContext';
 
-interface BankStatementTestDialogProps {
+export interface BankStatementTestDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  selectedMarket?: Market;
 }
 
-const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({
-  isOpen,
+const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({ 
+  isOpen, 
   onOpenChange,
+  selectedMarket = 'Global'
 }) => {
-  const { selectedMarket } = useMarket();
-  const [testResult, setTestResult] = useState<any>(null);
-  const [isTestInProgress, setIsTestInProgress] = useState(false);
+  const [activeTab, setActiveTab] = useState('input');
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [hasResults, setHasResults] = useState(false);
   
-  const markets = [
-    { name: "India", code: "IN" },
-    { name: "US", code: "US" },
-    { name: "Mexico", code: "MX" },
-    { name: "Indonesia", code: "ID" },
-    { name: "Philippines", code: "PH" },
-    { name: "Brazil", code: "BR" },
-    { name: "Malaysia", code: "MY" }
-  ];
-  
-  // Filter to only show current market if not global
-  const filteredMarkets = selectedMarket === 'Global' 
-    ? markets 
-    : markets.filter(market => market.name === selectedMarket);
-  
-  const runTestWithSample = () => {
-    setIsTestInProgress(true);
-    
-    // Simulate API call with timeout
+  const handleRunTest = () => {
+    setIsProcessing(true);
+    // Simulate API call
     setTimeout(() => {
-      const sampleResult = {
-        market: selectedMarket,
-        riskScore: {
-          score: 35,
-          level: "Low Risk",
-          factors: [
-            { name: "Stable Income", impact: "Positive" },
-            { name: "Positive Cash Flow", impact: "Positive" },
-            { name: "Large Irregular Transaction", impact: "Negative" }
-          ]
-        },
-        incomeVerification: {
-          status: "success",
-          totalIncome: 5250.00,
-          recurringIncome: [
-            { source: "ACME Corp", amount: 4500.00, frequency: "Monthly" },
-            { source: "Side Gig LLC", amount: 750.00, frequency: "Monthly" }
-          ]
-        },
-        expenseCategories: {
-          status: "success",
-          categories: [
-            { name: "Housing", total: 1800.00, percentage: 38 },
-            { name: "Utilities", total: 450.00, percentage: 9 },
-            { name: "Food", total: 750.00, percentage: 16 },
-            { name: "Transportation", total: 350.00, percentage: 7 },
-            { name: "Entertainment", total: 500.00, percentage: 11 },
-            { name: "Misc", total: 900.00, percentage: 19 }
-          ]
-        },
-        recurringPayments: {
-          status: "success",
-          identified: [
-            { name: "Netflix", amount: 14.99, category: "Entertainment" },
-            { name: "Gym Membership", amount: 49.99, category: "Health" },
-            { name: "Phone Bill", amount: 95.00, category: "Utilities" },
-            { name: "Car Insurance", amount: 120.00, category: "Insurance" }
-          ]
-        },
-        cashFlowAnalysis: {
-          status: "success",
-          netCashFlow: 1200.00,
-          savingsRate: 22.8,
-          volatility: "Low"
-        },
-        abnormalTransactions: {
-          status: "success",
-          identified: [
-            { date: "2023-10-15", amount: 1200.00, description: "Unusual large withdrawal", risk: "Medium" }
-          ]
-        }
-      };
-      
-      setTestResult(sampleResult);
-      setIsTestInProgress(false);
-      toast.success(`Bank statement analysis for ${selectedMarket} completed successfully`);
-    }, 2500);
+      setIsProcessing(false);
+      setHasResults(true);
+      setActiveTab('results');
+    }, 2000);
   };
   
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Bank Statement Analyzer Test</DialogTitle>
+          <DialogTitle>Test Bank Statement Analysis Agent</DialogTitle>
           <DialogDescription>
             {selectedMarket === 'Global' 
-              ? 'Select a market to test your bank statement analyzer configuration' 
-              : `Test your bank statement analyzer configuration for ${selectedMarket}`}
+              ? 'Upload bank statements to test the analysis capabilities' 
+              : `Upload ${selectedMarket} bank statements to test the analysis capabilities`}
           </DialogDescription>
         </DialogHeader>
         
-        <div className="py-4">
-          {!testResult && !isTestInProgress && (
-            <div className="flex flex-col items-center justify-center py-8 space-y-4">
-              <FileText className="h-16 w-16 text-muted-foreground" />
-              <p className="text-center text-muted-foreground">
-                Run a test to see how your bank statement analyzer would process a real customer statement.
-                <br />
-                This will process a pre-defined sample bank statement with your current configuration.
-              </p>
-              
-              {selectedMarket === 'Global' && (
-                <div className="w-full max-w-xs mt-4">
-                  <div className="flex items-center mb-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
-                    <Label htmlFor="market-selection">Select Market</Label>
-                  </div>
-                  <Select defaultValue={filteredMarkets[0]?.name}>
-                    <SelectTrigger id="market-selection" className="w-full">
-                      <SelectValue placeholder="Select a market" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {filteredMarkets.map((market) => (
-                        <SelectItem key={market.code} value={market.name}>
-                          <div className="flex items-center">
-                            <span>{market.name}</span>
-                          </div>
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              )}
-              
-              <Button onClick={runTestWithSample} className="mt-4">
-                Run Test Analysis
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="input">Input</TabsTrigger>
+            <TabsTrigger value="results" disabled={!hasResults}>Results</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="input" className="space-y-4">
+            <div className="border-2 border-dashed rounded-lg p-12 text-center">
+              <div className="mx-auto flex max-w-[420px] flex-col items-center justify-center text-center">
+                <svg
+                  className="h-10 w-10 text-muted-foreground"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <h3 className="mt-4 text-lg font-semibold">Drag & Drop your bank statement</h3>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  Supported formats: PDF, CSV, OFX, QFX
+                </p>
+                <p className="mt-2 text-xs text-muted-foreground">Max file size: 10MB</p>
+              </div>
+            </div>
+            
+            <Separator className="my-4" />
+            
+            <div className="flex justify-between">
+              <Button variant="outline" onClick={() => onOpenChange(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleRunTest} disabled={isProcessing}>
+                {isProcessing ? "Processing..." : "Run Analysis"}
               </Button>
             </div>
-          )}
+          </TabsContent>
           
-          {isTestInProgress && (
-            <div className="flex flex-col items-center justify-center py-12 space-y-4">
-              <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-              <p className="text-center">Analyzing sample bank statement for {selectedMarket}...</p>
+          <TabsContent value="results" className="space-y-4">
+            <div className="border rounded-lg p-6">
+              <h3 className="text-lg font-semibold mb-2">Analysis Results</h3>
+              <p className="text-sm text-muted-foreground mb-4">
+                The agent has analyzed the bank statement and extracted the following insights:
+              </p>
+              
+              <div className="space-y-4">
+                <div className="border p-4 rounded-md bg-muted/40">
+                  <h4 className="font-medium">Account Summary</h4>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Account Type</p>
+                      <p className="text-sm font-medium">Checking Account</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Account Number</p>
+                      <p className="text-sm font-medium">XXXX-XX-1234</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Statement Period</p>
+                      <p className="text-sm font-medium">Jan 1 - Jan 31, 2023</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Closing Balance</p>
+                      <p className="text-sm font-medium">$5,248.32</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border p-4 rounded-md bg-muted/40">
+                  <h4 className="font-medium">Financial Insights</h4>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Total Income</p>
+                      <p className="text-sm font-medium">$8,750.00</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Total Expenses</p>
+                      <p className="text-sm font-medium">$6,120.45</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Average Daily Balance</p>
+                      <p className="text-sm font-medium">$4,876.22</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Largest Transaction</p>
+                      <p className="text-sm font-medium">$2,500.00 (Rent)</p>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="border p-4 rounded-md bg-muted/40">
+                  <h4 className="font-medium">Risk Indicators</h4>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    <div>
+                      <p className="text-xs text-muted-foreground">Overdrafts</p>
+                      <p className="text-sm font-medium">None detected</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Insufficient Funds</p>
+                      <p className="text-sm font-medium">None detected</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Late Payments</p>
+                      <p className="text-sm font-medium">None detected</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-muted-foreground">Suspicious Activity</p>
+                      <p className="text-sm font-medium">None detected</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
-          
-          {testResult && (
-            <BankStatementTestResults 
-              testResult={testResult}
-              selectedMarket={selectedMarket}
-              setTestResult={setTestResult}
-            />
-          )}
-        </div>
-        
-        <DialogFooter>
-          {testResult && (
-            <Button variant="outline" onClick={() => setTestResult(null)} className="mr-auto">
-              <X className="h-4 w-4 mr-2" />
-              Clear Results
-            </Button>
-          )}
-          <Button variant="outline" onClick={() => onOpenChange(false)}>Close</Button>
-        </DialogFooter>
+            
+            <div className="flex justify-between">
+              <Button variant="outline" onClick={() => setActiveTab('input')}>
+                Back to Input
+              </Button>
+              <Button onClick={() => onOpenChange(false)}>
+                Close
+              </Button>
+            </div>
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   );

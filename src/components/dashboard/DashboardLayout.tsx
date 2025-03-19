@@ -1,3 +1,4 @@
+
 import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
@@ -39,6 +40,7 @@ import { Label } from "@/components/ui/label"
 import AIAssistant from "../ai-assistant/AIAssistant"
 import ViewToggle from "../agents/ViewToggle"
 import { MarketProvider } from "@/contexts/MarketContext"
+import MarketFilter from "@/components/common/MarketFilter"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -130,10 +132,11 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
         <div className="flex min-h-screen w-full">
           <Sidebar variant="sidebar" collapsible="icon">
             <SidebarHeader className="flex flex-col p-4 gap-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between mb-4">
                 <MonnaiLogo variant="gradient" />
                 <SidebarTrigger />
               </div>
+              <MarketFilter compact={true} />
             </SidebarHeader>
             <SidebarContent>
               <SidebarMenu>
