@@ -1,4 +1,3 @@
-
 import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
@@ -110,7 +109,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       const queryParams = new URLSearchParams(queryString);
       const currentParams = new URLSearchParams(location.search);
       
-      // Check if base path matches and the tab parameter matches
       return currentPath === basePath && 
              queryParams.get('tab') === currentParams.get('tab');
     }
@@ -131,12 +129,14 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
       <SidebarProvider>
         <div className="flex min-h-screen w-full">
           <Sidebar variant="sidebar" collapsible="icon">
-            <SidebarHeader className="flex flex-col p-4 gap-4">
-              <div className="flex items-center justify-between mb-4">
-                <MonnaiLogo variant="gradient" />
+            <SidebarHeader className="p-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <MonnaiLogo variant="gradient" />
+                  <MarketFilter compact={true} />
+                </div>
                 <SidebarTrigger />
               </div>
-              <MarketFilter compact={true} />
             </SidebarHeader>
             <SidebarContent>
               <SidebarMenu>
@@ -163,7 +163,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                           onClick={() => {
                             const params = new URLSearchParams();
                             params.set("viewMode", viewMode);
-                            // Navigate to the first sub-item by default
                             navigate({ 
                               pathname: item.path, 
                               search: item.subItems?.[0].path.includes('?') 
@@ -226,7 +225,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </SidebarInset>
         </div>
         
-        {/* AI Assistant component */}
         <AIAssistant />
       </SidebarProvider>
     </MarketProvider>
