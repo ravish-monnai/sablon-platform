@@ -2,9 +2,8 @@
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CaseHeaderActions from "./detail/CaseHeaderActions";
-import OverviewTab from "./detail/tabs/OverviewTab";
+import AIOverviewTab from "./detail/tabs/AIOverviewTab";
 import TransactionsTab from "./detail/tabs/TransactionsTab";
-import AIReasoningTab from "./detail/tabs/AIReasoningTab";
 import BankStatementFeatures from "../bank-statement/BankStatementFeatures";
 
 interface CaseDetailViewProps {
@@ -19,16 +18,15 @@ const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) =>
     <div className="space-y-6">
       <CaseHeaderActions caseData={caseData} onClose={onClose} />
 
-      <Tabs defaultValue="overview" className="w-full">
+      <Tabs defaultValue="ai-overview" className="w-full">
         <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="ai-overview">AI Overview</TabsTrigger>
           <TabsTrigger value="bank-features">Bank Statement Features</TabsTrigger>
           <TabsTrigger value="transactions">Transactions</TabsTrigger>
-          <TabsTrigger value="ai-reasoning">AI Reasoning</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview">
-          <OverviewTab caseData={caseData} />
+        <TabsContent value="ai-overview">
+          <AIOverviewTab caseData={caseData} />
         </TabsContent>
 
         <TabsContent value="bank-features">
@@ -44,16 +42,12 @@ const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) =>
               <TabsTrigger value="regulatory">Regulatory Compliance</TabsTrigger>
             </TabsList>
             
-            <BankStatementFeatures activeTab={activeFeatureTab} />
+            <BankStatementFeatures activeTab={activeFeatureTab} caseData={caseData} />
           </Tabs>
         </TabsContent>
 
         <TabsContent value="transactions">
           <TransactionsTab caseData={caseData} />
-        </TabsContent>
-
-        <TabsContent value="ai-reasoning">
-          <AIReasoningTab caseData={caseData} />
         </TabsContent>
       </Tabs>
     </div>
