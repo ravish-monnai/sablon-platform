@@ -1,59 +1,173 @@
 
 import React from "react";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { useMarket } from "@/contexts/MarketContext";
-import { getBanksByMarket } from "@/components/ai-journeys/MarketSpecificBanks";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 
-const SettingsTab: React.FC = () => {
-  const { selectedMarket } = useMarket();
-  const banks = getBanksByMarket(selectedMarket);
-  
-  // Define payment methods based on market
-  const getPaymentMethods = () => {
-    switch (selectedMarket) {
-      case 'India':
-        return ["UPI", "IMPS", "NEFT", "RTGS", "Google Pay", "PhonePe", "Paytm"];
-      case 'US':
-        return ["ACH", "Wire Transfer", "Zelle", "Venmo", "Cash App", "PayPal"];
-      case 'Mexico':
-        return ["SPEI", "CoDi", "Oxxo Pay", "Mercado Pago", "PayPal"];
-      case 'Brazil':
-        return ["PIX", "Boleto", "TED", "DOC", "Nubank", "PagSeguro"];
-      default:
-        return ["SWIFT", "Wire Transfer", "Digital Wallets", "Revolut", "Wise", "PayPal"];
-    }
-  };
-  
+interface SettingsTabProps {
+  isViewOnly?: boolean;
+}
+
+const SettingsTab: React.FC<SettingsTabProps> = ({ isViewOnly = false }) => {
   return (
-    <div className="pt-4">
+    <div className="space-y-6 pt-4">
       <Card>
         <CardHeader>
           <CardTitle>Journey Configuration</CardTitle>
-          <CardDescription>Configure how the Bank Statement Analyzer Agent works{selectedMarket !== 'Global' ? ` for ${selectedMarket}` : ''}</CardDescription>
+          <CardDescription>Manage the journey's settings and configurations</CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <h4 className="font-medium">Supported Banks</h4>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {banks.map((bank, index) => (
-                <Badge key={index} variant="outline" className="justify-start">{bank.name}</Badge>
-              ))}
-            </div>
-          </div>
-          
-          <Separator />
-          
-          <div className="space-y-2">
-            <h4 className="font-medium">Payment Method Detection</h4>
-            <p className="text-sm text-muted-foreground">Specialized detection for payment methods {selectedMarket !== 'Global' ? `common in ${selectedMarket}` : 'across global markets'}</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {getPaymentMethods().map((method, index) => (
-                <Badge key={index} variant="outline" className="justify-start">{method}</Badge>
-              ))}
-            </div>
-          </div>
+        <CardContent>
+          <Tabs defaultValue="general">
+            <TabsList className="mb-4">
+              <TabsTrigger value="general">General</TabsTrigger>
+              <TabsTrigger value="integrations">Integrations</TabsTrigger>
+              <TabsTrigger value="permissions">Permissions</TabsTrigger>
+            </TabsList>
+            
+            <TabsContent value="general" className="space-y-4">
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="journey-name">Journey Name</Label>
+                  <Input 
+                    id="journey-name" 
+                    disabled={isViewOnly}
+                    defaultValue="Bank Statement Analyzer"
+                  />
+                </div>
+                
+                <div>
+                  <Label htmlFor="journey-description">Description</Label>
+                  <Input 
+                    id="journey-description" 
+                    disabled={isViewOnly}
+                    defaultValue="AI-powered analysis for bank statements"
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="active-toggle">Active</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Enable or disable this journey
+                    </div>
+                  </div>
+                  <Switch 
+                    id="active-toggle" 
+                    defaultChecked 
+                    disabled={isViewOnly}
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="logging-toggle">Detailed Logging</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Log all activities for debugging
+                    </div>
+                  </div>
+                  <Switch 
+                    id="logging-toggle" 
+                    defaultChecked={false} 
+                    disabled={isViewOnly}
+                  />
+                </div>
+              </div>
+              
+              {!isViewOnly && (
+                <div className="flex justify-end pt-4">
+                  <Button>Save Changes</Button>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="integrations" className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label>Connect to CRM</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Integrate with your CRM system
+                    </div>
+                  </div>
+                  <Switch 
+                    disabled={isViewOnly}
+                    defaultChecked 
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label>API Webhooks</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Send events to external systems
+                    </div>
+                  </div>
+                  <Switch 
+                    disabled={isViewOnly}
+                    defaultChecked={false} 
+                  />
+                </div>
+              </div>
+              
+              {!isViewOnly && (
+                <div className="flex justify-end pt-4">
+                  <Button>Save Integrations</Button>
+                </div>
+              )}
+            </TabsContent>
+            
+            <TabsContent value="permissions" className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label>Admin Access</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Full access to journey config
+                    </div>
+                  </div>
+                  <Switch 
+                    disabled={isViewOnly}
+                    defaultChecked 
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label>Analyst Access</Label>
+                    <div className="text-sm text-muted-foreground">
+                      View and manage cases
+                    </div>
+                  </div>
+                  <Switch 
+                    disabled={isViewOnly}
+                    defaultChecked 
+                  />
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="space-y-0.5">
+                    <Label>User Access</Label>
+                    <div className="text-sm text-muted-foreground">
+                      Basic usage rights
+                    </div>
+                  </div>
+                  <Switch 
+                    disabled={isViewOnly}
+                    defaultChecked 
+                  />
+                </div>
+              </div>
+              
+              {!isViewOnly && (
+                <div className="flex justify-end pt-4">
+                  <Button>Save Permissions</Button>
+                </div>
+              )}
+            </TabsContent>
+          </Tabs>
         </CardContent>
       </Card>
     </div>
