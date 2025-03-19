@@ -10,6 +10,7 @@ import {
   SidebarInset,
   SidebarHeader,
   SidebarTrigger,
+  SidebarFooter,
 } from "@/components/ui/sidebar"
 import { 
   LayoutDashboard, 
@@ -33,6 +34,7 @@ import MonnaiLogo from "../branding/MonnaiLogo"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import AIAssistant from "../ai-assistant/AIAssistant"
+import ViewToggle from "../agents/ViewToggle"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -86,6 +88,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
   const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems
 
+  const handleViewModeChange = (value: string) => {
+    if (value === "customer" || value === "internal") {
+      setViewMode(value);
+      updateViewModeInURL(value);
+    }
+  };
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full">
@@ -94,26 +103,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <div className="flex items-center justify-between">
               <MonnaiLogo variant="gradient" />
               <SidebarTrigger />
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <UserRound className={`h-4 w-4 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
-                <Label htmlFor="view-mode-toggle" className="text-sm">Customer</Label>
-              </div>
-              <Switch 
-                id="view-mode-toggle" 
-                checked={viewMode === "internal"}
-                onCheckedChange={(checked) => {
-                  const newMode = checked ? "internal" : "customer";
-                  setViewMode(newMode);
-                  updateViewModeInURL(newMode);
-                }}
-              />
-              <div className="flex items-center space-x-2">
-                <Building2 className={`h-4 w-4 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
-                <Label htmlFor="view-mode-toggle" className="text-sm">Monnai</Label>
-              </div>
             </div>
           </SidebarHeader>
           <SidebarContent>
@@ -136,6 +125,21 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               ))}
             </SidebarMenu>
           </SidebarContent>
+          <SidebarFooter className="p-4">
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between text-sm text-muted-foreground">
+                <span className="flex items-center">
+                  <UserRound className={`h-4 w-4 mr-1 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
+                  Customer View
+                </span>
+                <span className="flex items-center">
+                  <Building2 className={`h-4 w-4 ml-1 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
+                  Monnai View
+                </span>
+              </div>
+              <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+            </div>
+          </SidebarFooter>
         </Sidebar>
         
         <SidebarInset>
