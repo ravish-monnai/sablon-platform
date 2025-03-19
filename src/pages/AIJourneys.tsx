@@ -4,7 +4,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
 import LiveJourneys from "@/components/ai-journeys/LiveJourneys";
-import BankStatementJourney from "@/components/ai-journeys/BankStatementJourney";
 
 const AIJourneys = () => {
   const location = useLocation();
@@ -13,7 +12,6 @@ const AIJourneys = () => {
   
   // Get selected tab from URL or default to "workflow"
   const defaultTab = searchParams.get("tab") || "workflow";
-  const journeyId = searchParams.get("journeyId");
   
   const [selectedTab, setSelectedTab] = useState(defaultTab);
   
@@ -21,23 +19,12 @@ const AIJourneys = () => {
     setSelectedTab(value);
     searchParams.set("tab", value);
     
-    if (value !== "journey-details") {
-      searchParams.delete("journeyId");
-    }
-    
     navigate({
       pathname: location.pathname,
       search: searchParams.toString(),
     });
   };
   
-  // If journey-details is selected but no journeyId, default to "live" tab
-  useEffect(() => {
-    if (selectedTab === "journey-details" && !journeyId) {
-      handleTabChange("live");
-    }
-  }, [selectedTab, journeyId]);
-
   // Update the selectedTab state if the URL search params change
   useEffect(() => {
     const tabFromUrl = searchParams.get("tab") || "workflow";
@@ -51,12 +38,9 @@ const AIJourneys = () => {
       <h1 className="text-3xl font-bold mb-6">AI Journeys</h1>
       
       <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workflow">Journey Builder</TabsTrigger>
           <TabsTrigger value="live">Live Journeys</TabsTrigger>
-          <TabsTrigger value="journey-details" disabled={!journeyId}>
-            Journey Details
-          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="workflow" className="mt-6">
@@ -67,15 +51,6 @@ const AIJourneys = () => {
         
         <TabsContent value="live" className="mt-6">
           <LiveJourneys />
-        </TabsContent>
-        
-        <TabsContent value="journey-details" className="mt-6">
-          {journeyId === "bank-statement-analyzer" && <BankStatementJourney />}
-          {journeyId !== "bank-statement-analyzer" && (
-            <div className="text-center p-6">
-              <p>Journey details not available</p>
-            </div>
-          )}
         </TabsContent>
       </Tabs>
     </div>

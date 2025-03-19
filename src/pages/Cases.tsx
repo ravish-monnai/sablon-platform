@@ -35,7 +35,6 @@ import CasesLinkAnalysis from "@/components/cases/CasesLinkAnalysis";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import { useNavigate } from "react-router-dom";
 
-// Sample bank statement fraud cases
 const bankStatementCases = [
   {
     id: "CASE-245",
@@ -109,7 +108,6 @@ const bankStatementCases = [
   },
 ];
 
-// Existing cases plus our new bank statement cases
 const allCases = [
   ...bankStatementCases,
   {
@@ -141,6 +139,7 @@ const Cases = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [selectedCase, setSelectedCase] = useState<any>(null);
   const [filterType, setFilterType] = useState("all");
+  const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   
   const filteredCases = filterType === "all" 
     ? allCases 
@@ -291,7 +290,6 @@ const Cases = () => {
             </CardContent>
           </Card>
           
-          {/* Bank Statement Fraud Summary */}
           {filterType === "bank-statement" || filterType === "all" ? (
             <Card>
               <CardHeader>
@@ -389,10 +387,10 @@ const Cases = () => {
         </TabsContent>
       </Tabs>
 
-      <CaseActionDialog
-        open={showDialog}
-        onOpenChange={setShowDialog}
-        caseData={selectedCase}
+      <CaseActionDialog 
+        isOpen={isActionDialogOpen} 
+        onOpenChange={setIsActionDialogOpen} 
+        caseData={selectedCase} 
       />
     </div>
   );

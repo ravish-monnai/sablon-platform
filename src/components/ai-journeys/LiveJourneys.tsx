@@ -1,10 +1,9 @@
-
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FileText, AlertTriangle, CheckCircle, Clock, PlayCircle, PauseCircle } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { FileText, AlertTriangle, CheckCircle, Clock, PlayCircle, PauseCircle, ChevronLeft } from "lucide-react";
+import BankStatementJourney from "./BankStatementJourney";
 
 // Sample data for live journeys
 const liveJourneys = [
@@ -44,20 +43,40 @@ const liveJourneys = [
 ];
 
 const LiveJourneys = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [selectedJourney, setSelectedJourney] = useState<string | null>(null);
 
   const handleViewDetails = (journeyId: string) => {
-    const searchParams = new URLSearchParams(location.search);
-    searchParams.set("tab", "journey-details");
-    searchParams.set("journeyId", journeyId);
-    
-    navigate({
-      pathname: location.pathname,
-      search: searchParams.toString(),
-    });
+    setSelectedJourney(journeyId);
   };
 
+  const handleBackToList = () => {
+    setSelectedJourney(null);
+  };
+
+  // If a journey is selected, show its details
+  if (selectedJourney) {
+    return (
+      <div>
+        <Button 
+          variant="ghost" 
+          className="mb-4 pl-0" 
+          onClick={handleBackToList}
+        >
+          <ChevronLeft className="mr-1 h-4 w-4" />
+          Back to Journeys
+        </Button>
+        
+        {selectedJourney === "bank-statement-analyzer" && <BankStatementJourney />}
+        {selectedJourney !== "bank-statement-analyzer" && (
+          <div className="text-center p-6">
+            <p>Journey details for {selectedJourney} are not available yet</p>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // Otherwise show the list of journeys
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
