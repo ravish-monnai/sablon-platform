@@ -49,7 +49,7 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
   const getRiskLevelVariant = (riskLevel: string | undefined) => {
     if (!riskLevel) return "outline";
     
-    switch (riskLevel.toLowerCase()) {
+    switch (riskLevel?.toLowerCase()) {
       case "critical":
       case "high":
         return "destructive";
@@ -76,6 +76,19 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
     }
   };
 
+  // Function to normalize journey name display
+  const getJourneyDisplay = (journey: string | undefined): string => {
+    if (!journey) return "N/A";
+    
+    // Standardize bank statement journeys display
+    if (journey.toLowerCase().includes("bank") && 
+        journey.toLowerCase().includes("statement")) {
+      return "Bank Statement Analysis";
+    }
+    
+    return journey;
+  };
+
   return (
     <div className="rounded-md border overflow-hidden">
       <Table>
@@ -98,7 +111,7 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
               <TableCell>
                 {caseItem.journey ? (
                   <Badge variant="outline" className="font-normal">
-                    {caseItem.journey}
+                    {getJourneyDisplay(caseItem.journey)}
                   </Badge>
                 ) : (
                   "N/A"
