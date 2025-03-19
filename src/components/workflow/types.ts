@@ -8,6 +8,8 @@ export interface NodeData {
   icon?: ReactNode;
   description?: string;
   modelType?: string;
+  color?: string;
+  status?: string;
   [key: string]: unknown;
 }
 

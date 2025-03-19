@@ -52,23 +52,23 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
       // Customize node appearance based on type
       switch (type) {
         case 'rule':
-          data.icon = <GitBranch className="text-monnai-blue" size={20} />;
+          data.icon = <GitBranch className="text-blue-700" size={20} />;
           data.description = 'Decision rule';
           break;
         case 'model':
-          data.icon = <Brain className="text-monnai-pink" size={20} />;
+          data.icon = <Brain className="text-pink-700" size={20} />;
           data.description = 'AI/ML model';
           break;
         case 'data':
-          data.icon = <Database className="text-monnai-yellow" size={20} />;
+          data.icon = <Database className="text-yellow-700" size={20} />;
           data.description = 'Data source';
           break;
         case 'notification':
-          data.icon = <MessageSquare className="text-green-500" size={20} />;
+          data.icon = <MessageSquare className="text-green-700" size={20} />;
           data.description = 'Notification action';
           break;
         case 'alert':
-          data.icon = <AlertCircle className="text-red-500" size={20} />;
+          data.icon = <AlertCircle className="text-red-700" size={20} />;
           data.description = 'Alert trigger';
           break;
       }
@@ -80,7 +80,6 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         data,
         style: {
           padding: '10px',
-          borderWidth: '1px',
           borderRadius: '8px'
         }
       };
@@ -102,27 +101,27 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
           <div className="text-sm font-medium mb-2">Components</div>
           <DraggableItem
             type="rule"
-            icon={<GitBranch className="text-monnai-blue" size={16} />}
+            icon={<GitBranch className="text-blue-700" size={16} />}
             label="Decision Rule"
           />
           <DraggableItem
             type="model"
-            icon={<Brain className="text-monnai-pink" size={16} />}
+            icon={<Brain className="text-pink-700" size={16} />}
             label="AI Model"
           />
           <DraggableItem
             type="data"
-            icon={<Database className="text-monnai-yellow" size={16} />}
+            icon={<Database className="text-yellow-700" size={16} />}
             label="Data Source"
           />
           <DraggableItem
             type="notification"
-            icon={<MessageSquare className="text-green-500" size={16} />}
+            icon={<MessageSquare className="text-green-700" size={16} />}
             label="Notification"
           />
           <DraggableItem
             type="alert"
-            icon={<AlertCircle className="text-red-500" size={16} />}
+            icon={<AlertCircle className="text-red-700" size={16} />}
             label="Alert"
           />
         </div>
