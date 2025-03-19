@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PlayCircle } from "lucide-react";
-import BankStatementFeatures from "@/components/bank-statement/BankStatementFeatures";
+import BankStatementFeatures from "@/components/agents/bank-statement/BankStatementFeatures"; // Updated import path
 import BankStatementModels from "./bank-statement/BankStatementModels";
 import BankStatementOutput from "./bank-statement/BankStatementOutput";
 import BankStatementTestDialog from "./bank-statement/BankStatementTestDialog";

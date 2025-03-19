@@ -11,7 +11,7 @@ import AutomatedUnderwritingTab from "./tabs/AutomatedUnderwritingTab";
 import RegulatoryComplianceTab from "./tabs/RegulatoryComplianceTab";
 
 interface BankStatementFeaturesProps {
-  activeTab: string;
+  activeTab?: string;
 }
 
 const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab }) => {
