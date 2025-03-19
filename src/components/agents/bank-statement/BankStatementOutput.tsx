@@ -23,6 +23,14 @@ const BankStatementOutput = () => {
         <Label htmlFor="dashboard-visuals">Dashboard Visuals</Label>
         <Switch id="dashboard-visuals" checked={true} />
       </div>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="api-webhook">API Webhook</Label>
+        <Switch id="api-webhook" checked={true} />
+      </div>
+      <div className="flex items-center justify-between">
+        <Label htmlFor="case-creation">Auto Case Creation</Label>
+        <Switch id="case-creation" checked={true} />
+      </div>
       
       <div className="pt-4">
         <Label className="mb-2 block">Output Integrations</Label>
