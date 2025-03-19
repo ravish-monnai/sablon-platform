@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { Database, Brain, Users } from 'lucide-react';
+import { Database, Brain, Users, Bot, FileText, ArrowRightLeft } from 'lucide-react';
 
 // Define a type for node data that includes icon as ReactNode
 export interface NodeData {
@@ -9,6 +9,7 @@ export interface NodeData {
   icon: ReactNode;
   type: string;
   modelType?: string;
+  agentType?: string;
 }
 
 // Journey workflow configurations for the journey builder
@@ -75,7 +76,8 @@ export const journeyWorkflowConfigurations = {
           label: 'Fraud Review Team',
           description: 'Manual review for high-risk cases',
           icon: React.createElement(Users, { className: "text-monnai-blue", size: 20 }),
-          type: 'agent'
+          type: 'agent',
+          agentType: 'regular_agent'
         }
       }
     ],
@@ -111,8 +113,8 @@ export const journeyWorkflowConfigurations = {
     description: "Analyzes bank statements for fraud detection and verification",
     status: "active",
     lastModified: "2 hours ago",
-    nodeCount: 5,
-    edgeCount: 4,
+    nodeCount: 6,
+    edgeCount: 5,
     nodes: [
       {
         id: 'data-1',
@@ -121,7 +123,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Bank Statement Upload',
           description: 'Bank statement documents for analysis',
-          icon: React.createElement(Database, { className: "text-monnai-yellow", size: 20 }),
+          icon: React.createElement(FileText, { className: "text-monnai-yellow", size: 20 }),
           type: 'datasource'
         }
       },
@@ -167,9 +169,22 @@ export const journeyWorkflowConfigurations = {
         position: { x: 700, y: 250 },
         data: { 
           label: 'Bank Statement Analyzer Agent',
-          description: 'Final analysis and recommendations',
+          description: 'AI-powered analysis and recommendations',
+          icon: React.createElement(Bot, { className: "text-monnai-blue", size: 20 }),
+          type: 'agent',
+          agentType: 'ai_agent'
+        }
+      },
+      {
+        id: 'agent-2',
+        type: 'default',
+        position: { x: 1000, y: 175 },
+        data: { 
+          label: 'Review Team',
+          description: 'Human review for complex cases',
           icon: React.createElement(Users, { className: "text-monnai-blue", size: 20 }),
-          type: 'agent'
+          type: 'agent',
+          agentType: 'regular_agent'
         }
       }
     ],
@@ -202,6 +217,12 @@ export const journeyWorkflowConfigurations = {
         id: 'e4-5',
         source: 'model-3',
         target: 'agent-1',
+        animated: true,
+      },
+      {
+        id: 'e5-6',
+        source: 'agent-1',
+        target: 'agent-2',
         animated: true,
       }
     ]

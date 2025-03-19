@@ -29,7 +29,15 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
       ]
     },
-    { label: "AI Agents", path: "/ai-agents", icon: Bot },
+    { 
+      label: "AI Agents", 
+      path: "/ai-agents", 
+      icon: Bot,
+      subItems: [
+        { label: "Agent Builder", path: "/ai-agents?tab=builder" },
+        { label: "Live Agents", path: "/ai-agents?tab=live", icon: PlayCircle }
+      ]
+    },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
     { label: "Cases", path: "/cases", icon: FileText },
@@ -48,7 +56,15 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
       ]
     },
-    { label: "AI Agents", path: "/ai-agents", icon: Bot },
+    { 
+      label: "AI Agents", 
+      path: "/ai-agents", 
+      icon: Bot,
+      subItems: [
+        { label: "Agent Builder", path: "/ai-agents?tab=builder" },
+        { label: "Live Agents", path: "/ai-agents?tab=live", icon: PlayCircle }
+      ]
+    },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
     { label: "All Transactions", path: "/transactions", icon: Wallet },

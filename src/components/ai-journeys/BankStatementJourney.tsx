@@ -8,6 +8,7 @@ import SettingsTab from "./components/SettingsTab";
 import LogsTab from "./components/LogsTab";
 import FeaturesTab from "./FeaturesTab";
 import { useMarket } from "@/contexts/MarketContext";
+import { Bot } from "lucide-react";
 
 const BankStatementJourney = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -16,8 +17,13 @@ const BankStatementJourney = () => {
   return (
     <div className="space-y-6">
       <JourneyHeader 
-        title="Bank Statement Analyzer Agent"
-        description={`Specialized analysis for bank statements${selectedMarket !== 'Global' ? ` in ${selectedMarket}` : ''}`}
+        title={
+          <div className="flex items-center gap-2">
+            <Bot className="text-monnai-blue h-6 w-6" />
+            <span>Bank Statement Analyzer Agent</span>
+          </div>
+        }
+        description={`AI-powered analysis for bank statements${selectedMarket !== 'Global' ? ` in ${selectedMarket}` : ''}`}
       />
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -5,7 +5,7 @@ import { DragItemProps } from './types';
 const DraggableItem: React.FC<DragItemProps> = ({ type, icon, label, data = {} }) => {
   return (
     <div 
-      className="border rounded-md p-2 bg-blue-50 cursor-grab flex items-center"
+      className="border rounded-md p-2 bg-blue-50 cursor-grab flex items-center gap-2"
       draggable
       onDragStart={(event) => {
         event.dataTransfer.setData('application/reactflow/type', type);
@@ -16,7 +16,7 @@ const DraggableItem: React.FC<DragItemProps> = ({ type, icon, label, data = {} }
       }}
     >
       {icon}
-      <span>{label}</span>
+      <span className="text-sm">{label}</span>
     </div>
   );
 };
