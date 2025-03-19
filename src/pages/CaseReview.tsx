@@ -1,10 +1,10 @@
 
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import CaseDetailView from "@/components/cases/CaseDetailView";
 import CaseNotFound from "@/components/case-review/CaseNotFound";
-import { generateCases } from "@/utils/caseDataGenerator";
 import { addDigitalFootprint } from "@/components/case-review/utils/digitalFootprintGenerator";
+import { generateCases } from "@/utils/caseDataGenerator";
 
 // Journey types used for case generation
 export const journeys = [
@@ -23,13 +23,35 @@ const CaseReview = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const [caseData, setCaseData] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Simulate loading
     setLoading(true);
     
+    // Log the caseId and sample of available case IDs for debugging
+    console.log("Looking for case ID:", caseId);
+    console.log("Sample available IDs:", allCases.slice(0, 5).map(c => c.id));
+    
     setTimeout(() => {
-      const foundCase = allCases.find(c => c.id === caseId);
+      // Try to find the case by exact ID first
+      let foundCase = allCases.find(c => c.id === caseId);
+      
+      // If not found, try case-insensitive comparison
+      if (!foundCase) {
+        foundCase = allCases.find(c => 
+          c.id.toLowerCase() === caseId?.toLowerCase()
+        );
+      }
+      
+      // If still not found but ID looks like CASE-XXX, try to map to our format
+      if (!foundCase && caseId?.startsWith('CASE-')) {
+        const caseNumber = parseInt(caseId.split('-')[1]);
+        if (!isNaN(caseNumber)) {
+          foundCase = allCases.find(c => c.id === `FR-2023-${1000 + caseNumber}`);
+        }
+      }
+      
       if (foundCase) {
         // Add digital footprint data if it doesn't exist
         const enhancedCase = addDigitalFootprint(foundCase);
@@ -40,7 +62,7 @@ const CaseReview = () => {
   }, [caseId]);
 
   const handleBackToList = () => {
-    window.history.back();
+    navigate('/cases');
   };
 
   if (loading) {
