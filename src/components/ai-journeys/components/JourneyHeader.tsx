@@ -1,10 +1,10 @@
 
-import React from "react";
+import React, { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 
 interface JourneyHeaderProps {
-  title: string;
+  title: ReactNode;
   description: string;
 }
 
