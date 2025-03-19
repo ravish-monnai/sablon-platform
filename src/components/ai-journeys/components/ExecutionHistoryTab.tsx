@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, Calendar, User, Clock, CheckSquare, XSquare } from "lucide-react";
+import { CheckCircle, AlertTriangle, Calendar, User } from "lucide-react";
 import { 
   Table, 
   TableHeader, 
@@ -11,7 +11,6 @@ import {
   TableCell 
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 
 const ExecutionHistoryTab: React.FC = () => {
   // Sample execution data for bank statement analysis journey
@@ -21,50 +20,35 @@ const ExecutionHistoryTab: React.FC = () => {
       customer: "Rahul Sharma",
       bank: "HDFC Bank",
       date: "October 1, 2023",
-      status: "success",
-      completeness: 100,
-      stepsCompleted: 5,
-      totalSteps: 5
+      status: "success"
     },
     {
       id: "BSA-2023-09-15",
       customer: "Priya Patel",
       bank: "SBI Bank",
       date: "September 15, 2023",
-      status: "success",
-      completeness: 80,
-      stepsCompleted: 4,
-      totalSteps: 5
+      status: "success"
     },
     {
       id: "BSA-2023-09-12",
       customer: "Vivek Singh",
       bank: "ICICI Bank",
       date: "September 12, 2023",
-      status: "failure",
-      completeness: 40,
-      stepsCompleted: 2,
-      totalSteps: 5
+      status: "failure"
     },
     {
       id: "BSA-2023-09-08",
       customer: "Ananya Desai",
       bank: "Axis Bank",
       date: "September 8, 2023",
-      status: "failure",
-      completeness: 60,
-      stepsCompleted: 3,
-      totalSteps: 5
+      status: "failure"
     },
     {
       id: "BSA-2023-09-05",
       customer: "Ravi Kumar",
       bank: "Yes Bank",
       date: "September 5, 2023",
-      status: "success",
-      completeness: 100,
-      stepsCompleted: 5,
-      totalSteps: 5
+      status: "success"
     }
   ];
   
@@ -84,7 +68,6 @@ const ExecutionHistoryTab: React.FC = () => {
                 <TableHead>Bank</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Completeness</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -116,19 +99,6 @@ const ExecutionHistoryTab: React.FC = () => {
                         Failed
                       </Badge>
                     )}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex flex-col gap-1">
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {execution.stepsCompleted}/{execution.totalSteps} steps
-                        </span>
-                        <span className="text-xs font-medium">
-                          {execution.completeness}%
-                        </span>
-                      </div>
-                      <Progress value={execution.completeness} className="h-2" />
-                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -173,28 +143,12 @@ const ExecutionHistoryTab: React.FC = () => {
                 </div>
               </div>
               
-              <div className="grid grid-cols-2 gap-4 mb-2">
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Date</p>
-                  <p className="font-medium flex items-center gap-1">
-                    <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-                    {execution.date.split(' ')[0]} {execution.date.split(' ')[1].replace(',', '')}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground mb-1">Completeness</p>
-                  <div className="flex flex-col">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-muted-foreground">
-                        {execution.stepsCompleted}/{execution.totalSteps} steps
-                      </span>
-                      <span className="text-xs font-medium">
-                        {execution.completeness}%
-                      </span>
-                    </div>
-                    <Progress value={execution.completeness} className="h-2 mt-1" />
-                  </div>
-                </div>
+              <div>
+                <p className="text-xs text-muted-foreground mb-1">Date</p>
+                <p className="font-medium flex items-center gap-1">
+                  <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
+                  {execution.date.split(' ')[0]} {execution.date.split(' ')[1].replace(',', '')}
+                </p>
               </div>
             </CardContent>
           </Card>
