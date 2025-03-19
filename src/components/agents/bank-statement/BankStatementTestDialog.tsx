@@ -9,13 +9,15 @@ import { Market } from '@/contexts/MarketContext';
 export interface BankStatementTestDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  selectedMarket?: Market;
+  selectedMarket: Market;
+  setSelectedMarket?: React.Dispatch<React.SetStateAction<Market>>;
 }
 
 const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({ 
   isOpen, 
   onOpenChange,
-  selectedMarket = 'Global'
+  selectedMarket = 'Global',
+  setSelectedMarket
 }) => {
   const [activeTab, setActiveTab] = useState('input');
   const [isProcessing, setIsProcessing] = useState(false);

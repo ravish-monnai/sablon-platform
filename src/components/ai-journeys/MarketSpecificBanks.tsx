@@ -2,7 +2,7 @@
 import React from "react";
 import { Market } from "@/contexts/MarketContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Building, BuildingBank } from "lucide-react";
+import { Building, Landmark } from "lucide-react";
 
 // Bank data for different markets
 export const getBanksByMarket = (market: Market) => {
@@ -78,7 +78,7 @@ const MarketSpecificBanks: React.FC<MarketSpecificBanksProps> = ({ market }) => 
           <Card key={index} className="bg-card hover:bg-accent/10 transition-colors">
             <CardHeader className="pb-2">
               <CardTitle className="text-base flex items-center">
-                <BuildingBank className="h-4 w-4 mr-2 text-primary" />
+                <Landmark className="h-4 w-4 mr-2 text-primary" />
                 {bank.name}
               </CardTitle>
             </CardHeader>
