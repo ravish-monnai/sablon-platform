@@ -8,30 +8,44 @@ import SettingsTab from "./components/SettingsTab";
 import LogsTab from "./components/LogsTab";
 import FeaturesTab from "./FeaturesTab";
 import { useMarket } from "@/contexts/MarketContext";
-import { Bot } from "lucide-react";
+import { Bot, EyeIcon } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
-const BankStatementJourney = () => {
+interface BankStatementJourneyProps {
+  isViewOnly?: boolean;
+}
+
+const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly = false }) => {
   const [activeTab, setActiveTab] = useState("overview");
   const { selectedMarket } = useMarket();
   
   return (
     <div className="space-y-6">
-      <JourneyHeader 
-        title={
-          <div className="flex items-center gap-2">
-            <Bot className="text-monnai-blue h-6 w-6" />
-            <span>Bank Statement Analyzer Agent</span>
-          </div>
-        }
-        description={`AI-powered analysis for bank statements${selectedMarket !== 'Global' ? ` in ${selectedMarket}` : ''}`}
-      />
+      <div className="flex justify-between items-center">
+        <JourneyHeader 
+          title={
+            <div className="flex items-center gap-2">
+              <Bot className="text-monnai-blue h-6 w-6" />
+              <span>Bank Statement Analyzer Agent</span>
+            </div>
+          }
+          description={`AI-powered analysis for bank statements${selectedMarket !== 'Global' ? ` in ${selectedMarket}` : ''}`}
+        />
+        
+        {isViewOnly && (
+          <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+            <EyeIcon className="h-4 w-4" />
+            View Only
+          </Badge>
+        )}
+      </div>
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-5 w-full max-w-3xl">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="cases">Cases</TabsTrigger>
           <TabsTrigger value="features">Features</TabsTrigger>
-          <TabsTrigger value="settings">Settings</TabsTrigger>
+          <TabsTrigger value="settings" disabled={isViewOnly}>Settings</TabsTrigger>
           <TabsTrigger value="logs">Logs</TabsTrigger>
         </TabsList>
         
@@ -48,7 +62,7 @@ const BankStatementJourney = () => {
         </TabsContent>
         
         <TabsContent value="settings">
-          <SettingsTab />
+          <SettingsTab isViewOnly={isViewOnly} />
         </TabsContent>
         
         <TabsContent value="logs">

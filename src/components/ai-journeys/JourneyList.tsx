@@ -1,8 +1,9 @@
 
 import React from "react";
-import { Button } from "@/components/ui/button";
 import JourneyCard from "./JourneyCard";
 import { Journey } from "./JourneyCard";
+import { Badge } from "@/components/ui/badge";
+import { EyeIcon } from "lucide-react";
 
 interface JourneyListProps {
   journeys: Journey[];
@@ -22,7 +23,10 @@ const JourneyList: React.FC<JourneyListProps> = ({
             Active AI journeys processing data in real-time
           </p>
         </div>
-        <Button>Create New Journey</Button>
+        <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+          <EyeIcon className="h-4 w-4" />
+          View Only
+        </Badge>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">

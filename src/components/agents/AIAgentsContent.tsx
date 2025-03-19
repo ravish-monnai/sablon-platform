@@ -1,7 +1,8 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Plus } from "lucide-react"
+import { Plus, EyeIcon } from "lucide-react"
 import { useLocation } from "react-router-dom"
 import AgentCard from "@/components/agents/AgentCard"
 import AgentEditors from "@/components/agents/AgentEditors"
@@ -9,6 +10,7 @@ import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentLis
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import AgentBuilder from "@/components/agents/AgentBuilder"
 import { useMarket } from "@/contexts/MarketContext"
+import { Badge } from "@/components/ui/badge"
 
 const AIAgentsContent = () => {
   const { selectedMarket } = useMarket();
@@ -28,6 +30,10 @@ const AIAgentsContent = () => {
   const location = useLocation()
   const searchParams = new URLSearchParams(location.search)
   const viewMode = searchParams.get("viewMode") === "internal" ? "internal" : "customer"
+  
+  // Get tab from URL 
+  const tab = searchParams.get("tab") || "builder"
+  const isLiveTab = tab === "live"
   
   const customerAgents = getCustomerAgents(
     setIsEditingFraudAgent, 
@@ -98,9 +104,16 @@ const AIAgentsContent = () => {
           </p>
         </div>
         <div className="flex gap-4">
-          <Button onClick={handleCreateAgent}>
-            <Plus className="mr-2 h-4 w-4" /> Create Agent
-          </Button>
+          {isLiveTab ? (
+            <Badge variant="outline" className="flex items-center gap-1 px-3 py-1">
+              <EyeIcon className="h-4 w-4" />
+              View Only
+            </Badge>
+          ) : (
+            <Button onClick={handleCreateAgent}>
+              <Plus className="mr-2 h-4 w-4" /> Create Agent
+            </Button>
+          )}
         </div>
       </div>
       
@@ -109,54 +122,65 @@ const AIAgentsContent = () => {
       {agentsToDisplay.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">No agents configured for {selectedMarket} market yet.</p>
-          <Button onClick={handleCreateAgent} className="mt-4">
-            <Plus className="mr-2 h-4 w-4" /> Create Agent for {selectedMarket}
-          </Button>
+          {!isLiveTab && (
+            <Button onClick={handleCreateAgent} className="mt-4">
+              <Plus className="mr-2 h-4 w-4" /> Create Agent for {selectedMarket}
+            </Button>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {agentsToDisplay.map((agent, index) => (
-            <AgentCard key={index} agent={agent} viewMode={viewMode} />
+            <AgentCard 
+              key={index} 
+              agent={agent} 
+              viewMode={viewMode} 
+              isViewOnly={isLiveTab}
+            />
           ))}
         </div>
       )}
 
-      <AgentEditors 
-        // Customer agent editing states
-        isEditingFraudAgent={isEditingFraudAgent}
-        isEditingKYCAgent={false}
-        isEditingBankStatementAgent={isEditingBankStatementAgent}
-        isEditingUnderwriterAgent={false}
-        isEditingCollectionAgent={false}
-        setIsEditingFraudAgent={setIsEditingFraudAgent}
-        setIsEditingKYCAgent={() => {}}
-        setIsEditingBankStatementAgent={setIsEditingBankStatementAgent}
-        setIsEditingUnderwriterAgent={() => {}}
-        setIsEditingCollectionAgent={() => {}}
-        
-        // Monnai agent editing states
-        isEditingDataAnalysisAgent={isEditingDataAnalysisAgent}
-        isEditingPOCAgent={isEditingPOCAgent}
-        isEditingBillingAgent={isEditingBillingAgent}
-        isEditingFeatureEngineeringAgent={isEditingFeatureEngineeringAgent}
-        isEditingModelManagementAgent={isEditingModelManagementAgent}
-        isEditingObservabilityAgent={isEditingObservabilityAgent}
-        setIsEditingDataAnalysisAgent={setIsEditingDataAnalysisAgent}
-        setIsEditingPOCAgent={setIsEditingPOCAgent}
-        setIsEditingBillingAgent={setIsEditingBillingAgent}
-        setIsEditingFeatureEngineeringAgent={setIsEditingFeatureEngineeringAgent}
-        setIsEditingModelManagementAgent={setIsEditingModelManagementAgent}
-        setIsEditingObservabilityAgent={setIsEditingObservabilityAgent}
-      />
+      {!isLiveTab && (
+        <AgentEditors 
+          // Customer agent editing states
+          isEditingFraudAgent={isEditingFraudAgent}
+          isEditingKYCAgent={false}
+          isEditingBankStatementAgent={isEditingBankStatementAgent}
+          isEditingUnderwriterAgent={false}
+          isEditingCollectionAgent={false}
+          setIsEditingFraudAgent={setIsEditingFraudAgent}
+          setIsEditingKYCAgent={() => {}}
+          setIsEditingBankStatementAgent={setIsEditingBankStatementAgent}
+          setIsEditingUnderwriterAgent={() => {}}
+          setIsEditingCollectionAgent={() => {}}
+          
+          // Monnai agent editing states
+          isEditingDataAnalysisAgent={isEditingDataAnalysisAgent}
+          isEditingPOCAgent={isEditingPOCAgent}
+          isEditingBillingAgent={isEditingBillingAgent}
+          isEditingFeatureEngineeringAgent={isEditingFeatureEngineeringAgent}
+          isEditingModelManagementAgent={isEditingModelManagementAgent}
+          isEditingObservabilityAgent={isEditingObservabilityAgent}
+          setIsEditingDataAnalysisAgent={setIsEditingDataAnalysisAgent}
+          setIsEditingPOCAgent={setIsEditingPOCAgent}
+          setIsEditingBillingAgent={setIsEditingBillingAgent}
+          setIsEditingFeatureEngineeringAgent={setIsEditingFeatureEngineeringAgent}
+          setIsEditingModelManagementAgent={setIsEditingModelManagementAgent}
+          setIsEditingObservabilityAgent={setIsEditingObservabilityAgent}
+        />
+      )}
       
-      <Dialog open={isBuilderOpen} onOpenChange={setIsBuilderOpen}>
-        <DialogContent className="max-w-6xl">
-          <AgentBuilder 
-            agentType={builderAgentType}
-            onSave={handleSaveAgent}
-          />
-        </DialogContent>
-      </Dialog>
+      {!isLiveTab && (
+        <Dialog open={isBuilderOpen} onOpenChange={setIsBuilderOpen}>
+          <DialogContent className="max-w-6xl">
+            <AgentBuilder 
+              agentType={builderAgentType}
+              onSave={handleSaveAgent}
+            />
+          </DialogContent>
+        </Dialog>
+      )}
     </div>
   );
 };

@@ -35,6 +35,7 @@ const LiveJourneys = () => {
       <JourneyDetail 
         selectedJourney={selectedJourney} 
         onBackToList={handleBackToList} 
+        isViewOnly={true}
       />
     );
   }

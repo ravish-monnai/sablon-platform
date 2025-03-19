@@ -36,8 +36,8 @@ const JourneyList: React.FC<JourneyListProps> = ({
           <h2 className="text-2xl font-bold">Journey Builder</h2>
           <p className="text-muted-foreground">
             {selectedMarket === 'Global' 
-              ? 'View and manage AI journey configurations'
-              : `View and manage AI journey configurations for ${selectedMarket}`}
+              ? 'Create and manage AI journey configurations'
+              : `Create and manage AI journey configurations for ${selectedMarket}`}
           </p>
         </div>
         <Button onClick={onCreateNewJourney}>
@@ -46,43 +46,52 @@ const JourneyList: React.FC<JourneyListProps> = ({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {journeys.map((journey) => (
-          <Card key={journey.id} className="overflow-hidden">
-            <CardHeader className="pb-2">
-              <div className="flex justify-between items-center mb-2">
-                <Badge variant={journey.status === "active" ? "default" : "outline"}>
-                  {journey.status === "active" ? "Active" : "Draft"}
-                </Badge>
-              </div>
-              <CardTitle>{journey.name}</CardTitle>
-              <CardDescription>{journey.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 gap-4 py-2">
-                <div className="flex flex-col">
-                  <span className="text-xs text-muted-foreground">Nodes</span>
-                  <span className="text-xl font-semibold">{journey.nodeCount}</span>
+        {journeys.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-muted-foreground mb-4">No journeys configured yet. Create your first journey.</p>
+            <Button onClick={onCreateNewJourney}>
+              <Plus className="mr-2 h-4 w-4" /> Create New Journey
+            </Button>
+          </div>
+        ) : (
+          journeys.map((journey) => (
+            <Card key={journey.id} className="overflow-hidden">
+              <CardHeader className="pb-2">
+                <div className="flex justify-between items-center mb-2">
+                  <Badge variant={journey.status === "active" ? "default" : "outline"}>
+                    {journey.status === "active" ? "Active" : "Draft"}
+                  </Badge>
                 </div>
-                <div className="flex flex-col">
-                  <span className="text-xs text-muted-foreground">Connections</span>
-                  <span className="text-xl font-semibold">{journey.edgeCount}</span>
+                <CardTitle>{journey.name}</CardTitle>
+                <CardDescription>{journey.description}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-2 gap-4 py-2">
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">Nodes</span>
+                    <span className="text-xl font-semibold">{journey.nodeCount}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-muted-foreground">Connections</span>
+                    <span className="text-xl font-semibold">{journey.edgeCount}</span>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-between pt-0">
-              <span className="text-xs text-muted-foreground">
-                Last modified: {journey.lastModified}
-              </span>
-              <Button 
-                variant="outline" 
-                size="sm"
-                onClick={() => onEditJourney(journey.id)}
-              >
-                View Journey
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+              </CardContent>
+              <CardFooter className="flex justify-between pt-0">
+                <span className="text-xs text-muted-foreground">
+                  Last modified: {journey.lastModified}
+                </span>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => onEditJourney(journey.id)}
+                >
+                  Edit Journey
+                </Button>
+              </CardFooter>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
