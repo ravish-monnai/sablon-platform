@@ -1,7 +1,7 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, AlertTriangle, Calendar, User, Clock } from "lucide-react";
+import { CheckCircle, AlertTriangle, Calendar, User, Clock, CheckSquare, XSquare } from "lucide-react";
 import { 
   Table, 
   TableHeader, 
@@ -11,6 +11,7 @@ import {
   TableCell 
 } from "@/components/ui/table";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Progress } from "@/components/ui/progress";
 
 const ExecutionHistoryTab: React.FC = () => {
   // Sample execution data for bank statement analysis journey
@@ -21,7 +22,9 @@ const ExecutionHistoryTab: React.FC = () => {
       bank: "HDFC Bank",
       date: "October 1, 2023",
       status: "success",
-      details: "All verification checks passed",
+      completeness: 100,
+      stepsCompleted: 5,
+      totalSteps: 5
     },
     {
       id: "BSA-2023-09-15",
@@ -29,7 +32,9 @@ const ExecutionHistoryTab: React.FC = () => {
       bank: "SBI Bank",
       date: "September 15, 2023",
       status: "success",
-      details: "Income verification passed",
+      completeness: 80,
+      stepsCompleted: 4,
+      totalSteps: 5
     },
     {
       id: "BSA-2023-09-12",
@@ -37,7 +42,9 @@ const ExecutionHistoryTab: React.FC = () => {
       bank: "ICICI Bank",
       date: "September 12, 2023",
       status: "failure",
-      details: "Suspicious transaction pattern detected",
+      completeness: 40,
+      stepsCompleted: 2,
+      totalSteps: 5
     },
     {
       id: "BSA-2023-09-08",
@@ -45,7 +52,9 @@ const ExecutionHistoryTab: React.FC = () => {
       bank: "Axis Bank",
       date: "September 8, 2023",
       status: "failure",
-      details: "Income inconsistency detected",
+      completeness: 60,
+      stepsCompleted: 3,
+      totalSteps: 5
     },
     {
       id: "BSA-2023-09-05",
@@ -53,7 +62,9 @@ const ExecutionHistoryTab: React.FC = () => {
       bank: "Yes Bank",
       date: "September 5, 2023",
       status: "success",
-      details: "All verification checks passed",
+      completeness: 100,
+      stepsCompleted: 5,
+      totalSteps: 5
     }
   ];
   
@@ -73,7 +84,7 @@ const ExecutionHistoryTab: React.FC = () => {
                 <TableHead>Bank</TableHead>
                 <TableHead>Date</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Details</TableHead>
+                <TableHead>Completeness</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -106,7 +117,19 @@ const ExecutionHistoryTab: React.FC = () => {
                       </Badge>
                     )}
                   </TableCell>
-                  <TableCell>{execution.details}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-muted-foreground">
+                          {execution.stepsCompleted}/{execution.totalSteps} steps
+                        </span>
+                        <span className="text-xs font-medium">
+                          {execution.completeness}%
+                        </span>
+                      </div>
+                      <Progress value={execution.completeness} className="h-2" />
+                    </div>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -159,8 +182,18 @@ const ExecutionHistoryTab: React.FC = () => {
                   </p>
                 </div>
                 <div>
-                  <p className="text-xs text-muted-foreground mb-1">Details</p>
-                  <p className="font-medium text-sm">{execution.details}</p>
+                  <p className="text-xs text-muted-foreground mb-1">Completeness</p>
+                  <div className="flex flex-col">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-muted-foreground">
+                        {execution.stepsCompleted}/{execution.totalSteps} steps
+                      </span>
+                      <span className="text-xs font-medium">
+                        {execution.completeness}%
+                      </span>
+                    </div>
+                    <Progress value={execution.completeness} className="h-2 mt-1" />
+                  </div>
                 </div>
               </div>
             </CardContent>
