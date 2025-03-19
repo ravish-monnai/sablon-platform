@@ -4,7 +4,6 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import JourneyHeader from "./components/JourneyHeader";
 import OverviewTab from "./components/OverviewTab";
 import ExecutionHistoryTab from "./components/ExecutionHistoryTab";
-import ExecutionHistorySummary from "./components/execution-history/ExecutionHistorySummary";
 import { Bot } from "lucide-react";
 
 interface IndianBankStatementJourneyProps {
@@ -27,9 +26,6 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
           isViewOnly={isViewOnly}
         />
       </div>
-      
-      {/* Add the execution summary at the top for bank statement analysis */}
-      <ExecutionHistorySummary executionId="latest" />
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>
         <TabsList className="grid grid-cols-2 w-full max-w-md">
