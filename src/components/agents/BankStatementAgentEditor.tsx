@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { PlayCircle } from "lucide-react";
-import BankStatementFeatures from "./bank-statement/BankStatementFeatures";
+import BankStatementFeatures from "@/components/bank-statement/BankStatementFeatures";
 import BankStatementModels from "./bank-statement/BankStatementModels";
 import BankStatementOutput from "./bank-statement/BankStatementOutput";
 import BankStatementTestDialog from "./bank-statement/BankStatementTestDialog";
@@ -52,9 +52,9 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     <div className="mt-6 space-y-6">
       <div className="flex justify-between">
         <div>
-          <h3 className="text-lg font-medium">Bank Statement Analyzer Configuration</h3>
+          <h3 className="text-lg font-medium">Indian Bank Statement Analyzer Configuration</h3>
           <p className="text-sm text-muted-foreground">
-            Configure how your AI agent analyzes customer bank statements
+            Configure how your AI agent analyzes Indian bank statements with UPI transaction support
           </p>
         </div>
         <Button 
