@@ -9,8 +9,12 @@ import AgentEditors from "@/components/agents/AgentEditors"
 import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentListData"
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import AgentBuilder from "@/components/agents/AgentBuilder"
+import { MarketProvider } from "@/contexts/MarketContext"
+import MarketFilter from "@/components/common/MarketFilter"
+import { useMarket } from "@/contexts/MarketContext"
 
-const AIAgents = () => {
+const AIAgentsContent = () => {
+  const { selectedMarket } = useMarket();
   // Customer agent editing states
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
   const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
@@ -47,7 +51,31 @@ const AIAgents = () => {
     setIsEditingObservabilityAgent
   )
   
-  const agentsToDisplay = viewMode === "internal" ? monnaiAgents : customerAgents
+  // Filter agents based on selected market if not Global
+  const filterAgentsByMarket = (agents) => {
+    if (selectedMarket === 'Global') {
+      return agents;
+    }
+    
+    // For demo purposes, filter to show 1-2 agents per market (this is simplified)
+    // In a real app, agents would have market property
+    return agents.filter((_, index) => {
+      switch(selectedMarket) {
+        case 'US': return index % 6 === 0;
+        case 'India': return index % 6 === 1;
+        case 'Indonesia': return index % 6 === 2;
+        case 'Philippines': return index % 6 === 3;
+        case 'Mexico': return index % 6 === 4;
+        case 'Brazil': return index % 6 === 5;
+        default: return true;
+      }
+    });
+  };
+  
+  const filteredCustomerAgents = filterAgentsByMarket(customerAgents);
+  const filteredMonnaiAgents = filterAgentsByMarket(monnaiAgents);
+  
+  const agentsToDisplay = viewMode === "internal" ? filteredMonnaiAgents : filteredCustomerAgents;
   
   const [isBuilderOpen, setIsBuilderOpen] = useState(false);
   const [builderAgentType, setBuilderAgentType] = useState("");
@@ -66,7 +94,14 @@ const AIAgents = () => {
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">AI Agents</h1>
+        <div>
+          <h1 className="text-3xl font-bold">AI Agents</h1>
+          <p className="text-muted-foreground">
+            {selectedMarket === 'Global' 
+              ? 'Intelligent agents to automate workflows'
+              : `Intelligent agents for ${selectedMarket} market`}
+          </p>
+        </div>
         <div className="flex gap-4">
           <Button onClick={handleCreateAgent}>
             <Plus className="mr-2 h-4 w-4" /> Create Agent
@@ -74,13 +109,24 @@ const AIAgents = () => {
         </div>
       </div>
       
+      <MarketFilter />
+      
       <Separator className="my-6" />
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {agentsToDisplay.map((agent, index) => (
-          <AgentCard key={index} agent={agent} viewMode={viewMode} />
-        ))}
-      </div>
+      {agentsToDisplay.length === 0 ? (
+        <div className="text-center py-12">
+          <p className="text-muted-foreground">No agents configured for {selectedMarket} market yet.</p>
+          <Button onClick={handleCreateAgent} className="mt-4">
+            <Plus className="mr-2 h-4 w-4" /> Create Agent for {selectedMarket}
+          </Button>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {agentsToDisplay.map((agent, index) => (
+            <AgentCard key={index} agent={agent} viewMode={viewMode} />
+          ))}
+        </div>
+      )}
 
       <AgentEditors 
         // Customer agent editing states
@@ -119,7 +165,15 @@ const AIAgents = () => {
         </DialogContent>
       </Dialog>
     </div>
-  )
-}
+  );
+};
 
-export default AIAgents
+const AIAgents = () => {
+  return (
+    <MarketProvider>
+      <AIAgentsContent />
+    </MarketProvider>
+  );
+};
+
+export default AIAgents;

@@ -7,30 +7,35 @@ import { Label } from "@/components/ui/label";
 import { FileText, MapPin, X } from "lucide-react";
 import { toast } from "sonner";
 import BankStatementTestResults from "./BankStatementTestResults";
+import { useMarket } from "@/contexts/MarketContext";
 
 interface BankStatementTestDialogProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
-  selectedMarket: string;
-  setSelectedMarket: (market: string) => void;
 }
 
 const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({
   isOpen,
   onOpenChange,
-  selectedMarket,
-  setSelectedMarket,
 }) => {
+  const { selectedMarket } = useMarket();
   const [testResult, setTestResult] = useState<any>(null);
   const [isTestInProgress, setIsTestInProgress] = useState(false);
   
   const markets = [
     { name: "India", code: "IN" },
+    { name: "US", code: "US" },
     { name: "Mexico", code: "MX" },
     { name: "Indonesia", code: "ID" },
     { name: "Philippines", code: "PH" },
+    { name: "Brazil", code: "BR" },
     { name: "Malaysia", code: "MY" }
   ];
+  
+  // Filter to only show current market if not global
+  const filteredMarkets = selectedMarket === 'Global' 
+    ? markets 
+    : markets.filter(market => market.name === selectedMarket);
   
   const runTestWithSample = () => {
     setIsTestInProgress(true);
@@ -102,7 +107,9 @@ const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Bank Statement Analyzer Test</DialogTitle>
           <DialogDescription>
-            Test your bank statement analyzer configuration with a sample statement
+            {selectedMarket === 'Global' 
+              ? 'Select a market to test your bank statement analyzer configuration' 
+              : `Test your bank statement analyzer configuration for ${selectedMarket}`}
           </DialogDescription>
         </DialogHeader>
         
@@ -116,26 +123,28 @@ const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({
                 This will process a pre-defined sample bank statement with your current configuration.
               </p>
               
-              <div className="w-full max-w-xs mt-4">
-                <div className="flex items-center mb-2">
-                  <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
-                  <Label htmlFor="market-selection">Select Market</Label>
+              {selectedMarket === 'Global' && (
+                <div className="w-full max-w-xs mt-4">
+                  <div className="flex items-center mb-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
+                    <Label htmlFor="market-selection">Select Market</Label>
+                  </div>
+                  <Select defaultValue={filteredMarkets[0]?.name}>
+                    <SelectTrigger id="market-selection" className="w-full">
+                      <SelectValue placeholder="Select a market" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {filteredMarkets.map((market) => (
+                        <SelectItem key={market.code} value={market.name}>
+                          <div className="flex items-center">
+                            <span>{market.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </div>
-                <Select value={selectedMarket} onValueChange={setSelectedMarket}>
-                  <SelectTrigger id="market-selection" className="w-full">
-                    <SelectValue placeholder="Select a market" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {markets.map((market) => (
-                      <SelectItem key={market.code} value={market.name}>
-                        <div className="flex items-center">
-                          <span>{market.name}</span>
-                        </div>
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              )}
               
               <Button onClick={runTestWithSample} className="mt-4">
                 Run Test Analysis

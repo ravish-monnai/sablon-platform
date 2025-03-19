@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { 
   useNodesState, 
@@ -17,37 +16,124 @@ import ModelConfigDialog from '../models/ModelConfigDialog';
 import AIWorkflowHelper from './AIWorkflowHelper';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { useMarket } from '@/contexts/MarketContext';
 
-// Sample data for configured journeys
-const configuredJourneys = [
-  {
-    id: "fraud-detection",
-    name: "Fraud Detection",
-    description: "Detect fraudulent transactions using ML models",
-    status: "active",
-    lastModified: "2 days ago",
-    nodeCount: 6,
-    edgeCount: 5,
-  },
-  {
-    id: "kyc-verification",
-    name: "KYC Verification",
-    description: "Verify customer identity with multiple data sources",
-    status: "draft",
-    lastModified: "5 days ago",
-    nodeCount: 4,
-    edgeCount: 3,
-  },
-  {
-    id: "risk-scoring",
-    name: "Risk Scoring",
-    description: "Score customer risk based on behavioral patterns",
-    status: "draft",
-    lastModified: "1 week ago",
-    nodeCount: 8,
-    edgeCount: 7,
-  },
-];
+// Sample data for configured journeys - organized by market
+const journeysByMarket = {
+  'Global': [
+    {
+      id: "fraud-detection",
+      name: "Fraud Detection",
+      description: "Detect fraudulent transactions using ML models",
+      status: "active",
+      lastModified: "2 days ago",
+      nodeCount: 6,
+      edgeCount: 5,
+    },
+    {
+      id: "kyc-verification",
+      name: "KYC Verification",
+      description: "Verify customer identity with multiple data sources",
+      status: "draft",
+      lastModified: "5 days ago",
+      nodeCount: 4,
+      edgeCount: 3,
+    },
+    {
+      id: "risk-scoring",
+      name: "Risk Scoring",
+      description: "Score customer risk based on behavioral patterns",
+      status: "draft",
+      lastModified: "1 week ago",
+      nodeCount: 8,
+      edgeCount: 7,
+    }
+  ],
+  'US': [
+    {
+      id: "us-fraud-detection",
+      name: "US Fraud Detection",
+      description: "Detect fraudulent transactions for US market",
+      status: "active",
+      lastModified: "1 day ago",
+      nodeCount: 7,
+      edgeCount: 6,
+    },
+    {
+      id: "us-credit-scoring",
+      name: "US Credit Scoring",
+      description: "Score US customers based on credit history",
+      status: "active",
+      lastModified: "3 days ago",
+      nodeCount: 5,
+      edgeCount: 4,
+    }
+  ],
+  'India': [
+    {
+      id: "india-kyc",
+      name: "India KYC",
+      description: "KYC verification for Indian customers using Aadhaar",
+      status: "active",
+      lastModified: "12 hours ago",
+      nodeCount: 4,
+      edgeCount: 3,
+    },
+    {
+      id: "india-upi-fraud",
+      name: "UPI Fraud Detection",
+      description: "Detect fraudulent UPI transactions in India",
+      status: "draft",
+      lastModified: "2 days ago",
+      nodeCount: 6,
+      edgeCount: 5,
+    }
+  ],
+  'Indonesia': [
+    {
+      id: "indonesia-credit-scoring",
+      name: "Indonesia Credit Scoring",
+      description: "Credit scoring for Indonesian market",
+      status: "active",
+      lastModified: "1 day ago",
+      nodeCount: 5,
+      edgeCount: 4,
+    }
+  ],
+  'Philippines': [
+    {
+      id: "philippines-remittance",
+      name: "Philippines Remittance",
+      description: "Secure remittance verification for Philippines",
+      status: "active",
+      lastModified: "3 days ago",
+      nodeCount: 5,
+      edgeCount: 4,
+    }
+  ],
+  'Mexico': [
+    {
+      id: "mexico-loan-assessment",
+      name: "Mexico Loan Assessment",
+      description: "Assess loan applications for Mexican customers",
+      status: "draft",
+      lastModified: "4 days ago",
+      nodeCount: 6,
+      edgeCount: 5,
+    }
+  ],
+  'Brazil': [
+    {
+      id: "brazil-pix-verification",
+      name: "Brazil PIX Verification",
+      description: "Verify PIX transactions in Brazil",
+      status: "active",
+      lastModified: "2 days ago",
+      nodeCount: 4,
+      edgeCount: 3,
+    }
+  ]
+};
 
 // Custom Node with Model Configuration
 const ModelNode = ({ data, isConnectable }) => {
@@ -97,6 +183,7 @@ const nodeTypes = {
 };
 
 const WorkflowEditor: React.FC = () => {
+  const { selectedMarket } = useMarket();
   const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
@@ -107,6 +194,24 @@ const WorkflowEditor: React.FC = () => {
     (params) => setEdges((eds) => addEdge(params, eds)),
     [setEdges]
   );
+
+  // Get journeys for the selected market or show global journeys if market has no specific journeys
+  const getJourneysForMarket = () => {
+    // If Global is selected, show all journeys from all markets
+    if (selectedMarket === 'Global') {
+      return journeysByMarket['Global'];
+    }
+    
+    // If selected market has journeys, return them
+    if (journeysByMarket[selectedMarket]?.length > 0) {
+      return journeysByMarket[selectedMarket];
+    }
+    
+    // Fallback to Global journeys if market has no specific journeys
+    return journeysByMarket['Global'];
+  };
+
+  const configuredJourneys = getJourneysForMarket();
 
   const onDragOver = useCallback((event) => {
     event.preventDefault();
@@ -227,7 +332,11 @@ const WorkflowEditor: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <div>
             <h2 className="text-2xl font-bold">Journey Builder</h2>
-            <p className="text-muted-foreground">Create and manage AI journeys for your business</p>
+            <p className="text-muted-foreground">
+              {selectedMarket === 'Global' 
+                ? 'Create and manage AI journeys for your business'
+                : `Create and manage AI journeys for your business in ${selectedMarket}`}
+            </p>
           </div>
           <Button onClick={handleCreateNewJourney}>
             <Plus className="mr-2 h-4 w-4" /> Create New Journey

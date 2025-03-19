@@ -1,4 +1,3 @@
-
 import { ReactNode, useState, useEffect } from "react"
 import {
   Sidebar,
@@ -39,6 +38,7 @@ import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
 import AIAssistant from "../ai-assistant/AIAssistant"
 import ViewToggle from "../agents/ViewToggle"
+import { MarketProvider } from "@/contexts/MarketContext"
 
 interface DashboardLayoutProps {
   children: ReactNode
@@ -125,107 +125,109 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   };
 
   return (
-    <SidebarProvider>
-      <div className="flex min-h-screen w-full">
-        <Sidebar variant="sidebar" collapsible="icon">
-          <SidebarHeader className="flex flex-col p-4 gap-4">
-            <div className="flex items-center justify-between">
-              <MonnaiLogo variant="gradient" />
-              <SidebarTrigger />
-            </div>
-          </SidebarHeader>
-          <SidebarContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  {!item.subItems ? (
-                    <SidebarMenuButton
-                      tooltip={item.label}
-                      isActive={isActive(item.path)}
-                      onClick={() => {
-                        const params = new URLSearchParams();
-                        params.set("viewMode", viewMode);
-                        navigate({ pathname: item.path, search: params.toString() });
-                      }}
-                    >
-                      <item.icon className="mr-2" />
-                      <span>{item.label}</span>
-                    </SidebarMenuButton>
-                  ) : (
-                    <>
+    <MarketProvider>
+      <SidebarProvider>
+        <div className="flex min-h-screen w-full">
+          <Sidebar variant="sidebar" collapsible="icon">
+            <SidebarHeader className="flex flex-col p-4 gap-4">
+              <div className="flex items-center justify-between">
+                <MonnaiLogo variant="gradient" />
+                <SidebarTrigger />
+              </div>
+            </SidebarHeader>
+            <SidebarContent>
+              <SidebarMenu>
+                {navItems.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    {!item.subItems ? (
                       <SidebarMenuButton
                         tooltip={item.label}
-                        isActive={currentPath.startsWith(item.path)}
+                        isActive={isActive(item.path)}
                         onClick={() => {
                           const params = new URLSearchParams();
                           params.set("viewMode", viewMode);
-                          // Navigate to the first sub-item by default
-                          navigate({ 
-                            pathname: item.path, 
-                            search: item.subItems?.[0].path.includes('?') 
-                              ? item.subItems[0].path.split('?')[1] 
-                              : params.toString() 
-                          });
+                          navigate({ pathname: item.path, search: params.toString() });
                         }}
                       >
                         <item.icon className="mr-2" />
                         <span>{item.label}</span>
                       </SidebarMenuButton>
-                      
-                      <SidebarMenuSub>
-                        {item.subItems.map((subItem) => (
-                          <SidebarMenuSubItem key={subItem.path}>
-                            <SidebarMenuSubButton
-                              isActive={isActive(subItem.path)}
-                              onClick={() => {
-                                navigate({ 
-                                  pathname: item.path, 
-                                  search: subItem.path.includes('?') 
-                                    ? subItem.path.split('?')[1] 
-                                    : '' 
-                                });
-                              }}
-                            >
-                              {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
-                              <span>{subItem.label}</span>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    </>
-                  )}
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarContent>
-          <SidebarFooter className="p-4">
-            <div className="flex flex-col gap-2">
-              <div className="flex items-center justify-between text-sm text-muted-foreground">
-                <span className="flex items-center">
-                  <UserRound className={`h-4 w-4 mr-1 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
-                  Customer View
-                </span>
-                <span className="flex items-center">
-                  <Building2 className={`h-4 w-4 ml-1 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
-                  Monnai View
-                </span>
+                    ) : (
+                      <>
+                        <SidebarMenuButton
+                          tooltip={item.label}
+                          isActive={currentPath.startsWith(item.path)}
+                          onClick={() => {
+                            const params = new URLSearchParams();
+                            params.set("viewMode", viewMode);
+                            // Navigate to the first sub-item by default
+                            navigate({ 
+                              pathname: item.path, 
+                              search: item.subItems?.[0].path.includes('?') 
+                                ? item.subItems[0].path.split('?')[1] 
+                                : params.toString() 
+                            });
+                          }}
+                        >
+                          <item.icon className="mr-2" />
+                          <span>{item.label}</span>
+                        </SidebarMenuButton>
+                        
+                        <SidebarMenuSub>
+                          {item.subItems.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.path}>
+                              <SidebarMenuSubButton
+                                isActive={isActive(subItem.path)}
+                                onClick={() => {
+                                  navigate({ 
+                                    pathname: item.path, 
+                                    search: subItem.path.includes('?') 
+                                      ? subItem.path.split('?')[1] 
+                                      : '' 
+                                  });
+                                }}
+                              >
+                                {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
+                                <span>{subItem.label}</span>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </>
+                    )}
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarContent>
+            <SidebarFooter className="p-4">
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center justify-between text-sm text-muted-foreground">
+                  <span className="flex items-center">
+                    <UserRound className={`h-4 w-4 mr-1 ${viewMode === "customer" ? "text-monnai-pink" : "text-gray-400"}`} />
+                    Customer View
+                  </span>
+                  <span className="flex items-center">
+                    <Building2 className={`h-4 w-4 ml-1 ${viewMode === "internal" ? "text-monnai-pink" : "text-gray-400"}`} />
+                    Monnai View
+                  </span>
+                </div>
+                <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
               </div>
-              <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+            </SidebarFooter>
+          </Sidebar>
+          
+          <SidebarInset>
+            <div className="p-6 w-full">
+              {children}
             </div>
-          </SidebarFooter>
-        </Sidebar>
+          </SidebarInset>
+        </div>
         
-        <SidebarInset>
-          <div className="p-6 w-full">
-            {children}
-          </div>
-        </SidebarInset>
-      </div>
-      
-      {/* AI Assistant component */}
-      <AIAssistant />
-    </SidebarProvider>
-  )
-}
+        {/* AI Assistant component */}
+        <AIAssistant />
+      </SidebarProvider>
+    </MarketProvider>
+  );
+};
 
-export default DashboardLayout
+export default DashboardLayout;
