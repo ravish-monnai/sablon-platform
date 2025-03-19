@@ -1,9 +1,7 @@
 
-import React, { useState } from "react";
-import { TabsContent } from "@/components/ui/tabs";
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ChartContainer } from "@/components/ui/chart";
 import { 
   AlertTriangle, 
   ArrowUp, 
@@ -18,7 +16,11 @@ import {
   PieChart,
   LineChart,
   BanknoteIcon,
-  CreditCard
+  CreditCard,
+  FileText,
+  Bot,
+  ShieldAlert,
+  ThumbsUp
 } from "lucide-react";
 import {
   Bar,
@@ -34,22 +36,22 @@ import {
   LineChart as RechartsLineChart,
   Line
 } from "recharts";
-
-import IncomeVerificationTab from "./tabs/IncomeVerificationTab";
-import CashFlowTab from "./tabs/CashFlowTab";
-import DebtServiceTab from "./tabs/DebtServiceTab";
-import RiskProfilingTab from "./tabs/RiskProfilingTab";
-import AlternativeCreditTab from "./tabs/AlternativeCreditTab";
-import FraudDetectionTab from "./tabs/FraudDetectionTab";
-import AutomatedUnderwritingTab from "./tabs/AutomatedUnderwritingTab";
-import RegulatoryComplianceTab from "./tabs/RegulatoryComplianceTab";
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
+} from "@/components/ui/table";
+import { Separator } from "@/components/ui/separator";
 
 interface BankStatementFeaturesProps {
   activeTab?: string;
   caseData?: any;
 }
 
-const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab, caseData }) => {
+const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData }) => {
   // Mock feature values for demonstration
   const featureValues = {
     income: {
@@ -118,6 +120,62 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab
         { factor: "Transaction Patterns", score: 65 },
       ],
       exceptions: ["Two overdraft instances in the last 6 months"]
+    },
+    alternativeCredit: {
+      metrics: [
+        { name: "Rent/mortgage payment regularity", value: "98% on-time", status: "Good" },
+        { name: "Utility payment consistency", value: "95% on-time", status: "Good" },
+        { name: "Subscription service payment reliability", value: "99% on-time", status: "Excellent" },
+        { name: "Informal loan repayment patterns", value: "No detection", status: "N/A" }
+      ],
+      indicators: [
+        { name: "Savings behavior scoring", value: "72/100", status: "Good" },
+        { name: "Investment activity detection", value: "Minimal", status: "Fair" },
+        { name: "Insurance premium payment consistency", value: "100% on-time", status: "Excellent" },
+        { name: "Financial planning service usage", value: "None detected", status: "N/A" }
+      ]
+    },
+    fraudDetection: {
+      verificationSignals: [
+        { name: "Name match on deposits", value: "100% match", status: "Verified" },
+        { name: "Address consistency with application", value: "100% match", status: "Verified" },
+        { name: "Transaction location patterns", value: "Normal pattern", status: "Low Risk" },
+        { name: "Digital footprint consistency", value: "Consistent", status: "Low Risk" }
+      ],
+      incomeManipulation: [
+        { name: "Unusual deposit timing", value: "None detected", status: "Low Risk" },
+        { name: "Round-sum deposit patterns", value: "1 instance", status: "Medium Risk" },
+        { name: "Temporary balance inflation", value: "None detected", status: "Low Risk" },
+        { name: "Deposit-withdrawal cycling", value: "None detected", status: "Low Risk" }
+      ]
+    },
+    automatedUnderwriting: {
+      accelerationMetrics: [
+        { name: "Automated verification completion rate", value: "95%", status: "High" },
+        { name: "Data sufficiency scoring", value: "87/100", status: "Good" },
+        { name: "Exception flagging precision", value: "92%", status: "High" },
+        { name: "Decision confidence scoring", value: "84/100", status: "Good" }
+      ],
+      standardizedCriteria: [
+        { name: "Income stability index", value: "78/100", status: "Good" },
+        { name: "Expense management score", value: "72/100", status: "Good" },
+        { name: "Debt handling rating", value: "65/100", status: "Fair" },
+        { name: "Financial stress resilience metric", value: "70/100", status: "Good" }
+      ]
+    },
+    regulatoryCompliance: {
+      kycVerification: [
+        { name: "Identity confirmation signals", value: "All verified", status: "Compliant" },
+        { name: "Activity pattern consistency", value: "Consistent", status: "Compliant" },
+        { name: "Expected vs. actual usage patterns", value: "Match", status: "Compliant" },
+        { name: "Customer profile validation", value: "Validated", status: "Compliant" }
+      ],
+      amlMonitoring: [
+        { name: "Unusual transaction pattern detection", value: "None detected", status: "Low Risk" },
+        { name: "High-risk jurisdiction transactions", value: "None detected", status: "Low Risk" },
+        { name: "Structured transaction identification", value: "None detected", status: "Low Risk" },
+        { name: "Source of funds verification", value: "Verified", status: "Compliant" }
+      ]
     }
   };
   
@@ -126,11 +184,15 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab
     return feature.exceptions && feature.exceptions.length > 0;
   };
 
-  const getStatusColor = (value, thresholds) => {
-    const numValue = parseInt(value);
-    if (numValue >= thresholds.high) return "text-red-500";
-    if (numValue >= thresholds.medium) return "text-amber-500";
-    return "text-green-500";
+  const getStatusColor = (status) => {
+    if (status === "Good" || status === "Excellent" || status === "Verified" || status === "Compliant" || status === "Low Risk") {
+      return "text-green-500";
+    } else if (status === "Fair" || status === "Medium Risk") {
+      return "text-amber-500";
+    } else if (status === "Poor" || status === "High Risk") {
+      return "text-red-500";
+    }
+    return "text-gray-500";
   };
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#9b87f5'];
@@ -454,184 +516,129 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab
     </Card>
   );
 
+  // Feature category table component
+  const FeatureCategoryTable = ({ title, icon, data }) => (
+    <Card className="mb-6">
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-2">
+          {icon}
+          <CardTitle className="text-base">{title}</CardTitle>
+        </div>
+      </CardHeader>
+      <CardContent>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Feature</TableHead>
+              <TableHead>Value</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data.map((item, index) => (
+              <TableRow key={index}>
+                <TableCell className="font-medium">{item.name}</TableCell>
+                <TableCell>{item.value}</TableCell>
+                <TableCell className={getStatusColor(item.status)}>{item.status}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+
   return (
     <>
       {/* Dashboard overview for all feature tabs */}
       {renderDashboard()}
       
-      <TabsContent value="income-verification" className="space-y-6">
-        <Card className="mb-4">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Income Verification Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Monthly Average</p>
-                <p className="font-medium text-lg">{featureValues.income.monthlyAverage}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Consistency</p>
-                <p className="font-medium text-lg">{featureValues.income.consistency}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Verification Status</p>
-                <Badge variant="outline" className="font-medium">
-                  {featureValues.income.verificationStatus}
-                </Badge>
-              </div>
-            </div>
-            
-            <div>
-              <p className="text-sm text-muted-foreground mb-2">Income Sources</p>
-              <div className="border rounded-md">
-                <table className="w-full">
-                  <thead className="bg-muted">
-                    <tr>
-                      <th className="text-left p-2 text-sm font-medium">Source</th>
-                      <th className="text-left p-2 text-sm font-medium">Amount</th>
-                      <th className="text-left p-2 text-sm font-medium">Frequency</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {featureValues.income.sources.map((source, idx) => (
-                      <tr key={idx} className="border-t">
-                        <td className="p-2 text-sm">{source.name}</td>
-                        <td className="p-2 text-sm">{source.amount}</td>
-                        <td className="p-2 text-sm">{source.frequency}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <IncomeVerificationTab />
-      </TabsContent>
-      
-      <TabsContent value="cash-flow" className="space-y-6">
-        <Card className="mb-4">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Cash Flow Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Average Balance</p>
-                <p className="font-medium text-lg">{featureValues.cashFlow.averageBalance}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Monthly Inflow</p>
-                <p className="font-medium text-lg">{featureValues.cashFlow.monthlyInflow}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Monthly Outflow</p>
-                <p className="font-medium text-lg">{featureValues.cashFlow.monthlyOutflow}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Volatility</p>
-                <Badge variant={featureValues.cashFlow.volatility === "Low" ? "outline" : "secondary"} className="font-medium">
-                  {featureValues.cashFlow.volatility}
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <CashFlowTab />
-      </TabsContent>
-      
-      <TabsContent value="debt-service" className="space-y-6">
-        <Card className="mb-4">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Debt Service Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Debt Service Ratio</p>
-                <p className="font-medium text-lg">{featureValues.debtService.ratio}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Existing Monthly Debt</p>
-                <p className="font-medium text-lg">{featureValues.debtService.existingDebt}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Proposed Monthly Debt</p>
-                <p className="font-medium text-lg">{featureValues.debtService.proposedDebt}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Risk Assessment</p>
-                <Badge 
-                  variant={
-                    featureValues.debtService.riskAssessment === "Low" ? "outline" : 
-                    featureValues.debtService.riskAssessment === "Medium" ? "secondary" : 
-                    "destructive"
-                  } 
-                  className="font-medium"
-                >
-                  {featureValues.debtService.riskAssessment}
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <DebtServiceTab />
-      </TabsContent>
-      
-      <TabsContent value="risk-profiling" className="space-y-6">
-        <Card className="mb-4">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base">Risk Profile Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-muted-foreground">Risk Score</p>
-                <p className="font-medium text-lg">{featureValues.riskProfile.score}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Overdrafts (Last 3 Months)</p>
-                <p className="font-medium text-lg">{featureValues.riskProfile.overdrafts}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Irregular Activity</p>
-                <p className="font-medium text-lg">{featureValues.riskProfile.irregularActivity}</p>
-              </div>
-              <div>
-                <p className="text-sm text-muted-foreground">Trend</p>
-                <Badge 
-                  variant={
-                    featureValues.riskProfile.trend === "Improving" ? "outline" : 
-                    featureValues.riskProfile.trend === "Stable" ? "secondary" : 
-                    "destructive"
-                  } 
-                  className="font-medium"
-                >
-                  {featureValues.riskProfile.trend}
-                </Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <RiskProfilingTab />
-      </TabsContent>
-      
-      <TabsContent value="alternative-credit" className="space-y-6">
-        <AlternativeCreditTab />
-      </TabsContent>
-      
-      <TabsContent value="fraud-detection" className="space-y-6">
-        <FraudDetectionTab />
-      </TabsContent>
-      
-      <TabsContent value="automated-underwriting" className="space-y-6">
-        <AutomatedUnderwritingTab />
-      </TabsContent>
-      
-      <TabsContent value="regulatory" className="space-y-6">
-        <RegulatoryComplianceTab />
-      </TabsContent>
+      {/* Tabulated feature results by category */}
+      <div className="space-y-6">
+        <FeatureCategoryTable 
+          title="Income Verification" 
+          icon={<DollarSign className="h-5 w-5 text-green-600" />}
+          data={[
+            { name: "Monthly Average", value: featureValues.income.monthlyAverage, status: "Good" },
+            { name: "Consistency", value: featureValues.income.consistency, status: "Good" },
+            { name: "Verification Status", value: featureValues.income.verificationStatus, status: "Verified" },
+            ...featureValues.income.sources.map(source => ({
+              name: `Source: ${source.name}`,
+              value: source.amount,
+              status: "Verified"
+            }))
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Cash Flow Assessment" 
+          icon={<Wallet className="h-5 w-5 text-blue-600" />}
+          data={[
+            { name: "Average Balance", value: featureValues.cashFlow.averageBalance, status: "Good" },
+            { name: "Monthly Inflow", value: featureValues.cashFlow.monthlyInflow, status: "Good" },
+            { name: "Monthly Outflow", value: featureValues.cashFlow.monthlyOutflow, status: "Good" },
+            { name: "Volatility", value: featureValues.cashFlow.volatility, status: "Low Risk" }
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Debt Service Coverage" 
+          icon={<CreditCard className="h-5 w-5 text-purple-600" />}
+          data={[
+            { name: "Debt Service Ratio", value: featureValues.debtService.ratio, status: "Medium Risk" },
+            { name: "Existing Monthly Debt", value: featureValues.debtService.existingDebt, status: "Medium Risk" },
+            { name: "Proposed Monthly Debt", value: featureValues.debtService.proposedDebt, status: "Medium Risk" },
+            { name: "Risk Assessment", value: featureValues.debtService.riskAssessment, status: "Medium Risk" }
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Risk Profiling" 
+          icon={<ShieldAlert className="h-5 w-5 text-red-600" />}
+          data={[
+            { name: "Risk Score", value: featureValues.riskProfile.score, status: "Medium Risk" },
+            { name: "Overdrafts (Last 3 Months)", value: featureValues.riskProfile.overdrafts, status: "Medium Risk" },
+            { name: "Irregular Activity", value: featureValues.riskProfile.irregularActivity, status: "Low Risk" },
+            { name: "Trend", value: featureValues.riskProfile.trend, status: "Improving" }
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Alternative Credit Assessment" 
+          icon={<ThumbsUp className="h-5 w-5 text-green-600" />}
+          data={[
+            ...featureValues.alternativeCredit.metrics,
+            ...featureValues.alternativeCredit.indicators
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Fraud Detection" 
+          icon={<ShieldAlert className="h-5 w-5 text-amber-600" />}
+          data={[
+            ...featureValues.fraudDetection.verificationSignals,
+            ...featureValues.fraudDetection.incomeManipulation
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Automated Underwriting" 
+          icon={<Bot className="h-5 w-5 text-blue-600" />}
+          data={[
+            ...featureValues.automatedUnderwriting.accelerationMetrics,
+            ...featureValues.automatedUnderwriting.standardizedCriteria
+          ]}
+        />
+        
+        <FeatureCategoryTable 
+          title="Regulatory Compliance" 
+          icon={<FileText className="h-5 w-5 text-indigo-600" />}
+          data={[
+            ...featureValues.regulatoryCompliance.kycVerification,
+            ...featureValues.regulatoryCompliance.amlMonitoring
+          ]}
+        />
+      </div>
     </>
   );
 };
