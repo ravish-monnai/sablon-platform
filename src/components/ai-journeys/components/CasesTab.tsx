@@ -343,23 +343,9 @@ const CasesTab: React.FC = () => {
     );
   }
   
-  // Case list view (default view)
+  // Case list view (default view) - removed the "Journey Results" card header
   return (
     <div className="space-y-6 pt-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Journey Results</h3>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm">
-            <Filter className="h-4 w-4 mr-1" />
-            Filter
-          </Button>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-1" />
-            Export
-          </Button>
-        </div>
-      </div>
-      
       {/* Table view for cases */}
       <Card>
         <CardContent className="p-0">
