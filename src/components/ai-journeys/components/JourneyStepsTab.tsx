@@ -2,7 +2,9 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, CircleDashed, CircleDot, ArrowRight } from "lucide-react";
+import { Check, CircleDashed, CircleDot, ArrowRight, AlertTriangle } from "lucide-react";
+import { ChartContainer } from "@/components/ui/chart";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 
 interface JourneyStep {
   id: number | string;
@@ -10,6 +12,11 @@ interface JourneyStep {
   description: string;
   icon: React.ReactNode;
   status: "completed" | "active" | "upcoming";
+  statsData?: {
+    processed: number;
+    passed: number;
+    exceptions: number;
+  };
   branches?: Omit<JourneyStep, "status" | "branches">[];
 }
 
@@ -18,6 +25,14 @@ interface JourneyStepsTabProps {
 }
 
 const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
+  // Sample statistics data for visualization
+  const stepsData = steps.map(step => ({
+    name: step.title,
+    processed: step.statsData?.processed || 0,
+    passed: step.statsData?.passed || 0,
+    exceptions: step.statsData?.exceptions || 0
+  }));
+
   return (
     <div className="space-y-6 pt-4">
       <Card>
@@ -46,8 +61,8 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                       )}
                     </div>
                     
-                    <div>
-                      <div className="flex items-center">
+                    <div className="flex-1">
+                      <div className="flex items-center mb-2">
                         <h3 className="text-lg font-medium">{step.title}</h3>
                         <Badge 
                           variant={step.status === "completed" ? "default" : 
@@ -58,7 +73,31 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                            step.status === "active" ? "In Progress" : "Pending"}
                         </Badge>
                       </div>
+                      
                       <p className="text-muted-foreground mb-3">{step.description}</p>
+                      
+                      {/* Stats for the step */}
+                      {step.statsData && (
+                        <div className="grid grid-cols-3 gap-3 mb-4">
+                          <div className="bg-slate-50 dark:bg-slate-900 rounded-md p-3">
+                            <p className="text-sm text-muted-foreground">Processed</p>
+                            <p className="text-xl font-semibold">{step.statsData.processed}</p>
+                          </div>
+                          <div className="bg-green-50 dark:bg-green-900/20 rounded-md p-3">
+                            <p className="text-sm text-muted-foreground">Passed</p>
+                            <p className="text-xl font-semibold text-green-600 dark:text-green-400">{step.statsData.passed}</p>
+                          </div>
+                          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-md p-3">
+                            <p className="text-sm text-muted-foreground">Exceptions</p>
+                            <div className="flex items-center">
+                              <p className="text-xl font-semibold text-amber-600 dark:text-amber-400">{step.statsData.exceptions}</p>
+                              {step.statsData.exceptions > 0 && (
+                                <AlertTriangle className="h-4 w-4 text-amber-500 ml-1" />
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       
                       {step.icon && <div className="mb-2">{step.icon}</div>}
                       
@@ -86,6 +125,42 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                 </div>
               ))}
             </div>
+          </div>
+        </CardContent>
+      </Card>
+      
+      <Card>
+        <CardHeader>
+          <CardTitle>Steps Performance Overview</CardTitle>
+          <CardDescription>
+            Visualization of bank statements processing through each journey step
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="h-80">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={stepsData}
+                margin={{
+                  top: 20,
+                  right: 30,
+                  left: 20,
+                  bottom: 60,
+                }}
+              >
+                <XAxis 
+                  dataKey="name"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="processed" fill="#94a3b8" name="Processed" />
+                <Bar dataKey="passed" fill="#22c55e" name="Passed" />
+                <Bar dataKey="exceptions" fill="#f59e0b" name="Exceptions" />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>

@@ -8,7 +8,7 @@ import SettingsTab from "./components/SettingsTab";
 import LogsTab from "./components/LogsTab";
 import FeaturesTab from "./FeaturesTab";
 import { useMarket } from "@/contexts/MarketContext";
-import { Bot, EyeIcon, ArrowDownToLine, ArrowRightLeft, FileText, ShieldAlert, UserCheck, CheckCircle } from "lucide-react";
+import { Bot, EyeIcon, ArrowDownToLine, ArrowRightLeft, FileText, ShieldAlert, UserCheck, CheckCircle, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import JourneyStepsTab from "./components/JourneyStepsTab";
 
@@ -20,28 +20,43 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
   const [activeTab, setActiveTab] = useState("overview");
   const { selectedMarket } = useMarket();
   
-  // Steps in the journey process - all marked as completed
+  // Steps in the journey process with stats data
   const journeySteps = [
     {
       id: 1,
       title: "Bank Statement Upload",
       description: "Customer uploads bank statements through API or secure S3 path",
       icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-      status: "completed" as const
+      status: "completed" as const,
+      statsData: {
+        processed: 432,
+        passed: 428,
+        exceptions: 4
+      }
     },
     {
       id: 2,
       title: "Analysis & Feature Extraction",
       description: "Bank statement analyzer agent parses the statements and extracts all configured features",
       icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-      status: "completed" as const
+      status: "completed" as const,
+      statsData: {
+        processed: 428,
+        passed: 415,
+        exceptions: 13
+      }
     },
     {
       id: 3,
       title: "Risk Assessment",
       description: "Agent evaluates risk score and makes initial determination",
       icon: <CheckCircle className="h-5 w-5 text-green-500" />,
-      status: "completed" as const
+      status: "completed" as const,
+      statsData: {
+        processed: 415,
+        passed: 378,
+        exceptions: 37
+      }
     },
     {
       id: 4,
@@ -49,20 +64,23 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
       description: "Case created with appropriate status based on risk assessment",
       icon: <CheckCircle className="h-5 w-5 text-green-500" />,
       status: "completed" as const,
+      statsData: {
+        processed: 378,
+        passed: 378,
+        exceptions: 0
+      },
       branches: [
         {
           id: "4a",
           title: "High Risk - Auto Reject",
           description: "Journey ends with auto-rejected case",
           icon: <ShieldAlert className="h-5 w-5 text-red-500" />,
-          status: "completed" as const
         },
         {
           id: "4b",
           title: "Acceptable Risk - Underwriting",
           description: "Case forwarded to underwriting agent",
           icon: <UserCheck className="h-5 w-5 text-green-500" />,
-          status: "completed" as const
         }
       ]
     }
