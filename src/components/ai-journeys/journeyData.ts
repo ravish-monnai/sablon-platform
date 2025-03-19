@@ -1,7 +1,16 @@
 
 import { Journey } from "./JourneyCard";
 import { Database, Brain, Users } from 'lucide-react';
-import React from 'react';
+import React, { ReactNode } from 'react';
+
+// Define a type for node data that includes icon as ReactNode
+interface NodeData {
+  label: string;
+  description: string;
+  icon: ReactNode;
+  type: string;
+  modelType?: string;
+}
 
 // Sample data for live journeys by market
 export const journeysByMarket: Record<string, Journey[]> = {
@@ -61,7 +70,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'User Registration Data',
           description: 'Collection of user input during registration',
-          icon: <Database className="text-monnai-yellow" size={20} />,
+          icon: React.createElement(Database, { className: "text-monnai-yellow", size: 20 }),
           type: 'datasource'
         }
       },
@@ -72,7 +81,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Device Fingerprint',
           description: 'Device and browser information',
-          icon: <Database className="text-monnai-yellow" size={20} />,
+          icon: React.createElement(Database, { className: "text-monnai-yellow", size: 20 }),
           type: 'datasource'
         }
       },
@@ -83,7 +92,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Identity Verification Model',
           description: 'Verifies user identity against data sources',
-          icon: <Brain className="text-monnai-pink" size={20} />,
+          icon: React.createElement(Brain, { className: "text-monnai-pink", size: 20 }),
           type: 'model',
           modelType: 'binary'
         }
@@ -95,7 +104,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Fraud Risk Scoring',
           description: 'Assigns fraud risk score based on patterns',
-          icon: <Brain className="text-monnai-pink" size={20} />,
+          icon: React.createElement(Brain, { className: "text-monnai-pink", size: 20 }),
           type: 'model',
           modelType: 'binary'
         }
@@ -107,7 +116,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Fraud Review Team',
           description: 'Manual review for high-risk cases',
-          icon: <Users className="text-monnai-blue" size={20} />,
+          icon: React.createElement(Users, { className: "text-monnai-blue", size: 20 }),
           type: 'agent'
         }
       }
@@ -154,7 +163,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Bank Statement Upload',
           description: 'Bank statement documents for analysis',
-          icon: <Database className="text-monnai-yellow" size={20} />,
+          icon: React.createElement(Database, { className: "text-monnai-yellow", size: 20 }),
           type: 'datasource'
         }
       },
@@ -165,7 +174,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Document Parser',
           description: 'Extracts structured data from statements',
-          icon: <Brain className="text-monnai-pink" size={20} />,
+          icon: React.createElement(Brain, { className: "text-monnai-pink", size: 20 }),
           type: 'model',
           modelType: 'binary'
         }
@@ -177,7 +186,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Transaction Analyzer',
           description: 'Analyzes transaction patterns',
-          icon: <Brain className="text-monnai-pink" size={20} />,
+          icon: React.createElement(Brain, { className: "text-monnai-pink", size: 20 }),
           type: 'model',
           modelType: 'multiclass'
         }
@@ -189,7 +198,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Income Verification',
           description: 'Verifies income claims',
-          icon: <Brain className="text-monnai-pink" size={20} />,
+          icon: React.createElement(Brain, { className: "text-monnai-pink", size: 20 }),
           type: 'model',
           modelType: 'regression'
         }
@@ -201,7 +210,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Bank Statement Analyzer Agent',
           description: 'Final analysis and recommendations',
-          icon: <Users className="text-monnai-blue" size={20} />,
+          icon: React.createElement(Users, { className: "text-monnai-blue", size: 20 }),
           type: 'agent'
         }
       }
@@ -240,4 +249,3 @@ export const journeyWorkflowConfigurations = {
     ]
   }
 };
-
