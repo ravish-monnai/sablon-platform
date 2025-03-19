@@ -8,7 +8,16 @@ import SettingsTab from "./components/SettingsTab";
 import LogsTab from "./components/LogsTab";
 import FeaturesTab from "./FeaturesTab";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, EyeIcon, ShieldAlert, UserCheck, AlertTriangle, Bot } from "lucide-react";
+import { 
+  Bot, 
+  EyeIcon, 
+  ShieldAlert, 
+  UserCheck, 
+  ArrowDownToLine, 
+  Database, 
+  Wrench, 
+  ScanSearch 
+} from "lucide-react";
 import JourneyStepsTab from "./components/JourneyStepsTab";
 
 interface IndianBankStatementJourneyProps {
@@ -24,8 +33,9 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
       id: 1,
       title: "Bank Statement Upload",
       description: "Customer uploads bank statements through API or secure S3 path",
-      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      icon: <ArrowDownToLine className="h-8 w-8" />,
       status: "completed" as const,
+      color: "#2bbfe0", // Blue
       statsData: {
         processed: 389,
         passed: 385,
@@ -34,10 +44,11 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
     },
     {
       id: 2,
-      title: "Analysis & Feature Extraction",
-      description: "Bank statement analyzer agent parses the statements and extracts all configured features",
-      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      title: "Analysis & Extraction",
+      description: "Bank statement analyzer parses statements and extracts features",
+      icon: <ScanSearch className="h-8 w-8" />,
       status: "completed" as const,
+      color: "#ffcc1d", // Yellow
       statsData: {
         processed: 385,
         passed: 372,
@@ -48,8 +59,9 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
       id: 3,
       title: "Risk Assessment",
       description: "Agent evaluates risk score and makes initial determination",
-      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      icon: <Database className="h-8 w-8" />,
       status: "completed" as const,
+      color: "#66cc66", // Green
       statsData: {
         processed: 372,
         passed: 341,
@@ -60,8 +72,9 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
       id: 4,
       title: "Case Creation",
       description: "Case created with appropriate status based on risk assessment",
-      icon: <CheckCircle className="h-5 w-5 text-green-500" />,
+      icon: <Wrench className="h-8 w-8" />,
       status: "completed" as const,
+      color: "#e85abd", // Pink
       statsData: {
         processed: 341,
         passed: 341,
@@ -70,15 +83,15 @@ const IndianBankStatementJourney: React.FC<IndianBankStatementJourneyProps> = ({
       branches: [
         {
           id: "4a",
-          title: "High Risk - Auto Reject",
+          title: "High Risk Path",
           description: "Journey ends with auto-rejected case",
-          icon: <ShieldAlert className="h-5 w-5 text-red-500" />,
+          icon: <ShieldAlert className="h-6 w-6" />,
         },
         {
           id: "4b",
-          title: "Acceptable Risk - Underwriting",
+          title: "Acceptable Risk Path",
           description: "Case forwarded to underwriting agent",
-          icon: <UserCheck className="h-5 w-5 text-green-500" />,
+          icon: <UserCheck className="h-6 w-6" />,
         }
       ]
     }

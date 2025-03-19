@@ -2,8 +2,19 @@
 import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Check, CircleDashed, CircleDot, ArrowRight, AlertTriangle } from "lucide-react";
-import { ShieldAlert, UserCheck } from "lucide-react";
+import { 
+  Check, 
+  CircleDashed, 
+  CircleDot, 
+  ArrowRight, 
+  AlertTriangle, 
+  ShieldAlert, 
+  UserCheck,
+  Cog,
+  FileText,
+  Upload,
+  Database
+} from "lucide-react";
 
 interface JourneyStep {
   id: number | string;
@@ -11,6 +22,7 @@ interface JourneyStep {
   description: string;
   icon: React.ReactNode;
   status: "completed" | "active" | "upcoming";
+  color?: string;
   statsData?: {
     processed: number;
     passed: number;
@@ -34,104 +46,125 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="relative p-4">
-            {/* The vertical line connecting the steps */}
-            <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-300 via-blue-500 to-green-500 z-0"></div>
-            
-            <div className="space-y-12 relative z-10">
+          <div className="relative p-6">
+            {/* Modern workflow visualization */}
+            <div className="flex flex-wrap justify-center relative">
               {steps.map((step, index) => (
-                <div key={step.id} className="relative">
-                  <div className="flex items-start">
-                    <div className={`rounded-full w-10 h-10 flex items-center justify-center z-10 mr-4 ${getStepStatusColors(step.status)} shadow-md transition-all duration-300 hover:scale-110 animate-pulse`}>
-                      {step.status === "completed" ? (
-                        <Check className="h-5 w-5 text-white animate-fade-in" />
-                      ) : step.status === "active" ? (
-                        <CircleDot className="h-5 w-5" />
-                      ) : (
-                        <CircleDashed className="h-5 w-5" />
+                <React.Fragment key={step.id}>
+                  {/* Step node */}
+                  <div className="flex flex-col items-center mx-4 mb-16 relative z-10">
+                    {/* Circular node */}
+                    <div 
+                      className={`rounded-full w-20 h-20 flex items-center justify-center mb-4 shadow-lg transition-all duration-500 animate-pulse relative border-4 ${getStepStatusBorder(step.status)}`}
+                      style={{ backgroundColor: getStepColor(step, index) }}
+                    >
+                      <div className="text-white">
+                        {step.icon}
+                      </div>
+                      
+                      {/* Step number badge */}
+                      <div className="absolute -top-2 -right-2 bg-white rounded-full w-8 h-8 flex items-center justify-center border-2 border-gray-200 shadow-md">
+                        <span className="text-sm font-bold">{index + 1}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Step info */}
+                    <div className="w-48 text-center">
+                      <h3 className="font-semibold mb-1">{step.title}</h3>
+                      <p className="text-xs text-muted-foreground h-12 overflow-hidden">{step.description}</p>
+                      
+                      {/* Stats badge */}
+                      {step.statsData && (
+                        <div className="mt-2 flex flex-col items-center">
+                          <Badge 
+                            variant={step.status === "completed" ? "success" : 
+                                  step.status === "active" ? "secondary" : "outline"}
+                            className="animate-fade-in mb-1"
+                          >
+                            {step.statsData.passed}/{step.statsData.processed} Passed
+                          </Badge>
+                          
+                          {step.statsData.exceptions > 0 && (
+                            <Badge variant="warning" className="flex items-center gap-1 animate-pulse">
+                              <AlertTriangle className="h-3 w-3" />
+                              {step.statsData.exceptions} Exceptions
+                            </Badge>
+                          )}
+                        </div>
                       )}
                     </div>
                     
-                    <div className="flex-1 bg-white dark:bg-slate-900 rounded-lg shadow-md p-5 transform transition-all duration-300 hover:translate-x-2">
-                      <div className="flex items-center mb-2">
-                        <h3 className="text-lg font-medium">{step.title}</h3>
-                        <Badge 
-                          variant={step.status === "completed" ? "default" : 
-                                  step.status === "active" ? "secondary" : "outline"}
-                          className="ml-3 animate-fade-in"
-                        >
-                          {step.status === "completed" ? "Completed" : 
-                           step.status === "active" ? "In Progress" : "Pending"}
-                        </Badge>
+                    {/* Branch paths visualization for steps with branches */}
+                    {step.branches && step.branches.length > 0 && (
+                      <div className="absolute top-20 pt-8 w-full">
+                        <div className="relative flex justify-center">
+                          {/* Vertical connector */}
+                          <div className="absolute w-0.5 h-12 bg-gray-300 left-1/2 transform -translate-x-1/2"></div>
+                          
+                          {/* Branch connector */}
+                          <div className="absolute top-12 w-full h-0.5 bg-gray-300"></div>
+                          
+                          {/* Branch nodes */}
+                          <div className="absolute top-12 flex justify-between w-full mt-8">
+                            {step.branches.map((branch, branchIndex) => (
+                              <div key={branch.id} className="flex flex-col items-center">
+                                {/* Vertical connector to branch */}
+                                <div className="w-0.5 h-6 bg-gray-300 mb-4"></div>
+                                
+                                {/* Branch circle */}
+                                <div 
+                                  className="rounded-full w-14 h-14 flex items-center justify-center mb-3 shadow-md border-2 border-gray-200"
+                                  style={{ backgroundColor: getBranchColor(branchIndex) }}
+                                >
+                                  <div className="text-white">
+                                    {branch.icon}
+                                  </div>
+                                </div>
+                                
+                                {/* Branch info */}
+                                <div className="w-36 text-center">
+                                  <h4 className="text-sm font-medium">{branch.title}</h4>
+                                  <p className="text-xs text-muted-foreground h-10 overflow-hidden">{branch.description}</p>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
                       </div>
-                      
-                      <p className="text-muted-foreground mb-4">{step.description}</p>
-                      
-                      {/* Stats for the step */}
-                      {step.statsData && (
-                        <div className="grid grid-cols-3 gap-3 mb-4 transition-all duration-500 animate-fade-in">
-                          <div className="bg-slate-50 dark:bg-slate-900 rounded-md p-3 shadow-sm">
-                            <p className="text-sm text-muted-foreground">Processed</p>
-                            <p className="text-xl font-semibold">{step.statsData.processed}</p>
-                          </div>
-                          <div className="bg-green-50 dark:bg-green-900/20 rounded-md p-3 shadow-sm">
-                            <p className="text-sm text-muted-foreground">Passed</p>
-                            <p className="text-xl font-semibold text-green-600 dark:text-green-400">{step.statsData.passed}</p>
-                          </div>
-                          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-md p-3 shadow-sm">
-                            <p className="text-sm text-muted-foreground">Exceptions</p>
-                            <div className="flex items-center">
-                              <p className="text-xl font-semibold text-amber-600 dark:text-amber-400">{step.statsData.exceptions}</p>
-                              {step.statsData.exceptions > 0 && (
-                                <AlertTriangle className="h-4 w-4 text-amber-500 ml-1 animate-pulse" />
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Step icon with animation */}
-                      {step.icon && (
-                        <div className="mb-2 transition-all duration-300 transform hover:scale-110">
-                          {step.icon}
-                        </div>
-                      )}
-                      
-                      {/* Branches if any */}
-                      {step.branches && step.branches.length > 0 && (
-                        <div className="pl-8 mt-6 space-y-4 animate-fade-in">
-                          {step.branches.map(branch => (
-                            <div key={branch.id} className="relative border-l-2 border-dashed border-gray-300 pl-6 py-2 transition-all duration-300 hover:translate-x-2 hover:border-blue-400">
-                              <div className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-1/2">
-                                <ArrowRight className="h-4 w-4 text-blue-500 animate-pulse" />
-                              </div>
-                              <div className="flex items-center bg-white dark:bg-slate-900 p-3 rounded-lg shadow-sm">
-                                <div className="mr-3 transition-all duration-300 transform hover:rotate-12">
-                                  {branch.icon}
-                                </div>
-                                <div>
-                                  <h4 className="font-medium">{branch.title}</h4>
-                                  <p className="text-sm text-muted-foreground">{branch.description}</p>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                      
-                      {/* Add connector lines for non-last items */}
-                      {index < steps.length - 1 && (
-                        <div className="absolute left-4 bottom-0 top-10 w-0.5 bg-gradient-to-b from-blue-500 to-green-500 z-0">
-                          <div className="absolute top-0 left-0 w-full h-full animate-pulse">
-                            <div className="h-2 w-2 bg-blue-400 rounded-full absolute -left-[3px] animate-bounce" style={{ top: '30%' }}></div>
-                            <div className="h-2 w-2 bg-blue-500 rounded-full absolute -left-[3px] animate-bounce" style={{ top: '60%', animationDelay: '0.5s' }}></div>
-                            <div className="h-2 w-2 bg-green-500 rounded-full absolute -left-[3px] animate-bounce" style={{ top: '90%', animationDelay: '1s' }}></div>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                    )}
                   </div>
-                </div>
+                  
+                  {/* Connector dots between steps */}
+                  {index < steps.length - 1 && (
+                    <div className="flex items-center self-center h-20 mx-1 z-0">
+                      <div className="flex space-x-1 items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <div 
+                            key={i} 
+                            className="w-2 h-2 rounded-full animate-pulse" 
+                            style={{ 
+                              backgroundColor: getDotColor(index, i),
+                              animationDelay: `${i * 0.1}s`
+                            }}
+                          ></div>
+                        ))}
+                      </div>
+                      <Cog className="h-4 w-4 text-gray-400 mx-3 animate-spin" style={{ animationDuration: '3s' }} />
+                      <div className="flex space-x-1 items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <div 
+                            key={i + 5} 
+                            className="w-2 h-2 rounded-full animate-pulse" 
+                            style={{ 
+                              backgroundColor: getDotColor(index, i + 5),
+                              animationDelay: `${(i + 5) * 0.1}s`
+                            }}
+                          ></div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </React.Fragment>
               ))}
             </div>
           </div>
@@ -178,15 +211,49 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
 };
 
 // Helper function to get the right colors based on status
-function getStepStatusColors(status: string): string {
+function getStepStatusBorder(status: string): string {
   switch (status) {
     case "completed":
-      return "bg-gradient-to-r from-green-400 to-green-500 text-white";
+      return "border-green-400";
     case "active":
-      return "bg-gradient-to-r from-blue-400 to-blue-500 text-white";
+      return "border-blue-400";
     default:
-      return "bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 text-gray-500 dark:text-gray-400";
+      return "border-gray-300";
   }
+}
+
+// Helper function to get step background color
+function getStepColor(step: JourneyStep, index: number): string {
+  if (step.color) return step.color;
+  
+  const colors = [
+    "#2bbfe0", // Blue
+    "#ffcc1d", // Yellow
+    "#66cc66", // Green
+    "#e85abd"  // Pink
+  ];
+  
+  return colors[index % colors.length];
+}
+
+// Helper function to get branch color
+function getBranchColor(index: number): string {
+  const colors = [
+    "#ff7066", // Red-ish for high risk
+    "#47c98e", // Green-ish for low risk
+    "#7f66ff"  // Purple for neutral
+  ];
+  
+  return colors[index % colors.length];
+}
+
+// Helper function to get dot colors for connector
+function getDotColor(stepIndex: number, dotIndex: number): string {
+  const fromColor = getStepColor({ id: stepIndex, title: "", description: "", icon: null, status: "completed" }, stepIndex);
+  const toColor = getStepColor({ id: stepIndex + 1, title: "", description: "", icon: null, status: "completed" }, stepIndex + 1);
+  
+  // For simplicity, just alternate colors
+  return dotIndex % 2 === 0 ? fromColor : toColor;
 }
 
 export default JourneyStepsTab;
