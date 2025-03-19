@@ -9,9 +9,10 @@ import {
 import { Button } from '@/components/ui/button';
 
 export interface CaseActionDialogProps {
-  isOpen: boolean; // Changed from 'open' to 'isOpen' to match what the component expects
+  isOpen: boolean;
   onOpenChange: (open: boolean) => void;
   caseData: any;
+  caseId?: string; // Add caseId property to fix type error
 }
 
 const CaseActionDialog: React.FC<CaseActionDialogProps> = ({ 
