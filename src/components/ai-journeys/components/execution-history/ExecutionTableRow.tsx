@@ -2,8 +2,7 @@
 import React from "react";
 import { TableRow, TableCell } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, AlertTriangle, Calendar, User, Clock, FileText } from "lucide-react";
+import { CheckCircle, AlertTriangle, Calendar, User } from "lucide-react";
 
 export interface Execution {
   id: string;
@@ -20,7 +19,7 @@ interface ExecutionTableRowProps {
 
 const ExecutionTableRow: React.FC<ExecutionTableRowProps> = ({ execution, onViewLogs }) => {
   return (
-    <TableRow key={execution.id} className="hover:bg-muted/50">
+    <TableRow key={execution.id} className="hover:bg-muted/50 cursor-pointer" onClick={() => onViewLogs(execution.id)}>
       <TableCell className="font-medium">{execution.id}</TableCell>
       <TableCell>
         <div className="flex items-center gap-2">
@@ -47,17 +46,6 @@ const ExecutionTableRow: React.FC<ExecutionTableRowProps> = ({ execution, onView
             Failed
           </Badge>
         )}
-      </TableCell>
-      <TableCell>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onViewLogs(execution.id)}
-          className="flex items-center gap-1"
-        >
-          <FileText className="h-4 w-4" />
-          View Logs
-        </Button>
       </TableCell>
     </TableRow>
   );

@@ -2,8 +2,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CheckCircle, AlertTriangle, Calendar, User, FileText } from "lucide-react";
+import { CheckCircle, AlertTriangle, Calendar, User } from "lucide-react";
 import type { Execution } from "./ExecutionTableRow";
 
 interface ExecutionCardProps {
@@ -13,7 +12,11 @@ interface ExecutionCardProps {
 
 const ExecutionCard: React.FC<ExecutionCardProps> = ({ execution, onViewLogs }) => {
   return (
-    <Card key={execution.id} className="overflow-hidden">
+    <Card 
+      key={execution.id} 
+      className="overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+      onClick={() => onViewLogs(execution.id)}
+    >
       <CardContent className="p-4">
         <div className="flex justify-between items-start mb-3">
           <h3 className="text-md font-bold">Case #{execution.id}</h3>
@@ -53,16 +56,6 @@ const ExecutionCard: React.FC<ExecutionCardProps> = ({ execution, onViewLogs }) 
             {execution.date.split(' ')[0]} {execution.date.split(' ')[1].replace(',', '')}
           </p>
         </div>
-        
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onViewLogs(execution.id)}
-          className="flex items-center gap-1 mt-2"
-        >
-          <FileText className="h-4 w-4" />
-          View Logs
-        </Button>
       </CardContent>
     </Card>
   );

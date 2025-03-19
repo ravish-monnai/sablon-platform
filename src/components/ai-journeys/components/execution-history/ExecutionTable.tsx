@@ -24,7 +24,6 @@ const ExecutionTable: React.FC<ExecutionTableProps> = ({ executions, onViewLogs 
           <TableHead>Bank</TableHead>
           <TableHead>Date</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
