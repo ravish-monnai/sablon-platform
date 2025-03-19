@@ -3,17 +3,14 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import JourneyCard from "./JourneyCard";
 import { Journey } from "./JourneyCard";
-import { Market } from "@/contexts/MarketContext";
 
 interface JourneyListProps {
   journeys: Journey[];
-  selectedMarket: Market;
   onViewDetails: (journeyId: string) => void;
 }
 
 const JourneyList: React.FC<JourneyListProps> = ({ 
   journeys,
-  selectedMarket,
   onViewDetails
 }) => {
   return (
@@ -22,9 +19,7 @@ const JourneyList: React.FC<JourneyListProps> = ({
         <div>
           <h2 className="text-2xl font-bold">Live Journeys</h2>
           <p className="text-muted-foreground">
-            {selectedMarket === 'Global' 
-              ? 'Active AI journeys processing data in real-time'
-              : `Active AI journeys for ${selectedMarket} market`}
+            Active AI journeys processing data in real-time
           </p>
         </div>
         <Button>Create New Journey</Button>

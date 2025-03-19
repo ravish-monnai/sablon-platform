@@ -8,23 +8,25 @@ const LiveJourneys = () => {
   const { selectedMarket } = useMarket();
   const [selectedJourney, setSelectedJourney] = useState<string | null>(null);
 
-  // Get journeys for the selected market
-  const getJourneysForMarket = () => {
-    // If Global is selected, show all journeys from Global
-    if (selectedMarket === 'Global') {
-      return journeysByMarket['Global'];
-    }
+  // Get all journeys - now includes Indian Bank Statement Analyzer by default
+  const getJourneys = () => {
+    // Get the global journeys
+    const globalJourneys = journeysByMarket['Global'];
     
-    // If selected market has journeys, return them
-    if (journeysByMarket[selectedMarket]?.length > 0) {
-      return journeysByMarket[selectedMarket];
-    }
+    // Get the Indian Bank Statement Analyzer journey
+    const indianBankStatementJourney = journeysByMarket['India'].find(
+      journey => journey.id === 'india-bank-statement-analyzer'
+    );
     
-    // Fallback to Global journeys if market has no specific journeys
-    return journeysByMarket['Global'];
+    // Combine global journeys with the Indian Bank Statement Analyzer journey
+    const combinedJourneys = indianBankStatementJourney 
+      ? [...globalJourneys, indianBankStatementJourney] 
+      : globalJourneys;
+    
+    return combinedJourneys;
   };
 
-  const liveJourneys = getJourneysForMarket();
+  const liveJourneys = getJourneys();
 
   const handleViewDetails = (journeyId: string) => {
     setSelectedJourney(journeyId);
@@ -48,7 +50,6 @@ const LiveJourneys = () => {
   return (
     <JourneyList
       journeys={liveJourneys}
-      selectedMarket={selectedMarket}
       onViewDetails={handleViewDetails}
     />
   );

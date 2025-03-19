@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Download, Settings } from "lucide-react";
+import { Settings } from "lucide-react";
 
 interface JourneyHeaderProps {
   title: string;
@@ -15,11 +15,7 @@ const JourneyHeader: React.FC<JourneyHeaderProps> = ({ title, description }) => 
         <h2 className="text-2xl font-bold">{title}</h2>
         <p className="text-muted-foreground">{description}</p>
       </div>
-      <div className="flex gap-2">
-        <Button variant="outline" size="sm">
-          <Download className="mr-2 h-4 w-4" />
-          Export Data
-        </Button>
+      <div>
         <Button size="sm">
           <Settings className="mr-2 h-4 w-4" />
           Configure Agent
