@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -63,7 +64,7 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
             <TableRow key={caseItem.id}>
               <TableCell className="font-medium">{caseItem.id}</TableCell>
               <TableCell>{caseItem.customer}</TableCell>
-              <TableCell>{caseItem.journey}</TableCell>
+              <TableCell>{caseItem.journey || 'N/A'}</TableCell>
               <TableCell>
                 <Badge
                   variant={
@@ -80,12 +81,12 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
                     <AlertTriangle className="h-3 w-3" />
                   )}
                   {caseItem.riskLevel === "Medium" && <Clock className="h-3 w-3" />}
-                  {caseItem.riskLevel}
+                  {caseItem.riskLevel || 'Unknown'}
                 </Badge>
               </TableCell>
               <TableCell>
                 <Badge
-                  className={`${caseItem.statusColor} flex w-fit items-center gap-1`}
+                  className={`${caseItem.statusColor || ''} flex w-fit items-center gap-1`}
                 >
                   {caseItem.status === "Pending Review" && <Clock className="h-3 w-3" />}
                   {caseItem.status === "Approved" && <CheckCircle className="h-3 w-3" />}
@@ -93,7 +94,7 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
                   {caseItem.status}
                 </Badge>
               </TableCell>
-              <TableCell>{caseItem.date}</TableCell>
+              <TableCell>{caseItem.date || caseItem.created}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
                   <Button
