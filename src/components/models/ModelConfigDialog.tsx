@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -9,9 +8,15 @@ import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Brain, Save, Upload, Plus, ChevronRight, LineChart, BarChart2 } from "lucide-react";
+import { 
+  Brain, Save, Upload, Plus, ChevronRight, LineChart, BarChart2,
+  Banknote, CreditCard, ShieldAlert, Calculator, ChartLine, FileText,
+  UserCheck, Briefcase, IndianRupee
+} from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
+import BankStatementFeatures from "../bank-statement/BankStatementFeatures";
+import FeatureEngineeringTab from "./FeatureEngineeringTab";
 
 interface ModelConfigDialogProps {
   open: boolean;
@@ -29,6 +34,12 @@ const ModelConfigDialog: React.FC<ModelConfigDialogProps> = ({
   const [activeTab, setActiveTab] = useState("overview");
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isIndianBankStatementAnalyzer, setIsIndianBankStatementAnalyzer] = useState(false);
+
+  useEffect(() => {
+    // Check if this is the Indian Bank Statement Analyzer model
+    setIsIndianBankStatementAnalyzer(modelName === "Indian Bank Statement Analyzer");
+  }, [modelName]);
 
   const handleSaveChanges = () => {
     setIsSubmitting(true);
@@ -48,7 +59,11 @@ const ModelConfigDialog: React.FC<ModelConfigDialogProps> = ({
       <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center text-xl">
-            <Brain className="mr-2 h-5 w-5 text-monnai-pink" />
+            {isIndianBankStatementAnalyzer ? (
+              <FileText className="mr-2 h-5 w-5 text-amber-500" />
+            ) : (
+              <Brain className="mr-2 h-5 w-5 text-monnai-pink" />
+            )}
             {modelName}
           </DialogTitle>
         </DialogHeader>
@@ -177,179 +192,176 @@ const ModelConfigDialog: React.FC<ModelConfigDialogProps> = ({
 
             {/* Feature Engineering Tab */}
             <TabsContent value="features" className="space-y-4">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-medium">Feature Engineering</h3>
-                <Button size="sm">
-                  <Plus className="h-4 w-4 mr-1" /> Add Feature
-                </Button>
-              </div>
+              {isIndianBankStatementAnalyzer ? (
+                <FeatureEngineeringTab modelType={modelType} />
+              ) : (
+                <div className="grid grid-cols-1 gap-4">
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base flex items-center justify-between">
+                        <span>Transaction Features</span>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </CardTitle>
+                      <CardDescription>Features derived from transaction data</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">transaction_amount_normalized</div>
+                            <div className="text-xs text-muted-foreground">Min-max scaled transaction amount</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">Min-Max Scaler</div>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">transaction_time_of_day</div>
+                            <div className="text-xs text-muted-foreground">Hour of transaction (0-23)</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Categorical</div>
+                            <div className="text-xs text-muted-foreground">One-Hot Encoding</div>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">transaction_velocity</div>
+                            <div className="text-xs text-muted-foreground">Number of transactions in last 24h</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">Standard Scaler</div>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
 
-              <div className="grid grid-cols-1 gap-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base flex items-center justify-between">
-                      <span>Transaction Features</span>
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </CardTitle>
-                    <CardDescription>Features derived from transaction data</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">transaction_amount_normalized</div>
-                          <div className="text-xs text-muted-foreground">Min-max scaled transaction amount</div>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base flex items-center justify-between">
+                        <span>User Behavior Features</span>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </CardTitle>
+                      <CardDescription>Features derived from user behavior</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">days_since_registration</div>
+                            <div className="text-xs text-muted-foreground">Days since user registered</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">Log Transform</div>
+                          </div>
+                          <Switch defaultChecked />
                         </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">Min-Max Scaler</div>
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">device_change</div>
+                            <div className="text-xs text-muted-foreground">New device used for transaction</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Boolean</div>
+                            <div className="text-xs text-muted-foreground">Binary</div>
+                          </div>
+                          <Switch defaultChecked />
                         </div>
-                        <Switch defaultChecked />
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">browser_fingerprint</div>
+                            <div className="text-xs text-muted-foreground">Hashed browser fingerprint</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Categorical</div>
+                            <div className="text-xs text-muted-foreground">Target Encoding</div>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
                       </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">transaction_time_of_day</div>
-                          <div className="text-xs text-muted-foreground">Hour of transaction (0-23)</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Categorical</div>
-                          <div className="text-xs text-muted-foreground">One-Hot Encoding</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">transaction_velocity</div>
-                          <div className="text-xs text-muted-foreground">Number of transactions in last 24h</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">Standard Scaler</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                    </CardContent>
+                  </Card>
 
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base flex items-center justify-between">
-                      <span>User Behavior Features</span>
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </CardTitle>
-                    <CardDescription>Features derived from user behavior</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">days_since_registration</div>
-                          <div className="text-xs text-muted-foreground">Days since user registered</div>
+                  <Card>
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-base flex items-center justify-between">
+                        <span>Network Features</span>
+                        <Button variant="ghost" size="icon" className="h-6 w-6">
+                          <ChevronRight className="h-4 w-4" />
+                        </Button>
+                      </CardTitle>
+                      <CardDescription>Features derived from network analysis</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="space-y-3">
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">network_degree</div>
+                            <div className="text-xs text-muted-foreground">Number of direct connections</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">Standard Scaler</div>
+                          </div>
+                          <Switch defaultChecked />
                         </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">Log Transform</div>
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">fraud_neighbor_ratio</div>
+                            <div className="text-xs text-muted-foreground">Ratio of neighbors marked as fraud</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">None</div>
+                          </div>
+                          <Switch defaultChecked />
                         </div>
-                        <Switch defaultChecked />
+                        
+                        <Separator />
+                        
+                        <div className="flex justify-between items-center text-sm">
+                          <div className="flex-1">
+                            <div className="font-medium">pagerank_score</div>
+                            <div className="text-xs text-muted-foreground">PageRank centrality score</div>
+                          </div>
+                          <div className="flex-1">
+                            <div>Numeric</div>
+                            <div className="text-xs text-muted-foreground">Min-Max Scaler</div>
+                          </div>
+                          <Switch defaultChecked />
+                        </div>
                       </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">device_change</div>
-                          <div className="text-xs text-muted-foreground">New device used for transaction</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Boolean</div>
-                          <div className="text-xs text-muted-foreground">Binary</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">browser_fingerprint</div>
-                          <div className="text-xs text-muted-foreground">Hashed browser fingerprint</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Categorical</div>
-                          <div className="text-xs text-muted-foreground">Target Encoding</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base flex items-center justify-between">
-                      <span>Network Features</span>
-                      <Button variant="ghost" size="icon" className="h-6 w-6">
-                        <ChevronRight className="h-4 w-4" />
-                      </Button>
-                    </CardTitle>
-                    <CardDescription>Features derived from network analysis</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">network_degree</div>
-                          <div className="text-xs text-muted-foreground">Number of direct connections</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">Standard Scaler</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">fraud_neighbor_ratio</div>
-                          <div className="text-xs text-muted-foreground">Ratio of neighbors marked as fraud</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">None</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                      
-                      <Separator />
-                      
-                      <div className="flex justify-between items-center text-sm">
-                        <div className="flex-1">
-                          <div className="font-medium">pagerank_score</div>
-                          <div className="text-xs text-muted-foreground">PageRank centrality score</div>
-                        </div>
-                        <div className="flex-1">
-                          <div>Numeric</div>
-                          <div className="text-xs text-muted-foreground">Min-Max Scaler</div>
-                        </div>
-                        <Switch defaultChecked />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </TabsContent>
 
             {/* Training Data Tab */}
