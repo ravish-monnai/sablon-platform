@@ -36,7 +36,7 @@ const ActivityTimeline: React.FC = () => {
         { 
           icon: <ShieldAlert className="h-3 w-3" />, 
           label: "Fraud Detection", 
-          variant: "warning" 
+          variant: "warning" as const
         },
         { icon: <IndianRupee className="h-3 w-3" />, label: "UPI Transactions" },
         { icon: <CreditCard className="h-3 w-3" />, label: "Cash Flow Analysis" }
@@ -51,12 +51,12 @@ const ActivityTimeline: React.FC = () => {
         { 
           icon: <AlertTriangle className="h-3 w-3" />, 
           label: "High Risk Transfers", 
-          variant: "danger" 
+          variant: "danger" as const
         },
         { 
           icon: <ShieldAlert className="h-3 w-3" />, 
           label: "Regulatory Compliance", 
-          variant: "warning" 
+          variant: "warning" as const
         },
         { icon: <FileText className="h-3 w-3" />, label: "Document Verification" }
       ]
