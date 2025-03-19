@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -13,7 +12,7 @@ import {
   ShieldAlert, AlertTriangle, Eye, UserX,
   ThumbsUp, ThumbsDown, ListCheck, UserCheck,
   XCircle, ScanFace, Fingerprint, BadgeDollarSign,
-  CheckCircle, Robot, Zap, Settings, ChevronDown,
+  CheckCircle, Bot, Zap, Settings, ChevronDown,
   Calendar, Clock, MapPin
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -448,7 +447,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
               
               <Separator />
               
-              {/* Add more debt service coverage features as needed */}
               <FeatureCategory title="Debt Structure Analysis">
                 <Feature 
                   title="Fixed vs. variable debt ratio"
@@ -527,7 +525,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
         
         {/* Risk Profiling Features */}
         <TabsContent value="risk-profiling" className="space-y-6">
-          {/* Similar structure with risk profiling features */}
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
@@ -587,7 +584,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
                 />
               </FeatureCategory>
               
-              {/* Add more risk profiling categories */}
               <Separator />
               
               <FeatureCategory title="High-Risk Transaction Analysis">
@@ -676,8 +672,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
                   icon={<Search className="h-5 w-5 text-blue-600" />}
                 />
               </FeatureCategory>
-              
-              {/* Add more alternative credit assessment categories */}
             </CardContent>
           </Card>
         </TabsContent>
@@ -742,8 +736,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
                   icon={<ArrowLeftRight className="h-5 w-5 text-red-600" />}
                 />
               </FeatureCategory>
-              
-              {/* Add more fraud detection categories */}
             </CardContent>
           </Card>
         </TabsContent>
@@ -753,7 +745,7 @@ const BankStatementFeatureExplorer: React.FC = () => {
           <Card>
             <CardHeader>
               <div className="flex items-center gap-2">
-                <Robot className="h-5 w-5 text-primary" />
+                <Bot className="h-5 w-5 text-primary" />
                 <CardTitle>Automated Underwriting Features</CardTitle>
               </div>
               <CardDescription>
@@ -808,8 +800,6 @@ const BankStatementFeatureExplorer: React.FC = () => {
                   icon={<ShieldAlert className="h-5 w-5 text-blue-600" />}
                 />
               </FeatureCategory>
-              
-              {/* Add more automated underwriting categories */}
             </CardContent>
           </Card>
         </TabsContent>
