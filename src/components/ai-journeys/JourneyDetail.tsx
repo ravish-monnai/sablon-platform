@@ -2,7 +2,6 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
-import BankStatementJourney from "./BankStatementJourney";
 import IndianBankStatementJourney from "./IndianBankStatementJourney";
 
 interface JourneyDetailProps {
