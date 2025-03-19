@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, AlertTriangle } from "lucide-react";
 import { CaseItem } from "./types";
 
 interface JourneyStepsContentProps {

@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BranchNode } from "./BranchNode";
+import BranchNode from "./BranchNode";
 import { JourneyStep } from "./types";
 
 interface BranchPathsProps {
