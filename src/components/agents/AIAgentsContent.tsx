@@ -1,4 +1,3 @@
-
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -15,7 +14,6 @@ const AIAgentsContent = () => {
   const { selectedMarket } = useMarket();
   // Customer agent editing states
   const [isEditingFraudAgent, setIsEditingFraudAgent] = useState(false)
-  const [isEditingKYCAgent, setIsEditingKYCAgent] = useState(false)
   const [isEditingBankStatementAgent, setIsEditingBankStatementAgent] = useState(false)
   
   // Monnai agent editing states
@@ -33,11 +31,10 @@ const AIAgentsContent = () => {
   
   const customerAgents = getCustomerAgents(
     setIsEditingFraudAgent, 
-    setIsEditingKYCAgent, 
-    setIsEditingBankStatementAgent,
-    // still passing these functions but they won't be used
+    () => {}, // placeholder for setIsEditingKYCAgent that we no longer use
     () => {}, // placeholder for setIsEditingUnderwriterAgent 
-    () => {}  // placeholder for setIsEditingCollectionAgent
+    () => {}, // placeholder for setIsEditingCollectionAgent
+    setIsEditingBankStatementAgent
   )
   
   const monnaiAgents = getMonnaiAgents(
@@ -127,12 +124,12 @@ const AIAgentsContent = () => {
       <AgentEditors 
         // Customer agent editing states
         isEditingFraudAgent={isEditingFraudAgent}
-        isEditingKYCAgent={isEditingKYCAgent}
+        isEditingKYCAgent={false}
         isEditingBankStatementAgent={isEditingBankStatementAgent}
         isEditingUnderwriterAgent={false}
         isEditingCollectionAgent={false}
         setIsEditingFraudAgent={setIsEditingFraudAgent}
-        setIsEditingKYCAgent={setIsEditingKYCAgent}
+        setIsEditingKYCAgent={() => {}}
         setIsEditingBankStatementAgent={setIsEditingBankStatementAgent}
         setIsEditingUnderwriterAgent={() => {}}
         setIsEditingCollectionAgent={() => {}}

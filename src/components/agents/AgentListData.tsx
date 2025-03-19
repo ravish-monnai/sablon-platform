@@ -23,26 +23,6 @@ export const getCustomerAgents = (
       onEdit: () => setIsEditingFraudAgent(true)
     },
     {
-      title: "KYC Compliance Agent",
-      description: "Automated identity verification and compliance",
-      icon: <UserCheck className="mr-2 h-5 w-5 text-[#D946EF]" />,
-      status: "Running",
-      casesPerDay: 124,
-      resolutionTime: "2.5 mins",
-      model: "Claude 3 Opus",
-      onEdit: () => setIsEditingKYCAgent(true)
-    },
-    {
-      title: "Bank Statement Analyzer",
-      description: "Analyzes bank statements for income verification and spending patterns",
-      icon: <FileText className="mr-2 h-5 w-5 text-[#10B981]" />,
-      status: "Running",
-      casesPerDay: 92,
-      resolutionTime: "4.1 mins",
-      model: "GPT-4o",
-      onEdit: () => setIsEditingBankStatementAgent(true)
-    },
-    {
       title: "Indian Bank Statement Analyzer",
       description: "Specialized analysis for Indian bank statements with UPI support",
       icon: <FileText className="mr-2 h-5 w-5 text-[#F97316]" />,
