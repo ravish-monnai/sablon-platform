@@ -19,9 +19,9 @@ const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) =>
       <CaseHeaderActions caseData={caseData} onClose={onClose} />
 
       <Tabs defaultValue="ai-overview" className="w-full">
-        <TabsList>
+        <TabsList className="flex flex-wrap h-auto py-2 overflow-auto mb-4">
           <TabsTrigger value="ai-overview">AI Overview</TabsTrigger>
-          <TabsTrigger value="bank-features">Bank Statement Features</TabsTrigger>
+          <TabsTrigger value="bank-features">Bank Statement Analysis</TabsTrigger>
           <TabsTrigger value="transactions">Transactions</TabsTrigger>
         </TabsList>
 

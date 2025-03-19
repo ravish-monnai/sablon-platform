@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -14,7 +14,9 @@ import {
   Shield,
   ThumbsUp,
   ThumbsDown,
-  HelpCircle
+  HelpCircle,
+  CogIcon,
+  Workflow
 } from "lucide-react";
 import {
   BarChart,
@@ -28,12 +30,15 @@ import {
   Pie,
   Cell
 } from "recharts";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 interface AIOverviewTabProps {
   caseData: CaseItem;
 }
 
 const AIOverviewTab: React.FC<AIOverviewTabProps> = ({ caseData }) => {
+  const [selectedModel, setSelectedModel] = useState("gpt-4o");
+  
   // Risk factor data for pie chart
   const riskFactorData = caseData.decisionFactors?.map((factor) => ({
     name: factor.factor,
@@ -43,9 +48,31 @@ const AIOverviewTab: React.FC<AIOverviewTabProps> = ({ caseData }) => {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#9b87f5'];
 
+  // Model-specific recommendations
+  const modelRecommendations = {
+    "gpt-4o": {
+      recommendation: getDecisionRecommendation(caseData.riskLevel).recommendation,
+      confidence: "92%",
+      reasoning: caseData.reasoning || "The case shows a pattern of consistent income with few anomalies. The risk indicators are within acceptable parameters.",
+      explanation: getDecisionRecommendation(caseData.riskLevel).description
+    },
+    "gpt-4o-mini": {
+      recommendation: getDecisionRecommendation(caseData.riskLevel).recommendation,
+      confidence: "87%",
+      reasoning: caseData.reasoning || "Risk assessment shows minimal concerns. Income verification passes all checks.",
+      explanation: getDecisionRecommendation(caseData.riskLevel).description
+    },
+    "llama-3": {
+      recommendation: getDecisionRecommendation(caseData.riskLevel === "Low" ? "Low" : caseData.riskLevel === "Medium" ? "Medium" : "High").recommendation,
+      confidence: "83%",
+      reasoning: "Analysis of transaction patterns and income verification show expected behavior with some inconsistencies.",
+      explanation: "The customer's financial profile demonstrates reasonable stability with some areas needing verification."
+    }
+  };
+
   // Get decision recommendation based on risk level
-  const getDecisionRecommendation = () => {
-    switch (caseData.riskLevel) {
+  function getDecisionRecommendation(riskLevel) {
+    switch (riskLevel) {
       case "Low":
         return {
           recommendation: "Approve",
@@ -76,35 +103,53 @@ const AIOverviewTab: React.FC<AIOverviewTabProps> = ({ caseData }) => {
           actionClass: "bg-gray-50 border-gray-200 text-gray-700"
         };
     }
-  };
+  }
 
-  const decision = getDecisionRecommendation();
+  const currentRecommendation = modelRecommendations[selectedModel];
+  const decision = getDecisionRecommendation(caseData.riskLevel);
 
   return (
     <div className="space-y-6">
       {/* Decision Recommendation */}
       <Card className="border border-[#9b87f5]/20">
         <CardHeader className="pb-2">
-          <div className="flex items-center">
-            <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
-            <CardTitle className="text-base">AI Decision Recommendation</CardTitle>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center">
+              <BrainCircuit className="h-5 w-5 mr-2 text-[#9b87f5]" />
+              <CardTitle className="text-base">AI Decision Recommendation</CardTitle>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="text-sm text-muted-foreground">AI Model:</span>
+              <select 
+                className="text-sm border rounded px-2 py-1 bg-background"
+                value={selectedModel}
+                onChange={(e) => setSelectedModel(e.target.value)}
+              >
+                <option value="gpt-4o">GPT-4o</option>
+                <option value="gpt-4o-mini">GPT-4o Mini</option>
+                <option value="llama-3">Llama 3</option>
+              </select>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className={`p-4 rounded-md border ${decision.actionClass}`}>
-            <div className="flex items-center mb-2">
-              {decision.icon}
-              <span className="ml-2 font-medium text-lg">{decision.recommendation}</span>
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center">
+                {decision.icon}
+                <span className="ml-2 font-medium text-lg">{currentRecommendation.recommendation}</span>
+              </div>
+              <Badge variant="outline">Confidence: {currentRecommendation.confidence}</Badge>
             </div>
-            <p className="text-sm">{decision.description}</p>
+            <p className="text-sm">{currentRecommendation.explanation}</p>
           </div>
 
           <div className="bg-[#9b87f5]/10 rounded-md p-4 border border-[#9b87f5]/20">
             <div className="flex items-start mb-3">
               <Cpu className="h-5 w-5 mr-2 text-[#9b87f5] mt-0.5" />
               <div>
-                <h3 className="font-medium text-[#9b87f5]">AI Reasoning</h3>
-                <p className="text-sm mt-1">{caseData.reasoning}</p>
+                <h3 className="font-medium text-[#9b87f5]">AI Reasoning ({selectedModel})</h3>
+                <p className="text-sm mt-1">{currentRecommendation.reasoning}</p>
               </div>
             </div>
           </div>
