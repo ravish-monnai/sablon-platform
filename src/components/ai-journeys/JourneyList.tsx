@@ -16,10 +16,7 @@ const JourneyList: React.FC<JourneyListProps> = ({
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold">Live Journeys</h2>
-          <p className="text-muted-foreground">
-            Active AI journeys processing data in real-time
-          </p>
+          <h2 className="text-2xl font-bold">Live Agents</h2>
         </div>
       </div>
 
