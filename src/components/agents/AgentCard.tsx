@@ -24,9 +24,10 @@ export type MonnaiAgentType = AgentType;
 interface AgentCardProps {
   agent: AgentType;
   viewMode: "customer" | "internal";
+  isViewOnly?: boolean;
 }
 
-const AgentCard = ({ agent, viewMode }: AgentCardProps) => {
+const AgentCard = ({ agent, viewMode, isViewOnly = false }: AgentCardProps) => {
   return (
     <Card>
       <CardHeader>
@@ -58,7 +59,7 @@ const AgentCard = ({ agent, viewMode }: AgentCardProps) => {
         </div>
       </CardContent>
       <CardFooter className="flex justify-end">
-        {agent.onEdit && (
+        {agent.onEdit && !isViewOnly && (
           <Button 
             variant="outline" 
             size="sm" 
