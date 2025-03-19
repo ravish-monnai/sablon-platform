@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
-import { CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import CaseHeader from "./detail/CaseHeader";
 import CaseTabs from "./detail/CaseTabs";

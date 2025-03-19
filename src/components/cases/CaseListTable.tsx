@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -24,7 +23,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
 
 interface CaseListTableProps {
   cases: CaseItem[];

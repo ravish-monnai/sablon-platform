@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
 import DetailTabContent from "./DetailTabContent";
 import AnomalyTabContent from "./AnomalyTabContent";
 import DecisionPathTabContent from "./DecisionPathTabContent";

@@ -1,6 +1,8 @@
 
 import { useState, useMemo } from 'react';
-import { CaseItem, allCases, bankStatementCases, indianBankStatementCases } from '@/types/cases';
+import { CaseItem, allCases } from '@/types/cases';
+import { bankStatementCases } from '@/types/mockData/bankStatementCases';
+import { indianBankStatementCases } from '@/types/mockData/indianBankStatementCases';
 
 interface UseCaseFilteringProps {
   selectedMarket: string;

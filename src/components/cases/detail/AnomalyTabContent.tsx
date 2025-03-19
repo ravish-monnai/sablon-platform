@@ -1,7 +1,6 @@
-
 import React from "react";
 import { AlertTriangle, AlertCircle } from "lucide-react";
-import { CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
 
 interface AnomalyTabContentProps {
   caseData: CaseItem;

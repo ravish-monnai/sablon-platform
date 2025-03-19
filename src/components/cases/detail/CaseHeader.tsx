@@ -1,9 +1,8 @@
-
 import React from "react";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, CheckCircle, AlertCircle, FileText } from "lucide-react";
-import { CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
 
 interface CaseHeaderProps {
   caseData: CaseItem;

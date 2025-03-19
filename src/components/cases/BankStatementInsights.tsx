@@ -5,7 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, Link2, ArrowDownUp, CheckCircle, AlertCircle, FileText, Eye } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { bankStatementCases, indianBankStatementCases, CaseItem } from "@/types/cases";
+import { CaseItem } from "@/types/caseTypes";
+import { bankStatementCases } from "@/types/mockData/bankStatementCases";
+import { indianBankStatementCases } from "@/types/mockData/indianBankStatementCases";
 import BankStatementCaseDetail from "./BankStatementCaseDetail";
 
 const BankStatementInsights: React.FC = () => {
