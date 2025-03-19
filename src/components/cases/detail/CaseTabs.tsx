@@ -12,12 +12,16 @@ interface CaseTabsProps {
 
 const CaseTabs: React.FC<CaseTabsProps> = ({ caseData }) => {
   return (
-    <Tabs defaultValue="details">
+    <Tabs defaultValue="ai-decision">
       <TabsList className="mb-4">
+        <TabsTrigger value="ai-decision">AI Reasoning</TabsTrigger>
         <TabsTrigger value="details">Details</TabsTrigger>
         <TabsTrigger value="anomalies">Anomalies</TabsTrigger>
-        <TabsTrigger value="ai-decision">AI Decision Path</TabsTrigger>
       </TabsList>
+      
+      <TabsContent value="ai-decision">
+        <DecisionPathTabContent />
+      </TabsContent>
       
       <TabsContent value="details">
         <DetailTabContent caseData={caseData} />
@@ -25,10 +29,6 @@ const CaseTabs: React.FC<CaseTabsProps> = ({ caseData }) => {
       
       <TabsContent value="anomalies">
         <AnomalyTabContent caseData={caseData} />
-      </TabsContent>
-      
-      <TabsContent value="ai-decision">
-        <DecisionPathTabContent />
       </TabsContent>
     </Tabs>
   );
