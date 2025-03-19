@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -67,7 +68,8 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ activeTab
         { month: "May", amount: 4250 },
         { month: "Jun", amount: 4350 },
       ],
-      anomalies: []
+      anomalies: [],
+      exceptions: [] // Add empty exceptions array to fix the TypeScript error
     },
     cashFlow: {
       averageBalance: caseData?.cashFlowDetails?.averageBalance || "$2,850",
