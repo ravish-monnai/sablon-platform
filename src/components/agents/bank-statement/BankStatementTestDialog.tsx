@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Market } from '@/contexts/MarketContext';
+import BankStatementTestResults from './BankStatementTestResults';
 
 export interface BankStatementTestDialogProps {
   isOpen: boolean;
@@ -89,80 +90,7 @@ const BankStatementTestDialog: React.FC<BankStatementTestDialogProps> = ({
           </TabsContent>
           
           <TabsContent value="results" className="space-y-4">
-            <div className="border rounded-lg p-6">
-              <h3 className="text-lg font-semibold mb-2">Analysis Results</h3>
-              <p className="text-sm text-muted-foreground mb-4">
-                The agent has analyzed the bank statement and extracted the following insights:
-              </p>
-              
-              <div className="space-y-4">
-                <div className="border p-4 rounded-md bg-muted/40">
-                  <h4 className="font-medium">Account Summary</h4>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Account Type</p>
-                      <p className="text-sm font-medium">Checking Account</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Account Number</p>
-                      <p className="text-sm font-medium">XXXX-XX-1234</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Statement Period</p>
-                      <p className="text-sm font-medium">Jan 1 - Jan 31, 2023</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Closing Balance</p>
-                      <p className="text-sm font-medium">$5,248.32</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border p-4 rounded-md bg-muted/40">
-                  <h4 className="font-medium">Financial Insights</h4>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Total Income</p>
-                      <p className="text-sm font-medium">$8,750.00</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Total Expenses</p>
-                      <p className="text-sm font-medium">$6,120.45</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Average Daily Balance</p>
-                      <p className="text-sm font-medium">$4,876.22</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Largest Transaction</p>
-                      <p className="text-sm font-medium">$2,500.00 (Rent)</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="border p-4 rounded-md bg-muted/40">
-                  <h4 className="font-medium">Risk Indicators</h4>
-                  <div className="grid grid-cols-2 gap-2 mt-2">
-                    <div>
-                      <p className="text-xs text-muted-foreground">Overdrafts</p>
-                      <p className="text-sm font-medium">None detected</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Insufficient Funds</p>
-                      <p className="text-sm font-medium">None detected</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Late Payments</p>
-                      <p className="text-sm font-medium">None detected</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground">Suspicious Activity</p>
-                      <p className="text-sm font-medium">None detected</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <BankStatementTestResults />
             
             <div className="flex justify-between">
               <Button variant="outline" onClick={() => setActiveTab('input')}>
