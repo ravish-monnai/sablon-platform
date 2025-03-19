@@ -11,6 +11,11 @@ interface CaseTabsProps {
 }
 
 const CaseTabs: React.FC<CaseTabsProps> = ({ caseData }) => {
+  // Add safety check to make sure caseData is properly loaded
+  if (!caseData) {
+    return <div>Loading case data...</div>;
+  }
+  
   return (
     <Tabs defaultValue="ai-decision">
       <TabsList className="mb-4">
@@ -20,7 +25,7 @@ const CaseTabs: React.FC<CaseTabsProps> = ({ caseData }) => {
       </TabsList>
       
       <TabsContent value="ai-decision">
-        <DecisionPathTabContent />
+        <DecisionPathTabContent caseId={caseData.id} />
       </TabsContent>
       
       <TabsContent value="details">
