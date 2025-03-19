@@ -8,7 +8,7 @@ import BankStatementFeatures from "@/components/bank-statement/BankStatementFeat
 import BankStatementModels from "./bank-statement/BankStatementModels";
 import BankStatementOutput from "./bank-statement/BankStatementOutput";
 import BankStatementTestDialog from "./bank-statement/BankStatementTestDialog";
-import { Market } from "@/contexts/MarketContext";
+import { Market, useMarket } from "@/contexts/MarketContext";
 
 interface BankStatementAgentEditorProps {
   onClose: () => void;
@@ -29,7 +29,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
   const [llmModel, setLLMModel] = useState("gpt-4o");
   const [confidenceThreshold, setConfidenceThreshold] = useState([80]);
   const [isTestDialogOpen, setIsTestDialogOpen] = useState(false);
-  const [selectedMarket, setSelectedMarket] = useState<Market>("India");
+  const { selectedMarket } = useMarket();
   
   const handleToggleFeature = (feature: string) => {
     setEnabledFeatures(prev => ({
@@ -52,9 +52,9 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     <div className="mt-6 space-y-6">
       <div className="flex justify-between">
         <div>
-          <h3 className="text-lg font-medium">Indian Bank Statement Analyzer Configuration</h3>
+          <h3 className="text-lg font-medium">Bank Statement Analyzer Configuration</h3>
           <p className="text-sm text-muted-foreground">
-            Configure how your AI agent analyzes Indian bank statements with UPI transaction support
+            Configure how your AI agent analyzes bank statements {selectedMarket !== 'Global' ? `for ${selectedMarket}` : 'globally'}
           </p>
         </div>
         <Button 
@@ -106,7 +106,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
         isOpen={isTestDialogOpen}
         onOpenChange={setIsTestDialogOpen}
         selectedMarket={selectedMarket}
-        setSelectedMarket={setSelectedMarket}
+        setSelectedMarket={undefined} // No longer allow changing market in the test dialog
       />
     </div>
   );
