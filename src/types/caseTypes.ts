@@ -17,21 +17,40 @@ export interface CaseItem {
   date?: string;
   agentAssigned: string;
   
-  // Additional properties that might be needed by CaseDetailView
+  // Contact information
   email?: string;
   phone?: string;
   location?: string;
+  
+  // AI analysis information
   reasoning?: string;
   decisionFactors?: Array<{
     factor: string;
     score: number;
     weight: number;
   }>;
+  
+  // Anomaly information
   anomalyFlags?: string[];
+  
+  // Document information
   documents?: Array<{
     type: string;
     verified: boolean;
     name: string;
     date?: string;
   }>;
+  
+  // Digital footprint
+  deviceId?: string;
+  ipAddress?: string;
+  digitalFootprint?: {
+    platforms?: Array<{
+      id: string;
+      name: string;
+      active: boolean;
+      usage: number;
+      lastActive: string;
+    }>;
+  };
 }

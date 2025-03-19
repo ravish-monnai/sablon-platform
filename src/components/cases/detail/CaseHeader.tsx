@@ -1,7 +1,8 @@
+
 import React from "react";
 import { CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, CheckCircle, AlertCircle, FileText } from "lucide-react";
+import { AlertTriangle, CheckCircle, AlertCircle, FileText, BrainCircuit } from "lucide-react";
 import { CaseItem } from "@/types/caseTypes";
 
 interface CaseHeaderProps {
@@ -10,13 +11,30 @@ interface CaseHeaderProps {
 
 const CaseHeader: React.FC<CaseHeaderProps> = ({ caseData }) => {
   return (
-    <div className="flex justify-between items-center pb-2">
+    <div className="flex justify-between items-center pb-4">
       <div>
         <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5 text-muted-foreground" />
-          Case #{caseData.id}
+          <div className="p-1.5 bg-[#9b87f5]/10 rounded-md">
+            <BrainCircuit className="h-5 w-5 text-[#9b87f5]" />
+          </div>
+          <span>Case #{caseData.id}</span>
         </CardTitle>
-        <CardDescription>Bank Statement Analysis</CardDescription>
+        <CardDescription className="mt-1 flex items-center gap-2">
+          <FileText className="h-3.5 w-3.5" />
+          {caseData.type || "Bank Statement Analysis"}
+          {caseData.market && (
+            <>
+              <span className="mx-1">•</span>
+              <span>{caseData.market}</span>
+            </>
+          )}
+          {caseData.bank && (
+            <>
+              <span className="mx-1">•</span>
+              <span>{caseData.bank}</span>
+            </>
+          )}
+        </CardDescription>
       </div>
       <Badge
         variant={
@@ -26,6 +44,7 @@ const CaseHeader: React.FC<CaseHeaderProps> = ({ caseData }) => {
             ? "secondary"
             : "outline"
         }
+        className="px-3 py-1"
       >
         {caseData.status === "High Risk" && (
           <AlertTriangle className="mr-1 h-3 w-3" />
