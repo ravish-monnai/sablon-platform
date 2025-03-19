@@ -1,3 +1,4 @@
+
 import { MonnaiAgentType, CustomerAgentType } from "./AgentCard"
 import { 
   Shield, Users, CreditCard, UserCheck, FileText,
@@ -23,8 +24,8 @@ export const getCustomerAgents = (
       onEdit: () => setIsEditingFraudAgent(true)
     },
     {
-      title: "Indian Bank Statement Analyzer",
-      description: "Specialized analysis for Indian bank statements with UPI support",
+      title: "Bank Statement Analyzer Agent",
+      description: "Specialized analysis for bank statements with UPI support",
       icon: <FileText className="mr-2 h-5 w-5 text-[#F97316]" />,
       status: "Running",
       casesPerDay: 167,

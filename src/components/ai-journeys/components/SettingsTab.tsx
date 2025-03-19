@@ -10,11 +10,11 @@ const SettingsTab: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>Journey Configuration</CardTitle>
-          <CardDescription>Configure how the Indian Bank Statement Analyzer works</CardDescription>
+          <CardDescription>Configure how the Bank Statement Analyzer Agent works</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
-            <h4 className="font-medium">Supported Indian Banks</h4>
+            <h4 className="font-medium">Supported Banks</h4>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <Badge variant="outline" className="justify-start">HDFC Bank</Badge>
               <Badge variant="outline" className="justify-start">State Bank of India</Badge>
@@ -32,7 +32,7 @@ const SettingsTab: React.FC = () => {
           
           <div className="space-y-2">
             <h4 className="font-medium">UPI Transaction Detection</h4>
-            <p className="text-sm text-muted-foreground">Specialized detection for UPI transactions from popular Indian payment apps</p>
+            <p className="text-sm text-muted-foreground">Specialized detection for UPI transactions from popular payment apps</p>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
               <Badge variant="outline" className="justify-start">Google Pay</Badge>
               <Badge variant="outline" className="justify-start">PhonePe</Badge>

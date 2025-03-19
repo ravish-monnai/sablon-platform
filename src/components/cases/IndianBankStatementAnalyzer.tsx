@@ -12,10 +12,10 @@ const IndianBankStatementAnalyzer = () => {
       <CardHeader>
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-amber-500" />
-          <CardTitle>Indian Bank Statement Analyzer</CardTitle>
+          <CardTitle>Bank Statement Analyzer Agent</CardTitle>
         </div>
         <CardDescription>
-          Specialized analysis for Indian bank statements with UPI transaction support
+          Specialized analysis for bank statements with UPI transaction support
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -135,7 +135,7 @@ const IndianBankStatementAnalyzer = () => {
       <CardFooter className="flex justify-between">
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <IndianRupee className="h-4 w-4" />
-          View All Indian Cases
+          View All Cases
         </Button>
         <Button size="sm" className="flex items-center gap-2">
           <ArrowUpRight className="h-4 w-4" />

@@ -14,8 +14,8 @@ const IndianBankStatementJourney = () => {
   return (
     <div className="space-y-6">
       <JourneyHeader 
-        title="Indian Bank Statement Analyzer"
-        description="Specialized analysis for Indian bank statements with UPI transaction support"
+        title="Bank Statement Analyzer Agent"
+        description="Specialized analysis for bank statements with UPI transaction support"
       />
       
       <Tabs value={activeTab} onValueChange={setActiveTab}>

@@ -109,7 +109,7 @@ const FeatureEngineeringTab: React.FC<FeatureEngineeringTabProps> = ({ modelType
                         modelType === 'regression' ? 'Regression' : modelType}
         </p>
         <p className="text-sm text-slate-600">
-          Indian Bank Statement Analyzer features are configured to maximize predictive power for multiple classification tasks.
+          Bank Statement Analyzer Agent features are configured to maximize predictive power for multiple classification tasks.
         </p>
       </div>
       
