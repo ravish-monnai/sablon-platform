@@ -11,6 +11,9 @@ import {
   SidebarHeader,
   SidebarTrigger,
   SidebarFooter,
+  SidebarMenuSub,
+  SidebarMenuSubItem,
+  SidebarMenuSubButton,
 } from "@/components/ui/sidebar"
 import { 
   LayoutDashboard, 
@@ -27,7 +30,8 @@ import {
   Wallet,
   Sliders,
   Layers,
-  Activity
+  Activity,
+  PlayCircle
 } from "lucide-react"
 import { useLocation, useNavigate } from "react-router-dom"
 import MonnaiLogo from "../branding/MonnaiLogo"
@@ -64,7 +68,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   const customerNavItems = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
-    { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
+    { 
+      label: "AI Journeys", 
+      path: "/ai-journeys", 
+      icon: Workflow,
+      subItems: [
+        { label: "Journey Builder", path: "/ai-journeys?tab=workflow" },
+        { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
+      ]
+    },
     { label: "AI Agents", path: "/ai-agents", icon: Bot },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
@@ -75,7 +87,15 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   
   const monnaiNavItems = [
     { label: "Operations Dashboard", path: "/", icon: LayoutDashboard },
-    { label: "AI Journeys", path: "/ai-journeys", icon: Workflow },
+    { 
+      label: "AI Journeys", 
+      path: "/ai-journeys", 
+      icon: Workflow,
+      subItems: [
+        { label: "Journey Builder", path: "/ai-journeys?tab=workflow" },
+        { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
+      ]
+    },
     { label: "AI Agents", path: "/ai-agents", icon: Bot },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
@@ -83,10 +103,19 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   ]
   
   const isActive = (path: string) => {
-    return currentPath === path || currentPath.startsWith(`${path}/`)
+    if (path.includes('?')) {
+      const [basePath, queryString] = path.split('?');
+      const queryParams = new URLSearchParams(queryString);
+      const currentParams = new URLSearchParams(location.search);
+      
+      // Check if base path matches and the tab parameter matches
+      return currentPath === basePath && 
+             queryParams.get('tab') === currentParams.get('tab');
+    }
+    return currentPath === path || currentPath.startsWith(`${path}/`);
   }
 
-  const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems
+  const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems;
 
   const handleViewModeChange = (value: string) => {
     if (value === "customer" || value === "internal") {
@@ -109,18 +138,62 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             <SidebarMenu>
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    tooltip={item.label}
-                    isActive={isActive(item.path)}
-                    onClick={() => {
-                      const params = new URLSearchParams();
-                      params.set("viewMode", viewMode);
-                      navigate({ pathname: item.path, search: params.toString() });
-                    }}
-                  >
-                    <item.icon className="mr-2" />
-                    <span>{item.label}</span>
-                  </SidebarMenuButton>
+                  {!item.subItems ? (
+                    <SidebarMenuButton
+                      tooltip={item.label}
+                      isActive={isActive(item.path)}
+                      onClick={() => {
+                        const params = new URLSearchParams();
+                        params.set("viewMode", viewMode);
+                        navigate({ pathname: item.path, search: params.toString() });
+                      }}
+                    >
+                      <item.icon className="mr-2" />
+                      <span>{item.label}</span>
+                    </SidebarMenuButton>
+                  ) : (
+                    <>
+                      <SidebarMenuButton
+                        tooltip={item.label}
+                        isActive={currentPath.startsWith(item.path)}
+                        onClick={() => {
+                          const params = new URLSearchParams();
+                          params.set("viewMode", viewMode);
+                          // Navigate to the first sub-item by default
+                          navigate({ 
+                            pathname: item.path, 
+                            search: item.subItems?.[0].path.includes('?') 
+                              ? item.subItems[0].path.split('?')[1] 
+                              : params.toString() 
+                          });
+                        }}
+                      >
+                        <item.icon className="mr-2" />
+                        <span>{item.label}</span>
+                      </SidebarMenuButton>
+                      
+                      <SidebarMenuSub>
+                        {item.subItems.map((subItem) => (
+                          <SidebarMenuSubItem key={subItem.path}>
+                            <SidebarMenuSubButton
+                              isActive={isActive(subItem.path)}
+                              onClick={() => {
+                                navigate({ 
+                                  pathname: item.path, 
+                                  search: subItem.path.includes('?') 
+                                    ? subItem.path.split('?')[1] 
+                                    : '' 
+                                });
+                              }}
+                            >
+                              {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
+                              <span>{subItem.label}</span>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </>
+                  )}
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

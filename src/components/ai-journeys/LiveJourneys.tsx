@@ -1,11 +1,10 @@
 
 import React from "react";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { FileText, AlertTriangle, CheckCircle, Clock, PlayCircle, PauseCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 // Sample data for live journeys
 const liveJourneys = [
@@ -46,6 +45,18 @@ const liveJourneys = [
 
 const LiveJourneys = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleViewDetails = (journeyId: string) => {
+    const searchParams = new URLSearchParams(location.search);
+    searchParams.set("tab", "journey-details");
+    searchParams.set("journeyId", journeyId);
+    
+    navigate({
+      pathname: location.pathname,
+      search: searchParams.toString(),
+    });
+  };
 
   return (
     <div className="space-y-6">
@@ -100,7 +111,7 @@ const LiveJourneys = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                onClick={() => journey.id === "bank-statement-analyzer" ? navigate("/cases") : null}
+                onClick={() => handleViewDetails(journey.id)}
               >
                 View Details
               </Button>

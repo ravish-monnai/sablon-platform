@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
@@ -32,11 +32,19 @@ const AIJourneys = () => {
   };
   
   // If journey-details is selected but no journeyId, default to "live" tab
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedTab === "journey-details" && !journeyId) {
       handleTabChange("live");
     }
   }, [selectedTab, journeyId]);
+
+  // Update the selectedTab state if the URL search params change
+  useEffect(() => {
+    const tabFromUrl = searchParams.get("tab") || "workflow";
+    if (tabFromUrl !== selectedTab) {
+      setSelectedTab(tabFromUrl);
+    }
+  }, [location.search]);
   
   return (
     <div className="container mx-auto p-6">
