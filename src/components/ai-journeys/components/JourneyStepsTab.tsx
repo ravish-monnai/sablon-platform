@@ -24,7 +24,7 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
             The bank statement analysis process follows these steps
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-6">
+        <CardContent className="p-6 pb-24">
           <WorkflowVisualization 
             steps={steps}
             getStepStatusBorder={getStepStatusBorder}

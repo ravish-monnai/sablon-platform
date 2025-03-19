@@ -18,10 +18,11 @@ export function getStepColor(step: JourneyStep, index: number): string {
   if (step.color) return step.color;
   
   const colors = [
-    "#2bbfe0", // Blue
-    "#ffcc1d", // Yellow
-    "#66cc66", // Green
-    "#e85abd"  // Pink
+    "#2bbfe0", // Blue for Document Upload
+    "#ffcc1d", // Yellow for Feature Extraction
+    "#66cc66", // Green for Risk Assessment
+    "#e85abd", // Pink for Underwriting
+    "#2bbfe0"  // Blue for Data Storage
   ];
   
   return colors[index % colors.length];
