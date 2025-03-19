@@ -3,17 +3,10 @@ import React from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Check, 
-  CircleDashed, 
-  CircleDot, 
-  ArrowRight, 
   AlertTriangle, 
   ShieldAlert, 
   UserCheck,
-  Cog,
-  FileText,
-  Upload,
-  Database
+  Cog
 } from "lucide-react";
 
 interface JourneyStep {
@@ -47,7 +40,7 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
         </CardHeader>
         <CardContent>
           <div className="relative p-6">
-            {/* Modern workflow visualization */}
+            {/* Modern workflow visualization with reduced animations */}
             <div className="flex flex-wrap justify-center relative">
               {steps.map((step, index) => (
                 <React.Fragment key={step.id}>
@@ -55,7 +48,7 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                   <div className="flex flex-col items-center mx-4 mb-16 relative z-10">
                     {/* Circular node */}
                     <div 
-                      className={`rounded-full w-20 h-20 flex items-center justify-center mb-4 shadow-lg transition-all duration-500 animate-pulse relative border-4 ${getStepStatusBorder(step.status)}`}
+                      className={`rounded-full w-20 h-20 flex items-center justify-center mb-4 shadow-lg relative border-4 ${getStepStatusBorder(step.status)}`}
                       style={{ backgroundColor: getStepColor(step, index) }}
                     >
                       <div className="text-white">
@@ -79,13 +72,13 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                           <Badge 
                             variant={step.status === "completed" ? "success" : 
                                   step.status === "active" ? "secondary" : "outline"}
-                            className="animate-fade-in mb-1"
+                            className="mb-1"
                           >
                             {step.statsData.passed}/{step.statsData.processed} Passed
                           </Badge>
                           
                           {step.statsData.exceptions > 0 && (
-                            <Badge variant="warning" className="flex items-center gap-1 animate-pulse">
+                            <Badge variant="warning" className="flex items-center gap-1">
                               <AlertTriangle className="h-3 w-3" />
                               {step.statsData.exceptions} Exceptions
                             </Badge>
@@ -141,23 +134,21 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                         {[...Array(5)].map((_, i) => (
                           <div 
                             key={i} 
-                            className="w-2 h-2 rounded-full animate-pulse" 
+                            className="w-2 h-2 rounded-full" 
                             style={{ 
-                              backgroundColor: getDotColor(index, i),
-                              animationDelay: `${i * 0.1}s`
+                              backgroundColor: getDotColor(index, i)
                             }}
                           ></div>
                         ))}
                       </div>
-                      <Cog className="h-4 w-4 text-gray-400 mx-3 animate-spin" style={{ animationDuration: '3s' }} />
+                      <Cog className="h-4 w-4 text-gray-400 mx-3" />
                       <div className="flex space-x-1 items-center">
                         {[...Array(5)].map((_, i) => (
                           <div 
                             key={i + 5} 
-                            className="w-2 h-2 rounded-full animate-pulse" 
+                            className="w-2 h-2 rounded-full" 
                             style={{ 
-                              backgroundColor: getDotColor(index, i + 5),
-                              animationDelay: `${(i + 5) * 0.1}s`
+                              backgroundColor: getDotColor(index, i + 5)
                             }}
                           ></div>
                         ))}
@@ -166,42 +157,6 @@ const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
                   )}
                 </React.Fragment>
               ))}
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-      
-      <Card>
-        <CardHeader>
-          <CardTitle>Journey Decision Logic</CardTitle>
-          <CardDescription>
-            How risk scoring affects the journey flow
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="p-4 border rounded-lg bg-red-50 dark:bg-red-900/20 shadow-md transform transition-all duration-300 hover:translate-y-[-4px]">
-              <h3 className="flex items-center font-medium text-red-700 dark:text-red-400">
-                <ShieldAlert className="h-5 w-5 mr-2 animate-pulse" />
-                High Risk Path
-              </h3>
-              <p className="mt-2 text-sm">
-                If the risk score is above the configured threshold, the statement will be auto-rejected.
-                A case will be created with all features and transactions marked as "Auto-Rejected".
-                The journey ends at this point.
-              </p>
-            </div>
-            
-            <div className="p-4 border rounded-lg bg-green-50 dark:bg-green-900/20 shadow-md transform transition-all duration-300 hover:translate-y-[-4px]">
-              <h3 className="flex items-center font-medium text-green-700 dark:text-green-400">
-                <UserCheck className="h-5 w-5 mr-2 animate-pulse" />
-                Acceptable Risk Path
-              </h3>
-              <p className="mt-2 text-sm">
-                If the risk score is within acceptable limits, the journey continues.
-                A case is created for the underwriting agent with all features and transactions.
-                The underwriting agent will perform further analysis.
-              </p>
             </div>
           </div>
         </CardContent>
