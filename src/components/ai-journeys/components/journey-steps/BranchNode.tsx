@@ -9,13 +9,13 @@ interface BranchNodeProps {
 
 const BranchNode: React.FC<BranchNodeProps> = ({ branch, branchColor }) => {
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center group cursor-pointer transition-transform hover:scale-105">
       {/* Vertical connector to branch */}
-      <div className="w-0.5 h-6 bg-gray-300 mb-2"></div>
+      <div className="w-0.5 h-6 bg-gray-300 mb-2 group-hover:bg-gray-400"></div>
       
       {/* Branch circle */}
       <div 
-        className="rounded-full w-14 h-14 flex items-center justify-center mb-2 shadow-md border-2 border-white"
+        className="rounded-full w-14 h-14 flex items-center justify-center mb-2 shadow-md border-2 border-white group-hover:shadow-lg"
         style={{ backgroundColor: branchColor }}
       >
         <div className="text-white">
@@ -26,7 +26,7 @@ const BranchNode: React.FC<BranchNodeProps> = ({ branch, branchColor }) => {
       {/* Branch info */}
       <div className="w-32 text-center">
         <h4 className="text-sm font-semibold">{branch.title}</h4>
-        <p className="text-xs text-muted-foreground h-8 overflow-hidden">{branch.description}</p>
+        <p className="text-xs text-muted-foreground h-8 overflow-hidden line-clamp-2">{branch.description}</p>
       </div>
     </div>
   );

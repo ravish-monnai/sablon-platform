@@ -26,13 +26,12 @@ const CustomNode = ({ data, id, selected }: NodeProps) => {
   
   return (
     <div 
-      className={`flex flex-col items-center rounded-md shadow-md p-3 ${statusBorder}`}
+      className={`flex flex-col items-center rounded-md shadow-md p-3 ${statusBorder} transition-all duration-200`}
       style={{ 
         backgroundColor: backgroundColor,
         borderWidth: '2px',
         minWidth: '130px',
         minHeight: '90px',
-        transition: 'transform 0.2s ease',
         transform: selected ? 'scale(1.05)' : 'scale(1)'
       }}
     >
@@ -43,7 +42,7 @@ const CustomNode = ({ data, id, selected }: NodeProps) => {
       )}
       <div className="text-sm font-medium text-white">{nodeData.label}</div>
       {nodeData.description && (
-        <div className="text-xs text-white opacity-80 mt-1 text-center">{nodeData.description}</div>
+        <div className="text-xs text-white opacity-80 mt-1 text-center line-clamp-2">{nodeData.description}</div>
       )}
       
       {/* Node identifier badge */}
@@ -116,7 +115,8 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   const edgeOptions = {
     style: { strokeWidth: 2, stroke: '#94a3b8' },
     labelBgStyle: { fill: 'white', fillOpacity: 0.8 },
-    labelStyle: { fill: '#333', fontSize: 12 }
+    labelStyle: { fill: '#333', fontSize: 12 },
+    animated: true
   };
 
   // Define nodeTypes properly matching ReactFlow expectations
@@ -126,7 +126,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   } as NodeTypes;
 
   return (
-    <div className="h-[400px] border rounded-md overflow-hidden">
+    <div className="h-[450px] border rounded-md overflow-hidden">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -139,10 +139,14 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         nodeTypes={combinedNodeTypes}
         defaultEdgeOptions={edgeOptions}
         fitView
+        snapToGrid
+        snapGrid={[15, 15]}
+        minZoom={0.5}
+        maxZoom={1.5}
         className="bg-gray-50"
       >
         <Background color="#f0f0f0" gap={16} />
-        <Controls />
+        <Controls position="bottom-right" showInteractive={false} />
         <MiniMap 
           nodeColor={(node) => {
             const nodeData = node.data as NodeData;
@@ -159,7 +163,11 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         />
         <Panel position="top-left">
           <div className="bg-white p-3 rounded shadow-sm text-xs">
-            <span className="text-monnai-blue font-medium">Monnai</span> Journey Builder
+            <div className="flex items-center">
+              <span className="text-blue-600 font-medium mr-1">Monnai</span> 
+              <span>Journey Builder</span>
+            </div>
+            <p className="text-gray-500 text-[10px] mt-1">Drag and drop nodes to create journey</p>
           </div>
         </Panel>
       </ReactFlow>

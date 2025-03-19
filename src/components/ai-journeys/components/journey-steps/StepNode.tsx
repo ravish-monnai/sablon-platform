@@ -18,10 +18,10 @@ const StepNode: React.FC<StepNodeProps> = ({
   getStepColor 
 }) => {
   return (
-    <div className="flex flex-col items-center mx-3 mb-16 relative z-10">
+    <div className="flex flex-col items-center mx-3 mb-16 relative z-10 group cursor-pointer">
       {/* Circular node */}
       <div 
-        className={`rounded-full w-20 h-20 flex items-center justify-center mb-3 shadow-lg relative border-[3px] ${getStepStatusBorder(step.status)}`}
+        className={`rounded-full w-20 h-20 flex items-center justify-center mb-3 shadow-lg relative border-[3px] ${getStepStatusBorder(step.status)} transition-all duration-300 group-hover:shadow-xl group-hover:scale-105`}
         style={{ backgroundColor: getStepColor(step, index) }}
       >
         <div className="text-white">
