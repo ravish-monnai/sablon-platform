@@ -8,6 +8,7 @@ import BankStatementFeatures from "./bank-statement/BankStatementFeatures";
 import BankStatementModels from "./bank-statement/BankStatementModels";
 import BankStatementOutput from "./bank-statement/BankStatementOutput";
 import BankStatementTestDialog from "./bank-statement/BankStatementTestDialog";
+import { Market } from "@/contexts/MarketContext";
 
 interface BankStatementAgentEditorProps {
   onClose: () => void;
@@ -28,7 +29,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
   const [llmModel, setLLMModel] = useState("gpt-4o");
   const [confidenceThreshold, setConfidenceThreshold] = useState([80]);
   const [isTestDialogOpen, setIsTestDialogOpen] = useState(false);
-  const [selectedMarket, setSelectedMarket] = useState("India");
+  const [selectedMarket, setSelectedMarket] = useState<Market>("India");
   
   const handleToggleFeature = (feature: string) => {
     setEnabledFeatures(prev => ({
