@@ -27,28 +27,28 @@ const BankStatementJourney: React.FC<BankStatementJourneyProps> = ({ isViewOnly 
       title: "Bank Statement Upload",
       description: "Customer uploads bank statements through API or secure S3 path",
       icon: <ArrowDownToLine className="h-5 w-5 text-blue-500" />,
-      status: "completed"
+      status: "completed" as const
     },
     {
       id: 2,
       title: "Analysis & Feature Extraction",
       description: "Bank statement analyzer agent parses the statements and extracts all configured features",
       icon: <FileText className="h-5 w-5 text-blue-500" />,
-      status: "active"
+      status: "active" as const
     },
     {
       id: 3,
       title: "Risk Assessment",
       description: "Agent evaluates risk score and makes initial determination",
       icon: <ShieldAlert className="h-5 w-5 text-amber-500" />,
-      status: "upcoming"
+      status: "upcoming" as const
     },
     {
       id: 4,
       title: "Case Creation",
       description: "Case created with appropriate status based on risk assessment",
       icon: <ArrowRightLeft className="h-5 w-5 text-gray-500" />,
-      status: "upcoming",
+      status: "upcoming" as const,
       branches: [
         {
           id: "4a",
