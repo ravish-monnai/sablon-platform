@@ -45,6 +45,7 @@ const LiveJourneys = () => {
     <JourneyList
       journeys={liveJourneys}
       onViewDetails={handleViewDetails}
+      showAgentTitle={false} // Pass flag to hide the "Live Agents" title
     />
   );
 };
