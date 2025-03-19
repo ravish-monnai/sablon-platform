@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { 
   FileText, CreditCard, ChartBar, Users, PlusCircle, 
   ArrowUpDown, Banknote, AreaChart, Building, Check,
-  PlayCircle, X, AlertTriangle, ShieldCheck
+  PlayCircle, X, AlertTriangle, ShieldCheck, MapPin, Globe
 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -38,6 +38,15 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
   const [isTestDialogOpen, setIsTestDialogOpen] = useState(false);
   const [testResult, setTestResult] = useState<any>(null);
   const [isTestInProgress, setIsTestInProgress] = useState(false);
+  const [selectedMarket, setSelectedMarket] = useState("India");
+  
+  const markets = [
+    { name: "India", code: "IN" },
+    { name: "Mexico", code: "MX" },
+    { name: "Indonesia", code: "ID" },
+    { name: "Philippines", code: "PH" },
+    { name: "Malaysia", code: "MY" }
+  ];
   
   const handleToggleFeature = (feature: string) => {
     setEnabledFeatures(prev => ({
@@ -50,7 +59,8 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     console.log("Saving bank statement analyzer configuration:", {
       enabledFeatures,
       llmModel,
-      confidenceThreshold
+      confidenceThreshold,
+      selectedMarket
     });
     onClose();
   };
@@ -61,6 +71,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
     // Simulate API call with timeout
     setTimeout(() => {
       const sampleResult = {
+        market: selectedMarket,
         riskScore: {
           score: 35,
           level: "Low Risk",
@@ -114,7 +125,7 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
       
       setTestResult(sampleResult);
       setIsTestInProgress(false);
-      toast.success("Bank statement analysis completed successfully");
+      toast.success(`Bank statement analysis for ${selectedMarket} completed successfully`);
     }, 2500);
   };
   
@@ -375,7 +386,6 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
         <Button onClick={handleSave}>Save Configuration</Button>
       </div>
 
-      {/* Test with Sample Dialog */}
       <Dialog open={isTestDialogOpen} onOpenChange={setIsTestDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
@@ -394,6 +404,28 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
                   <br />
                   This will process a pre-defined sample bank statement with your current configuration.
                 </p>
+                
+                <div className="w-full max-w-xs mt-4">
+                  <div className="flex items-center mb-2">
+                    <MapPin className="h-4 w-4 text-muted-foreground mr-2" />
+                    <Label htmlFor="market-selection">Select Market</Label>
+                  </div>
+                  <Select value={selectedMarket} onValueChange={setSelectedMarket}>
+                    <SelectTrigger id="market-selection" className="w-full">
+                      <SelectValue placeholder="Select a market" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {markets.map((market) => (
+                        <SelectItem key={market.code} value={market.name}>
+                          <div className="flex items-center">
+                            <span>{market.name}</span>
+                          </div>
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                
                 <Button onClick={runTestWithSample} className="mt-4">
                   Run Test Analysis
                 </Button>
@@ -403,12 +435,30 @@ const BankStatementAgentEditor: React.FC<BankStatementAgentEditorProps> = ({ onC
             {isTestInProgress && (
               <div className="flex flex-col items-center justify-center py-12 space-y-4">
                 <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-primary"></div>
-                <p className="text-center">Analyzing sample bank statement...</p>
+                <p className="text-center">Analyzing sample bank statement for {selectedMarket}...</p>
               </div>
             )}
             
             {testResult && (
               <div className="space-y-6">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center">
+                    <Globe className="h-5 w-5 text-blue-500 mr-2" />
+                    <span className="font-medium">Market: {testResult.market}</span>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => {
+                      setTestResult(null);
+                    }}
+                    className="flex items-center gap-1"
+                  >
+                    <MapPin className="h-3.5 w-3.5" />
+                    Change Market
+                  </Button>
+                </div>
+                
                 {testResult.riskScore && (
                   <Card className="overflow-hidden border-0 shadow-lg">
                     <div className={`p-4 ${getRiskScoreColor(testResult.riskScore.score)}`}>
