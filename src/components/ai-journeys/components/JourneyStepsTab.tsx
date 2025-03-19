@@ -17,14 +17,14 @@ interface JourneyStepsTabProps {
 const JourneyStepsTab: React.FC<JourneyStepsTabProps> = ({ steps }) => {
   return (
     <div className="space-y-4 pt-4">
-      <Card className="overflow-hidden">
+      <Card className="overflow-hidden w-full">
         <CardHeader className="pb-2">
           <CardTitle>Journey Workflow</CardTitle>
           <CardDescription>
             The bank statement analysis process follows these steps
           </CardDescription>
         </CardHeader>
-        <CardContent className="p-4">
+        <CardContent className="p-6">
           <WorkflowVisualization 
             steps={steps}
             getStepStatusBorder={getStepStatusBorder}

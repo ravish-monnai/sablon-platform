@@ -21,8 +21,8 @@ const WorkflowVisualization: React.FC<WorkflowVisualizationProps> = ({
   getDotColor
 }) => {
   return (
-    <div className="relative pb-4">
-      <div className="flex justify-between items-center relative max-w-4xl mx-auto">
+    <div className="relative pb-8">
+      <div className="flex justify-between items-center relative w-full mx-auto">
         {steps.map((step, index) => (
           <React.Fragment key={step.id}>
             {/* Step node */}
