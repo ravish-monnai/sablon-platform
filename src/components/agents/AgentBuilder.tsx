@@ -41,11 +41,12 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         y: event.clientY - event.target.getBoundingClientRect().top,
       };
 
+      // Create a properly typed NodeData object
       const data: NodeData = {
         label: `New ${type}`,
         type,
-        icon: undefined,
         description: '',
+        icon: undefined,
       };
 
       // Customize node appearance based on type

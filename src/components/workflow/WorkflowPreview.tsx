@@ -2,15 +2,7 @@
 import React from 'react';
 import { ReactFlow, Background, Controls, Node, Edge } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-
-// Define the expected shape of node data with index signature
-interface NodeData {
-  label: string;
-  description: string;
-  icon?: React.ReactNode;
-  type?: string;
-  [key: string]: unknown; // Add index signature to satisfy Record<string, unknown>
-}
+import { NodeData } from './types';
 
 // Custom Node component to display the icon in preview mode
 const PreviewNode = ({ data }: { data: NodeData }) => (

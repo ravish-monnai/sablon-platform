@@ -10,9 +10,10 @@ import {
   NodeProps
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { NodeData } from './types';
 
 // Custom Node component to display the icon
-const CustomNode = ({ data }: NodeProps) => (
+const CustomNode = ({ data }: NodeProps<NodeData>) => (
   <div className="flex flex-col items-center p-2">
     {data.icon && (
       <div className="mb-2">
