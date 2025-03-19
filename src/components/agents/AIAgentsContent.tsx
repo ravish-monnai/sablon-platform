@@ -1,3 +1,4 @@
+
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
@@ -9,7 +10,6 @@ import { getCustomerAgents, getMonnaiAgents } from "@/components/agents/AgentLis
 import { Dialog, DialogContent } from "@/components/ui/dialog"
 import AgentBuilder from "@/components/agents/AgentBuilder"
 import { useMarket } from "@/contexts/MarketContext"
-import MarketSpecificBanks from "@/components/ai-journeys/MarketSpecificBanks"
 
 const AIAgentsContent = () => {
   const { selectedMarket } = useMarket();
@@ -108,8 +108,6 @@ const AIAgentsContent = () => {
       </div>
       
       <Separator className="my-6" />
-      
-      <MarketSpecificBanks market={selectedMarket} />
       
       {agentsToDisplay.length === 0 ? (
         <div className="text-center py-12">

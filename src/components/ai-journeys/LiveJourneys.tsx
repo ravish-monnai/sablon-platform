@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { FileText, AlertTriangle, CheckCircle, Clock, PlayCircle, PauseCircle, ChevronLeft } from "lucide-react";
 import BankStatementJourney from "./BankStatementJourney";
 import { useMarket } from "@/contexts/MarketContext";
-import MarketSpecificBanks from "./MarketSpecificBanks";
 
 // Sample data for live journeys by market
 const journeysByMarket = {
@@ -214,9 +212,6 @@ const LiveJourneys = () => {
         </div>
         <Button>Create New Journey</Button>
       </div>
-      
-      {/* Add the market-specific banks section */}
-      <MarketSpecificBanks market={selectedMarket} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {liveJourneys.map((journey) => (
