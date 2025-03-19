@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import JourneyList from "./JourneyList";
 import JourneyDetail from "./JourneyDetail";
-import { journeysByMarket } from "./journeyData";
+import { journeysByMarket } from "./data";
 
 const LiveJourneys = () => {
   const [selectedJourney, setSelectedJourney] = useState<string | null>(null);
