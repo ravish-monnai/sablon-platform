@@ -41,6 +41,16 @@ export const getCustomerAgents = (
       resolutionTime: "4.1 mins",
       model: "GPT-4o",
       onEdit: () => setIsEditingBankStatementAgent(true)
+    },
+    {
+      title: "Indian Bank Statement Analyzer",
+      description: "Specialized analysis for Indian bank statements with UPI support",
+      icon: <FileText className="mr-2 h-5 w-5 text-[#F97316]" />,
+      status: "Running",
+      casesPerDay: 167,
+      resolutionTime: "1.5 mins",
+      model: "GPT-4o",
+      onEdit: () => setIsEditingBankStatementAgent(true)
     }
   ]
 }

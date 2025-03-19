@@ -3,6 +3,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import BankStatementJourney from "./BankStatementJourney";
+import IndianBankStatementJourney from "./IndianBankStatementJourney";
 
 interface JourneyDetailProps {
   selectedJourney: string;
@@ -22,7 +23,8 @@ const JourneyDetail: React.FC<JourneyDetailProps> = ({ selectedJourney, onBackTo
       </Button>
       
       {selectedJourney === "bank-statement-analyzer" && <BankStatementJourney />}
-      {selectedJourney !== "bank-statement-analyzer" && (
+      {selectedJourney === "india-bank-statement-analyzer" && <IndianBankStatementJourney />}
+      {selectedJourney !== "bank-statement-analyzer" && selectedJourney !== "india-bank-statement-analyzer" && (
         <div className="text-center p-6">
           <p>Journey details for {selectedJourney} are not available yet</p>
         </div>

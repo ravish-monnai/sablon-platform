@@ -84,6 +84,17 @@ export const journeysByMarket: Record<string, Journey[]> = {
       totalAnalyzed: 42,
       alerts: 8,
       fraudCases: 3,
+    },
+    {
+      id: "india-bank-statement-analyzer",
+      name: "Indian Bank Statement Analyzer",
+      description: "Specialized analysis for Indian bank statements with UPI transaction support.",
+      status: "active",
+      lastRun: "30 seconds ago",
+      apiIntegration: "REST API",
+      totalAnalyzed: 167,
+      alerts: 23,
+      fraudCases: 8,
     }
   ],
   'Indonesia': [
