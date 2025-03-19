@@ -1,13 +1,80 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { ArrowDownUp, FileText, Clock, AlertTriangle, CheckCircle, PlayCircle, PauseCircle, List, Activity } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { ArrowDownUp, FileText, Clock, AlertTriangle, CheckCircle, PlayCircle, PauseCircle, List, Activity, Calendar, User, DollarSign, Building, FileBarChart } from "lucide-react";
+
+// Define a type for the statement data
+interface StatementData {
+  id: string;
+  customer: string;
+  date: string;
+  bank: string;
+  status: string;
+  riskScore: {
+    level: "Low" | "Medium" | "High";
+    score: number;
+  };
+}
 
 const BankStatementJourney = () => {
+  // State for case detail dialog
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [selectedStatement, setSelectedStatement] = useState<StatementData | null>(null);
+
+  // Sample data for recent statements
+  const recentStatements: StatementData[] = [
+    {
+      id: "BS-00125",
+      customer: "John Smith",
+      date: "May 15, 2023",
+      bank: "HDFC Bank",
+      status: "Fraud Detected",
+      riskScore: { level: "High", score: 87 }
+    },
+    {
+      id: "BS-00124",
+      customer: "Maria Rodriguez",
+      date: "May 15, 2023",
+      bank: "Bank of Mexico",
+      status: "Approved",
+      riskScore: { level: "Low", score: 12 }
+    },
+    {
+      id: "BS-00123",
+      customer: "Lee Wong",
+      date: "May 15, 2023",
+      bank: "BPI",
+      status: "Under Review",
+      riskScore: { level: "Medium", score: 54 }
+    },
+    {
+      id: "BS-00122",
+      customer: "Ravi Patel",
+      date: "May 14, 2023",
+      bank: "SBI",
+      status: "Fraud Detected",
+      riskScore: { level: "High", score: 92 }
+    },
+    {
+      id: "BS-00121",
+      customer: "Aisha Khan",
+      date: "May 14, 2023",
+      bank: "Maybank",
+      status: "Approved",
+      riskScore: { level: "Low", score: 8 }
+    }
+  ];
+
+  const handleViewStatement = (statement: StatementData) => {
+    setSelectedStatement(statement);
+    setIsDetailOpen(true);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -155,75 +222,45 @@ const BankStatementJourney = () => {
                   <div>Action</div>
                 </div>
                 
-                <div className="grid grid-cols-7 items-center py-3 border-b">
-                  <div className="font-medium">BS-00125</div>
-                  <div>John Smith</div>
-                  <div>May 15, 2023</div>
-                  <div>HDFC Bank</div>
-                  <div>
-                    <Badge variant="destructive">Fraud Detected</Badge>
+                {recentStatements.map((statement) => (
+                  <div key={statement.id} className="grid grid-cols-7 items-center py-3 border-b">
+                    <div className="font-medium">{statement.id}</div>
+                    <div>{statement.customer}</div>
+                    <div>{statement.date}</div>
+                    <div>{statement.bank}</div>
+                    <div>
+                      <Badge 
+                        variant={
+                          statement.status === "Fraud Detected" 
+                            ? "destructive" 
+                            : statement.status === "Under Review" 
+                              ? "secondary" 
+                              : "outline"
+                        }
+                      >
+                        {statement.status}
+                      </Badge>
+                    </div>
+                    <div className={`font-semibold ${
+                      statement.riskScore.level === "High" 
+                        ? "text-red-500" 
+                        : statement.riskScore.level === "Medium" 
+                          ? "text-amber-500" 
+                          : "text-green-500"
+                    }`}>
+                      {statement.riskScore.level} ({statement.riskScore.score}/100)
+                    </div>
+                    <div>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => handleViewStatement(statement)}
+                      >
+                        View
+                      </Button>
+                    </div>
                   </div>
-                  <div className="font-semibold text-red-500">High (87/100)</div>
-                  <div>
-                    <Button variant="outline" size="sm">View</Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-7 items-center py-3 border-b">
-                  <div className="font-medium">BS-00124</div>
-                  <div>Maria Rodriguez</div>
-                  <div>May 15, 2023</div>
-                  <div>Bank of Mexico</div>
-                  <div>
-                    <Badge variant="outline">Approved</Badge>
-                  </div>
-                  <div className="font-semibold text-green-500">Low (12/100)</div>
-                  <div>
-                    <Button variant="outline" size="sm">View</Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-7 items-center py-3 border-b">
-                  <div className="font-medium">BS-00123</div>
-                  <div>Lee Wong</div>
-                  <div>May 15, 2023</div>
-                  <div>BPI</div>
-                  <div>
-                    <Badge variant="secondary">Under Review</Badge>
-                  </div>
-                  <div className="font-semibold text-amber-500">Medium (54/100)</div>
-                  <div>
-                    <Button variant="outline" size="sm">View</Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-7 items-center py-3 border-b">
-                  <div className="font-medium">BS-00122</div>
-                  <div>Ravi Patel</div>
-                  <div>May 14, 2023</div>
-                  <div>SBI</div>
-                  <div>
-                    <Badge variant="destructive">Fraud Detected</Badge>
-                  </div>
-                  <div className="font-semibold text-red-500">High (92/100)</div>
-                  <div>
-                    <Button variant="outline" size="sm">View</Button>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-7 items-center py-3">
-                  <div className="font-medium">BS-00121</div>
-                  <div>Aisha Khan</div>
-                  <div>May 14, 2023</div>
-                  <div>Maybank</div>
-                  <div>
-                    <Badge variant="outline">Approved</Badge>
-                  </div>
-                  <div className="font-semibold text-green-500">Low (8/100)</div>
-                  <div>
-                    <Button variant="outline" size="sm">View</Button>
-                  </div>
-                </div>
+                ))}
               </div>
             </CardContent>
             <CardFooter>
@@ -464,6 +501,190 @@ const BankStatementJourney = () => {
           </Card>
         </TabsContent>
       </Tabs>
+
+      {/* Case Detail Dialog */}
+      <Dialog open={isDetailOpen} onOpenChange={setIsDetailOpen}>
+        <DialogContent className="max-w-3xl">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <FileBarChart className="h-5 w-5 text-primary" />
+              Statement Details: {selectedStatement?.id}
+            </DialogTitle>
+            <DialogDescription>
+              Detailed information about the bank statement
+            </DialogDescription>
+          </DialogHeader>
+          
+          {selectedStatement && (
+            <div className="space-y-6">
+              {/* Header Info */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <User className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Customer:</span>
+                    <span>{selectedStatement.customer}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Date:</span>
+                    <span>{selectedStatement.date}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Building className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Bank:</span>
+                    <span>{selectedStatement.bank}</span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2">
+                    <Activity className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Status:</span>
+                    <Badge 
+                      variant={
+                        selectedStatement.status === "Fraud Detected" 
+                          ? "destructive" 
+                          : selectedStatement.status === "Under Review" 
+                            ? "secondary" 
+                            : "outline"
+                      }
+                    >
+                      {selectedStatement.status}
+                    </Badge>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle className={`h-4 w-4 ${
+                      selectedStatement.riskScore.level === "High" 
+                        ? "text-red-500" 
+                        : selectedStatement.riskScore.level === "Medium" 
+                          ? "text-amber-500" 
+                          : "text-green-500"
+                    }`} />
+                    <span className="text-sm font-medium">Risk Score:</span>
+                    <span className={`font-medium ${
+                      selectedStatement.riskScore.level === "High" 
+                        ? "text-red-500" 
+                        : selectedStatement.riskScore.level === "Medium" 
+                          ? "text-amber-500" 
+                          : "text-green-500"
+                    }`}>
+                      {selectedStatement.riskScore.level} ({selectedStatement.riskScore.score}/100)
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm font-medium">Processing Time:</span>
+                    <span>3.2 seconds</span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Analysis Summary */}
+              <div>
+                <h3 className="text-lg font-medium mb-2">Analysis Summary</h3>
+                <Card>
+                  <CardContent className="p-4">
+                    <div className="space-y-4">
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Account Overview</h4>
+                        <div className="grid grid-cols-3 gap-4">
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <div className="text-xs text-muted-foreground">Average Balance</div>
+                            <div className="text-lg font-bold flex items-center">
+                              <DollarSign className="h-4 w-4 mr-1" />
+                              {selectedStatement.riskScore.level === "High" ? "5,234" : 
+                                selectedStatement.riskScore.level === "Medium" ? "12,456" : "32,785"}
+                            </div>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <div className="text-xs text-muted-foreground">Monthly Income</div>
+                            <div className="text-lg font-bold flex items-center">
+                              <DollarSign className="h-4 w-4 mr-1" />
+                              {selectedStatement.riskScore.level === "High" ? "3,100" : 
+                                selectedStatement.riskScore.level === "Medium" ? "6,200" : "10,500"}
+                            </div>
+                          </div>
+                          <div className="bg-gray-50 p-3 rounded-md">
+                            <div className="text-xs text-muted-foreground">Monthly Expenses</div>
+                            <div className="text-lg font-bold flex items-center">
+                              <DollarSign className="h-4 w-4 mr-1" />
+                              {selectedStatement.riskScore.level === "High" ? "4,950" : 
+                                selectedStatement.riskScore.level === "Medium" ? "5,300" : "7,200"}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Detected Anomalies */}
+                      {selectedStatement.riskScore.level !== "Low" && (
+                        <div>
+                          <h4 className="text-sm font-medium mb-2">Detected Anomalies</h4>
+                          <div className="space-y-2">
+                            {selectedStatement.riskScore.level === "High" && (
+                              <>
+                                <div className="flex items-start gap-2 p-2 bg-red-50 rounded-md">
+                                  <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
+                                  <div>
+                                    <p className="text-sm font-medium">Large cash deposits followed by immediate withdrawals</p>
+                                    <p className="text-xs text-muted-foreground">Pattern consistent with money laundering</p>
+                                  </div>
+                                </div>
+                                <div className="flex items-start gap-2 p-2 bg-red-50 rounded-md">
+                                  <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5" />
+                                  <div>
+                                    <p className="text-sm font-medium">Income inconsistency detected</p>
+                                    <p className="text-xs text-muted-foreground">Declared income does not match transaction patterns</p>
+                                  </div>
+                                </div>
+                              </>
+                            )}
+                            {(selectedStatement.riskScore.level === "Medium" || selectedStatement.riskScore.level === "High") && (
+                              <div className="flex items-start gap-2 p-2 bg-amber-50 rounded-md">
+                                <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5" />
+                                <div>
+                                  <p className="text-sm font-medium">Unusual transaction pattern</p>
+                                  <p className="text-xs text-muted-foreground">Multiple small transactions to the same recipient</p>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Verification Status */}
+                      <div>
+                        <h4 className="text-sm font-medium mb-2">Verification Status</h4>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="flex justify-between items-center p-2 border rounded-md">
+                            <span className="text-sm">Identity Match</span>
+                            <Badge variant={selectedStatement.riskScore.level === "High" ? "destructive" : "outline"} className="bg-green-50">
+                              {selectedStatement.riskScore.level === "High" ? "Failed" : "Passed"}
+                            </Badge>
+                          </div>
+                          <div className="flex justify-between items-center p-2 border rounded-md">
+                            <span className="text-sm">Income Verification</span>
+                            <Badge variant={selectedStatement.riskScore.level !== "Low" ? "destructive" : "outline"} className="bg-green-50">
+                              {selectedStatement.riskScore.level !== "Low" ? "Failed" : "Passed"}
+                            </Badge>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </div>
+          )}
+          
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsDetailOpen(false)}>Close</Button>
+            {selectedStatement && selectedStatement.status !== "Approved" && (
+              <Button variant="default">Take Action</Button>
+            )}
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
