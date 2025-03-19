@@ -2,7 +2,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Clock, CheckCircle, UserRound, Calendar } from "lucide-react";
+import { AlertTriangle, CheckCircle, Calendar, FileText } from "lucide-react";
 import { CaseItem } from "@/types/cases";
 
 interface CaseListTableProps {
@@ -23,26 +23,17 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
           <tr className="border-b text-left">
             <th className="p-2 font-medium">ID</th>
             <th className="p-2 font-medium">Customer</th>
-            <th className="p-2 font-medium">Type</th>
             <th className="p-2 font-medium">Status</th>
-            <th className="p-2 font-medium">Created</th>
-            <th className="p-2 font-medium">Source</th>
-            <th className="p-2 font-medium">Bank</th>
-            <th className="p-2 font-medium">Assigned</th>
+            <th className="p-2 font-medium">Date</th>
+            <th className="p-2 font-medium">Type</th>
             <th className="p-2 font-medium">Actions</th>
           </tr>
         </thead>
         <tbody>
           {cases.map((caseItem) => (
-            <tr key={caseItem.id} className="border-b">
+            <tr key={caseItem.id} className="border-b hover:bg-gray-50">
               <td className="p-2 font-medium">{caseItem.id}</td>
-              <td className="p-2">
-                <div className="flex items-center gap-1">
-                  <UserRound className="h-4 w-4 text-muted-foreground" />
-                  {caseItem.customer}
-                </div>
-              </td>
-              <td className="p-2">{caseItem.type}</td>
+              <td className="p-2">{caseItem.customer}</td>
               <td className="p-2">
                 <Badge
                   variant={
@@ -52,15 +43,13 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
                       ? "secondary"
                       : "outline"
                   }
+                  className="flex items-center gap-1 whitespace-nowrap"
                 >
                   {caseItem.status === "High Risk" && (
-                    <AlertTriangle className="mr-1 h-3 w-3" />
-                  )}
-                  {caseItem.status === "Medium Risk" && (
-                    <Clock className="mr-1 h-3 w-3" />
+                    <AlertTriangle className="h-3 w-3" />
                   )}
                   {caseItem.status === "Low Risk" && (
-                    <CheckCircle className="mr-1 h-3 w-3" />
+                    <CheckCircle className="h-3 w-3" />
                   )}
                   {caseItem.status}
                 </Badge>
@@ -71,32 +60,21 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
                   {caseItem.created}
                 </div>
               </td>
-              <td className="p-2">{caseItem.source}</td>
-              <td className="p-2">{caseItem.bank || "-"}</td>
               <td className="p-2">
-                {caseItem.agentAssigned === "Unassigned" ? (
-                  <Badge variant="outline">Unassigned</Badge>
-                ) : (
-                  caseItem.agentAssigned
-                )}
+                <div className="flex items-center gap-1">
+                  <FileText className="h-4 w-4 text-muted-foreground" />
+                  {caseItem.type}
+                </div>
               </td>
               <td className="p-2">
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onViewCase(caseItem.id)}
-                  >
-                    View
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => onActionCase(caseItem)}
-                  >
-                    Action
-                  </Button>
-                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onViewCase(caseItem.id)}
+                  className="w-full"
+                >
+                  View Details
+                </Button>
               </td>
             </tr>
           ))}

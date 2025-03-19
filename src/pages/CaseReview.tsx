@@ -1,28 +1,16 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { 
-  ArrowLeft, 
-  BrainCircuit,
-  User, 
-  Activity,
-  Network
-} from "lucide-react";
-import CaseChat from "@/components/cases/CaseChat";
-import CaseActionDialog from "@/components/cases/CaseActionDialog";
-import CaseHeader from "@/components/case-review/CaseHeader";
-import CaseSummaryTab from "@/components/case-review/CaseSummaryTab";
-import CaseIdentityTab from "@/components/case-review/CaseIdentityTab";
-import CaseActivityTab from "@/components/case-review/CaseActivityTab";
-import CaseNetworkTab from "@/components/case-review/CaseNetworkTab";
+import { ArrowLeft } from "lucide-react";
+import CaseDetailView from "@/components/cases/CaseDetailView";
 
 const journeys = [
   "Account Opening", 
   "Transaction Monitoring", 
   "Identity Verification", 
   "Risk Assessment",
-  "Fraud Detection"
+  "Fraud Detection",
+  "Bank Statement Analysis"
 ];
 
 const generateCases = () => {
@@ -149,20 +137,10 @@ const allCases = generateCases();
 const CaseReview = () => {
   const { caseId } = useParams<{ caseId: string }>();
   const [caseData, setCaseData] = useState<any>(null);
-  const [isChatOpen, setIsChatOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("summary");
-  const [actionDialog, setActionDialog] = useState<{
-    isOpen: boolean;
-    actionType: "approve" | "reject" | "escalate";
-  }>({
-    isOpen: false,
-    actionType: "approve"
-  });
 
   useEffect(() => {
     const foundCase = allCases.find(c => c.id === caseId);
     if (foundCase) {
-      // Add digital footprint data to the case
       if (!foundCase.digitalFootprint) {
         foundCase.digitalFootprint = {
           platforms: [
@@ -180,18 +158,8 @@ const CaseReview = () => {
     }
   }, [caseId]);
 
-  const openActionDialog = (actionType: "approve" | "reject" | "escalate") => {
-    setActionDialog({
-      isOpen: true,
-      actionType
-    });
-  };
-
-  const closeActionDialog = () => {
-    setActionDialog({
-      ...actionDialog,
-      isOpen: false
-    });
+  const handleBackToList = () => {
+    window.history.back();
   };
 
   if (!caseData) {
@@ -211,61 +179,8 @@ const CaseReview = () => {
   }
 
   return (
-    <div className="relative">
-      <CaseHeader 
-        caseData={caseData} 
-        openActionDialog={openActionDialog} 
-        setIsChatOpen={setIsChatOpen}
-      />
-
-      <Tabs defaultValue="summary" value={activeTab} onValueChange={setActiveTab} className="space-y-4">
-        <TabsList className="grid grid-cols-4 mb-4">
-          <TabsTrigger value="summary" className="flex items-center">
-            <BrainCircuit className="h-4 w-4 mr-2" /> Summary & Analysis
-          </TabsTrigger>
-          <TabsTrigger value="identity" className="flex items-center">
-            <User className="h-4 w-4 mr-2" /> Identity
-          </TabsTrigger>
-          <TabsTrigger value="activity" className="flex items-center">
-            <Activity className="h-4 w-4 mr-2" /> Activity
-          </TabsTrigger>
-          <TabsTrigger value="network" className="flex items-center">
-            <Network className="h-4 w-4 mr-2" /> Network
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="summary" className="space-y-4">
-          <CaseSummaryTab caseData={caseData} />
-        </TabsContent>
-
-        <TabsContent value="identity" className="space-y-4">
-          <CaseIdentityTab caseData={caseData} />
-        </TabsContent>
-
-        <TabsContent value="activity" className="space-y-4">
-          <CaseActivityTab caseData={caseData} />
-        </TabsContent>
-
-        <TabsContent value="network" className="space-y-4">
-          <CaseNetworkTab caseData={caseData} />
-        </TabsContent>
-      </Tabs>
-
-      {actionDialog.isOpen && (
-        <CaseActionDialog
-          caseId={caseData.id}
-          actionType={actionDialog.actionType}
-          isOpen={actionDialog.isOpen}
-          onClose={closeActionDialog}
-        />
-      )}
-
-      {isChatOpen && (
-        <CaseChat
-          caseData={caseData}
-          onClose={() => setIsChatOpen(false)}
-        />
-      )}
+    <div className="container mx-auto p-6">
+      <CaseDetailView caseData={caseData} onClose={handleBackToList} />
     </div>
   );
 };

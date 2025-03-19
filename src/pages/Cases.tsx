@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { FileText } from "lucide-react";
+import { FileText, Plus } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -48,9 +48,9 @@ const Cases = () => {
   return (
     <div className="container mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Cases</h1>
+        <h1 className="text-2xl font-bold">Cases</h1>
         <Button>
-          <FileText className="mr-2 h-4 w-4" /> Create Manual Case
+          <Plus className="mr-2 h-4 w-4" /> Create New Case
         </Button>
       </div>
 
@@ -61,11 +61,11 @@ const Cases = () => {
         </TabsList>
         
         <TabsContent value="list" className="space-y-4">
-          <Card>
+          <Card className="bg-white shadow-sm border-gray-100">
             <CardHeader className="pb-3">
               <div className="flex justify-between items-center flex-wrap gap-4">
                 <div>
-                  <CardTitle>All Cases</CardTitle>
+                  <CardTitle className="text-xl">All Cases</CardTitle>
                   <CardDescription>
                     {selectedMarket === 'Global' 
                       ? 'Review and manage cases that require attention'
@@ -92,7 +92,7 @@ const Cases = () => {
         </TabsContent>
         
         <TabsContent value="network">
-          <Card className="h-[80vh]">
+          <Card className="h-[80vh] bg-white shadow-sm border-gray-100">
             <CardContent className="p-0">
               <CasesLinkAnalysis />
             </CardContent>
