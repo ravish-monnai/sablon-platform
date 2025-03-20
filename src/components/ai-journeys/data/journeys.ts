@@ -26,6 +26,18 @@ export const journeysByMarket: Record<string, Journey[]> = {
       alerts: 23,
       fraudCases: 8,
       featureTag: "new"
+    },
+    {
+      id: "loan-underwriting",
+      name: "Loan Underwriting",
+      description: "AI-powered loan underwriting process with credit analysis and risk assessment.",
+      status: "active",
+      lastRun: "5 minutes ago",
+      apiIntegration: "REST API",
+      totalAnalyzed: 89,
+      alerts: 12,
+      fraudCases: 3,
+      featureTag: "new"
     }
   ],
   'India': [
