@@ -110,6 +110,15 @@ export interface RegulatoryComplianceDetails {
   }>;
 }
 
+// Add UPI interface for Indian market
+export interface UPIDetails {
+  transactions: string;
+  spend: string;
+  topApp: string;
+  merchantReliability: string;
+  suspiciousActivity: string;
+}
+
 export interface FeatureValues {
   income: IncomeDetails;
   cashFlow: CashFlowDetails;
@@ -119,4 +128,6 @@ export interface FeatureValues {
   fraudDetection: FraudDetectionDetails;
   automatedUnderwriting: AutomatedUnderwritingDetails;
   regulatoryCompliance: RegulatoryComplianceDetails;
+  // Make UPI optional since it's only for Indian market
+  upi?: UPIDetails;
 }

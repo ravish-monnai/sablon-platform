@@ -1,7 +1,7 @@
 
 import React from "react";
 import SummaryDashboard from "./dashboard/SummaryDashboard";
-import { generateFeatureValues } from "./dashboard/utils";
+import { generateFeatureValues } from "./dashboard/utils/featureGenerator";
 import { FeatureValues } from "./dashboard/FeatureValueTypes";
 import IncomeVerificationCategory from "./dashboard/components/IncomeVerificationCategory";
 import CashFlowCategory from "./dashboard/components/CashFlowCategory";
@@ -37,7 +37,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <CashFlowCategory cashFlowData={featureValues.cashFlow} />
         
         {/* UPI Payment Analysis for Indian Cases Only */}
-        {isIndianCase && <UPICategory upiData={featureValues.upi} />}
+        {isIndianCase && featureValues.upi && <UPICategory upiData={featureValues.upi} />}
         
         {/* Debt Service Coverage */}
         <DebtServiceCategory debtServiceData={featureValues.debtService} />
