@@ -83,6 +83,24 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
     [setNodes]
   );
 
+  // Add the onUpdateNode handler
+  const handleUpdateNode = (nodeId: string, data: NodeData) => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === nodeId) {
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              ...data,
+            },
+          };
+        }
+        return node;
+      })
+    );
+  };
+
   return (
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
@@ -131,6 +149,7 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
             onDragOver={onDragOver}
             nodeTypes={{} as NodeTypes}
             onNodeDragStart={() => {}}
+            onUpdateNode={handleUpdateNode}
           />
         </div>
       </div>
