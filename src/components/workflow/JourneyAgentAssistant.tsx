@@ -1,11 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { X, MessageSquareText, Zap, Bot, Database, Workflow, BrainCircuit, Send } from 'lucide-react';
+import { X, MessageSquareText, Zap, Bot, Workflow } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
-import { useLocation } from 'react-router-dom';
 
 interface Message {
   id: string;
@@ -27,13 +26,12 @@ const JourneyAgentAssistant: React.FC<JourneyAgentAssistantProps> = ({
   const [currentInput, setCurrentInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([]);
   const [isThinking, setIsThinking] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
     // Set initial welcome message based on type
     const initialMessage = type === 'journey' 
-      ? "Hi! I'm your Journey Assistant. I can help you create and configure AI journeys. What kind of journey would you like to build today?"
-      : "Hi! I'm your Agent Assistant. I can help you create and configure AI agents. What kind of agent would you like to build today?";
+      ? "Hi! I'm your AI Configuration Assistant. I can help you create and configure AI journeys. What kind of journey would you like to build today?"
+      : "Hi! I'm your AI Configuration Assistant. I can help you create and configure AI agents. What kind of agent would you like to build today?";
     
     setMessages([{
       id: '1',
@@ -50,9 +48,7 @@ const JourneyAgentAssistant: React.FC<JourneyAgentAssistantProps> = ({
   };
 
   const getTitle = () => {
-    return type === 'journey' 
-      ? 'Journey Assistant'
-      : 'Agent Assistant';
+    return 'AI Configuration Assistant';
   };
 
   const getColor = () => {
@@ -228,7 +224,7 @@ const JourneyAgentAssistant: React.FC<JourneyAgentAssistantProps> = ({
                 className="flex-1"
               />
               <Button onClick={handleSendMessage} disabled={isThinking}>
-                <Send className="h-4 w-4" />
+                Send
               </Button>
             </div>
           </div>
