@@ -7,6 +7,7 @@ import {
 import SummaryDashboard from "./dashboard/SummaryDashboard";
 import FeatureCategoryTable from "./dashboard/FeatureCategoryTable";
 import { generateFeatureValues } from "./dashboard/utils";
+import { FeatureValues } from "./dashboard/FeatureValueTypes";
 
 interface BankStatementFeaturesProps {
   activeTab?: string;
@@ -15,7 +16,7 @@ interface BankStatementFeaturesProps {
 
 const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData }) => {
   // Generate feature values for the dashboard
-  const featureValues = generateFeatureValues(caseData);
+  const featureValues: FeatureValues = generateFeatureValues(caseData);
   
   return (
     <>
