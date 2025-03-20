@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
 import LiveJourneys from "@/components/ai-journeys/LiveJourneys";
 import JourneyAgentAssistant from "@/components/workflow/JourneyAgentAssistant";
+import FeatureTag from "@/components/ui/feature-tag";
 
 const AIJourneys = () => {
   const location = useLocation();
@@ -50,7 +51,10 @@ const AIJourneys = () => {
       <Tabs value={selectedTab} onValueChange={handleTabChange} className="w-full">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="workflow">Journey Builder</TabsTrigger>
-          <TabsTrigger value="live">Live Journeys</TabsTrigger>
+          <TabsTrigger value="live" className="flex items-center gap-1.5">
+            Live Journeys
+            <FeatureTag variant="new" className="scale-90" />
+          </TabsTrigger>
         </TabsList>
         
         <TabsContent value="workflow" className="mt-6">
