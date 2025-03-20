@@ -100,7 +100,7 @@ const CaseReview = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <CaseDetailView caseData={caseData} onClose={handleBackToList} />
+      <CaseDetailView selectedCase={caseData} onBackToList={handleBackToList} />
     </div>
   );
 };
