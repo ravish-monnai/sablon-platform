@@ -59,18 +59,18 @@ const getNodeColorByType = (type: string): string => {
     case 'rule':
       return '#3b82f6'; // blue
     case 'model':
-      return '#e879f9'; // pink
+      return '#8b5cf6'; // purple (changed from pink)
     case 'data':
     case 'datasource':
-      return '#ffcc1d'; // yellow - updated to match journey color
+      return '#2bbfe0'; // blue (changed from yellow)
     case 'notification':
       return '#22c55e'; // green
     case 'alert':
-      return '#ef4444'; // red
+      return '#6b7280'; // gray (changed from red)
     case 'agent':
-      return '#8b5cf6'; // purple
+      return '#3b82f6'; // blue (changed from purple)
     default:
-      return '#2bbfe0'; // default blue from journey steps
+      return '#2bbfe0'; // default blue
   }
 };
 
@@ -150,12 +150,12 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         <MiniMap 
           nodeColor={(node) => {
             const nodeData = node.data as NodeData;
-            if (nodeData.type === 'datasource' || nodeData.type === 'data') return '#ffcc1d';
-            if (nodeData.type === 'model') return '#e879f9';
-            if (nodeData.type === 'agent') return '#8b5cf6';
+            if (nodeData.type === 'datasource' || nodeData.type === 'data') return '#2bbfe0'; // changed from yellow
+            if (nodeData.type === 'model') return '#8b5cf6'; // changed from pink
+            if (nodeData.type === 'agent') return '#3b82f6'; // changed from purple
             if (nodeData.type === 'rule') return '#3b82f6';
             if (nodeData.type === 'notification') return '#22c55e';
-            if (nodeData.type === 'alert') return '#ef4444';
+            if (nodeData.type === 'alert') return '#6b7280'; // changed from red
             return '#2bbfe0';
           }}
           zoomable 

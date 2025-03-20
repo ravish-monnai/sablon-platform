@@ -10,18 +10,18 @@ const getNodeColorByType = (type: string): string => {
     case 'rule':
       return '#3b82f6'; // blue
     case 'model':
-      return '#e879f9'; // pink
+      return '#8b5cf6'; // purple (changed from pink)
     case 'data':
     case 'datasource':
-      return '#ffcc1d'; // yellow - updated to match journey color
+      return '#2bbfe0'; // blue (changed from yellow)
     case 'notification':
       return '#22c55e'; // green
     case 'alert':
-      return '#ef4444'; // red
+      return '#6b7280'; // gray (changed from red)
     case 'agent':
-      return '#8b5cf6'; // purple
+      return '#3b82f6'; // blue (changed from purple)
     default:
-      return '#2bbfe0'; // default blue from journey steps
+      return '#2bbfe0'; // default blue
   }
 };
 

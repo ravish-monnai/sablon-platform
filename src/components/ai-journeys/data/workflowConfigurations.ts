@@ -1,3 +1,4 @@
+
 import React, { ReactNode } from 'react';
 import { Database, Brain, Users, Bot, FileText, ArrowRightLeft, ArrowDownToLine, ShieldAlert, UserCheck } from 'lucide-react';
 
@@ -145,7 +146,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'Risk Assessment',
           description: 'Agent evaluates risk score and makes initial determination',
-          icon: React.createElement(ShieldAlert, { className: "text-amber-500", size: 20 }),
+          icon: React.createElement(ShieldAlert, { className: "text-blue-500", size: 20 }),
           type: 'model',
           modelType: 'multiclass'
         }
@@ -157,7 +158,7 @@ export const journeyWorkflowConfigurations = {
         data: { 
           label: 'High Risk - Auto Reject',
           description: 'Journey ends with auto-rejected case',
-          icon: React.createElement(ShieldAlert, { className: "text-red-500", size: 20 }),
+          icon: React.createElement(ShieldAlert, { className: "text-gray-500", size: 20 }),
           type: 'agent',
           agentType: 'ai_agent'
         }

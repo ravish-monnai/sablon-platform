@@ -13,27 +13,27 @@ export function getStepStatusBorder(status: string): string {
   }
 }
 
-// Helper function to get step background color
+// Helper function to get step background color - removed yellow and pink
 export function getStepColor(step: JourneyStep, index: number): string {
   if (step.color) return step.color;
   
   const colors = [
     "#2bbfe0", // Blue for Document Upload
-    "#ffcc1d", // Yellow for Feature Extraction
-    "#66cc66", // Green for Risk Assessment
-    "#e85abd", // Pink for Underwriting
-    "#2bbfe0"  // Blue for Data Storage
+    "#66cc66", // Green for Feature Extraction
+    "#6b7280", // Gray for Risk Assessment
+    "#3b82f6", // Blue for Underwriting
+    "#8b5cf6"  // Purple for Data Storage
   ];
   
   return colors[index % colors.length];
 }
 
-// Helper function to get branch color
+// Helper function to get branch color - removed reddish color
 export function getBranchColor(index: number): string {
   const colors = [
-    "#ff7066", // Red-ish for high risk
-    "#47c98e", // Green-ish for low risk
-    "#7f66ff"  // Purple for neutral
+    "#3b82f6", // Blue for path 1
+    "#47c98e", // Green for path 2
+    "#8b5cf6"  // Purple for path 3
   ];
   
   return colors[index % colors.length];
