@@ -21,6 +21,9 @@ export interface AnalysisRule {
   operator: string;
   value: string;
   action: string;
+  priority?: 'low' | 'medium' | 'high';
+  notes?: string;
+  ruleType?: 'simple' | 'compound' | 'temporal';
 }
 
 export interface DragItemProps {

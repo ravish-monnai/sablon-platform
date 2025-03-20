@@ -2,19 +2,28 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { AnalysisRule } from '../types';
 import { RuleEditorProps } from './types';
 import RuleItem from './RuleItem';
 
 const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
-  const addRule = () => {
+  const addRule = (ruleType: 'simple' | 'compound' | 'temporal' = 'simple') => {
     const newRule: AnalysisRule = {
       id: `rule-${Date.now()}`,
       condition: 'amount',
       operator: '>',
       value: '1000',
-      action: 'flag'
+      action: 'flag',
+      ruleType: ruleType,
+      priority: 'medium'
     };
     setRules([...rules, newRule]);
   };
@@ -32,17 +41,39 @@ const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
   return (
     <div className="space-y-2">
       <div className="flex justify-between items-center">
-        <Label>If-Then Analysis Rules</Label>
-        <Button 
-          type="button" 
-          variant="outline" 
-          size="sm" 
-          onClick={addRule}
-          className="flex items-center gap-1"
-        >
-          <Plus size={14} />
-          Add Rule
-        </Button>
+        <div>
+          <Label>If-Then Analysis Rules</Label>
+          <p className="text-xs text-muted-foreground">
+            Define rules to automate decision making in the workflow
+          </p>
+        </div>
+        
+        <div className="flex gap-2">
+          <Select
+            defaultValue="simple"
+            onValueChange={(value: 'simple' | 'compound' | 'temporal') => addRule(value)}
+          >
+            <SelectTrigger className="h-8 w-[130px] bg-primary text-primary-foreground hover:bg-primary/90">
+              <SelectValue placeholder="Add Rule" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="simple">Simple Rule</SelectItem>
+              <SelectItem value="compound">Compound Rule</SelectItem>
+              <SelectItem value="temporal">Time-Based Rule</SelectItem>
+            </SelectContent>
+          </Select>
+          
+          <Button 
+            type="button" 
+            variant="outline" 
+            size="sm" 
+            onClick={() => addRule()}
+            className="flex items-center gap-1"
+          >
+            <Plus size={14} />
+            Quick Add
+          </Button>
+        </div>
       </div>
       
       <div className="space-y-3 mt-3">
@@ -59,6 +90,12 @@ const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
           ))
         )}
       </div>
+      
+      {rules.length > 0 && (
+        <div className="text-xs text-muted-foreground mt-2">
+          {rules.length} rule{rules.length !== 1 ? 's' : ''} configured
+        </div>
+      )}
     </div>
   );
 };
