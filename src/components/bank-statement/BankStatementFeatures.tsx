@@ -121,8 +121,8 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
           icon={<FileText className="h-5 w-5 text-blue-600" />}
           description="Assessment of compliance with KYC regulations, AML monitoring metrics, and transaction verification requirements."
           data={[
-            ...featureValues.regulatoryCompliance.kycComponents,
-            ...featureValues.regulatoryCompliance.amlMetrics
+            ...featureValues.regulatoryCompliance.kycVerification,
+            ...featureValues.regulatoryCompliance.amlMonitoring
           ]}
         />
 
@@ -131,8 +131,8 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
           icon={<Bot className="h-5 w-5 text-purple-600" />}
           description="Standardized metrics and scoring for automated credit decision-making and exception handling."
           data={[
-            ...featureValues.automatedUnderwriting.decisionMetrics,
-            ...featureValues.automatedUnderwriting.evaluationCriteria
+            ...featureValues.automatedUnderwriting.accelerationMetrics,
+            ...featureValues.automatedUnderwriting.standardizedCriteria
           ]}
         />
       </div>
