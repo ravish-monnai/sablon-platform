@@ -3,6 +3,10 @@ import { useState, useMemo } from 'react';
 import { CaseItem, allCases } from '@/types/cases';
 import { bankStatementCases } from '@/types/mockData/bankStatementCases';
 import { indianBankStatementCases } from '@/types/mockData/indianBankStatementCases';
+import { usaBankStatementCases } from '@/types/mockData/usaBankStatementCases';
+import { mexicoBankStatementCases } from '@/types/mockData/mexicoBankStatementCases';
+import { indonesiaBankStatementCases } from '@/types/mockData/indonesiaBankStatementCases';
+import { philippinesBankStatementCases } from '@/types/mockData/philippinesBankStatementCases';
 
 interface UseCaseFilteringProps {
   selectedMarket: string;
@@ -23,7 +27,14 @@ export const useCaseFiltering = ({ selectedMarket }: UseCaseFilteringProps): Use
 
   // Combine all bank statement cases
   const allBankStatementCases = useMemo(() => {
-    return [...bankStatementCases, ...indianBankStatementCases];
+    return [
+      ...bankStatementCases, 
+      ...indianBankStatementCases,
+      ...usaBankStatementCases,
+      ...mexicoBankStatementCases,
+      ...indonesiaBankStatementCases,
+      ...philippinesBankStatementCases
+    ];
   }, []);
 
   const filteredCases = useMemo(() => {
