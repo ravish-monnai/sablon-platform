@@ -1,5 +1,5 @@
 
-import { NodeData, JourneyWorkflowConfigurations } from './types';
+import { JourneyWorkflowConfigurations, NodeData } from './types';
 import { onboardingFraudDetection } from './onboarding-fraud-detection';
 import { bankStatementAnalyzer } from './bank-statement-analyzer';
 
