@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback } from 'react';
 import { useNodesState, useEdgesState, addEdge, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -7,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import WorkflowFlow from '../workflow/WorkflowFlow';
 import DraggableItem from '../workflow/DraggableItem';
 import { NodeData } from '../workflow/types';
+import { getDefaultLabelForType, getDefaultDescriptionForType } from '../workflow/utils/nodeUtils';
 
 interface AgentBuilderProps {
   agentType: string;
@@ -42,9 +42,9 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
 
       // Create a properly typed NodeData object
       const data: NodeData = {
-        label: `New ${type}`,
+        label: getDefaultLabelForType(type),
         type,
-        description: '',
+        description: getDefaultDescriptionForType(type),
       };
 
       // Customize node appearance based on type
