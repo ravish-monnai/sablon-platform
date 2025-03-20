@@ -9,6 +9,12 @@ import { indonesiaBankStatementCases } from "./mockData/indonesiaBankStatementCa
 import { philippinesBankStatementCases } from "./mockData/philippinesBankStatementCases";
 import { otherCases } from "./mockData/otherCases";
 
+// Create a new file specifically for US cases
+export const unitedStatesBankStatementCases: CaseItem[] = [
+  ...bankStatementCases.filter(c => c.market === "United States"),
+  ...usaBankStatementCases
+];
+
 // Combine all cases for convenience
 export const allCases: CaseItem[] = [
   ...bankStatementCases,
