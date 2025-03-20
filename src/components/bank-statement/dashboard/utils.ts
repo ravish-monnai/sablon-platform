@@ -1,3 +1,4 @@
+
 // Helper function to get currency symbol based on market
 export const getCurrencySymbol = (market?: string) => {
   if (!market) return "₹";
@@ -44,7 +45,7 @@ export const hasExceptions = (feature: any): boolean => {
 };
 
 // Helper function to get the appropriate badge variant based on status
-export const getStatusColor = (status: string): string => {
+export const getStatusColor = (status: string): "success" | "warning" | "destructive" | "default" | "secondary" | "outline" => {
   const statusLower = status.toLowerCase();
   
   if (statusLower.includes('good') || 
