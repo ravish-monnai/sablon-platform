@@ -1,57 +1,118 @@
 
-// Helper functions for node styling
+import { Edge, MarkerType, Node } from '@xyflow/react';
+import { NodeData } from '../types';
 
-// Return appropriate color based on node type
-export const getNodeColorByType = (type: string): string => {
-  switch(type) {
-    case 'rule':
-      return '#3b82f6'; // blue
-    case 'model':
-      return '#8b5cf6'; // purple (changed from pink)
-    case 'data':
+// Maps node types to minimap colors
+export const getMinimapNodeColor = (node: Node) => {
+  const data = node.data as NodeData;
+  
+  if (!data || !data.type) return '#d1d5db'; // Default gray
+
+  // Use the same colors as in the CustomNode
+  switch (data.type) {
     case 'datasource':
-      return '#2bbfe0'; // blue (changed from yellow)
+      return '#fef08a'; // Yellow
+    case 'model':
+      return '#d8b4fe'; // Purple
+    case 'rule':
+      return '#93c5fd'; // Blue
     case 'notification':
-      return '#22c55e'; // green
-    case 'alert':
-      return '#6b7280'; // gray (changed from red)
+      return '#86efac'; // Green
     case 'agent':
-      return '#3b82f6'; // blue (changed from purple)
+      return '#a5b4fc'; // Indigo
+    case 'alert':
+      return '#fca5a5'; // Red
     default:
-      return '#2bbfe0'; // default blue
+      return '#d1d5db'; // Gray
   }
 };
 
-// Match the status border styling from journey steps
-export const getStatusBorder = (status?: string): string => {
-  switch(status) {
-    case 'completed':
-      return 'border-green-400';
-    case 'active':
-      return 'border-blue-400';
-    case 'error':
-      return 'border-red-400';
-    default:
-      return 'border-transparent';
-  }
+// Default edge options
+export const getEdgeOptions = () => {
+  return {
+    type: 'smoothstep',
+    style: { 
+      stroke: '#94a3b8',  // Default edge color
+      strokeWidth: 2
+    },
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+      width: 20,
+      height: 20,
+      color: '#94a3b8'
+    },
+    animated: false,
+    labelStyle: { 
+      fill: '#64748b', 
+      fontWeight: 500,
+      fontSize: 12
+    },
+    labelBgStyle: { 
+      fill: '#f8fafc', 
+      fillOpacity: 0.8,
+      rx: 4,
+      strokeWidth: 0
+    }
+  };
 };
 
-// Define edge styling options
-export const getEdgeOptions = () => ({
-  style: { strokeWidth: 2, stroke: '#94a3b8' },
-  labelBgStyle: { fill: 'white', fillOpacity: 0.8 },
-  labelStyle: { fill: '#333', fontSize: 12 },
-  animated: true
-});
-
-// Get node color for minimap
-export const getMinimapNodeColor = (node: any) => {
-  const nodeData = node.data;
-  if (nodeData.type === 'datasource' || nodeData.type === 'data') return '#2bbfe0'; // changed from yellow
-  if (nodeData.type === 'model') return '#8b5cf6'; // changed from pink
-  if (nodeData.type === 'agent') return '#3b82f6'; // changed from purple
-  if (nodeData.type === 'rule') return '#3b82f6';
-  if (nodeData.type === 'notification') return '#22c55e';
-  if (nodeData.type === 'alert') return '#6b7280'; // changed from red
-  return '#2bbfe0';
+// Function to get a custom edge style based on edge data
+export const getCustomEdgeStyle = (edge: Edge) => {
+  const edgeType = edge.data?.type;
+  
+  if (!edgeType) return getEdgeOptions();
+  
+  switch (edgeType) {
+    case 'success':
+      return {
+        ...getEdgeOptions(),
+        style: { 
+          stroke: '#22c55e', // Green for success
+          strokeWidth: 2
+        },
+        markerEnd: {
+          ...getEdgeOptions().markerEnd,
+          color: '#22c55e'
+        }
+      };
+    case 'failure':
+      return {
+        ...getEdgeOptions(),
+        style: { 
+          stroke: '#ef4444', // Red for failure
+          strokeWidth: 2
+        },
+        markerEnd: {
+          ...getEdgeOptions().markerEnd,
+          color: '#ef4444'
+        }
+      };
+    case 'warning':
+      return {
+        ...getEdgeOptions(),
+        style: { 
+          stroke: '#f59e0b', // Amber for warning
+          strokeWidth: 2
+        },
+        markerEnd: {
+          ...getEdgeOptions().markerEnd,
+          color: '#f59e0b'
+        }
+      };
+    case 'feedback':
+      return {
+        ...getEdgeOptions(),
+        style: { 
+          stroke: '#6366f1', // Indigo for feedback
+          strokeWidth: 2,
+          strokeDasharray: '5,5' // Dashed line
+        },
+        markerEnd: {
+          ...getEdgeOptions().markerEnd,
+          color: '#6366f1'
+        }
+      };
+    default:
+      return getEdgeOptions();
+  }
 };

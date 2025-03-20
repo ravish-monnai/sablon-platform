@@ -1,3 +1,4 @@
+
 import React, { useCallback, useState } from 'react';
 import { 
   ReactFlow, 
@@ -7,7 +8,8 @@ import {
   Panel,
   Node,
   NodeTypes,
-  Edge
+  Edge,
+  ConnectionLineType
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { NodeData } from './types';
@@ -47,7 +49,8 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   const edgeOptions = getEdgeOptions();
 
   const combinedNodeTypes = {
-    ...nodeTypes
+    ...nodeTypes,
+    default: CustomNode
   } as NodeTypes;
 
   const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
@@ -80,6 +83,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         onNodeDoubleClick={onNodeDoubleClick}
         nodeTypes={combinedNodeTypes}
         defaultEdgeOptions={edgeOptions}
+        connectionLineType={ConnectionLineType.SmoothStep}
         fitView
         snapToGrid
         snapGrid={[15, 15]}

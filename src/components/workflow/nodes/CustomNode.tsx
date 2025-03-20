@@ -1,174 +1,212 @@
 
 import React, { useState } from 'react';
-import { NodeProps } from '@xyflow/react';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
+import { Handle, Position } from '@xyflow/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
-import { ScrollArea } from '@/components/ui/scroll-area';
 import { NodeData } from '../types';
-import { getNodeColorByType, getStatusBorder } from '../utils/nodeStyles';
 
-const CustomNode = ({ data, id, selected }: NodeProps) => {
-  const [showDetails, setShowDetails] = useState(false);
-  
-  // Type assertion to ensure TypeScript understands this is NodeData
-  const nodeData = data as NodeData;
-  
-  // Use the same styling as in the journey steps tab
-  const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
-  const statusBorder = getStatusBorder(nodeData.status);
-  const hasRules = nodeData.rules && nodeData.rules.length > 0;
-  
-  // Determine if this node has additional configuration details
-  const hasApiSpecs = nodeData.apiSpecs !== undefined;
-  const hasFeatureExtraction = nodeData.featureExtraction !== undefined;
-  const hasRiskAssessment = nodeData.riskAssessment !== undefined;
-  const hasCaseConfiguration = nodeData.caseConfiguration !== undefined;
-  const hasDetails = hasApiSpecs || hasFeatureExtraction || hasRiskAssessment || hasCaseConfiguration;
-  
+interface CustomNodeProps {
+  id: string;
+  data: NodeData;
+  selected: boolean;
+  isConnectable: boolean;
+}
+
+const CustomNode: React.FC<CustomNodeProps> = ({ id, data, selected }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  // Determine background color based on type or explicit color
+  const getBgColor = () => {
+    if (data.color) return data.color;
+    
+    switch (data.type) {
+      case 'datasource':
+        return '#FEF9C3'; // Yellow
+      case 'model':
+        return '#F3E8FF'; // Purple
+      case 'rule':
+        return '#DBEAFE'; // Blue
+      case 'notification':
+        return '#DCFCE7'; // Green
+      case 'agent':
+        return '#E0E7FF'; // Indigo
+      case 'alert':
+        return '#FEE2E2'; // Red
+      default:
+        return '#F1F5F9'; // Default slate
+    }
+  };
+
+  // Determine border color based on selection and status
+  const getBorderColor = () => {
+    if (selected) return 'border-blue-500';
+    if (data.status === 'error') return 'border-red-500';
+    if (data.status === 'warning') return 'border-yellow-500';
+    if (data.status === 'success') return 'border-green-500';
+    return 'border-gray-200';
+  };
+
+  const toggleExpand = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  // Helper to render object properties in a readable format
+  const renderObjectProperties = (obj: Record<string, any>, depth = 0): JSX.Element => {
+    if (!obj) return <></>;
+    
+    return (
+      <div className={`pl-${depth * 2}`}>
+        {Object.entries(obj).map(([key, value]) => {
+          // Skip rendering React elements or functions
+          if (React.isValidElement(value) || typeof value === 'function') {
+            return null;
+          }
+          
+          // Format the key for display
+          const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+          
+          if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+            return (
+              <div key={key} className="mt-1">
+                <div className="font-medium text-gray-700">{formattedKey}:</div>
+                {renderObjectProperties(value, depth + 1)}
+              </div>
+            );
+          } else if (Array.isArray(value)) {
+            return (
+              <div key={key} className="mt-1">
+                <div className="font-medium text-gray-700">{formattedKey}:</div>
+                <ul className="pl-4 list-disc text-xs">
+                  {value.map((item, i) => (
+                    <li key={i} className="mt-0.5">{item}</li>
+                  ))}
+                </ul>
+              </div>
+            );
+          } else {
+            return (
+              <div key={key} className="mt-0.5 text-xs">
+                <span className="font-medium text-gray-700">{formattedKey}: </span>
+                <span>{value?.toString()}</span>
+              </div>
+            );
+          }
+        })}
+      </div>
+    );
+  };
+
+  // Determine what details to show when expanded
+  const renderExpandedDetails = () => {
+    // API Specifications
+    if (data.apiSpecs) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">API Specifications:</div>
+          {renderObjectProperties(data.apiSpecs)}
+        </div>
+      );
+    }
+    
+    // Feature Extraction
+    if (data.featureExtraction) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Feature Extraction:</div>
+          {renderObjectProperties(data.featureExtraction)}
+        </div>
+      );
+    }
+    
+    // Risk Assessment
+    if (data.riskAssessment) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Risk Assessment:</div>
+          {renderObjectProperties(data.riskAssessment)}
+        </div>
+      );
+    }
+    
+    // Case Configuration
+    if (data.caseConfiguration) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Case Configuration:</div>
+          {renderObjectProperties(data.caseConfiguration)}
+        </div>
+      );
+    }
+    
+    // Rules
+    if (data.rules && data.rules.length > 0) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Rules:</div>
+          <ul className="pl-4 list-disc">
+            {data.rules.map((rule, idx) => (
+              <li key={idx}>{rule.condition} {rule.operator} {rule.value} → {rule.action}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
+    
+    return (
+      <div className="text-xs text-gray-500 mt-2">
+        No additional configuration details available
+      </div>
+    );
+  };
+
   return (
     <div 
-      className={`flex flex-col items-center rounded-md shadow-md ${statusBorder} transition-all duration-200`}
-      style={{ 
-        backgroundColor: backgroundColor,
-        borderWidth: '2px',
-        minWidth: hasDetails && showDetails ? '280px' : '130px',
-        minHeight: hasDetails && showDetails ? '200px' : '90px',
-        transform: selected ? 'scale(1.05)' : 'scale(1)',
-        maxWidth: hasDetails && showDetails ? '350px' : 'auto'
-      }}
+      className={`p-3 rounded-lg shadow-md border ${getBorderColor()} max-w-xs transition-all duration-200`}
+      style={{ backgroundColor: getBgColor() }}
     >
-      <div className="p-3 flex flex-col items-center w-full">
-        {nodeData.icon && (
-          <div className="rounded-full bg-white p-2 mb-2 shadow-sm">
-            {nodeData.icon}
-          </div>
-        )}
-        <div className="text-sm font-medium text-white">{nodeData.label}</div>
-        <div className="text-xs text-white opacity-80 mt-1 text-center line-clamp-2">{nodeData.description}</div>
+      {/* Input handle on the left */}
+      <Handle
+        type="target"
+        position={Position.Left}
+        isConnectable={true}
+        className="w-3 h-3 bg-gray-400 border-2 border-white"
+      />
+      
+      {/* Output handle on the right */}
+      <Handle
+        type="source"
+        position={Position.Right}
+        isConnectable={true}
+        className="w-3 h-3 bg-gray-400 border-2 border-white"
+      />
+      
+      <div className="flex items-center">
+        {data.icon && <div className="mr-2">{data.icon}</div>}
+        <div className="flex-1">
+          <div className="font-medium text-gray-800 text-sm">{data.label}</div>
+          <div className="text-xs text-gray-600">{data.description}</div>
+        </div>
         
-        {/* Rules indicator badge */}
-        {hasRules && (
-          <Badge className="mt-2 bg-white text-black border border-white">
-            {nodeData.rules?.length} {nodeData.rules?.length === 1 ? 'Rule' : 'Rules'}
-          </Badge>
-        )}
-        
-        {/* Toggle details button (only show if node has details) */}
-        {hasDetails && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="mt-1 bg-white bg-opacity-20 text-white hover:bg-white hover:bg-opacity-30"
-            onClick={(e) => {
-              e.stopPropagation();
-              setShowDetails(!showDetails);
-            }}
+        {/* Show expand button only if we have additional details */}
+        {(data.apiSpecs || data.featureExtraction || data.riskAssessment || data.caseConfiguration || (data.rules && data.rules.length > 0)) && (
+          <button 
+            className="ml-1 text-gray-500 hover:text-gray-700"
+            onClick={toggleExpand}
           >
-            {showDetails ? (
-              <>
-                <ChevronUp className="mr-1 h-3 w-3" /> Hide Details
-              </>
+            {isExpanded ? (
+              <ChevronUp size={16} />
             ) : (
-              <>
-                <ChevronDown className="mr-1 h-3 w-3" /> Show Details
-              </>
+              <ChevronDown size={16} />
             )}
-          </Button>
+          </button>
         )}
       </div>
       
-      {/* Details section */}
-      {hasDetails && showDetails && (
-        <div className="w-full bg-white bg-opacity-10 p-3 rounded-b-md text-white text-xs">
-          <ScrollArea className="h-[180px]">
-            {/* API Specs */}
-            {hasApiSpecs && (
-              <div className="mb-3">
-                <h4 className="font-bold mb-1 text-white">API Specifications:</h4>
-                <ul className="list-disc list-inside space-y-1">
-                  <li>Endpoint: {nodeData.apiSpecs?.endpoint}</li>
-                  <li>Method: {nodeData.apiSpecs?.method}</li>
-                  <li>Auth: {nodeData.apiSpecs?.authType}</li>
-                  {nodeData.apiSpecs?.s3Config && (
-                    <>
-                      <li className="font-semibold mt-1">S3 Configuration:</li>
-                      <ul className="list-disc list-inside ml-3">
-                        <li>Bucket: {nodeData.apiSpecs.s3Config.bucketName}</li>
-                        <li>Region: {nodeData.apiSpecs.s3Config.region}</li>
-                        <li>File Types: {nodeData.apiSpecs.s3Config.allowedFileTypes?.join(', ')}</li>
-                        <li>Max Size: {nodeData.apiSpecs.s3Config.maxFileSize}</li>
-                      </ul>
-                    </>
-                  )}
-                </ul>
-              </div>
-            )}
-            
-            {/* Feature Extraction */}
-            {hasFeatureExtraction && (
-              <div className="mb-3">
-                <h4 className="font-bold mb-1 text-white">Features Extracted:</h4>
-                <ul className="list-disc list-inside grid grid-cols-1 gap-1">
-                  {nodeData.featureExtraction?.features?.map((feature, index) => (
-                    <li key={index}>{feature}</li>
-                  ))}
-                </ul>
-                <div className="mt-2">
-                  <p>Models: {nodeData.featureExtraction?.models?.join(', ')}</p>
-                  <p>Confidence: {nodeData.featureExtraction?.confidenceThreshold}%</p>
-                </div>
-              </div>
-            )}
-            
-            {/* Risk Assessment */}
-            {hasRiskAssessment && (
-              <div className="mb-3">
-                <h4 className="font-bold mb-1 text-white">Risk Assessment:</h4>
-                <div className="grid grid-cols-2 gap-x-2 gap-y-1">
-                  <p>High Risk: ≥{nodeData.riskAssessment?.thresholds?.highRisk}</p>
-                  <p>Medium Risk: ≥{nodeData.riskAssessment?.thresholds?.mediumRisk}</p>
-                  <p>Low Risk: ≥{nodeData.riskAssessment?.thresholds?.lowRisk}</p>
-                  <p>Auto-Decision: {nodeData.riskAssessment?.autoDecision ? 'Yes' : 'No'}</p>
-                </div>
-                <h5 className="font-semibold mt-1">Key Risk Factors:</h5>
-                <ul className="list-disc list-inside">
-                  {nodeData.riskAssessment?.factors?.slice(0, 4).map((factor, index) => (
-                    <li key={index}>{factor}</li>
-                  ))}
-                  {nodeData.riskAssessment?.factors && nodeData.riskAssessment.factors.length > 4 && (
-                    <li>+{nodeData.riskAssessment.factors.length - 4} more factors</li>
-                  )}
-                </ul>
-              </div>
-            )}
-            
-            {/* Case Configuration */}
-            {hasCaseConfiguration && (
-              <div>
-                <h4 className="font-bold mb-1 text-white">Case Configuration:</h4>
-                <ul className="list-disc list-inside">
-                  <li>Type: {nodeData.caseConfiguration?.caseType}</li>
-                  <li>Priority: {nodeData.caseConfiguration?.priority}</li>
-                  <li>Team: {nodeData.caseConfiguration?.assignedTeam}</li>
-                  <li>SLA: {nodeData.caseConfiguration?.slaHours} hours</li>
-                  <li>Auto-Notify: {nodeData.caseConfiguration?.autoNotify ? 'Yes' : 'No'}</li>
-                </ul>
-              </div>
-            )}
-          </ScrollArea>
+      {/* Expandable section with details */}
+      {isExpanded && (
+        <div className="mt-2 border-t pt-2 border-gray-200">
+          {renderExpandedDetails()}
         </div>
       )}
-      
-      {/* Node identifier badge */}
-      <div className="absolute -top-2 -right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center border border-gray-200 shadow-sm">
-        <span className="text-xs font-bold">{id && typeof id === 'string' ? id.split('-')[1] || '1' : '1'}</span>
-      </div>
-      
-      {/* Edit instruction */}
-      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white text-[8px] text-center py-1 rounded-b-sm">
-        Double-click to edit
-      </div>
     </div>
   );
 };

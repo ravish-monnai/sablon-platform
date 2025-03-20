@@ -1,175 +1,239 @@
 
 import React from 'react';
-import { ArrowDownToLine, FileText, ShieldAlert, UserCheck } from 'lucide-react';
+import { Upload, Brain, BarChart4, Shield, Users, AlertTriangle, CheckCircle } from 'lucide-react';
 import { JourneyWorkflowConfig } from './types';
+import { MarkerType } from '@xyflow/react';
 
 // Bank statement analyzer journey configuration
 export const bankStatementAnalyzer: JourneyWorkflowConfig = {
-  name: "Bank Statement Analysis",
-  description: "Analyzes bank statements for fraud detection and verification",
+  name: "Bank Statement Analyzer",
+  description: "Analyzes and extracts insights from bank statements",
   status: "active",
-  lastModified: "2 hours ago",
-  nodeCount: 4,
-  edgeCount: 4,
+  lastModified: "2 days ago",
+  nodeCount: 7,
+  edgeCount: 7,
   nodes: [
     {
-      id: 'step-1',
+      id: 'upload-1',
       type: 'default',
-      position: { x: 100, y: 175 },
+      position: { x: 100, y: 150 },
       data: { 
         label: 'Bank Statement Upload',
-        description: 'Customer uploads bank statements through API or secure S3 path',
-        icon: React.createElement(ArrowDownToLine, { className: "text-blue-500", size: 20 }),
+        description: 'API endpoint for statement uploads',
+        icon: React.createElement(Upload, { className: "text-blue-500", size: 20 }),
         type: 'datasource',
         apiSpecs: {
-          endpoint: '/api/v1/bank-statements/upload',
+          endpoint: '/api/bank-statements/upload',
           method: 'POST',
           authType: 'Bearer Token',
-          requiredFields: ['customerId', 'statementDate', 'fileContent'],
-          optionalFields: ['bankName', 'accountType', 'currency'],
+          requiredFields: ['file', 'customer_id', 'bank_id'],
+          optionalFields: ['statement_date', 'account_number'],
           responseFormat: 'JSON',
           s3Config: {
             bucketName: 'monnai-bank-statements',
             region: 'us-west-2',
             accessKeyRequired: true,
             allowedFileTypes: ['.pdf', '.csv', '.xlsx', '.xml'],
-            maxFileSize: '25MB'
+            maxFileSize: '10MB'
           }
         }
       }
     },
     {
-      id: 'step-2',
+      id: 'analysis-1',
       type: 'default',
-      position: { x: 350, y: 175 },
+      position: { x: 400, y: 150 },
       data: { 
-        label: 'Analysis & Feature Extraction',
-        description: 'Bank statement analyzer agent parses the statements and extracts all configured features',
-        icon: React.createElement(FileText, { className: "text-blue-500", size: 20 }),
+        label: 'Feature Extraction',
+        description: 'Extracts financial insights from statements',
+        icon: React.createElement(Brain, { className: "text-purple-500", size: 20 }),
         type: 'model',
-        modelType: 'binary',
         featureExtraction: {
           features: [
-            'Monthly Income Verification',
-            'Income Consistency Analysis',
-            'Income Source Identification',
-            'Average Balance Calculation',
-            'Cash Flow Analysis',
-            'Recurring Transaction Patterns',
+            'Account Balances',
+            'Income Verification',
             'Expense Categorization',
-            'Debt Service Ratio Calculation',
-            'Overdraft Detection',
-            'Payment Regularity Assessment',
-            'Account Volatility Measurement',
-            'Fraud Indicators Analysis',
-            'Abnormal Transaction Detection',
-            'Customer Behavioral Patterns',
-            'Financial Stability Metrics',
-            'Credit Risk Indicators'
+            'Cash Flow Analysis',
+            'Transaction Patterns',
+            'Recurring Payments',
+            'Overdraft Frequency',
+            'Deposit Consistency',
+            'Debt Service Ratio',
+            'Savings Rate',
+            'Debt-to-Income Ratio',
+            'Lifestyle Spending'
           ],
-          models: ['LLM Parser', 'OCR Engine', 'Transaction Classifier'],
-          confidenceThreshold: 85,
-          processingTime: '30-60 seconds'
+          models: ['TransactionClassifier-v2', 'FinancialMetricsCalculator-v1'],
+          confidenceThreshold: 0.85,
+          processingTime: '30-45 seconds'
         }
       }
     },
     {
-      id: 'step-3',
+      id: 'risk-1',
       type: 'default',
-      position: { x: 600, y: 175 },
+      position: { x: 700, y: 150 },
       data: { 
         label: 'Risk Assessment',
-        description: 'Agent evaluates risk score and makes initial determination',
-        icon: React.createElement(ShieldAlert, { className: "text-blue-500", size: 20 }),
+        description: 'Evaluates financial risk profile',
+        icon: React.createElement(Shield, { className: "text-red-500", size: 20 }),
         type: 'model',
-        modelType: 'multiclass',
         riskAssessment: {
           thresholds: {
-            highRisk: 75,
-            mediumRisk: 45,
-            lowRisk: 20
+            highRisk: 0.75,
+            mediumRisk: 0.45,
+            lowRisk: 0.25
           },
           factors: [
-            'Income Stability Score',
-            'Debt-to-Income Ratio',
-            'Account Balance Volatility',
-            'Suspicious Transaction Patterns',
-            'Overdraft Frequency',
-            'Spending Behavior Consistency',
-            'Payment Reliability'
+            'Income Stability',
+            'Expense Management',
+            'Debt Burden',
+            'Cash Flow Volatility',
+            'Fraud Indicators',
+            'Account Management Behavior'
           ],
-          modelType: 'Ensemble (Random Forest + Neural Network)',
+          modelType: 'Ensemble',
           autoDecision: true
         }
       }
     },
     {
-      id: 'step-4-high',
+      id: 'high-risk-1',
       type: 'default',
-      position: { x: 850, y: 100 },
+      position: { x: 550, y: 350 },
       data: { 
-        label: 'High Risk - Auto Reject',
-        description: 'Journey ends with auto-rejected case',
-        icon: React.createElement(ShieldAlert, { className: "text-gray-500", size: 20 }),
-        type: 'agent',
-        agentType: 'ai_agent',
+        label: 'High Risk Case',
+        description: 'Automatically rejected applications',
+        icon: React.createElement(AlertTriangle, { className: "text-red-500", size: 20 }),
+        type: 'rule',
+        color: '#FEE2E2',
         caseConfiguration: {
-          caseType: 'Auto-Rejected',
-          priority: 'Low',
-          assignedTeam: 'Fraud Analytics',
-          slaHours: 48,
+          caseType: 'High Risk',
+          priority: 'High',
+          assignedTeam: 'Risk Management',
+          slaHours: 24,
           autoNotify: true,
-          requiredDocuments: ['Bank Statement', 'Risk Assessment Report']
+          requiredDocuments: ['Additional Income Proof', 'Existing Debt Documentation']
         }
       }
     },
     {
-      id: 'step-4-low',
+      id: 'acceptable-risk-1',
       type: 'default',
-      position: { x: 850, y: 250 },
+      position: { x: 850, y: 350 },
       data: { 
-        label: 'Acceptable Risk - Underwriting',
-        description: 'Case forwarded to underwriting agent',
-        icon: React.createElement(UserCheck, { className: "text-green-500", size: 20 }),
-        type: 'agent',
-        agentType: 'regular_agent',
+        label: 'Acceptable Risk Case',
+        description: 'Automatically approved applications',
+        icon: React.createElement(CheckCircle, { className: "text-green-500", size: 20 }),
+        type: 'rule',
+        color: '#DCFCE7',
         caseConfiguration: {
-          caseType: 'Underwriting Review',
-          priority: 'Medium',
+          caseType: 'Acceptable Risk',
+          priority: 'Normal',
           assignedTeam: 'Underwriting',
-          slaHours: 24,
-          autoNotify: true,
-          requiredDocuments: ['Bank Statement', 'Income Verification Report', 'Credit Report']
+          slaHours: 48,
+          autoNotify: false,
+          requiredDocuments: []
         }
+      }
+    },
+    {
+      id: 'reports-1',
+      type: 'default',
+      position: { x: 1000, y: 150 },
+      data: { 
+        label: 'Report Generation',
+        description: 'Creates financial insights reports',
+        icon: React.createElement(BarChart4, { className: "text-blue-500", size: 20 }),
+        type: 'notification'
+      }
+    },
+    {
+      id: 'agent-1',
+      type: 'default',
+      position: { x: 1000, y: 250 },
+      data: { 
+        label: 'Manual Review Team',
+        description: 'Team that reviews edge cases',
+        icon: React.createElement(Users, { className: "text-indigo-500", size: 20 }),
+        type: 'agent'
       }
     }
   ],
   edges: [
     {
       id: 'e1-2',
-      source: 'step-1',
-      target: 'step-2',
+      source: 'upload-1',
+      target: 'analysis-1',
       animated: true,
+      style: { stroke: '#94a3b8' },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
     },
     {
       id: 'e2-3',
-      source: 'step-2',
-      target: 'step-3',
+      source: 'analysis-1',
+      target: 'risk-1',
       animated: true,
+      style: { stroke: '#94a3b8' },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
     },
     {
-      id: 'e3-4a',
-      source: 'step-3',
-      target: 'step-4-high',
+      id: 'e3-4',
+      source: 'risk-1',
+      target: 'high-risk-1',
       animated: true,
       label: 'High Risk',
+      labelStyle: { fill: '#ef4444', fontWeight: 500 },
+      style: { stroke: '#ef4444' },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
     },
     {
-      id: 'e3-4b',
-      source: 'step-3',
-      target: 'step-4-low',
+      id: 'e3-5',
+      source: 'risk-1',
+      target: 'acceptable-risk-1',
       animated: true,
-      label: 'Acceptable Risk',
+      label: 'Acceptable',
+      labelStyle: { fill: '#22c55e', fontWeight: 500 },
+      style: { stroke: '#22c55e' },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    },
+    {
+      id: 'e3-6',
+      source: 'risk-1',
+      target: 'reports-1',
+      animated: true,
+      style: { stroke: '#94a3b8' },
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    },
+    {
+      id: 'e5-7',
+      source: 'acceptable-risk-1',
+      target: 'agent-1',
+      style: { stroke: '#94a3b8' },
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
+    },
+    {
+      id: 'e4-7',
+      source: 'high-risk-1',
+      target: 'agent-1',
+      style: { stroke: '#94a3b8' },
+      animated: true,
+      markerEnd: {
+        type: MarkerType.ArrowClosed,
+      },
     }
   ]
 };
