@@ -41,11 +41,13 @@ const WorkflowEditor: React.FC = () => {
   
   // Function to open the node configuration dialog
   const openNodeConfig = useCallback((node: any) => {
+    console.log('Opening config for node:', node);
     setConfigNode(node);
     setIsConfigDialogOpen(true);
   }, []);
   
   const closeNodeConfig = useCallback(() => {
+    console.log('Closing node config dialog');
     setConfigNode(null);
     setIsConfigDialogOpen(false);
   }, []);

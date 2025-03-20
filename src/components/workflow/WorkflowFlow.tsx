@@ -54,6 +54,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     default: CustomNode
   } as NodeTypes;
 
+  // Explicitly handle drag over to show visual feedback
   const handleDragOver = (event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -65,18 +66,13 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     setIsDraggingOver(false);
   };
 
+  // Handle drop with visual feedback
   const handleDrop = (event: React.DragEvent) => {
     setIsDraggingOver(false);
     if (onDrop) onDrop(event);
-
-    // Show a brief success toast feedback
-    const type = event.dataTransfer.getData('application/reactflow/type');
-    if (type) {
-      const nodeLabel = type.charAt(0).toUpperCase() + type.slice(1);
-      toast.success(`Added ${nodeLabel} node to workflow`);
-    }
   };
 
+  // Pass the clicked node to the parent component
   const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     console.log("Node clicked:", node);
     if (onNodeClick) {

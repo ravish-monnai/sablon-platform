@@ -16,7 +16,10 @@ export function useWorkflowDragDrop(setNodes: any, openNodeConfig?: (node: any) 
       // Get the dropped element type
       const type = event.dataTransfer.getData('application/reactflow/type');
       
-      if (!type) return;
+      if (!type) {
+        console.error('No type data found in drag event');
+        return;
+      }
 
       // Get position where the element was dropped
       const reactFlowBounds = event.currentTarget.getBoundingClientRect();
@@ -65,14 +68,6 @@ export function useWorkflowDragDrop(setNodes: any, openNodeConfig?: (node: any) 
       // Add the new node to the canvas
       setNodes((nds: any) => {
         const updatedNodes = nds.concat(newNode);
-        
-        // Automatically open the config dialog for the new node
-        if (openNodeConfig) {
-          setTimeout(() => {
-            openNodeConfig(newNode);
-          }, 100); // Small delay to ensure node is rendered
-        }
-        
         return updatedNodes;
       });
       
@@ -82,13 +77,20 @@ export function useWorkflowDragDrop(setNodes: any, openNodeConfig?: (node: any) 
         description: "Configure your new node",
         duration: 3000,
       });
+      
+      // Automatically open the config dialog for the new node
+      if (openNodeConfig) {
+        setTimeout(() => {
+          openNodeConfig(newNode);
+        }, 100); // Small delay to ensure node is rendered
+      }
     },
     [setNodes, openNodeConfig]
   );
 
-  const onNodeDragStart = useCallback(() => {
-    // This is a placeholder for now
-    // Could be used for visual feedback or tracking
+  const onNodeDragStart = useCallback((event: any, node: any) => {
+    // This is a placeholder that could be used for visual feedback
+    console.log('Node drag started:', node);
   }, []);
 
   return {
