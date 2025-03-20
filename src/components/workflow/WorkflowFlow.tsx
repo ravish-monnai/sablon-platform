@@ -51,12 +51,12 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
 
   // Define nodeTypes properly matching ReactFlow expectations
   const combinedNodeTypes = {
-    ...nodeTypes,
-    default: CustomNode
+    ...nodeTypes
   } as NodeTypes;
 
   // Handle node double click
   const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
+    console.log("Node double clicked:", node);
     setConfigNode(node);
     setIsDialogOpen(true);
   }, []);

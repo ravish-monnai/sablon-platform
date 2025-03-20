@@ -4,9 +4,12 @@ import { useJourneyState } from './hooks/useJourneyState';
 import { useWorkflowDragDrop } from './hooks/useWorkflowDragDrop';
 import JourneyList from './JourneyList';
 import JourneyEditor from './JourneyEditor';
+import CustomNode from './nodes/CustomNode';
 
 // Custom Node Types
-const nodeTypes = {};
+const nodeTypes = {
+  default: CustomNode
+};
 
 const WorkflowEditor: React.FC = () => {
   const { 

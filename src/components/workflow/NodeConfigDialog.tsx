@@ -27,7 +27,7 @@ const NodeConfigDialog: React.FC<NodeConfigDialogProps> = ({ isOpen, onClose, no
   const [label, setLabel] = useState(node?.data?.label || '');
   const [description, setDescription] = useState(node?.data?.description || '');
   const [type, setType] = useState(node?.data?.type || 'datasource');
-  const [status, setStatus] = useState(node?.data?.status || '');
+  const [status, setStatus] = useState(node?.data?.status || 'none');
   const [rules, setRules] = useState<AnalysisRule[]>(node?.data?.rules || []);
 
   React.useEffect(() => {
@@ -35,7 +35,7 @@ const NodeConfigDialog: React.FC<NodeConfigDialogProps> = ({ isOpen, onClose, no
       setLabel(node.data.label || '');
       setDescription(node.data.description || '');
       setType(node.data.type || 'datasource');
-      setStatus(node.data.status || '');
+      setStatus(node.data.status || 'none');
       setRules(node.data.rules || []);
     }
   }, [node]);
@@ -135,7 +135,7 @@ const NodeConfigDialog: React.FC<NodeConfigDialogProps> = ({ isOpen, onClose, no
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">None</SelectItem>
+                <SelectItem value="none">None</SelectItem>
                 <SelectItem value="active">Active</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="error">Error</SelectItem>
