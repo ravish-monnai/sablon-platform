@@ -11,6 +11,7 @@ import { journeyWorkflowConfigurations } from '../ai-journeys/data';
 import JourneyList from './JourneyList';
 import JourneyEditor from './JourneyEditor';
 import { toast } from "sonner";
+import { NodeData } from './types';
 
 // Custom Node Types
 const nodeTypes = {};
@@ -181,6 +182,25 @@ const WorkflowEditor: React.FC = () => {
     setIsPreviewMode(false);
   };
 
+  // Handle node update
+  const handleUpdateNode = (nodeId: string, newData: NodeData) => {
+    setNodes((nds) =>
+      nds.map((node) => {
+        if (node.id === nodeId) {
+          // Update the node data
+          return {
+            ...node,
+            data: {
+              ...node.data,
+              ...newData,
+            },
+          };
+        }
+        return node;
+      })
+    );
+  };
+
   // Determine journey name and description
   const journeyName = activeJourney && journeyWorkflowConfigurations[activeJourney] 
     ? journeyWorkflowConfigurations[activeJourney].name 
@@ -219,6 +239,7 @@ const WorkflowEditor: React.FC = () => {
       togglePreviewMode={togglePreviewMode}
       onBackToList={handleBackToList}
       nodeTypes={nodeTypes}
+      onUpdateNode={handleUpdateNode}
     />
   );
 };

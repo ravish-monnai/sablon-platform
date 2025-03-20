@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import WorkflowToolbar from './WorkflowToolbar';
 import WorkflowFlow from './WorkflowFlow';
 import WorkflowPreview from './WorkflowPreview';
+import { NodeData } from './types';
 
 interface JourneyEditorProps {
   activeJourney: string;
@@ -22,6 +23,7 @@ interface JourneyEditorProps {
   togglePreviewMode: () => void;
   onBackToList: () => void;
   nodeTypes: Record<string, React.ComponentType<any>>;
+  onUpdateNode: (nodeId: string, data: NodeData) => void;
 }
 
 const JourneyEditor: React.FC<JourneyEditorProps> = ({
@@ -39,7 +41,8 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
   onNodeDragStart,
   togglePreviewMode,
   onBackToList,
-  nodeTypes
+  nodeTypes,
+  onUpdateNode
 }) => {
   if (isPreviewMode) {
     return (
@@ -95,6 +98,7 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
         onDragOver={onDragOver}
         onNodeDragStart={onNodeDragStart}
         nodeTypes={nodeTypes}
+        onUpdateNode={onUpdateNode}
       />
     </div>
   );

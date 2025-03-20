@@ -1,5 +1,5 @@
 
-import React, { useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -14,6 +14,8 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { NodeData, WorkflowNode } from './types';
+import NodeConfigDialog from './NodeConfigDialog';
+import { toast } from "sonner";
 
 // Custom Node component to display the icon
 const CustomNode = ({ data, id, selected }: NodeProps) => {
@@ -98,6 +100,7 @@ interface WorkflowFlowProps {
   onDragOver: any;
   onNodeDragStart: any;
   nodeTypes: NodeTypes;
+  onUpdateNode: (nodeId: string, data: NodeData) => void;
 }
 
 const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
@@ -109,8 +112,13 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   onDrop,
   onDragOver,
   onNodeDragStart,
-  nodeTypes
+  nodeTypes,
+  onUpdateNode
 }) => {
+  // State for node configuration dialog
+  const [configNode, setConfigNode] = useState<Node | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   // Custom edge with labels
   const edgeOptions = {
     style: { strokeWidth: 2, stroke: '#94a3b8' },
@@ -125,6 +133,24 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     default: CustomNode
   } as NodeTypes;
 
+  // Handle node double click
+  const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
+    setConfigNode(node);
+    setIsDialogOpen(true);
+  }, []);
+
+  // Handle dialog close
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setConfigNode(null);
+  };
+
+  // Handle node update
+  const handleUpdateNode = (nodeId: string, newData: NodeData) => {
+    onUpdateNode(nodeId, newData);
+    toast.success("Node configuration updated");
+  };
+
   return (
     <div className="h-[450px] border rounded-md overflow-hidden">
       <ReactFlow
@@ -136,6 +162,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         onDrop={onDrop}
         onDragOver={onDragOver}
         onNodeDragStart={onNodeDragStart}
+        onNodeDoubleClick={onNodeDoubleClick}
         nodeTypes={combinedNodeTypes}
         defaultEdgeOptions={edgeOptions}
         fitView
@@ -171,6 +198,14 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
           </div>
         </Panel>
       </ReactFlow>
+
+      {/* Node configuration dialog */}
+      <NodeConfigDialog 
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+        node={configNode}
+        onUpdateNode={handleUpdateNode}
+      />
     </div>
   );
 };
