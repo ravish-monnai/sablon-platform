@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import WorkflowToolbar from './WorkflowToolbar';
 import WorkflowFlow from './WorkflowFlow';
 import WorkflowPreview from './WorkflowPreview';
+import { NodeConfigDialog } from './node-config';
 import { NodeData } from './types';
 
 interface JourneyEditorProps {
@@ -25,6 +26,10 @@ interface JourneyEditorProps {
   onSaveJourney?: () => void;
   nodeTypes: Record<string, React.ComponentType<any>>;
   onUpdateNode: (nodeId: string, data: NodeData) => void;
+  configNode: any;
+  isConfigDialogOpen: boolean;
+  openNodeConfig: (node: any) => void;
+  closeNodeConfig: () => void;
 }
 
 const JourneyEditor: React.FC<JourneyEditorProps> = ({
@@ -44,7 +49,11 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
   onBackToList,
   onSaveJourney,
   nodeTypes,
-  onUpdateNode
+  onUpdateNode,
+  configNode,
+  isConfigDialogOpen,
+  openNodeConfig,
+  closeNodeConfig
 }) => {
   if (isPreviewMode) {
     return (
@@ -114,6 +123,15 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
         onDragOver={onDragOver}
         onNodeDragStart={onNodeDragStart}
         nodeTypes={nodeTypes}
+        onUpdateNode={onUpdateNode}
+        onNodeClick={openNodeConfig}
+      />
+      
+      {/* Node Configuration Dialog */}
+      <NodeConfigDialog
+        isOpen={isConfigDialogOpen}
+        onClose={closeNodeConfig}
+        node={configNode}
         onUpdateNode={onUpdateNode}
       />
     </div>

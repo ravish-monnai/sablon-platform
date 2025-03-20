@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { toast } from "sonner";
 import { getDefaultLabelForType, getDefaultDescriptionForType, getDefaultIconForType } from '../utils/nodeUtils';
 
-export function useWorkflowDragDrop(setNodes: any) {
+export function useWorkflowDragDrop(setNodes: any, openNodeConfig?: (node: any) => void) {
   const onDragOver = useCallback((event: React.DragEvent) => {
     event.preventDefault();
     event.dataTransfer.dropEffect = 'move';
@@ -63,16 +63,27 @@ export function useWorkflowDragDrop(setNodes: any) {
       };
 
       // Add the new node to the canvas
-      setNodes((nds: any) => nds.concat(newNode));
+      setNodes((nds: any) => {
+        const updatedNodes = nds.concat(newNode);
+        
+        // Automatically open the config dialog for the new node
+        if (openNodeConfig) {
+          setTimeout(() => {
+            openNodeConfig(newNode);
+          }, 100); // Small delay to ensure node is rendered
+        }
+        
+        return updatedNodes;
+      });
       
       // Show detailed success toast with actionable hint
       const nodeLabel = getDefaultLabelForType(type);
       toast.success(`Added ${nodeLabel}`, {
-        description: "Click on the node to configure it",
+        description: "Configure your new node",
         duration: 3000,
       });
     },
-    [setNodes]
+    [setNodes, openNodeConfig]
   );
 
   const onNodeDragStart = useCallback(() => {

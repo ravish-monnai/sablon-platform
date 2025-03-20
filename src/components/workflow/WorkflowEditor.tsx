@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useJourneyState } from './hooks/useJourneyState';
 import { useWorkflowDragDrop } from './hooks/useWorkflowDragDrop';
 import JourneyList from './JourneyList';
@@ -35,7 +35,22 @@ const WorkflowEditor: React.FC = () => {
     setEdges
   } = useJourneyState();
 
-  const { onDragOver, onDrop, onNodeDragStart } = useWorkflowDragDrop(setNodes);
+  // State for the node configuration dialog
+  const [configNode, setConfigNode] = useState<any>(null);
+  const [isConfigDialogOpen, setIsConfigDialogOpen] = useState(false);
+  
+  // Function to open the node configuration dialog
+  const openNodeConfig = useCallback((node: any) => {
+    setConfigNode(node);
+    setIsConfigDialogOpen(true);
+  }, []);
+  
+  const closeNodeConfig = useCallback(() => {
+    setConfigNode(null);
+    setIsConfigDialogOpen(false);
+  }, []);
+
+  const { onDragOver, onDrop, onNodeDragStart } = useWorkflowDragDrop(setNodes, openNodeConfig);
 
   // Handler for creating a journey template from the assistant
   const handleCreateTemplate = (templateType: string, description: string) => {
@@ -83,6 +98,10 @@ const WorkflowEditor: React.FC = () => {
         onSaveJourney={saveJourney}
         nodeTypes={nodeTypes}
         onUpdateNode={handleUpdateNode}
+        configNode={configNode}
+        isConfigDialogOpen={isConfigDialogOpen}
+        openNodeConfig={openNodeConfig}
+        closeNodeConfig={closeNodeConfig}
       />
       <JourneyAgentAssistant type="journey" onCreateTemplate={handleCreateTemplate} />
     </>

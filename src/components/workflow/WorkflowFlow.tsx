@@ -13,7 +13,6 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { NodeData } from './types';
-import NodeConfigDialog from './node-config/NodeConfigDialog';
 import { toast } from "sonner";
 import CustomNode from './nodes/CustomNode';
 import { getEdgeOptions, getMinimapNodeColor } from './utils/nodeStyles';
@@ -29,6 +28,7 @@ interface WorkflowFlowProps {
   onNodeDragStart: any;
   nodeTypes: NodeTypes;
   onUpdateNode: (nodeId: string, data: NodeData) => void;
+  onNodeClick?: (node: Node) => void;
 }
 
 const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
@@ -41,10 +41,9 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   onDragOver,
   onNodeDragStart,
   nodeTypes,
-  onUpdateNode
+  onUpdateNode,
+  onNodeClick
 }) => {
-  const [configNode, setConfigNode] = useState<Node | null>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isDraggingOver, setIsDraggingOver] = useState(false);
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
@@ -78,27 +77,12 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     }
   };
 
-  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+  const handleNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     console.log("Node clicked:", node);
-    setConfigNode(node);
-    setIsDialogOpen(true);
-  }, []);
-
-  const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
-    console.log("Node double clicked:", node);
-    setConfigNode(node);
-    setIsDialogOpen(true);
-  }, []);
-
-  const handleCloseDialog = () => {
-    setIsDialogOpen(false);
-    setConfigNode(null);
-  };
-
-  const handleUpdateNode = (nodeId: string, newData: NodeData) => {
-    onUpdateNode(nodeId, newData);
-    toast.success("Node configuration updated");
-  };
+    if (onNodeClick) {
+      onNodeClick(node);
+    }
+  }, [onNodeClick]);
 
   return (
     <div 
@@ -124,8 +108,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onNodeDragStart={onNodeDragStart}
-        onNodeClick={onNodeClick}
-        onNodeDoubleClick={onNodeDoubleClick}
+        onNodeClick={handleNodeClick}
         nodeTypes={combinedNodeTypes}
         defaultEdgeOptions={edgeOptions}
         connectionLineType={ConnectionLineType.SmoothStep}
@@ -155,13 +138,6 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
           </div>
         </Panel>
       </ReactFlow>
-
-      <NodeConfigDialog 
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
-        node={configNode}
-        onUpdateNode={handleUpdateNode}
-      />
     </div>
   );
 };
