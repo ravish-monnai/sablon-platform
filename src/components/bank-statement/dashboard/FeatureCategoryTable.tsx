@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import { Info } from "lucide-react";
 import { getStatusColor } from "./utils";
 
@@ -17,13 +18,14 @@ interface FeatureItemProps {
   name: string;
   value: string | number;
   status: string;
+  description?: string;
 }
 
 interface FeatureCategoryTableProps {
-  title: string;
+  title: React.ReactNode;
   icon: React.ReactNode;
   data: FeatureItemProps[];
-  description?: string; // New prop for tooltip description
+  description?: string; // For tooltip description
 }
 
 const FeatureCategoryTable: React.FC<FeatureCategoryTableProps> = ({ 
@@ -65,7 +67,22 @@ const FeatureCategoryTable: React.FC<FeatureCategoryTableProps> = ({
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={index}>
-              <TableCell>{item.name}</TableCell>
+              <TableCell>
+                {item.description ? (
+                  <HoverCard>
+                    <HoverCardTrigger asChild>
+                      <span className="cursor-help border-b border-dotted border-gray-400">
+                        {item.name}
+                      </span>
+                    </HoverCardTrigger>
+                    <HoverCardContent className="w-80 p-3">
+                      <p className="text-sm">{item.description}</p>
+                    </HoverCardContent>
+                  </HoverCard>
+                ) : (
+                  item.name
+                )}
+              </TableCell>
               <TableCell className="text-right">{item.value}</TableCell>
               <TableCell className="text-right">
                 <Badge className={getStatusColor(item.status)}>
