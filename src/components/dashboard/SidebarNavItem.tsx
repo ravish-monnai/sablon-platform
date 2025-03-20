@@ -8,11 +8,16 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
+import FeatureTag from "@/components/ui/feature-tag";
 
 interface SubItem {
   label: string;
   path: string;
   icon?: React.FC<{ className?: string }>;
+  featureTag?: {
+    variant: "new" | "beta" | "updated" | "ai" | "premium";
+    label?: string;
+  };
 }
 
 interface NavItemProps {
@@ -21,6 +26,10 @@ interface NavItemProps {
   icon: React.FC<{ className?: string }>;
   subItems?: SubItem[];
   viewMode: "customer" | "internal";
+  featureTag?: {
+    variant: "new" | "beta" | "updated" | "ai" | "premium";
+    label?: string;
+  };
 }
 
 const SidebarNavItem = ({ 
@@ -28,7 +37,8 @@ const SidebarNavItem = ({
   path, 
   icon: Icon, 
   subItems, 
-  viewMode 
+  viewMode,
+  featureTag
 }: NavItemProps) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -59,7 +69,17 @@ const SidebarNavItem = ({
           }}
         >
           <Icon className="mr-2" />
-          <span>{label}</span>
+          <span className="flex items-center gap-1.5">
+            {label}
+            {featureTag && (
+              <FeatureTag 
+                variant={featureTag.variant} 
+                className="scale-75"
+              >
+                {featureTag.label}
+              </FeatureTag>
+            )}
+          </span>
         </SidebarMenuButton>
       ) : (
         <>
@@ -78,7 +98,17 @@ const SidebarNavItem = ({
             }}
           >
             <Icon className="mr-2" />
-            <span>{label}</span>
+            <span className="flex items-center gap-1.5">
+              {label}
+              {featureTag && (
+                <FeatureTag 
+                  variant={featureTag.variant} 
+                  className="scale-75"
+                >
+                  {featureTag.label}
+                </FeatureTag>
+              )}
+            </span>
           </SidebarMenuButton>
           
           <SidebarMenuSub>
@@ -96,7 +126,17 @@ const SidebarNavItem = ({
                   }}
                 >
                   {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
-                  <span>{subItem.label}</span>
+                  <span className="flex items-center gap-1.5">
+                    {subItem.label}
+                    {subItem.featureTag && (
+                      <FeatureTag 
+                        variant={subItem.featureTag.variant} 
+                        className="scale-75"
+                      >
+                        {subItem.featureTag.label}
+                      </FeatureTag>
+                    )}
+                  </span>
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             ))}

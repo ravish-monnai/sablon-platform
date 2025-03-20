@@ -25,8 +25,17 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       path: "/ai-journeys", 
       icon: Workflow,
       subItems: [
-        { label: "Journey Builder", path: "/ai-journeys?tab=workflow" },
-        { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
+        { 
+          label: "Journey Builder", 
+          path: "/ai-journeys?tab=workflow",
+          featureTag: { variant: "new" }
+        },
+        { 
+          label: "Live Journeys", 
+          path: "/ai-journeys?tab=live", 
+          icon: PlayCircle,
+          featureTag: { variant: "new" }
+        }
       ]
     },
     { 
@@ -34,13 +43,27 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       path: "/ai-agents", 
       icon: Bot,
       subItems: [
-        { label: "Agent Builder", path: "/ai-agents?tab=builder" },
-        { label: "Live Agents", path: "/ai-agents?tab=live", icon: PlayCircle }
+        { 
+          label: "Agent Builder", 
+          path: "/ai-agents?tab=builder",
+          featureTag: { variant: "new" }
+        },
+        { 
+          label: "Live Agents", 
+          path: "/ai-agents?tab=live", 
+          icon: PlayCircle,
+          featureTag: { variant: "new" }
+        }
       ]
     },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { label: "Cases", path: "/cases", icon: FileText },
+    { 
+      label: "Cases", 
+      path: "/cases", 
+      icon: FileText,
+      featureTag: { variant: "new" }
+    },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: Wallet },
   ];
@@ -52,8 +75,17 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       path: "/ai-journeys", 
       icon: Workflow,
       subItems: [
-        { label: "Journey Builder", path: "/ai-journeys?tab=workflow" },
-        { label: "Live Journeys", path: "/ai-journeys?tab=live", icon: PlayCircle }
+        { 
+          label: "Journey Builder", 
+          path: "/ai-journeys?tab=workflow",
+          featureTag: { variant: "new" }
+        },
+        { 
+          label: "Live Journeys", 
+          path: "/ai-journeys?tab=live", 
+          icon: PlayCircle,
+          featureTag: { variant: "new" }
+        }
       ]
     },
     { 
@@ -61,13 +93,26 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       path: "/ai-agents", 
       icon: Bot,
       subItems: [
-        { label: "Agent Builder", path: "/ai-agents?tab=builder" },
-        { label: "Live Agents", path: "/ai-agents?tab=live", icon: PlayCircle }
+        { 
+          label: "Agent Builder", 
+          path: "/ai-agents?tab=builder",
+          featureTag: { variant: "new" }
+        },
+        { 
+          label: "Live Agents", 
+          path: "/ai-agents?tab=live", 
+          icon: PlayCircle,
+          featureTag: { variant: "new" }
+        }
       ]
     },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { label: "All Transactions", path: "/transactions", icon: Wallet },
+    { 
+      label: "All Transactions", 
+      path: "/transactions", 
+      icon: Wallet 
+    },
   ];
 
   const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems;
@@ -82,6 +127,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
           icon={item.icon}
           subItems={item.subItems}
           viewMode={viewMode}
+          featureTag={item.featureTag}
         />
       ))}
     </SidebarMenu>
