@@ -4,6 +4,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useLocation, useNavigate } from "react-router-dom";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
 import LiveJourneys from "@/components/ai-journeys/LiveJourneys";
+import JourneyAgentAssistant from "@/components/workflow/JourneyAgentAssistant";
 
 const AIJourneys = () => {
   const location = useLocation();
@@ -33,6 +34,15 @@ const AIJourneys = () => {
     }
   }, [location.search]);
   
+  // Handler for creating a journey template from the assistant
+  const handleCreateTemplate = (templateType: string, description: string) => {
+    console.log(`Creating ${templateType} template: ${description}`);
+    // Switch to workflow tab when a template is requested
+    if (selectedTab !== "workflow") {
+      handleTabChange("workflow");
+    }
+  };
+  
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold mb-6">AI Journeys</h1>
@@ -51,6 +61,7 @@ const AIJourneys = () => {
         
         <TabsContent value="live" className="mt-6">
           <LiveJourneys />
+          <JourneyAgentAssistant type="journey" onCreateTemplate={handleCreateTemplate} />
         </TabsContent>
       </Tabs>
     </div>

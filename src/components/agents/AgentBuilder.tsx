@@ -9,6 +9,7 @@ import DraggableItem from '../workflow/DraggableItem';
 import { NodeData } from '../workflow/types';
 import { getDefaultLabelForType, getDefaultDescriptionForType } from '../workflow/utils/nodeUtils';
 import FeatureTag from '@/components/ui/feature-tag';
+import JourneyAgentAssistant from '../workflow/JourneyAgentAssistant';
 
 interface AgentBuilderProps {
   agentType: string;
@@ -88,6 +89,16 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
     [setNodes]
   );
 
+  // Handler for creating an agent template from the assistant
+  const handleCreateTemplate = (templateType: string, description: string) => {
+    // In a real implementation, this would generate a specific template
+    // based on the templateType
+    console.log(`Creating ${templateType} template: ${description}`);
+    
+    // Here we would generate nodes based on the template type
+    // For now, just a placeholder
+  };
+
   // Add the onUpdateNode handler
   const handleUpdateNode = (nodeId: string, data: NodeData) => {
     setNodes((nds) =>
@@ -107,61 +118,64 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
   };
 
   return (
-    <div className="p-4 space-y-4">
-      <div className="flex justify-between items-center">
-        <h3 className="text-lg font-medium">Agent Visual Builder</h3>
-        <div className="flex gap-2 items-center">
-          <FeatureTag variant="new" />
-          <Button onClick={() => onSave({ nodes, edges })}>Save Configuration</Button>
-        </div>
-      </div>
-
-      <div className="flex gap-4">
-        <div className="flex flex-col gap-2 w-48">
-          <div className="text-sm font-medium mb-2">Components</div>
-          <DraggableItem
-            type="rule"
-            icon={<GitBranch className="text-blue-700" size={16} />}
-            label="Decision Rule"
-          />
-          <DraggableItem
-            type="model"
-            icon={<Brain className="text-pink-700" size={16} />}
-            label="AI Model"
-          />
-          <DraggableItem
-            type="data"
-            icon={<Database className="text-yellow-700" size={16} />}
-            label="Data Source"
-          />
-          <DraggableItem
-            type="notification"
-            icon={<MessageSquare className="text-green-700" size={16} />}
-            label="Notification"
-          />
-          <DraggableItem
-            type="alert"
-            icon={<AlertCircle className="text-red-700" size={16} />}
-            label="Alert"
-          />
+    <>
+      <div className="p-4 space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Agent Visual Builder</h3>
+          <div className="flex gap-2 items-center">
+            <FeatureTag variant="new" />
+            <Button onClick={() => onSave({ nodes, edges })}>Save Configuration</Button>
+          </div>
         </div>
 
-        <div className="flex-1 border rounded-lg bg-gray-50">
-          <WorkflowFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onConnect={onConnect}
-            onDrop={onDrop}
-            onDragOver={onDragOver}
-            nodeTypes={{} as NodeTypes}
-            onNodeDragStart={() => {}}
-            onUpdateNode={handleUpdateNode}
-          />
+        <div className="flex gap-4">
+          <div className="flex flex-col gap-2 w-48">
+            <div className="text-sm font-medium mb-2">Components</div>
+            <DraggableItem
+              type="rule"
+              icon={<GitBranch className="text-blue-700" size={16} />}
+              label="Decision Rule"
+            />
+            <DraggableItem
+              type="model"
+              icon={<Brain className="text-pink-700" size={16} />}
+              label="AI Model"
+            />
+            <DraggableItem
+              type="data"
+              icon={<Database className="text-yellow-700" size={16} />}
+              label="Data Source"
+            />
+            <DraggableItem
+              type="notification"
+              icon={<MessageSquare className="text-green-700" size={16} />}
+              label="Notification"
+            />
+            <DraggableItem
+              type="alert"
+              icon={<AlertCircle className="text-red-700" size={16} />}
+              label="Alert"
+            />
+          </div>
+
+          <div className="flex-1 border rounded-lg bg-gray-50">
+            <WorkflowFlow
+              nodes={nodes}
+              edges={edges}
+              onNodesChange={onNodesChange}
+              onEdgesChange={onEdgesChange}
+              onConnect={onConnect}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              nodeTypes={{} as NodeTypes}
+              onNodeDragStart={() => {}}
+              onUpdateNode={handleUpdateNode}
+            />
+          </div>
         </div>
       </div>
-    </div>
+      <JourneyAgentAssistant type="agent" onCreateTemplate={handleCreateTemplate} />
+    </>
   );
 };
 
