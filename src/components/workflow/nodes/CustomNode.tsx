@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Handle, Position } from '@xyflow/react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import { NodeData } from '../types';
+import FeatureTag from '@/components/ui/feature-tag';
 
 interface CustomNodeProps {
   id: string;
@@ -182,7 +183,12 @@ const CustomNode: React.FC<CustomNodeProps> = ({ id, data, selected }) => {
       <div className="flex items-center">
         {data.icon && <div className="mr-2">{data.icon}</div>}
         <div className="flex-1">
-          <div className="font-medium text-gray-800 text-sm">{data.label}</div>
+          <div className="font-medium text-gray-800 text-sm flex items-center gap-1.5">
+            {data.label}
+            {data.featureTag && (
+              <FeatureTag variant={data.featureTag as any} />
+            )}
+          </div>
           <div className="text-xs text-gray-600">{data.description}</div>
         </div>
         

@@ -1,4 +1,3 @@
-
 import { ReactNode } from 'react';
 import { Node } from '@xyflow/react';
 
@@ -25,6 +24,7 @@ export interface NodeData {
     outcome: string;
     nextNode?: string;
   }[];
+  featureTag?: 'new' | 'beta' | 'updated' | 'ai' | 'premium';
   [key: string]: unknown;
 }
 

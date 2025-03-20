@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback } from 'react';
 import { useNodesState, useEdgesState, addEdge, NodeTypes } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
@@ -7,6 +8,7 @@ import WorkflowFlow from '../workflow/WorkflowFlow';
 import DraggableItem from '../workflow/DraggableItem';
 import { NodeData } from '../workflow/types';
 import { getDefaultLabelForType, getDefaultDescriptionForType } from '../workflow/utils/nodeUtils';
+import FeatureTag from '@/components/ui/feature-tag';
 
 interface AgentBuilderProps {
   agentType: string;
@@ -52,10 +54,12 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         case 'rule':
           data.icon = <GitBranch className="text-blue-700" size={20} />;
           data.description = 'Decision rule';
+          data.featureTag = 'new';
           break;
         case 'model':
           data.icon = <Brain className="text-pink-700" size={20} />;
           data.description = 'AI/ML model';
+          data.featureTag = 'ai';
           break;
         case 'data':
           data.icon = <Database className="text-yellow-700" size={20} />;
@@ -68,6 +72,7 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
         case 'alert':
           data.icon = <AlertCircle className="text-red-700" size={20} />;
           data.description = 'Alert trigger';
+          data.featureTag = 'beta';
           break;
       }
 
@@ -105,7 +110,10 @@ const AgentBuilder: React.FC<AgentBuilderProps> = ({ agentType, onSave }) => {
     <div className="p-4 space-y-4">
       <div className="flex justify-between items-center">
         <h3 className="text-lg font-medium">Agent Visual Builder</h3>
-        <Button onClick={() => onSave({ nodes, edges })}>Save Configuration</Button>
+        <div className="flex gap-2 items-center">
+          <FeatureTag variant="new" />
+          <Button onClick={() => onSave({ nodes, edges })}>Save Configuration</Button>
+        </div>
       </div>
 
       <div className="flex gap-4">

@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Clock, PlayCircle, PauseCircle } from "lucide-react";
+import FeatureTag from "@/components/ui/feature-tag";
 
 export interface Journey {
   id: string;
@@ -15,6 +16,7 @@ export interface Journey {
   totalAnalyzed: number;
   alerts: number;
   fraudCases: number;
+  featureTag?: 'new' | 'beta' | 'updated' | 'ai' | 'premium';
 }
 
 interface JourneyCardProps {
@@ -27,14 +29,19 @@ const JourneyCard: React.FC<JourneyCardProps> = ({ journey, onViewDetails }) => 
     <Card key={journey.id} className="overflow-hidden">
       <CardHeader className="pb-2">
         <div className="flex justify-between items-center mb-2">
-          <Badge variant={journey.status === "active" ? "default" : "outline"}>
-            {journey.status === "active" ? (
-              <PlayCircle className="w-3 h-3 mr-1 text-green-500" />
-            ) : (
-              <PauseCircle className="w-3 h-3 mr-1 text-amber-500" />
+          <div className="flex items-center gap-2">
+            <Badge variant={journey.status === "active" ? "default" : "outline"}>
+              {journey.status === "active" ? (
+                <PlayCircle className="w-3 h-3 mr-1 text-green-500" />
+              ) : (
+                <PauseCircle className="w-3 h-3 mr-1 text-amber-500" />
+              )}
+              {journey.status === "active" ? "Active" : "Paused"}
+            </Badge>
+            {journey.featureTag && (
+              <FeatureTag variant={journey.featureTag} />
             )}
-            {journey.status === "active" ? "Active" : "Paused"}
-          </Badge>
+          </div>
           <Badge variant="outline" className="ml-2">
             {journey.apiIntegration}
           </Badge>

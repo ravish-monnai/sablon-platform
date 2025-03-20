@@ -3,6 +3,7 @@ import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { AlertTriangle } from "lucide-react";
 import { JourneyStep } from "../journey-steps/types";
+import FeatureTag from "@/components/ui/feature-tag";
 
 interface StepNodeProps {
   step: JourneyStep;
@@ -32,6 +33,13 @@ const StepNode: React.FC<StepNodeProps> = ({
         <div className="absolute -top-2 -right-2 bg-white rounded-full w-7 h-7 flex items-center justify-center border border-gray-200 shadow-md">
           <span className="text-sm font-bold">{index + 1}</span>
         </div>
+        
+        {/* Feature tag if present */}
+        {step.featureTag && (
+          <div className="absolute -top-2 -left-4">
+            <FeatureTag variant={step.featureTag} className="scale-75" />
+          </div>
+        )}
       </div>
       
       {/* Step info */}

@@ -14,4 +14,5 @@ export interface JourneyStep {
     exceptions: number;
   };
   branches?: Omit<JourneyStep, "status" | "branches">[];
+  featureTag?: 'new' | 'beta' | 'updated' | 'ai' | 'premium';
 }

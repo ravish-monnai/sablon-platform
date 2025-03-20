@@ -5,9 +5,10 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { NodeFormFieldsProps } from './types';
+import FeatureTag from '@/components/ui/feature-tag';
 
 const NodeFormFields: React.FC<NodeFormFieldsProps> = ({ node, onChange }) => {
-  const { label = '', description = '', type = 'datasource', status = 'none' } = node.data || {};
+  const { label = '', description = '', type = 'datasource', status = 'none', featureTag } = node.data || {};
 
   return (
     <>
@@ -60,6 +61,51 @@ const NodeFormFields: React.FC<NodeFormFieldsProps> = ({ node, onChange }) => {
             <SelectItem value="active">Active</SelectItem>
             <SelectItem value="completed">Completed</SelectItem>
             <SelectItem value="error">Error</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="feature-tag">Feature Tag</Label>
+        <Select 
+          value={featureTag || ""} 
+          onValueChange={(value) => onChange('featureTag', value || undefined)}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Add feature tag (optional)" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">None</SelectItem>
+            <SelectItem value="new">
+              <div className="flex items-center gap-2">
+                <FeatureTag variant="new" />
+                <span>New Feature</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="beta">
+              <div className="flex items-center gap-2">
+                <FeatureTag variant="beta" />
+                <span>Beta Feature</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="updated">
+              <div className="flex items-center gap-2">
+                <FeatureTag variant="updated" />
+                <span>Recently Updated</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="ai">
+              <div className="flex items-center gap-2">
+                <FeatureTag variant="ai" />
+                <span>AI Powered</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="premium">
+              <div className="flex items-center gap-2">
+                <FeatureTag variant="premium" />
+                <span>Premium Feature</span>
+              </div>
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

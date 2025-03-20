@@ -22,6 +22,7 @@ export const bankStatementAnalyzer: JourneyWorkflowConfig = {
         description: 'API endpoint for statement uploads',
         icon: React.createElement(Upload, { className: "text-blue-500", size: 20 }),
         type: 'datasource',
+        featureTag: 'updated',
         apiSpecs: {
           endpoint: '/api/bank-statements/upload',
           method: 'POST',
@@ -48,6 +49,7 @@ export const bankStatementAnalyzer: JourneyWorkflowConfig = {
         description: 'Extracts financial insights from statements',
         icon: React.createElement(Brain, { className: "text-purple-500", size: 20 }),
         type: 'model',
+        featureTag: 'ai',
         featureExtraction: {
           features: [
             'Account Balances',
@@ -78,6 +80,7 @@ export const bankStatementAnalyzer: JourneyWorkflowConfig = {
         description: 'Evaluates financial risk profile',
         icon: React.createElement(Shield, { className: "text-red-500", size: 20 }),
         type: 'model',
+        featureTag: 'beta',
         riskAssessment: {
           thresholds: {
             highRisk: 0.75,
