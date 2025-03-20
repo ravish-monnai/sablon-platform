@@ -1,18 +1,19 @@
 
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Download, Filter } from "lucide-react";
 import CaseListTable from "@/components/cases/CaseListTable";
 import CaseFilters from "@/components/cases/CaseFilters";
 import { CaseItem } from "@/types/cases";
 import CaseDetailView from "@/components/cases/CaseDetailView";
+import { FilterBar, FilterButton } from "@/components/filters";
 
 interface CaseListViewProps {
   filteredCases: CaseItem[];
   filterType: string;
   setFilterType: (type: string) => void;
   setSearchQuery: (query: string) => void;
+  searchQuery?: string;
   onViewCase: (caseId: string) => void;
   onActionCase: (caseData: CaseItem) => void;
 }
@@ -22,6 +23,7 @@ const CaseListView: React.FC<CaseListViewProps> = ({
   filterType,
   setFilterType,
   setSearchQuery,
+  searchQuery = "",
   onViewCase,
   onActionCase
 }) => {
@@ -48,7 +50,7 @@ const CaseListView: React.FC<CaseListViewProps> = ({
   return (
     <Card className="bg-white shadow-sm border-gray-100">
       <CardHeader className="pb-3">
-        <div className="flex justify-between items-center flex-wrap gap-4">
+        <FilterBar>
           <div>
             <CardTitle className="text-xl">All Cases</CardTitle>
             <CardDescription>
@@ -60,17 +62,16 @@ const CaseListView: React.FC<CaseListViewProps> = ({
               filterType={filterType} 
               onFilterChange={setFilterType} 
               onSearchChange={setSearchQuery}
+              searchValue={searchQuery}
             />
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-1" />
+            <FilterButton icon={Filter} variant="outline" size="sm">
               Filter
-            </Button>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-1" />
+            </FilterButton>
+            <FilterButton icon={Download} variant="outline" size="sm">
               Export
-            </Button>
+            </FilterButton>
           </div>
-        </div>
+        </FilterBar>
       </CardHeader>
       <CardContent>
         <CaseListTable 

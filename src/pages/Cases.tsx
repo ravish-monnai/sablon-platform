@@ -53,6 +53,7 @@ const Cases = () => {
             filterType={filterType}
             setFilterType={setFilterType}
             setSearchQuery={setSearchQuery}
+            searchQuery={searchQuery}
             onViewCase={handleCaseView}
             onActionCase={handleCaseAction}
           />
