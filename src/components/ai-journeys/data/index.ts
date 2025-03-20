@@ -1,3 +1,4 @@
 
 export { journeysByMarket } from './journeys';
-export { journeyWorkflowConfigurations, type NodeData } from './workflowConfigurations';
+export { journeyWorkflowConfigurations } from './workflowConfigurations';
+export type { NodeData } from './workflowConfigurations';
