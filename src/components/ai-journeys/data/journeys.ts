@@ -25,6 +25,7 @@ export const journeysByMarket: Record<string, Journey[]> = {
       totalAnalyzed: 167,
       alerts: 23,
       fraudCases: 8,
+      featureTag: "new"
     }
   ],
   'India': [
@@ -38,6 +39,7 @@ export const journeysByMarket: Record<string, Journey[]> = {
       totalAnalyzed: 167,
       alerts: 23,
       fraudCases: 8,
+      featureTag: "new"
     }
   ]
 };

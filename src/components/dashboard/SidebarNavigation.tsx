@@ -28,13 +28,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         }
       ]
     },
@@ -46,13 +46,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         }
       ]
     },
@@ -62,7 +62,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       label: "Cases", 
       path: "/cases", 
       icon: FileText,
-      featureTag: { variant: "new" }
+      featureTag: { variant: "new" as const }
     },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: Wallet },
@@ -78,13 +78,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         }
       ]
     },
@@ -96,13 +96,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" }
+          featureTag: { variant: "new" as const }
         }
       ]
     },

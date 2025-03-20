@@ -8,6 +8,7 @@ import JourneyStepsTab from "./components/JourneyStepsTab";
 import ExecutionHistoryTab from "./components/ExecutionHistoryTab";
 import { FileText } from "lucide-react";
 import OverviewTab from "./components/OverviewTab";
+import FeatureTag from "@/components/ui/feature-tag";
 
 // Import journey steps data for the bank statement analyzer journey
 import { getBankStatementJourneySteps } from "./data/journeyStepsData";
@@ -46,6 +47,7 @@ const JourneyDetail: React.FC<JourneyDetailProps> = ({
           <div className="flex items-center gap-2 mb-4">
             <Bot className="text-monnai-blue h-6 w-6" />
             <h2 className="text-2xl font-semibold">Bank Statement Analyzer Journey</h2>
+            <FeatureTag variant="new" className="scale-90" />
           </div>
           
           <Tabs value={activeTab} onValueChange={setActiveTab}>
