@@ -1,4 +1,3 @@
-
 import React, { useCallback, useState } from 'react';
 import { 
   ReactFlow, 
@@ -12,7 +11,7 @@ import {
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
 import { NodeData } from './types';
-import NodeConfigDialog from './NodeConfigDialog';
+import NodeConfigDialog from './node-config/NodeConfigDialog';
 import { toast } from "sonner";
 import CustomNode from './nodes/CustomNode';
 import { getEdgeOptions, getMinimapNodeColor } from './utils/nodeStyles';
@@ -42,32 +41,26 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   nodeTypes,
   onUpdateNode
 }) => {
-  // State for node configuration dialog
   const [configNode, setConfigNode] = useState<Node | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Get edge styling options
   const edgeOptions = getEdgeOptions();
 
-  // Define nodeTypes properly matching ReactFlow expectations
   const combinedNodeTypes = {
     ...nodeTypes
   } as NodeTypes;
 
-  // Handle node double click
   const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
     console.log("Node double clicked:", node);
     setConfigNode(node);
     setIsDialogOpen(true);
   }, []);
 
-  // Handle dialog close
   const handleCloseDialog = () => {
     setIsDialogOpen(false);
     setConfigNode(null);
   };
 
-  // Handle node update
   const handleUpdateNode = (nodeId: string, newData: NodeData) => {
     onUpdateNode(nodeId, newData);
     toast.success("Node configuration updated");
@@ -112,7 +105,6 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         </Panel>
       </ReactFlow>
 
-      {/* Node configuration dialog */}
       <NodeConfigDialog 
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
