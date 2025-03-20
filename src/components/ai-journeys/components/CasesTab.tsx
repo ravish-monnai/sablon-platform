@@ -7,8 +7,8 @@ import CaseList from "./cases/CaseList";
 import CaseDetail from "./cases/CaseDetail";
 import { CaseItem } from "./cases/types";
 
-// Sample case data
-const sampleCases: CaseItem[] = [
+// Sample case data specifically for bank statement analysis
+const bankStatementCases: CaseItem[] = [
   {
     id: "CASE-245",
     customer: "John Smith",
@@ -63,7 +63,7 @@ const CasesTab: React.FC = () => {
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   
   const selectedCase = selectedCaseId 
-    ? sampleCases.find(c => c.id === selectedCaseId) || null
+    ? bankStatementCases.find(c => c.id === selectedCaseId) || null
     : null;
   
   const handleSelectCase = (caseId: string) => {
@@ -82,25 +82,22 @@ const CasesTab: React.FC = () => {
           onBackToList={handleBackToList} 
         />
       ) : (
-        <>
-          <Card className="mb-6">
-            <CardHeader className="pb-3">
-              <CardTitle>Recent Cases</CardTitle>
-              <CardDescription>
-                Bank statement analysis cases processed by AI agents
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="p-0">
-              <CaseList cases={sampleCases} onSelectCase={handleSelectCase} />
-            </CardContent>
-          </Card>
-          
-          <div className="flex justify-center mt-4">
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle>Bank Statement Analysis Cases</CardTitle>
+            <CardDescription>
+              Cases processed by bank statement analysis AI agents
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="p-0">
+            <CaseList cases={bankStatementCases} onSelectCase={handleSelectCase} />
+          </CardContent>
+          <div className="p-4 flex justify-center">
             <Button variant="outline" className="flex items-center gap-2">
               View All Cases <ArrowUpRight className="h-4 w-4" />
             </Button>
           </div>
-        </>
+        </Card>
       )}
     </div>
   );
