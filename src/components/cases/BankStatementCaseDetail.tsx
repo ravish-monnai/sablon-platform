@@ -2,11 +2,16 @@
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CaseItem } from "@/types/caseTypes";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import CaseHeader from "./detail/CaseHeader";
-import CaseTabs from "./detail/CaseTabs";
-import { ThumbsUp, ThumbsDown, AlertCircle } from "lucide-react";
+import AIOverviewTab from "./detail/tabs/AIOverviewTab";
+import BankStatementFeatures from "@/components/bank-statement/BankStatementFeatures";
+import AIFeedbackForm from "@/components/bank-statement/AIFeedbackForm";
+import JourneyExecutionHistory from "@/components/bank-statement/JourneyExecutionHistory";
+import TransactionsTab from "./detail/tabs/TransactionsTab";
+import { ThumbsUp, ThumbsDown, AlertCircle, BrainCircuit, BarChart, History, MessageSquare } from "lucide-react";
 
 interface BankStatementCaseDetailProps {
   caseData: CaseItem;
@@ -28,7 +33,57 @@ const BankStatementCaseDetail: React.FC<BankStatementCaseDetailProps> = ({ caseD
         <CaseHeader caseData={caseData} />
       </CardHeader>
       <CardContent>
-        <CaseTabs caseData={caseData} />
+        <Tabs defaultValue="ai-overview" className="w-full">
+          <TabsList className="mb-4 grid w-full grid-cols-4 md:grid-cols-5">
+            <TabsTrigger value="ai-overview" className="flex items-center">
+              <BrainCircuit className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">AI Overview</span>
+              <span className="sm:hidden">AI</span>
+            </TabsTrigger>
+            <TabsTrigger value="features" className="flex items-center">
+              <BarChart className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Statement Features</span>
+              <span className="sm:hidden">Features</span>
+            </TabsTrigger>
+            <TabsTrigger value="transactions" className="flex items-center">
+              <AlertCircle className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Transactions</span>
+              <span className="sm:hidden">Trans.</span>
+            </TabsTrigger>
+            <TabsTrigger value="execution-history" className="flex items-center">
+              <History className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Execution History</span>
+              <span className="sm:hidden">History</span>
+            </TabsTrigger>
+            <TabsTrigger value="feedback" className="flex items-center">
+              <MessageSquare className="h-4 w-4 mr-2" />
+              <span className="hidden sm:inline">Agent Feedback</span>
+              <span className="sm:hidden">Feedback</span>
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="ai-overview">
+            <AIOverviewTab caseData={caseData} />
+          </TabsContent>
+          
+          <TabsContent value="features">
+            <BankStatementFeatures caseData={caseData} />
+          </TabsContent>
+          
+          <TabsContent value="transactions">
+            <TransactionsTab caseData={caseData} />
+          </TabsContent>
+          
+          <TabsContent value="execution-history">
+            <JourneyExecutionHistory caseId={caseData.id} />
+          </TabsContent>
+          
+          <TabsContent value="feedback">
+            <div className="space-y-6">
+              <AIFeedbackForm caseId={caseData.id} />
+            </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
       <CardFooter className="flex justify-between items-center">
         <Button variant="outline" onClick={onClose}>

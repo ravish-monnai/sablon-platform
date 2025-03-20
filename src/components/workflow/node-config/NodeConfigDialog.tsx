@@ -1,145 +1,130 @@
 
-import React, { useState, useEffect } from 'react';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogFooter,
-  DialogDescription
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
+import React, { useState } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Copy, Settings2, Sliders, GitBranch, FileOutput, CodeXml } from "lucide-react";
 import { toast } from "sonner";
-import { NodeData, AnalysisRule } from '../types';
-import { NodeConfigProps } from './types';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import NodeFormFields from './NodeFormFields';
-import RulesEditor from './RulesEditor';
-import NodeInputsOutputs from './NodeInputsOutputs';
-import NodeMappings from './NodeMappings';
-import NodeDecisions from './NodeDecisions';
+import { NodeConfigDialogProps } from "./types";
+import NodeFormFields from "./NodeFormFields";
+import RulesEditor from "./RulesEditor";
+import NodeInputsOutputs from "./NodeInputsOutputs";
+import NodeMappings from "./NodeMappings";
+import NodeDecisions from "./NodeDecisions";
+import { NodeData } from "../types";
 
-const NodeConfigDialog: React.FC<NodeConfigProps> = ({ isOpen, onClose, node, onUpdateNode }) => {
-  const [label, setLabel] = useState(node?.data?.label || '');
-  const [description, setDescription] = useState(node?.data?.description || '');
-  const [type, setType] = useState(node?.data?.type || 'datasource');
-  const [status, setStatus] = useState(node?.data?.status || 'none');
-  const [rules, setRules] = useState<AnalysisRule[]>(node?.data?.rules || []);
-  const [inputs, setInputs] = useState<string[]>(node?.data?.inputs || []);
-  const [outputs, setOutputs] = useState<string[]>(node?.data?.outputs || []);
-  const [mappings, setMappings] = useState(node?.data?.mappings || {});
-  const [decisions, setDecisions] = useState(node?.data?.decisions || []);
+const NodeConfigDialog: React.FC<NodeConfigDialogProps> = ({
+  isOpen,
+  onClose,
+  node,
+  onUpdateNode
+}) => {
+  const [formData, setFormData] = useState<NodeData>(() => {
+    return node?.data || {};
+  });
 
-  // Update form state when the node changes
-  useEffect(() => {
+  // Reset form data when node changes
+  React.useEffect(() => {
     if (node) {
-      setLabel(node.data.label || '');
-      setDescription(node.data.description || '');
-      setType(node.data.type || 'datasource');
-      setStatus(node.data.status || 'none');
-      setRules(node.data.rules || []);
-      setInputs(node.data.inputs || []);
-      setOutputs(node.data.outputs || []);
-      setMappings(node.data.mappings || {});
-      setDecisions(node.data.decisions || []);
+      setFormData(node.data || {});
     }
   }, [node]);
 
-  // Handle form submission
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (node) {
-      const updatedData: NodeData = {
-        ...node.data,
-        label,
-        description,
-        type,
-        status,
-        rules,
-        inputs,
-        outputs,
-        mappings,
-        decisions
-      };
-      
-      onUpdateNode(node.id, updatedData);
-      toast.success("Node configuration updated");
+  const handleChange = (field: string, value: any) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleSubmit = () => {
+    if (node && node.id) {
+      onUpdateNode(node.id, formData);
       onClose();
     }
   };
 
-  // Don't render if no node is selected
+  const handleCancel = () => {
+    setFormData(node?.data || {});
+    onClose();
+  };
+
   if (!node) return null;
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Configure Node: {label}</DialogTitle>
-          <DialogDescription>
-            Define the node's properties, inputs, outputs, and behavior
-          </DialogDescription>
+          <DialogTitle>Configure {formData.label || 'Node'}</DialogTitle>
         </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Tabs defaultValue="basic" className="w-full">
-            <TabsList className="grid grid-cols-5 mb-4">
-              <TabsTrigger value="basic">Basic</TabsTrigger>
-              <TabsTrigger value="io">Inputs/Outputs</TabsTrigger>
-              <TabsTrigger value="mappings">Mappings</TabsTrigger>
-              <TabsTrigger value="decisions">Decisions</TabsTrigger>
-              <TabsTrigger value="rules">Rules</TabsTrigger>
-            </TabsList>
+        <Tabs defaultValue="basic" className="mt-4">
+          <TabsList className="grid grid-cols-3 lg:grid-cols-5">
+            <TabsTrigger value="basic" className="flex items-center gap-1">
+              <Settings2 className="h-3.5 w-3.5" />
+              <span>Basic</span>
+            </TabsTrigger>
+            <TabsTrigger value="inputs-outputs" className="flex items-center gap-1">
+              <FileOutput className="h-3.5 w-3.5" />
+              <span>I/O</span>
+            </TabsTrigger>
+            <TabsTrigger value="mappings" className="flex items-center gap-1">
+              <CodeXml className="h-3.5 w-3.5" />
+              <span>Mappings</span>
+            </TabsTrigger>
+            <TabsTrigger value="decisions" className="flex items-center gap-1">
+              <GitBranch className="h-3.5 w-3.5" />
+              <span>Decisions</span>
+            </TabsTrigger>
+            <TabsTrigger value="rules" className="flex items-center gap-1">
+              <Sliders className="h-3.5 w-3.5" />
+              <span>Rules</span>
+            </TabsTrigger>
+          </TabsList>
 
-            <TabsContent value="basic" className="space-y-4">
-              <NodeFormFields 
-                label={label}
-                setLabel={setLabel}
-                description={description}
-                setDescription={setDescription}
-                type={type}
-                setType={setType}
-                status={status}
-                setStatus={setStatus}
-              />
-            </TabsContent>
+          <TabsContent value="basic" className="space-y-4 mt-4">
+            <NodeFormFields 
+              node={node} 
+              onChange={handleChange} 
+            />
+          </TabsContent>
 
-            <TabsContent value="io" className="space-y-4">
-              <NodeInputsOutputs 
-                inputs={inputs}
-                setInputs={setInputs}
-                outputs={outputs}
-                setOutputs={setOutputs}
-                nodeType={type}
-              />
-            </TabsContent>
+          <TabsContent value="inputs-outputs" className="mt-4">
+            <NodeInputsOutputs 
+              inputs={formData.inputs || []} 
+              outputs={formData.outputs || []} 
+              onChange={handleChange} 
+            />
+          </TabsContent>
 
-            <TabsContent value="mappings" className="space-y-4">
-              <NodeMappings 
-                mappings={mappings}
-                setMappings={setMappings}
-                outputs={outputs}
-              />
-            </TabsContent>
+          <TabsContent value="mappings" className="mt-4">
+            <NodeMappings 
+              mappings={formData.mappings || {}} 
+              onChange={(mappings) => handleChange('mappings', mappings)} 
+            />
+          </TabsContent>
 
-            <TabsContent value="decisions" className="space-y-4">
-              <NodeDecisions
-                decisions={decisions}
-                setDecisions={setDecisions}
-              />
-            </TabsContent>
+          <TabsContent value="decisions" className="mt-4">
+            <NodeDecisions 
+              decisions={formData.decisions || []} 
+              onChange={(decisions) => handleChange('decisions', decisions)} 
+            />
+          </TabsContent>
 
-            <TabsContent value="rules" className="space-y-4">
-              <RulesEditor rules={rules} setRules={setRules} />
-            </TabsContent>
-          </Tabs>
-          
-          <DialogFooter>
-            <Button variant="outline" type="button" onClick={onClose}>Cancel</Button>
-            <Button type="submit">Save Changes</Button>
-          </DialogFooter>
-        </form>
+          <TabsContent value="rules" className="mt-4">
+            <RulesEditor 
+              rules={formData.rules || []} 
+              onChange={(rules) => handleChange('rules', rules)} 
+            />
+          </TabsContent>
+        </Tabs>
+        <DialogFooter className="gap-2 sm:gap-0">
+          <Button variant="outline" onClick={handleCancel}>
+            Cancel
+          </Button>
+          <Button variant="default" onClick={handleSubmit}>
+            Save Changes
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   );

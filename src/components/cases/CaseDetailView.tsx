@@ -1,10 +1,10 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import CaseHeaderActions from "./detail/CaseHeaderActions";
 import AIOverviewTab from "./detail/tabs/AIOverviewTab";
 import TransactionsTab from "./detail/tabs/TransactionsTab";
 import BankStatementFeatures from "../bank-statement/BankStatementFeatures";
+import BankStatementCaseDetail from "./BankStatementCaseDetail";
 
 interface CaseDetailViewProps {
   caseData: any;
@@ -12,6 +12,16 @@ interface CaseDetailViewProps {
 }
 
 const CaseDetailView: React.FC<CaseDetailViewProps> = ({ caseData, onClose }) => {
+  // Check if this is a bank statement analysis case
+  const isBankStatementCase = caseData?.type === "Bank Statement Analysis" || 
+                               caseData?.journey === "Bank Statement Analysis";
+
+  // If it's a bank statement case, render the specialized view
+  if (isBankStatementCase) {
+    return <BankStatementCaseDetail caseData={caseData} onClose={onClose} />;
+  }
+  
+  // Otherwise, render the default case view
   return (
     <div className="space-y-6">
       <CaseHeaderActions caseData={caseData} onClose={onClose} />

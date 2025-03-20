@@ -1,119 +1,155 @@
 
-import React from 'react';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Plus, X, GitBranch } from "lucide-react";
+import { NodeDecisionsProps } from "./types";
 
-interface Decision {
-  condition: string;
-  outcome: string;
-  nextNode?: string;
-}
+const NodeDecisions: React.FC<NodeDecisionsProps> = ({
+  decisions,
+  onChange
+}) => {
+  const [condition, setCondition] = useState("");
+  const [outcome, setOutcome] = useState("");
+  const [nextNode, setNextNode] = useState("");
 
-interface NodeDecisionsProps {
-  decisions: Decision[];
-  setDecisions: React.Dispatch<React.SetStateAction<Decision[]>>;
-}
-
-const NodeDecisions: React.FC<NodeDecisionsProps> = ({ decisions, setDecisions }) => {
   const handleAddDecision = () => {
-    setDecisions([...decisions, { condition: '', outcome: '', nextNode: '' }]);
+    if (condition.trim() && outcome.trim()) {
+      const updatedDecisions = [
+        ...decisions,
+        {
+          condition: condition.trim(),
+          outcome: outcome.trim(),
+          nextNode: nextNode.trim() || undefined
+        }
+      ];
+      onChange(updatedDecisions);
+      setCondition("");
+      setOutcome("");
+      setNextNode("");
+    }
   };
 
   const handleRemoveDecision = (index: number) => {
-    setDecisions(decisions.filter((_, i) => i !== index));
+    const updatedDecisions = decisions.filter((_, i) => i !== index);
+    onChange(updatedDecisions);
   };
 
-  const updateDecision = (index: number, field: keyof Decision, value: string) => {
-    const newDecisions = [...decisions];
-    newDecisions[index] = { ...newDecisions[index], [field]: value };
-    setDecisions(newDecisions);
+  const handleUpdateDecision = (index: number, field: string, value: string) => {
+    const updatedDecisions = [...decisions];
+    updatedDecisions[index] = {
+      ...updatedDecisions[index],
+      [field]: value
+    };
+    onChange(updatedDecisions);
   };
 
   return (
     <div className="space-y-4">
-      <div>
-        <Label className="text-base">Decision Logic</Label>
-        <p className="text-sm text-muted-foreground">
-          Define conditions that determine the workflow path
-        </p>
+      <div className="flex items-center">
+        <GitBranch className="h-4 w-4 mr-2 text-amber-500" />
+        <h3 className="text-sm font-medium">Decision Paths</h3>
       </div>
       
-      {decisions.length === 0 ? (
-        <div className="text-sm text-muted-foreground py-2">
-          No decision logic configured. Add decisions to control the flow based on conditions.
+      <div className="space-y-3">
+        <div className="space-y-2">
+          <label className="text-xs text-muted-foreground">Condition</label>
+          <Input
+            value={condition}
+            onChange={(e) => setCondition(e.target.value)}
+            placeholder="e.g., score > 80"
+          />
         </div>
-      ) : (
-        <div className="space-y-3">
-          {decisions.map((decision, index) => (
-            <div key={index} className="p-3 border rounded-md bg-gray-50">
-              <div className="flex items-center justify-between mb-2">
-                <Label className="text-sm">Decision {index + 1}</Label>
-                <Button
-                  variant="ghost"
-                  size="icon"
+        
+        <div className="space-y-2">
+          <label className="text-xs text-muted-foreground">Outcome</label>
+          <Input
+            value={outcome}
+            onChange={(e) => setOutcome(e.target.value)}
+            placeholder="e.g., Approve"
+          />
+        </div>
+        
+        <div className="space-y-2">
+          <label className="text-xs text-muted-foreground">Next Node (optional)</label>
+          <Input
+            value={nextNode}
+            onChange={(e) => setNextNode(e.target.value)}
+            placeholder="e.g., notification-node"
+          />
+        </div>
+      </div>
+      
+      <Button 
+        size="sm" 
+        onClick={handleAddDecision}
+        variant="outline"
+        className="w-full"
+      >
+        <Plus className="h-4 w-4 mr-1" />
+        Add Decision Path
+      </Button>
+      
+      <div className="space-y-3 mt-4">
+        {decisions.length === 0 ? (
+          <p className="text-sm text-muted-foreground">No decision paths defined</p>
+        ) : (
+          decisions.map((decision, index) => (
+            <div key={index} className="border rounded-md p-3 bg-amber-50 border-amber-200">
+              <div className="flex justify-between items-start">
+                <h4 className="text-sm font-medium">Path #{index + 1}</h4>
+                <Button 
+                  size="icon" 
+                  variant="ghost" 
                   onClick={() => handleRemoveDecision(index)}
-                  type="button"
+                  className="h-6 w-6"
                 >
-                  <X className="h-4 w-4" />
+                  <X className="h-3 w-3" />
                 </Button>
               </div>
               
-              <div className="grid gap-3">
-                <div>
-                  <Label className="text-xs">If Condition</Label>
-                  <Input
-                    value={decision.condition}
-                    onChange={(e) => updateDecision(index, 'condition', e.target.value)}
-                    placeholder="e.g., score > 700"
-                    className="mt-1"
-                  />
+              <div className="mt-2 space-y-2">
+                <div className="grid grid-cols-12 gap-1">
+                  <div className="col-span-4 text-xs text-muted-foreground">Condition:</div>
+                  <div className="col-span-8">
+                    <Input
+                      size="sm"
+                      value={decision.condition}
+                      onChange={(e) => handleUpdateDecision(index, "condition", e.target.value)}
+                      className="h-7 text-sm"
+                    />
+                  </div>
                 </div>
                 
-                <div>
-                  <Label className="text-xs">Outcome</Label>
-                  <Select 
-                    value={decision.outcome}
-                    onValueChange={(value) => updateDecision(index, 'outcome', value)}
-                  >
-                    <SelectTrigger className="mt-1">
-                      <SelectValue placeholder="Select an outcome" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="approve">Approve</SelectItem>
-                      <SelectItem value="reject">Reject</SelectItem>
-                      <SelectItem value="review">Manual Review</SelectItem>
-                      <SelectItem value="escalate">Escalate</SelectItem>
-                      <SelectItem value="continue">Continue</SelectItem>
-                    </SelectContent>
-                  </Select>
+                <div className="grid grid-cols-12 gap-1">
+                  <div className="col-span-4 text-xs text-muted-foreground">Outcome:</div>
+                  <div className="col-span-8">
+                    <Input
+                      size="sm"
+                      value={decision.outcome}
+                      onChange={(e) => handleUpdateDecision(index, "outcome", e.target.value)}
+                      className="h-7 text-sm"
+                    />
+                  </div>
                 </div>
                 
-                <div>
-                  <Label className="text-xs">Next Node (Optional)</Label>
-                  <Input
-                    value={decision.nextNode || ''}
-                    onChange={(e) => updateDecision(index, 'nextNode', e.target.value)}
-                    placeholder="Node ID or label of next step"
-                    className="mt-1"
-                  />
+                <div className="grid grid-cols-12 gap-1">
+                  <div className="col-span-4 text-xs text-muted-foreground">Next Node:</div>
+                  <div className="col-span-8">
+                    <Input
+                      size="sm"
+                      value={decision.nextNode || ""}
+                      onChange={(e) => handleUpdateDecision(index, "nextNode", e.target.value)}
+                      className="h-7 text-sm"
+                      placeholder="No next node specified"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
-      )}
-      
-      <Button 
-        type="button" 
-        variant="outline" 
-        onClick={handleAddDecision}
-        size="sm"
-      >
-        <Plus className="h-4 w-4 mr-1" /> Add Decision Rule
-      </Button>
+          ))
+        )}
+      </div>
     </div>
   );
 };
