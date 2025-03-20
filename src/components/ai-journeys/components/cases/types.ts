@@ -8,4 +8,6 @@ export interface CaseItem {
   status: "success" | "failure";
   details: string;
   risk: string;
+  decision?: "Approved" | "Rejected" | "Pending Review";
+  decisionReason?: string;
 }

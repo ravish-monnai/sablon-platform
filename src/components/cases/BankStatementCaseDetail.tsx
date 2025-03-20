@@ -11,7 +11,8 @@ import BankStatementFeatures from "@/components/bank-statement/BankStatementFeat
 import AIFeedbackForm from "@/components/bank-statement/AIFeedbackForm";
 import JourneyExecutionHistory from "@/components/bank-statement/JourneyExecutionHistory";
 import TransactionsTab from "./detail/tabs/TransactionsTab";
-import { ThumbsUp, ThumbsDown, AlertCircle, BrainCircuit, BarChart, History, MessageSquare } from "lucide-react";
+import { ThumbsUp, ThumbsDown, AlertCircle, BrainCircuit, BarChart, History, MessageSquare, Check, X } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface BankStatementCaseDetailProps {
   caseData: CaseItem;
@@ -27,10 +28,49 @@ const BankStatementCaseDetail: React.FC<BankStatementCaseDetailProps> = ({ caseD
     setActionDialogOpen(true);
   };
 
+  // Determine if case has already been decisioned by the AI agent
+  const isDecisioned = caseData.status !== "Pending Review";
+  const isApproved = caseData.status === "Approved";
+  const isRejected = caseData.status === "Rejected";
+
   return (
     <Card className="w-full">
       <CardHeader className="pb-2">
         <CaseHeader caseData={caseData} />
+        
+        {/* Decision banner */}
+        {isDecisioned && (
+          <div className={`mt-4 p-3 rounded-md flex items-center justify-between ${
+            isApproved ? 'bg-green-50 border border-green-200' : 
+            isRejected ? 'bg-red-50 border border-red-200' : 
+            'bg-amber-50 border border-amber-200'
+          }`}>
+            <div className="flex items-center">
+              {isApproved && <Check className="h-5 w-5 mr-2 text-green-600" />}
+              {isRejected && <X className="h-5 w-5 mr-2 text-red-600" />}
+              <div>
+                <p className={`font-medium ${
+                  isApproved ? 'text-green-700' : 
+                  isRejected ? 'text-red-700' : 
+                  'text-amber-700'
+                }`}>
+                  {isApproved ? 'Approved by Bank Statement Analysis Agent' : 
+                   isRejected ? 'Rejected by Bank Statement Analysis Agent' : 
+                   'Agent Decision Pending'}
+                </p>
+                <p className="text-sm text-gray-600">
+                  {caseData.decisionFactors?.[0]?.factor || 
+                   (isApproved ? 'All verification checks passed' : 
+                    isRejected ? 'Failed to meet required criteria' : 
+                    'AI agent is currently processing this case')}
+                </p>
+              </div>
+            </div>
+            <Badge variant={isApproved ? "success" : isRejected ? "destructive" : "warning"}>
+              {caseData.status}
+            </Badge>
+          </div>
+        )}
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="ai-overview" className="w-full">
@@ -90,30 +130,47 @@ const BankStatementCaseDetail: React.FC<BankStatementCaseDetailProps> = ({ caseD
           Back to List
         </Button>
         <div className="flex gap-2">
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
-            onClick={() => handleActionClick("approve")}
-          >
-            <ThumbsUp className="h-4 w-4" />
-            Approve
-          </Button>
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200"
-            onClick={() => handleActionClick("escalate")}
-          >
-            <AlertCircle className="h-4 w-4" />
-            Escalate
-          </Button>
-          <Button 
-            variant="outline" 
-            className="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
-            onClick={() => handleActionClick("reject")}
-          >
-            <ThumbsDown className="h-4 w-4" />
-            Reject
-          </Button>
+          {isDecisioned ? (
+            <Button 
+              variant="outline" 
+              className={`flex items-center gap-1 ${
+                isApproved ? 'bg-green-50 hover:bg-green-100 text-green-700 border-green-200' :
+                isRejected ? 'bg-red-50 hover:bg-red-100 text-red-700 border-red-200' :
+                'bg-gray-100 hover:bg-gray-200 text-gray-700'
+              }`}
+            >
+              {isApproved && <Check className="h-4 w-4" />}
+              {isRejected && <X className="h-4 w-4" />}
+              AI Decision: {caseData.status}
+            </Button>
+          ) : (
+            <>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                onClick={() => handleActionClick("approve")}
+              >
+                <ThumbsUp className="h-4 w-4" />
+                Approve
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-1 bg-amber-50 hover:bg-amber-100 text-amber-700 border-amber-200"
+                onClick={() => handleActionClick("escalate")}
+              >
+                <AlertCircle className="h-4 w-4" />
+                Escalate
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+                onClick={() => handleActionClick("reject")}
+              >
+                <ThumbsDown className="h-4 w-4" />
+                Reject
+              </Button>
+            </>
+          )}
         </div>
       </CardFooter>
       

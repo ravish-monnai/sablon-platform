@@ -56,7 +56,7 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
       case "medium":
         return "secondary";
       case "low":
-        return "outline";
+        return "success";
       default:
         return "outline";
     }
@@ -73,6 +73,20 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
         return "bg-red-100 text-red-800";
       default:
         return "";
+    }
+  };
+
+  // Function to get decision status icon
+  const getStatusIcon = (status: string) => {
+    switch (status.toLowerCase()) {
+      case "pending review":
+        return <Clock className="h-3 w-3 mr-1" />;
+      case "approved":
+        return <CheckCircle className="h-3 w-3 mr-1" />;
+      case "rejected":
+        return <AlertTriangle className="h-3 w-3 mr-1" />;
+      default:
+        return null;
     }
   };
 
@@ -104,71 +118,77 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {cases.map((caseItem) => (
-            <TableRow key={caseItem.id}>
-              <TableCell className="font-medium">{caseItem.id}</TableCell>
-              <TableCell>{caseItem.customer}</TableCell>
-              <TableCell>
-                {caseItem.journey ? (
-                  <Badge variant="outline" className="font-normal">
-                    {getJourneyDisplay(caseItem.journey)}
-                  </Badge>
-                ) : (
-                  "N/A"
-                )}
-              </TableCell>
-              <TableCell>
-                <Badge
-                  variant={getRiskLevelVariant(caseItem.riskLevel)}
-                  className="flex w-fit items-center gap-1"
-                >
-                  {caseItem.riskLevel === "Low" && <CheckCircle className="h-3 w-3" />}
-                  {(caseItem.riskLevel === "Critical" || caseItem.riskLevel === "High") && (
-                    <AlertTriangle className="h-3 w-3" />
+          {cases.map((caseItem) => {
+            // Check if this is a bank statement analysis case
+            const isBankStatementCase = caseItem.journey?.toLowerCase().includes("bank") && 
+                                       caseItem.journey?.toLowerCase().includes("statement");
+            
+            return (
+              <TableRow key={caseItem.id}>
+                <TableCell className="font-medium">{caseItem.id}</TableCell>
+                <TableCell>{caseItem.customer}</TableCell>
+                <TableCell>
+                  {caseItem.journey ? (
+                    <Badge variant="outline" className="font-normal">
+                      {getJourneyDisplay(caseItem.journey)}
+                    </Badge>
+                  ) : (
+                    "N/A"
                   )}
-                  {caseItem.riskLevel === "Medium" && <Clock className="h-3 w-3" />}
-                  {caseItem.riskLevel || 'Unknown'}
-                </Badge>
-              </TableCell>
-              <TableCell>
-                <Badge
-                  className={`${getStatusColorClass(caseItem.status)} flex w-fit items-center gap-1`}
-                >
-                  {caseItem.status.toLowerCase() === "pending review" && <Clock className="h-3 w-3" />}
-                  {caseItem.status.toLowerCase() === "approved" && <CheckCircle className="h-3 w-3" />}
-                  {caseItem.status.toLowerCase() === "rejected" && <AlertTriangle className="h-3 w-3" />}
-                  {caseItem.status}
-                </Badge>
-              </TableCell>
-              <TableCell>{caseItem.date || caseItem.created}</TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => onViewCase(caseItem.id)}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={getRiskLevelVariant(caseItem.riskLevel)}
+                    className="flex w-fit items-center gap-1"
                   >
-                    <Eye className="h-4 w-4" />
-                  </Button>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="ghost" size="icon">
-                        <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                      <DropdownMenuItem onClick={() => onActionCase(caseItem)}>
-                        Take Action
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={`/case-review/${caseItem.id}`}>View Details</Link>
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
+                    {caseItem.riskLevel === "Low" && <CheckCircle className="h-3 w-3" />}
+                    {(caseItem.riskLevel === "Critical" || caseItem.riskLevel === "High") && (
+                      <AlertTriangle className="h-3 w-3" />
+                    )}
+                    {caseItem.riskLevel === "Medium" && <Clock className="h-3 w-3" />}
+                    {caseItem.riskLevel || 'Unknown'}
+                  </Badge>
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    className={`${getStatusColorClass(caseItem.status)} flex w-fit items-center gap-1`}
+                  >
+                    {getStatusIcon(caseItem.status)}
+                    {isBankStatementCase && caseItem.status === "Pending Review" 
+                      ? "Agent Review" 
+                      : caseItem.status}
+                  </Badge>
+                </TableCell>
+                <TableCell>{caseItem.date || caseItem.created}</TableCell>
+                <TableCell className="text-right">
+                  <div className="flex justify-end gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => onViewCase(caseItem.id)}
+                    >
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem onClick={() => onActionCase(caseItem)}>
+                          Take Action
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to={`/case-review/${caseItem.id}`}>View Details</Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
     </div>
