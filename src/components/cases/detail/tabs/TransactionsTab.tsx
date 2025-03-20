@@ -13,6 +13,7 @@ import {
   Tooltip,
   ResponsiveContainer
 } from "recharts";
+import { getCurrencySymbol, formatCurrency } from "@/components/bank-statement/dashboard/utils";
 
 interface TransactionsTabProps {
   caseData: CaseItem;
@@ -29,48 +30,8 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
     { category: "Savings", amount: 10000, type: "savings" }
   ];
 
-  // Get currency symbol based on market
-  const getCurrencySymbol = (market?: string) => {
-    if (!market) return "₹";
-    
-    switch (market) {
-      case "India":
-        return "₹";
-      case "US":
-        return "$";
-      case "Mexico":
-        return "$";
-      case "Indonesia":
-        return "Rp";
-      case "Philippines":
-        return "₱";
-      default:
-        return "₹";
-    }
-  };
-
   // Explicitly use the market to determine currency symbol
   const currencySymbol = getCurrencySymbol(caseData.market);
-
-  // Function to format numbers according to local currency format
-  const formatCurrency = (amount: number) => {
-    if (!caseData.market) return `₹${amount.toLocaleString()}`;
-    
-    switch (caseData.market) {
-      case "India":
-        return `₹${amount.toLocaleString('en-IN')}`;
-      case "US":
-        return `$${amount.toLocaleString('en-US')}`;
-      case "Mexico":
-        return `$${amount.toLocaleString('es-MX')}`;
-      case "Indonesia":
-        return `Rp${amount.toLocaleString('id-ID')}`;
-      case "Philippines":
-        return `₱${amount.toLocaleString('en-PH')}`;
-      default:
-        return `₹${amount.toLocaleString('en-IN')}`;
-    }
-  };
 
   return (
     <Card>
@@ -92,7 +53,7 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="category" />
                 <YAxis />
-                <Tooltip formatter={(value) => [formatCurrency(value as number), "Amount"]} />
+                <Tooltip formatter={(value) => [formatCurrency(value as number, caseData.market), "Amount"]} />
                 <Bar 
                   dataKey="amount" 
                   fill="#9b87f5" 
@@ -160,7 +121,7 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                       <td className="py-2 px-3">{date.toLocaleDateString()}</td>
                       <td className="py-2 px-3">{description}</td>
                       <td className={`py-2 px-3 text-right font-medium ${amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        {formatCurrency(Math.abs(amount))}
+                        {formatCurrency(Math.abs(amount), caseData.market)}
                       </td>
                       <td className="py-2 px-3">
                         <Badge variant="outline" className="bg-gray-100">
