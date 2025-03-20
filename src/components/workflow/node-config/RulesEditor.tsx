@@ -11,10 +11,10 @@ import {
 } from '@/components/ui/select';
 import { Plus } from 'lucide-react';
 import { AnalysisRule } from '../types';
-import { RuleEditorProps } from './types';
+import { RulesEditorProps } from './types';
 import RuleItem from './RuleItem';
 
-const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
+const RulesEditor: React.FC<RulesEditorProps> = ({ rules, onChange }) => {
   const addRule = (ruleType: 'simple' | 'compound' | 'temporal' = 'simple') => {
     const newRule: AnalysisRule = {
       id: `rule-${Date.now()}`,
@@ -25,17 +25,17 @@ const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
       ruleType: ruleType,
       priority: 'medium'
     };
-    setRules([...rules, newRule]);
+    onChange([...rules, newRule]);
   };
 
-  const updateRule = (id: string, field: keyof AnalysisRule, value: string) => {
-    setRules(rules.map(rule => 
+  const updateRule = (id: string, field: string, value: any) => {
+    onChange(rules.map(rule => 
       rule.id === id ? { ...rule, [field]: value } : rule
     ));
   };
 
   const removeRule = (id: string) => {
-    setRules(rules.filter(rule => rule.id !== id));
+    onChange(rules.filter(rule => rule.id !== id));
   };
 
   return (
@@ -84,8 +84,8 @@ const RulesEditor: React.FC<RuleEditorProps> = ({ rules, setRules }) => {
             <RuleItem 
               key={rule.id} 
               rule={rule} 
-              onUpdate={updateRule} 
-              onRemove={removeRule} 
+              onEdit={updateRule} 
+              onDelete={removeRule} 
             />
           ))
         )}

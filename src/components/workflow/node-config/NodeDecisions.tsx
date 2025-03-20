@@ -113,7 +113,6 @@ const NodeDecisions: React.FC<NodeDecisionsProps> = ({
                   <div className="col-span-4 text-xs text-muted-foreground">Condition:</div>
                   <div className="col-span-8">
                     <Input
-                      size="sm"
                       value={decision.condition}
                       onChange={(e) => handleUpdateDecision(index, "condition", e.target.value)}
                       className="h-7 text-sm"
@@ -125,7 +124,6 @@ const NodeDecisions: React.FC<NodeDecisionsProps> = ({
                   <div className="col-span-4 text-xs text-muted-foreground">Outcome:</div>
                   <div className="col-span-8">
                     <Input
-                      size="sm"
                       value={decision.outcome}
                       onChange={(e) => handleUpdateDecision(index, "outcome", e.target.value)}
                       className="h-7 text-sm"
@@ -137,7 +135,6 @@ const NodeDecisions: React.FC<NodeDecisionsProps> = ({
                   <div className="col-span-4 text-xs text-muted-foreground">Next Node:</div>
                   <div className="col-span-8">
                     <Input
-                      size="sm"
                       value={decision.nextNode || ""}
                       onChange={(e) => handleUpdateDecision(index, "nextNode", e.target.value)}
                       className="h-7 text-sm"

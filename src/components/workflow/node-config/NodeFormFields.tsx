@@ -6,16 +6,9 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { NodeFormFieldsProps } from './types';
 
-const NodeFormFields: React.FC<NodeFormFieldsProps> = ({ 
-  label, 
-  setLabel, 
-  description, 
-  setDescription, 
-  type, 
-  setType, 
-  status, 
-  setStatus 
-}) => {
+const NodeFormFields: React.FC<NodeFormFieldsProps> = ({ node, onChange }) => {
+  const { label = '', description = '', type = 'datasource', status = 'none' } = node.data || {};
+
   return (
     <>
       <div className="space-y-2">
@@ -23,7 +16,7 @@ const NodeFormFields: React.FC<NodeFormFieldsProps> = ({
         <Input
           id="node-label"
           value={label}
-          onChange={(e) => setLabel(e.target.value)}
+          onChange={(e) => onChange('label', e.target.value)}
           placeholder="Enter node label"
         />
       </div>
@@ -33,7 +26,7 @@ const NodeFormFields: React.FC<NodeFormFieldsProps> = ({
         <Textarea
           id="node-description"
           value={description}
-          onChange={(e) => setDescription(e.target.value)}
+          onChange={(e) => onChange('description', e.target.value)}
           placeholder="Enter node description"
           rows={3}
         />
@@ -41,7 +34,7 @@ const NodeFormFields: React.FC<NodeFormFieldsProps> = ({
       
       <div className="space-y-2">
         <Label htmlFor="node-type">Type</Label>
-        <Select value={type} onValueChange={setType}>
+        <Select value={type} onValueChange={(value) => onChange('type', value)}>
           <SelectTrigger>
             <SelectValue placeholder="Select node type" />
           </SelectTrigger>
@@ -58,7 +51,7 @@ const NodeFormFields: React.FC<NodeFormFieldsProps> = ({
       
       <div className="space-y-2">
         <Label htmlFor="node-status">Status</Label>
-        <Select value={status} onValueChange={setStatus}>
+        <Select value={status} onValueChange={(value) => onChange('status', value)}>
           <SelectTrigger>
             <SelectValue placeholder="Select status" />
           </SelectTrigger>

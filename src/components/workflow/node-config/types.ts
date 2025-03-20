@@ -22,6 +22,7 @@ export interface RuleItemProps {
     action: string;
     priority?: 'low' | 'medium' | 'high';
     notes?: string;
+    ruleType?: 'simple' | 'compound' | 'temporal';
   };
   onDelete: (id: string) => void;
   onEdit: (id: string, field: string, value: any) => void;
@@ -36,6 +37,7 @@ export interface RulesEditorProps {
     action: string;
     priority?: 'low' | 'medium' | 'high';
     notes?: string;
+    ruleType?: 'simple' | 'compound' | 'temporal';
   }>;
   onChange: (rules: any[]) => void;
 }

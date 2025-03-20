@@ -9,7 +9,7 @@ import { AlertTriangle, Check, ChevronDown, ChevronUp, Flag, X } from 'lucide-re
 import { AnalysisRule } from '../types';
 import { RuleItemProps } from './types';
 
-const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
+const RuleItem: React.FC<RuleItemProps> = ({ rule, onEdit, onDelete }) => {
   const [expanded, setExpanded] = useState(false);
 
   // Get icon for action
@@ -35,7 +35,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
           <Label className="text-xs mb-1 block">If</Label>
           <Select 
             value={rule.condition} 
-            onValueChange={(value) => onUpdate(rule.id, 'condition', value)}
+            onValueChange={(value) => onEdit(rule.id, 'condition', value)}
           >
             <SelectTrigger className="h-8">
               <SelectValue placeholder="Field" />
@@ -61,7 +61,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
           <Label className="text-xs mb-1 block">Operator</Label>
           <Select 
             value={rule.operator} 
-            onValueChange={(value) => onUpdate(rule.id, 'operator', value)}
+            onValueChange={(value) => onEdit(rule.id, 'operator', value)}
           >
             <SelectTrigger className="h-8">
               <SelectValue placeholder="Op" />
@@ -88,7 +88,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
           <Input
             className="h-8"
             value={rule.value}
-            onChange={(e) => onUpdate(rule.id, 'value', e.target.value)}
+            onChange={(e) => onEdit(rule.id, 'value', e.target.value)}
             placeholder="Value"
           />
         </div>
@@ -97,7 +97,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
           <Label className="text-xs mb-1 block">Then</Label>
           <Select 
             value={rule.action} 
-            onValueChange={(value) => onUpdate(rule.id, 'action', value)}
+            onValueChange={(value) => onEdit(rule.id, 'action', value)}
           >
             <SelectTrigger className="h-8">
               <SelectValue placeholder="Action" />
@@ -133,7 +133,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
             variant="ghost" 
             size="icon" 
             className="h-8 w-8 mt-5"
-            onClick={() => onRemove(rule.id)}
+            onClick={() => onDelete(rule.id)}
           >
             <X size={14} />
           </Button>
@@ -146,7 +146,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
             <Label className="text-xs mb-1 block">Rule Type</Label>
             <Select 
               value={rule.ruleType || 'simple'} 
-              onValueChange={(value) => onUpdate(rule.id, 'ruleType', value)}
+              onValueChange={(value) => onEdit(rule.id, 'ruleType', value)}
             >
               <SelectTrigger className="h-8">
                 <SelectValue placeholder="Rule Type" />
@@ -163,7 +163,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
             <Label className="text-xs mb-1 block">Priority</Label>
             <Select 
               value={rule.priority || 'medium'} 
-              onValueChange={(value) => onUpdate(rule.id, 'priority', value)}
+              onValueChange={(value) => onEdit(rule.id, 'priority', value)}
             >
               <SelectTrigger className="h-8">
                 <SelectValue placeholder="Priority" />
@@ -181,7 +181,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
             <Textarea
               className="min-h-[60px]"
               value={rule.notes || ''}
-              onChange={(e) => onUpdate(rule.id, 'notes', e.target.value)}
+              onChange={(e) => onEdit(rule.id, 'notes', e.target.value)}
               placeholder="Add notes about this rule..."
             />
           </div>
