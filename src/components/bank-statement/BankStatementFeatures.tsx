@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   DollarSign, Wallet, CreditCard, ShieldAlert, 
-  ThumbsUp, AlertCircle, Smartphone
+  ThumbsUp, AlertCircle, Smartphone, FileText, Bot
 } from "lucide-react";
 import SummaryDashboard from "./dashboard/SummaryDashboard";
 import FeatureCategoryTable from "./dashboard/FeatureCategoryTable";
@@ -31,6 +31,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Income Verification" 
           icon={<DollarSign className="h-5 w-5 text-green-600" />}
+          description="Analysis of income sources, frequency, and consistency to verify declared income against bank statement transactions."
           data={[
             { name: "Monthly Average", value: featureValues.income.monthlyAverage, status: "Good" },
             { name: "Consistency", value: featureValues.income.consistency, status: "Good" },
@@ -46,6 +47,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Cash Flow Assessment" 
           icon={<Wallet className="h-5 w-5 text-blue-600" />}
+          description="Comprehensive evaluation of money movement patterns, balance trends, and financial stability indicators."
           data={[
             { name: "Average Balance", value: featureValues.cashFlow.averageBalance, status: "Good" },
             { name: "Monthly Inflow", value: featureValues.cashFlow.monthlyInflow, status: "Good" },
@@ -59,6 +61,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
           <FeatureCategoryTable 
             title="UPI Payments Analysis" 
             icon={<Smartphone className="h-5 w-5 text-indigo-600" />}
+            description="Analysis of Unified Payments Interface (UPI) transactions including spending patterns, merchant reliability, and suspicious activity detection."
             data={[
               { name: "Total UPI Transactions", value: "47", status: "Good" },
               { name: "Monthly UPI Spend", value: "₹24,850", status: "Medium Risk" },
@@ -72,6 +75,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Debt Service Coverage" 
           icon={<CreditCard className="h-5 w-5 text-purple-600" />}
+          description="Assessment of ability to service existing and proposed debt obligations based on income and outgoing payments."
           data={[
             { name: "Debt Service Ratio", value: featureValues.debtService.ratio, status: "Medium Risk" },
             { name: "Existing Monthly Debt", value: featureValues.debtService.existingDebt, status: "Medium Risk" },
@@ -83,6 +87,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Risk Profiling" 
           icon={<AlertCircle className="h-5 w-5 text-red-600" />}
+          description="Evaluation of financial risk behaviors including overdrafts, irregular activity, and overall risk trends."
           data={[
             { name: "Risk Score", value: featureValues.riskProfile.score, status: "Medium Risk" },
             { name: "Overdrafts (Last 3 Months)", value: featureValues.riskProfile.overdrafts, status: "Medium Risk" },
@@ -94,6 +99,7 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Alternative Credit Assessment" 
           icon={<ThumbsUp className="h-5 w-5 text-green-600" />}
+          description="Non-traditional credit assessment using payment consistency, financial responsibility indicators, and saving behavior."
           data={[
             ...featureValues.alternativeCredit.metrics,
             ...featureValues.alternativeCredit.indicators
@@ -103,9 +109,30 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
         <FeatureCategoryTable 
           title="Fraud Detection" 
           icon={<ShieldAlert className="h-5 w-5 text-amber-600" />}
+          description="Analysis of potential fraudulent activities including identity verification signals and income manipulation detection."
           data={[
             ...featureValues.fraudDetection.verificationSignals,
             ...featureValues.fraudDetection.incomeManipulation
+          ]}
+        />
+
+        <FeatureCategoryTable 
+          title="Regulatory Compliance" 
+          icon={<FileText className="h-5 w-5 text-blue-600" />}
+          description="Assessment of compliance with KYC regulations, AML monitoring metrics, and transaction verification requirements."
+          data={[
+            ...featureValues.regulatoryCompliance.kycComponents,
+            ...featureValues.regulatoryCompliance.amlMetrics
+          ]}
+        />
+
+        <FeatureCategoryTable 
+          title="Automated Underwriting" 
+          icon={<Bot className="h-5 w-5 text-purple-600" />}
+          description="Standardized metrics and scoring for automated credit decision-making and exception handling."
+          data={[
+            ...featureValues.automatedUnderwriting.decisionMetrics,
+            ...featureValues.automatedUnderwriting.evaluationCriteria
           ]}
         />
       </div>
