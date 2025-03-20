@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Download, Filter, Plus } from "lucide-react";
+import { Download, Filter } from "lucide-react";
 import CaseListTable from "@/components/cases/CaseListTable";
 import CaseFilters from "@/components/cases/CaseFilters";
 import { CaseItem } from "@/types/cases";
-import BankStatementCaseDetail from "@/components/cases/BankStatementCaseDetail";
+import CaseDetailView from "@/components/cases/CaseDetailView";
 
 interface CaseListViewProps {
   filteredCases: CaseItem[];
@@ -42,17 +42,7 @@ const CaseListView: React.FC<CaseListViewProps> = ({
   };
 
   if (isViewingCaseDetail && selectedCase) {
-    return (
-      <div className="space-y-4">
-        <Button variant="outline" onClick={handleBackToList} className="mb-4">
-          ← Back to Case List
-        </Button>
-        <BankStatementCaseDetail 
-          caseData={selectedCase} 
-          onClose={handleBackToList} 
-        />
-      </div>
-    );
+    return <CaseDetailView selectedCase={selectedCase} onBackToList={handleBackToList} />;
   }
 
   return (
