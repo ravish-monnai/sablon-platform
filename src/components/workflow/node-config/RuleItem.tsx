@@ -100,7 +100,7 @@ const RuleItem: React.FC<RuleItemProps> = ({ rule, onUpdate, onRemove }) => {
             onValueChange={(value) => onUpdate(rule.id, 'action', value)}
           >
             <SelectTrigger className="h-8">
-              <SelectValue placeholder="Action" icon={getActionIcon(rule.action)} />
+              <SelectValue placeholder="Action" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="flag">Flag for Review</SelectItem>

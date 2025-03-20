@@ -12,6 +12,10 @@ export interface NodeData {
   color?: string;
   status?: string;
   rules?: AnalysisRule[];
+  apiSpecs?: ApiSpecification;
+  featureExtraction?: FeatureExtractionConfig;
+  riskAssessment?: RiskAssessmentConfig;
+  caseConfiguration?: CaseConfiguration;
   [key: string]: unknown;
 }
 
@@ -24,6 +28,49 @@ export interface AnalysisRule {
   priority?: 'low' | 'medium' | 'high';
   notes?: string;
   ruleType?: 'simple' | 'compound' | 'temporal';
+}
+
+export interface ApiSpecification {
+  endpoint?: string;
+  method?: string;
+  authType?: string;
+  requiredFields?: string[];
+  optionalFields?: string[];
+  responseFormat?: string;
+  s3Config?: {
+    bucketName?: string;
+    region?: string;
+    accessKeyRequired?: boolean;
+    allowedFileTypes?: string[];
+    maxFileSize?: string;
+  };
+}
+
+export interface FeatureExtractionConfig {
+  features?: string[];
+  models?: string[];
+  confidenceThreshold?: number;
+  processingTime?: string;
+}
+
+export interface RiskAssessmentConfig {
+  thresholds?: {
+    highRisk?: number;
+    mediumRisk?: number;
+    lowRisk?: number;
+  };
+  factors?: string[];
+  modelType?: string;
+  autoDecision?: boolean;
+}
+
+export interface CaseConfiguration {
+  caseType?: string;
+  priority?: string;
+  assignedTeam?: string;
+  slaHours?: number;
+  autoNotify?: boolean;
+  requiredDocuments?: string[];
 }
 
 export interface DragItemProps {

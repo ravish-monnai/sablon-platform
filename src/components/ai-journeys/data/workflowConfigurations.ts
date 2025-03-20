@@ -1,16 +1,7 @@
 
 import React, { ReactNode } from 'react';
 import { Database, Brain, Users, Bot, FileText, ArrowRightLeft, ArrowDownToLine, ShieldAlert, UserCheck } from 'lucide-react';
-
-// Define a type for node data that includes icon as ReactNode
-export interface NodeData {
-  label: string;
-  description: string;
-  icon: ReactNode;
-  type: string;
-  modelType?: string;
-  agentType?: string;
-}
+import { NodeData, ApiSpecification, FeatureExtractionConfig, RiskAssessmentConfig, CaseConfiguration } from '@/components/workflow/types';
 
 // Journey workflow configurations for the journey builder
 export const journeyWorkflowConfigurations = {
@@ -124,7 +115,22 @@ export const journeyWorkflowConfigurations = {
           label: 'Bank Statement Upload',
           description: 'Customer uploads bank statements through API or secure S3 path',
           icon: React.createElement(ArrowDownToLine, { className: "text-blue-500", size: 20 }),
-          type: 'datasource'
+          type: 'datasource',
+          apiSpecs: {
+            endpoint: '/api/v1/bank-statements/upload',
+            method: 'POST',
+            authType: 'Bearer Token',
+            requiredFields: ['customerId', 'statementDate', 'fileContent'],
+            optionalFields: ['bankName', 'accountType', 'currency'],
+            responseFormat: 'JSON',
+            s3Config: {
+              bucketName: 'monnai-bank-statements',
+              region: 'us-west-2',
+              accessKeyRequired: true,
+              allowedFileTypes: ['.pdf', '.csv', '.xlsx', '.xml'],
+              maxFileSize: '25MB'
+            }
+          }
         }
       },
       {
@@ -136,7 +142,30 @@ export const journeyWorkflowConfigurations = {
           description: 'Bank statement analyzer agent parses the statements and extracts all configured features',
           icon: React.createElement(FileText, { className: "text-blue-500", size: 20 }),
           type: 'model',
-          modelType: 'binary'
+          modelType: 'binary',
+          featureExtraction: {
+            features: [
+              'Monthly Income Verification',
+              'Income Consistency Analysis',
+              'Income Source Identification',
+              'Average Balance Calculation',
+              'Cash Flow Analysis',
+              'Recurring Transaction Patterns',
+              'Expense Categorization',
+              'Debt Service Ratio Calculation',
+              'Overdraft Detection',
+              'Payment Regularity Assessment',
+              'Account Volatility Measurement',
+              'Fraud Indicators Analysis',
+              'Abnormal Transaction Detection',
+              'Customer Behavioral Patterns',
+              'Financial Stability Metrics',
+              'Credit Risk Indicators'
+            ],
+            models: ['LLM Parser', 'OCR Engine', 'Transaction Classifier'],
+            confidenceThreshold: 85,
+            processingTime: '30-60 seconds'
+          }
         }
       },
       {
@@ -148,7 +177,25 @@ export const journeyWorkflowConfigurations = {
           description: 'Agent evaluates risk score and makes initial determination',
           icon: React.createElement(ShieldAlert, { className: "text-blue-500", size: 20 }),
           type: 'model',
-          modelType: 'multiclass'
+          modelType: 'multiclass',
+          riskAssessment: {
+            thresholds: {
+              highRisk: 75,
+              mediumRisk: 45,
+              lowRisk: 20
+            },
+            factors: [
+              'Income Stability Score',
+              'Debt-to-Income Ratio',
+              'Account Balance Volatility',
+              'Suspicious Transaction Patterns',
+              'Overdraft Frequency',
+              'Spending Behavior Consistency',
+              'Payment Reliability'
+            ],
+            modelType: 'Ensemble (Random Forest + Neural Network)',
+            autoDecision: true
+          }
         }
       },
       {
@@ -160,7 +207,15 @@ export const journeyWorkflowConfigurations = {
           description: 'Journey ends with auto-rejected case',
           icon: React.createElement(ShieldAlert, { className: "text-gray-500", size: 20 }),
           type: 'agent',
-          agentType: 'ai_agent'
+          agentType: 'ai_agent',
+          caseConfiguration: {
+            caseType: 'Auto-Rejected',
+            priority: 'Low',
+            assignedTeam: 'Fraud Analytics',
+            slaHours: 48,
+            autoNotify: true,
+            requiredDocuments: ['Bank Statement', 'Risk Assessment Report']
+          }
         }
       },
       {
@@ -172,7 +227,15 @@ export const journeyWorkflowConfigurations = {
           description: 'Case forwarded to underwriting agent',
           icon: React.createElement(UserCheck, { className: "text-green-500", size: 20 }),
           type: 'agent',
-          agentType: 'regular_agent'
+          agentType: 'regular_agent',
+          caseConfiguration: {
+            caseType: 'Underwriting Review',
+            priority: 'Medium',
+            assignedTeam: 'Underwriting',
+            slaHours: 24,
+            autoNotify: true,
+            requiredDocuments: ['Bank Statement', 'Income Verification Report', 'Credit Report']
+          }
         }
       }
     ],
