@@ -53,6 +53,12 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     default: CustomNode
   } as NodeTypes;
 
+  const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
+    console.log("Node clicked:", node);
+    setConfigNode(node);
+    setIsDialogOpen(true);
+  }, []);
+
   const onNodeDoubleClick = useCallback((event: React.MouseEvent, node: Node) => {
     console.log("Node double clicked:", node);
     setConfigNode(node);
@@ -80,6 +86,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         onDrop={onDrop}
         onDragOver={onDragOver}
         onNodeDragStart={onNodeDragStart}
+        onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
         nodeTypes={combinedNodeTypes}
         defaultEdgeOptions={edgeOptions}
@@ -104,7 +111,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
               <span className="text-blue-600 font-medium mr-1">Monnai</span> 
               <span>Journey Builder</span>
             </div>
-            <p className="text-gray-500 text-[10px] mt-1">Double-click on nodes to configure</p>
+            <p className="text-gray-500 text-[10px] mt-1">Click on nodes to configure</p>
           </div>
         </Panel>
       </ReactFlow>

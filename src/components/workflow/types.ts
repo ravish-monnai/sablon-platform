@@ -16,6 +16,15 @@ export interface NodeData {
   featureExtraction?: FeatureExtractionConfig;
   riskAssessment?: RiskAssessmentConfig;
   caseConfiguration?: CaseConfiguration;
+  // New fields for enhanced configuration
+  inputs?: string[];
+  outputs?: string[];
+  mappings?: Record<string, string>;
+  decisions?: {
+    condition: string;
+    outcome: string;
+    nextNode?: string;
+  }[];
   [key: string]: unknown;
 }
 

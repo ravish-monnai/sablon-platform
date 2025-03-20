@@ -116,3 +116,30 @@ export const getCustomEdgeStyle = (edge: Edge) => {
       return getEdgeOptions();
   }
 };
+
+// Functions for WorkflowPreview component
+export const getNodeColorByType = (type: string) => {
+  switch (type) {
+    case 'datasource':
+      return '#FEF9C3'; // Yellow
+    case 'model':
+      return '#F3E8FF'; // Purple
+    case 'rule':
+      return '#DBEAFE'; // Blue
+    case 'notification':
+      return '#DCFCE7'; // Green
+    case 'agent':
+      return '#E0E7FF'; // Indigo
+    case 'alert':
+      return '#FEE2E2'; // Red
+    default:
+      return '#F1F5F9'; // Default slate
+  }
+};
+
+export const getStatusBorder = (status: string) => {
+  if (status === 'error') return 'border-red-500';
+  if (status === 'warning') return 'border-yellow-500';
+  if (status === 'success') return 'border-green-500';
+  return 'border-gray-200';
+};
