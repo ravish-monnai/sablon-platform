@@ -2,6 +2,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   CheckCircle, 
   XCircle, 
@@ -10,7 +11,9 @@ import {
   Bot,
   UserCheck,
   Timer,
-  FileText
+  FileText,
+  Download,
+  Eye
 } from "lucide-react";
 
 interface ExecutionStep {
@@ -20,6 +23,11 @@ interface ExecutionStep {
   timestamp: string;
   duration: string;
   notes?: string;
+  document?: {
+    name: string;
+    type: string;
+    size: string;
+  };
 }
 
 interface JourneyExecutionHistoryProps {
@@ -27,6 +35,9 @@ interface JourneyExecutionHistoryProps {
 }
 
 const JourneyExecutionHistory: React.FC<JourneyExecutionHistoryProps> = ({ caseId }) => {
+  // Determine if this is an Indian case by checking the ID prefix
+  const isIndianCase = caseId.includes("IN-") || caseId.includes("301") || caseId.includes("302") || caseId.includes("303");
+  
   // This would come from API in real app
   const executionSteps: ExecutionStep[] = [
     {
@@ -35,7 +46,12 @@ const JourneyExecutionHistory: React.FC<JourneyExecutionHistoryProps> = ({ caseI
       status: "completed",
       timestamp: "2023-09-15 09:32:15",
       duration: "2.3s",
-      notes: "Bank statement document validated successfully"
+      notes: "Bank statement document validated successfully",
+      document: {
+        name: isIndianCase ? "HDFC_Statement_Sep2023.pdf" : "Bank_Statement_Sep2023.pdf",
+        type: "application/pdf",
+        size: "1.4 MB"
+      }
     },
     {
       id: "step-2",
@@ -51,7 +67,7 @@ const JourneyExecutionHistory: React.FC<JourneyExecutionHistoryProps> = ({ caseI
       status: "completed",
       timestamp: "2023-09-15 09:32:23",
       duration: "3.1s",
-      notes: "Generated 45 features across 8 categories"
+      notes: isIndianCase ? "Generated 52 features including UPI transaction analysis" : "Generated 45 features across 8 categories"
     },
     {
       id: "step-4",
@@ -144,6 +160,31 @@ const JourneyExecutionHistory: React.FC<JourneyExecutionHistoryProps> = ({ caseI
                 {step.notes && (
                   <p className="text-sm mt-2 text-muted-foreground">{step.notes}</p>
                 )}
+                
+                {/* Document attachment */}
+                {step.document && (
+                  <div className="mt-3 p-3 bg-gray-50 rounded-md border border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center">
+                        <FileText className="h-4 w-4 mr-2 text-blue-500" />
+                        <div>
+                          <p className="text-sm font-medium">{step.document.name}</p>
+                          <p className="text-xs text-muted-foreground">{step.document.size}</p>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" className="h-8 gap-1">
+                          <Eye className="h-3.5 w-3.5" />
+                          <span className="text-xs">View</span>
+                        </Button>
+                        <Button variant="outline" size="sm" className="h-8 gap-1">
+                          <Download className="h-3.5 w-3.5" />
+                          <span className="text-xs">Download</span>
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -158,6 +199,7 @@ const JourneyExecutionHistory: React.FC<JourneyExecutionHistoryProps> = ({ caseI
             {caseId.includes("246") || caseId.includes("249") || caseId.includes("IN-302") 
               ? "This case required manual review after automated analysis detected anomalies or inconsistencies in the bank statement data. The AI agent successfully extracted and analyzed features but determined human judgment was needed for final decision."
               : "This case was fully processed by the AI agent. All steps were completed successfully, and the final decision was made automatically based on the analysis results without requiring human intervention."}
+            {isIndianCase && " UPI transaction analysis was conducted as part of the enhanced feature set for Indian market."}
           </p>
         </div>
       </CardContent>

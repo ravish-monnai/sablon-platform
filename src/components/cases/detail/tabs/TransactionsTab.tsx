@@ -3,7 +3,7 @@ import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CaseItem } from "@/types/caseTypes";
-import { CreditCard, BarChart3 } from "lucide-react";
+import { CreditCard, BarChart3, Smartphone } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -11,7 +11,10 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  ResponsiveContainer
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
 } from "recharts";
 import { getCurrencySymbol, formatCurrency } from "@/components/bank-statement/dashboard/utils";
 
@@ -20,6 +23,12 @@ interface TransactionsTabProps {
 }
 
 const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
+  // Explicitly use the market to determine currency symbol
+  const currencySymbol = getCurrencySymbol(caseData.market);
+  
+  // Check if this is an Indian case
+  const isIndianCase = caseData.market === "India";
+  
   // Sample transaction data
   const transactionData = [
     { category: "Salary", amount: 45000, type: "income" },
@@ -29,9 +38,17 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
     { category: "Entertainment", amount: 3000, type: "expense" },
     { category: "Savings", amount: 10000, type: "savings" }
   ];
-
-  // Explicitly use the market to determine currency symbol
-  const currencySymbol = getCurrencySymbol(caseData.market);
+  
+  // UPI app usage data for Indian cases
+  const upiAppData = [
+    { name: "Google Pay", value: 68 },
+    { name: "PhonePe", value: 22 },
+    { name: "Paytm", value: 8 },
+    { name: "Others", value: 2 }
+  ];
+  
+  // Colors for pie chart
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
   return (
     <Card>
@@ -63,6 +80,76 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
               </BarChart>
             </ResponsiveContainer>
           </div>
+          
+          {/* UPI Analysis for Indian Cases */}
+          {isIndianCase && (
+            <div className="mt-6 mb-4">
+              <div className="flex items-center mb-2">
+                <Smartphone className="h-5 w-5 mr-2 text-indigo-600" />
+                <h3 className="font-medium">UPI Payment Analysis</h3>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="h-64">
+                  <h4 className="text-sm font-medium mb-2">UPI App Usage</h4>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={upiAppData}
+                        cx="50%"
+                        cy="50%"
+                        labelLine={false}
+                        outerRadius={80}
+                        fill="#8884d8"
+                        dataKey="value"
+                        label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                      >
+                        {upiAppData.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value) => [`${value}%`, 'Usage']} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
+                
+                <div className="space-y-2">
+                  <div className="p-3 bg-gray-50 rounded-md">
+                    <h4 className="text-sm font-medium">UPI Transaction Summary</h4>
+                    <div className="grid grid-cols-2 gap-2 mt-2">
+                      <div>
+                        <p className="text-xs text-muted-foreground">Total Transactions</p>
+                        <p className="font-medium">47</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Total Amount</p>
+                        <p className="font-medium">₹24,850</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Average Transaction</p>
+                        <p className="font-medium">₹528</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground">Merchants</p>
+                        <p className="font-medium">22</p>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="p-3 bg-blue-50 rounded-md">
+                    <h4 className="text-sm font-medium text-blue-800">UPI Reliability Score</h4>
+                    <div className="flex items-center justify-between mt-2">
+                      <p className="font-medium text-blue-800">92/100</p>
+                      <Badge className="bg-blue-100 text-blue-800 hover:bg-blue-200">Good</Badge>
+                    </div>
+                    <p className="text-xs text-blue-700 mt-1">
+                      Consistent pattern with verified merchants
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="overflow-hidden rounded-lg border">
             <table className="w-full text-sm">
@@ -80,7 +167,11 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                     Math.floor(Math.random() * 10000) * -1 : 
                     Math.floor(Math.random() * 50000);
                   
-                  const categories = ['Salary', 'Rent', 'Utilities', 'Groceries', 'Entertainment', 'Transport', 'Healthcare'];
+                  // Include UPI transactions for Indian cases
+                  const categories = isIndianCase ? 
+                    ['Salary', 'UPI Payment', 'UPI Transfer', 'Rent', 'Utilities', 'Groceries', 'Entertainment', 'Transport', 'Healthcare'] :
+                    ['Salary', 'Rent', 'Utilities', 'Groceries', 'Entertainment', 'Transport', 'Healthcare'];
+                    
                   const category = categories[Math.floor(Math.random() * categories.length)];
                   
                   const descriptions = {
@@ -90,7 +181,9 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                     'Groceries': ['Supermarket', 'Grocery Store', 'Food Market'],
                     'Entertainment': ['Movie Tickets', 'Restaurant Bill', 'Concert Tickets'],
                     'Transport': ['Uber Ride', 'Fuel Payment', 'Train Ticket'],
-                    'Healthcare': ['Medical Bill', 'Pharmacy', 'Health Insurance']
+                    'Healthcare': ['Medical Bill', 'Pharmacy', 'Health Insurance'],
+                    'UPI Payment': ['UPI: GooglePay', 'UPI: PhonePe', 'UPI: Paytm'],
+                    'UPI Transfer': ['UPI Transfer to Friend', 'UPI P2P', 'UPI Family Transfer']
                   };
                   
                   const description = descriptions[category][Math.floor(Math.random() * descriptions[category].length)];
@@ -119,7 +212,14 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                   return (
                     <tr key={index} className="border-b last:border-0">
                       <td className="py-2 px-3">{date.toLocaleDateString()}</td>
-                      <td className="py-2 px-3">{description}</td>
+                      <td className="py-2 px-3">
+                        {description}
+                        {isIndianCase && (category === 'UPI Payment' || category === 'UPI Transfer') && (
+                          <Badge variant="outline" className="ml-2 bg-indigo-50 text-indigo-700 border-indigo-200 text-[10px]">
+                            UPI
+                          </Badge>
+                        )}
+                      </td>
                       <td className={`py-2 px-3 text-right font-medium ${amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
                         {formatCurrency(Math.abs(amount), caseData.market)}
                       </td>

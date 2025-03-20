@@ -61,6 +61,26 @@ export const getStatusColor = (status: string): string => {
 export const generateFeatureValues = (caseData: any) => {
   // Determine market for currency formatting
   const market = caseData?.market || "India";
+  const isIndianMarket = market === "India";
+  
+  // Generate UPI data specifically for Indian market
+  const upiData = isIndianMarket ? {
+    totalTransactions: 47,
+    monthlySpend: 24850,
+    frequentApps: [
+      { name: "Google Pay", percentage: 68 },
+      { name: "PhonePe", percentage: 22 },
+      { name: "Paytm", percentage: 8 },
+      { name: "Other", percentage: 2 }
+    ],
+    merchantCategories: [
+      { category: "Retail", amount: 12500 },
+      { category: "Food & Dining", amount: 6300 },
+      { category: "Utilities", amount: 3200 },
+      { category: "Entertainment", amount: 2850 }
+    ],
+    suspiciousActivity: "None Detected"
+  } : null;
   
   return {
     income: {
@@ -170,6 +190,14 @@ export const generateFeatureValues = (caseData: any) => {
         { name: "Transaction Risk", value: "Low", status: "Good" },
         { name: "Watch List Check", value: "Passed", status: "Good" }
       ]
-    }
+    },
+    // Add UPI analysis data for Indian market
+    upi: isIndianMarket ? {
+      transactions: upiData?.totalTransactions.toString() || "0",
+      spend: formatCurrency(upiData?.monthlySpend || 0, market),
+      topApp: `${upiData?.frequentApps[0].name} (${upiData?.frequentApps[0].percentage}%)`,
+      merchantReliability: "92%",
+      suspiciousActivity: upiData?.suspiciousActivity || "None Detected"
+    } : undefined
   };
 };

@@ -2,7 +2,7 @@
 import React from "react";
 import { 
   DollarSign, Wallet, CreditCard, ShieldAlert, 
-  ThumbsUp, AlertCircle 
+  ThumbsUp, AlertCircle, Smartphone
 } from "lucide-react";
 import SummaryDashboard from "./dashboard/SummaryDashboard";
 import FeatureCategoryTable from "./dashboard/FeatureCategoryTable";
@@ -17,6 +17,9 @@ interface BankStatementFeaturesProps {
 const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData }) => {
   // Generate feature values for the dashboard
   const featureValues: FeatureValues = generateFeatureValues(caseData);
+  
+  // Check if this is an Indian case to show UPI analysis
+  const isIndianCase = caseData?.market === "India";
   
   return (
     <>
@@ -50,6 +53,21 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
             { name: "Volatility", value: featureValues.cashFlow.volatility, status: "Low Risk" }
           ]}
         />
+        
+        {/* UPI Payment Analysis for Indian Cases Only */}
+        {isIndianCase && (
+          <FeatureCategoryTable 
+            title="UPI Payments Analysis" 
+            icon={<Smartphone className="h-5 w-5 text-indigo-600" />}
+            data={[
+              { name: "Total UPI Transactions", value: "47", status: "Good" },
+              { name: "Monthly UPI Spend", value: "₹24,850", status: "Medium Risk" },
+              { name: "Top UPI App", value: "Google Pay (68%)", status: "Good" },
+              { name: "UPI Merchant Reliability", value: "92%", status: "Good" },
+              { name: "Suspicious UPI Activity", value: "None Detected", status: "Low Risk" }
+            ]}
+          />
+        )}
         
         <FeatureCategoryTable 
           title="Debt Service Coverage" 
