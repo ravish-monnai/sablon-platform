@@ -55,3 +55,6 @@ export const journeysByMarket: Record<string, Journey[]> = {
     }
   ]
 };
+
+// Re-export the Journey type for use in other files
+export type { Journey };
