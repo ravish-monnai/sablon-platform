@@ -85,7 +85,7 @@ const FeatureCategoryTable: React.FC<FeatureCategoryTableProps> = ({
               </TableCell>
               <TableCell className="text-right">{item.value}</TableCell>
               <TableCell className="text-right">
-                <Badge className={getStatusColor(item.status)}>
+                <Badge variant={getStatusColor(item.status)}>
                   {item.status}
                 </Badge>
               </TableCell>

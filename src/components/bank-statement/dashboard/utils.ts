@@ -1,4 +1,3 @@
-
 // Helper function to get currency symbol based on market
 export const getCurrencySymbol = (market?: string) => {
   if (!market) return "₹";
@@ -44,17 +43,31 @@ export const hasExceptions = (feature: any): boolean => {
   return feature.exceptions && feature.exceptions.length > 0;
 };
 
-// Helper function to get the appropriate CSS color class based on status
+// Helper function to get the appropriate badge variant based on status
 export const getStatusColor = (status: string): string => {
   const statusLower = status.toLowerCase();
-  if (statusLower.includes('good') || statusLower.includes('verified') || statusLower.includes('excellent')) {
-    return 'text-green-600';
-  } else if (statusLower.includes('medium')) {
-    return 'text-amber-600';
-  } else if (statusLower.includes('high') || statusLower.includes('risk') || statusLower.includes('failed')) {
-    return 'text-red-600';
+  
+  if (statusLower.includes('good') || 
+      statusLower.includes('verified') || 
+      statusLower.includes('excellent') || 
+      statusLower.includes('low risk') || 
+      statusLower.includes('passed') || 
+      statusLower.includes('improving') || 
+      statusLower.includes('positive') ||
+      statusLower.includes('stable')) {
+    return 'success';
+  } else if (statusLower.includes('medium') || 
+             statusLower.includes('moderate') || 
+             statusLower.includes('stable')) {
+    return 'warning';
+  } else if (statusLower.includes('high') || 
+             statusLower.includes('risk') || 
+             statusLower.includes('failed') || 
+             statusLower.includes('rejected') ||
+             statusLower.includes('worsening')) {
+    return 'destructive';
   } else {
-    return 'text-blue-600';
+    return 'default';
   }
 };
 

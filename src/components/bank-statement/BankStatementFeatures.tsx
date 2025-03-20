@@ -1,9 +1,7 @@
-
 import React from "react";
 import { 
   DollarSign, Wallet, CreditCard, ShieldAlert, 
-  ThumbsUp, AlertCircle, Smartphone, FileText, Bot,
-  Info
+  ThumbsUp, AlertCircle, Smartphone, Info
 } from "lucide-react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 import SummaryDashboard from "./dashboard/SummaryDashboard";
@@ -87,26 +85,6 @@ const featureDescriptions = {
       addressConsistency: "Consistency of location-based transactions with declared address.",
       transactionPatterns: "Analysis of unusual or suspicious transaction patterns.",
       incomeManipulation: "Detection of potential artificial inflation of income."
-    }
-  },
-  regulatoryCompliance: {
-    title: "Regulatory Compliance",
-    description: "Features ensuring compliance with financial regulations and standards.",
-    features: {
-      kycVerification: "Know Your Customer verification components.",
-      amlMonitoring: "Anti-Money Laundering monitoring metrics.",
-      sourceOfFunds: "Verification of legitimate sources of funds.",
-      highRiskActivity: "Detection of potentially high-risk transaction activity."
-    }
-  },
-  automatedUnderwriting: {
-    title: "Automated Underwriting",
-    description: "Standardized metrics for automated credit decision-making.",
-    features: {
-      accelerationMetrics: "Metrics for accelerating the decision process.",
-      standardizedCriteria: "Standardized evaluation criteria for consistent assessments.",
-      decisionConfidence: "Confidence level of automated decisions.",
-      exceptionHandling: "Identification and handling of exceptions to standard criteria."
     }
   }
 };
@@ -394,54 +372,6 @@ const BankStatementFeatures: React.FC<BankStatementFeaturesProps> = ({ caseData 
             ...featureValues.fraudDetection.incomeManipulation.map(item => ({
               ...item,
               description: featureDescriptions.fraudDetection.features.incomeManipulation
-            }))
-          ]}
-        />
-
-        <FeatureCategoryTable 
-          title={
-            <div className="flex items-center">
-              Regulatory Compliance
-              <FeatureInfoTooltip 
-                title={featureDescriptions.regulatoryCompliance.title} 
-                description={featureDescriptions.regulatoryCompliance.description} 
-              />
-            </div>
-          }
-          icon={<FileText className="h-5 w-5 text-blue-600" />}
-          description="Assessment of compliance with KYC regulations, AML monitoring metrics, and transaction verification requirements."
-          data={[
-            ...featureValues.regulatoryCompliance.kycVerification.map(item => ({
-              ...item,
-              description: featureDescriptions.regulatoryCompliance.features.kycVerification
-            })),
-            ...featureValues.regulatoryCompliance.amlMonitoring.map(item => ({
-              ...item,
-              description: featureDescriptions.regulatoryCompliance.features.amlMonitoring
-            }))
-          ]}
-        />
-
-        <FeatureCategoryTable 
-          title={
-            <div className="flex items-center">
-              Automated Underwriting
-              <FeatureInfoTooltip 
-                title={featureDescriptions.automatedUnderwriting.title} 
-                description={featureDescriptions.automatedUnderwriting.description} 
-              />
-            </div>
-          }
-          icon={<Bot className="h-5 w-5 text-purple-600" />}
-          description="Standardized metrics and scoring for automated credit decision-making and exception handling."
-          data={[
-            ...featureValues.automatedUnderwriting.accelerationMetrics.map(metric => ({
-              ...metric,
-              description: featureDescriptions.automatedUnderwriting.features.accelerationMetrics
-            })),
-            ...featureValues.automatedUnderwriting.standardizedCriteria.map(criteria => ({
-              ...criteria,
-              description: featureDescriptions.automatedUnderwriting.features.standardizedCriteria
             }))
           ]}
         />
