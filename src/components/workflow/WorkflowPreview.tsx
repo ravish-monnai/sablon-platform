@@ -2,41 +2,8 @@
 import React from 'react';
 import { ReactFlow, Background, Controls, Node, Edge, NodeProps } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { NodeData, WorkflowNode } from './types';
-
-// Helper functions for node styling
-const getNodeColorByType = (type: string): string => {
-  switch(type) {
-    case 'rule':
-      return '#3b82f6'; // blue
-    case 'model':
-      return '#8b5cf6'; // purple (changed from pink)
-    case 'data':
-    case 'datasource':
-      return '#2bbfe0'; // blue (changed from yellow)
-    case 'notification':
-      return '#22c55e'; // green
-    case 'alert':
-      return '#6b7280'; // gray (changed from red)
-    case 'agent':
-      return '#3b82f6'; // blue (changed from purple)
-    default:
-      return '#2bbfe0'; // default blue
-  }
-};
-
-const getStatusBorder = (status?: string): string => {
-  switch(status) {
-    case 'completed':
-      return 'border-green-400';
-    case 'active':
-      return 'border-blue-400';
-    case 'error':
-      return 'border-red-400';
-    default:
-      return 'border-transparent';
-  }
-};
+import { NodeData } from './types';
+import { getNodeColorByType, getStatusBorder, getEdgeOptions } from './utils/nodeStyles';
 
 // Custom Node component to display the icon in preview mode
 const PreviewNode = ({ data, id }: NodeProps) => {
@@ -87,11 +54,7 @@ const WorkflowPreview: React.FC<WorkflowPreviewProps> = ({ nodes, edges }) => {
   } as const;
 
   // Custom edge with labels
-  const edgeOptions = {
-    style: { strokeWidth: 2, stroke: '#94a3b8' },
-    labelBgStyle: { fill: 'white', fillOpacity: 0.8 },
-    labelStyle: { fill: '#333', fontSize: 12 }
-  };
+  const edgeOptions = getEdgeOptions();
 
   return (
     <div className="h-[400px] border rounded-md overflow-hidden">

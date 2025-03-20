@@ -6,89 +6,16 @@ import {
   Controls, 
   MiniMap,
   Panel,
-  EdgeLabelRenderer,
   Node,
   NodeTypes,
-  Edge,
-  NodeProps
+  Edge
 } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
-import { NodeData, WorkflowNode } from './types';
+import { NodeData } from './types';
 import NodeConfigDialog from './NodeConfigDialog';
 import { toast } from "sonner";
-
-// Custom Node component to display the icon
-const CustomNode = ({ data, id, selected }: NodeProps) => {
-  // Type assertion to ensure TypeScript understands this is NodeData
-  const nodeData = data as NodeData;
-  
-  // Use the same styling as in the journey steps tab
-  const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
-  const statusBorder = getStatusBorder(nodeData.status);
-  
-  return (
-    <div 
-      className={`flex flex-col items-center rounded-md shadow-md p-3 ${statusBorder} transition-all duration-200`}
-      style={{ 
-        backgroundColor: backgroundColor,
-        borderWidth: '2px',
-        minWidth: '130px',
-        minHeight: '90px',
-        transform: selected ? 'scale(1.05)' : 'scale(1)'
-      }}
-    >
-      {nodeData.icon && (
-        <div className="rounded-full bg-white p-2 mb-2 shadow-sm">
-          {nodeData.icon}
-        </div>
-      )}
-      <div className="text-sm font-medium text-white">{nodeData.label}</div>
-      {nodeData.description && (
-        <div className="text-xs text-white opacity-80 mt-1 text-center line-clamp-2">{nodeData.description}</div>
-      )}
-      
-      {/* Node identifier badge */}
-      <div className="absolute -top-2 -right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center border border-gray-200 shadow-sm">
-        <span className="text-xs font-bold">{id && typeof id === 'string' ? id.split('-')[1] || '1' : '1'}</span>
-      </div>
-    </div>
-  );
-};
-
-// Helper functions for node styling - update to match journey-steps/utils.ts
-const getNodeColorByType = (type: string): string => {
-  switch(type) {
-    case 'rule':
-      return '#3b82f6'; // blue
-    case 'model':
-      return '#8b5cf6'; // purple (changed from pink)
-    case 'data':
-    case 'datasource':
-      return '#2bbfe0'; // blue (changed from yellow)
-    case 'notification':
-      return '#22c55e'; // green
-    case 'alert':
-      return '#6b7280'; // gray (changed from red)
-    case 'agent':
-      return '#3b82f6'; // blue (changed from purple)
-    default:
-      return '#2bbfe0'; // default blue
-  }
-};
-
-// Match the status border styling from journey steps
-const getStatusBorder = (status?: string): string => {
-  switch(status) {
-    case 'completed':
-      return 'border-green-400';
-    case 'active':
-      return 'border-blue-400';
-    case 'error':
-      return 'border-red-400';
-    default:
-      return 'border-transparent';
-  }
-};
+import CustomNode from './nodes/CustomNode';
+import { getEdgeOptions, getMinimapNodeColor } from './utils/nodeStyles';
 
 interface WorkflowFlowProps {
   nodes: Node[];
@@ -119,13 +46,8 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   const [configNode, setConfigNode] = useState<Node | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Custom edge with labels
-  const edgeOptions = {
-    style: { strokeWidth: 2, stroke: '#94a3b8' },
-    labelBgStyle: { fill: 'white', fillOpacity: 0.8 },
-    labelStyle: { fill: '#333', fontSize: 12 },
-    animated: true
-  };
+  // Get edge styling options
+  const edgeOptions = getEdgeOptions();
 
   // Define nodeTypes properly matching ReactFlow expectations
   const combinedNodeTypes = {
@@ -175,16 +97,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
         <Background color="#f0f0f0" gap={16} />
         <Controls position="bottom-right" showInteractive={false} />
         <MiniMap 
-          nodeColor={(node) => {
-            const nodeData = node.data as NodeData;
-            if (nodeData.type === 'datasource' || nodeData.type === 'data') return '#2bbfe0'; // changed from yellow
-            if (nodeData.type === 'model') return '#8b5cf6'; // changed from pink
-            if (nodeData.type === 'agent') return '#3b82f6'; // changed from purple
-            if (nodeData.type === 'rule') return '#3b82f6';
-            if (nodeData.type === 'notification') return '#22c55e';
-            if (nodeData.type === 'alert') return '#6b7280'; // changed from red
-            return '#2bbfe0';
-          }}
+          nodeColor={getMinimapNodeColor}
           zoomable 
           pannable
         />
