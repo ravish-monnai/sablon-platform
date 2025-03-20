@@ -22,6 +22,10 @@ export interface CaseItem {
   phone?: string;
   location?: string;
   
+  // Currency and payment information
+  currency?: string;
+  paymentMethods?: string[];
+  
   // AI analysis information
   reasoning?: string;
   decisionFactors?: Array<{

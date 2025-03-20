@@ -22,7 +22,8 @@ export const mexicoBankStatementCases: CaseItem[] = [
     email: "carlos.fernandez@example.com",
     phone: "+52 55 1234 5678",
     location: "Mexico City, Mexico",
-    reasoning: "The customer demonstrates consistent income with regular deposits from an established employer. Transactions show normal spending patterns with predictable bill payments and household expenses. The customer maintains adequate account balances and has no concerning transaction patterns.",
+    currency: "$ (MXN)",
+    reasoning: "The customer demonstrates consistent income with regular deposits from an established employer. Transactions show normal spending patterns with predictable bill payments via SPEI transfers and household expenses. CoDi digital payments show consistent usage with verified merchants. The customer maintains adequate account balances and has no concerning transaction patterns.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -45,6 +46,7 @@ export const mexicoBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["SPEI", "CoDi", "Debit Card", "Credit Card"],
     anomalyFlags: [],
     documents: [
       {
@@ -75,7 +77,8 @@ export const mexicoBankStatementCases: CaseItem[] = [
     email: "sofia.ramirez@example.com",
     phone: "+52 55 8765 4321",
     location: "Guadalajara, Mexico",
-    reasoning: "The customer's account shows multiple deposits just below reporting thresholds, indicating potential structuring behavior. There are frequent cash deposits with unclear sources and several international transfers without supporting documentation. The transaction patterns are inconsistent with the stated income source.",
+    currency: "$ (MXN)",
+    reasoning: "The customer's account shows multiple deposits just below reporting thresholds, indicating potential structuring behavior. There are frequent cash deposits with unclear sources and several SPEI transfers to multiple accounts without supporting documentation. Minimal usage of traceable payment methods like CoDi despite its availability. The transaction patterns are inconsistent with the stated income source.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -98,12 +101,14 @@ export const mexicoBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["SPEI", "Cash Deposits"],
     anomalyFlags: [
       "Multiple deposits below reporting thresholds",
       "Frequent cash transactions without clear source",
       "International transfers without documentation",
       "Transaction patterns inconsistent with stated income",
-      "Rapid fund movement through account"
+      "Rapid fund movement through account",
+      "Avoidance of digital payment methods like CoDi"
     ],
     documents: [
       {

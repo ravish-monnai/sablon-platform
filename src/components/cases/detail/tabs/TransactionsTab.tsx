@@ -29,6 +29,28 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
     { category: "Savings", amount: 10000, type: "savings" }
   ];
 
+  // Get currency symbol based on market
+  const getCurrencySymbol = (market?: string) => {
+    if (!market) return "₹";
+    
+    switch (market) {
+      case "India":
+        return "₹";
+      case "US":
+        return "$";
+      case "Mexico":
+        return "$";
+      case "Indonesia":
+        return "Rp";
+      case "Philippines":
+        return "₱";
+      default:
+        return "₹";
+    }
+  };
+
+  const currencySymbol = caseData.currency?.split(' ')[0] || getCurrencySymbol(caseData.market);
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -94,12 +116,30 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                   const date = new Date();
                   date.setDate(date.getDate() - Math.floor(Math.random() * 30));
                   
+                  // Get payment method based on market
+                  const getPaymentMethod = () => {
+                    const marketSpecificMethods: Record<string, string[]> = {
+                      "India": ["UPI", "IMPS", "NEFT", "Credit Card", "Debit Card"],
+                      "US": ["ACH", "Zelle", "Credit Card", "Debit Card", "Check"],
+                      "Mexico": ["SPEI", "CoDi", "Debit Card", "Credit Card"],
+                      "Indonesia": ["QRIS", "GoPay", "OVO", "Bank Transfer"],
+                      "Philippines": ["InstaPay", "PESONet", "GCash", "Maya"]
+                    };
+                    
+                    const defaultMethods = ["Bank Transfer", "Credit Card", "Debit Card"];
+                    const methods = caseData.market ? 
+                                   (marketSpecificMethods[caseData.market] || defaultMethods) : 
+                                   defaultMethods;
+                    
+                    return methods[Math.floor(Math.random() * methods.length)];
+                  };
+                  
                   return (
                     <tr key={index} className="border-b last:border-0">
                       <td className="py-2 px-3">{date.toLocaleDateString()}</td>
                       <td className="py-2 px-3">{description}</td>
                       <td className={`py-2 px-3 text-right font-medium ${amount < 0 ? 'text-red-600' : 'text-green-600'}`}>
-                        ₹{Math.abs(amount).toLocaleString()}
+                        {currencySymbol}{Math.abs(amount).toLocaleString()}
                       </td>
                       <td className="py-2 px-3">
                         <Badge variant="outline" className="bg-gray-100">

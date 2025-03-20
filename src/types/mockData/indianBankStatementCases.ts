@@ -22,7 +22,8 @@ export const indianBankStatementCases: CaseItem[] = [
     email: "rajesh.kumar@example.com",
     phone: "+91 98765 43210",
     location: "Mumbai, India",
-    reasoning: "The customer shows consistent salary credits from a verified IT company employer. Expenses are well-managed with regular payments for utilities, EMIs, and household expenses. The account maintains a healthy balance with good savings patterns. No suspicious transactions detected. Automated approval is recommended based on the stable financial profile.",
+    currency: "₹ (INR)",
+    reasoning: "The customer shows consistent salary credits from a verified IT company employer. Expenses are well-managed with regular UPI payments for utilities, EMIs, and household expenses. The account maintains a healthy balance with good savings patterns. Several recurring UPI transactions to verified billers indicate responsible financial behavior. No suspicious transactions detected. Automated approval is recommended based on the stable financial profile.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -45,6 +46,7 @@ export const indianBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["UPI", "IMPS", "NEFT", "Credit Card", "Debit Card"],
     anomalyFlags: [],
     documents: [
       {
@@ -75,7 +77,8 @@ export const indianBankStatementCases: CaseItem[] = [
     email: "priya.sharma@example.com",
     phone: "+91 87654 32109",
     location: "Delhi, India",
-    reasoning: "The customer has a combination of salary income and business receipts. While the salary component is consistent, there are multiple cash deposits of varying amounts that require verification. The overall cash flow is healthy, but the source of cash deposits needs clarification. Manual review recommended to verify the nature and source of the cash deposits.",
+    currency: "₹ (INR)",
+    reasoning: "The customer has a combination of salary income and business receipts. While the salary component is consistent, there are multiple cash deposits of varying amounts that require verification. UPI transactions show normal spending patterns but high volume of QR code payments at unverified merchants. The overall cash flow is healthy, but the source of cash deposits and certain UPI transfers needs clarification. Manual review recommended to verify the nature and source of the cash deposits and unusual UPI transactions.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -98,10 +101,12 @@ export const indianBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["UPI", "IMPS", "Cash Deposits", "Debit Card"],
     anomalyFlags: [
       "Multiple cash deposits detected",
       "Inconsistent transaction patterns",
-      "Mixed business and personal transactions"
+      "Mixed business and personal transactions",
+      "High volume of UPI transactions to unverified recipients"
     ],
     documents: [
       {
@@ -132,7 +137,8 @@ export const indianBankStatementCases: CaseItem[] = [
     email: "amit.patel@example.com",
     phone: "+91 76543 21098",
     location: "Bangalore, India",
-    reasoning: "The customer's bank statements show multiple risk factors including frequent large cash transactions, minimal digital footprint, and significant unexplained deposits. The account shows irregular activity patterns with several high-value transactions without clear business purpose. Income source verification failed due to inconsistencies. Automatic rejection recommended based on multiple high-risk indicators.",
+    currency: "₹ (INR)",
+    reasoning: "The customer's bank statements show multiple risk factors including frequent large cash transactions, suspicious UPI payments to multiple unverified accounts, and significant unexplained deposits. The account shows irregular activity patterns with several high-value UPI transactions without clear business purpose. Income source verification failed due to inconsistencies. Automatic rejection recommended based on multiple high-risk indicators including rapid fund movement through UPI channels.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -155,12 +161,14 @@ export const indianBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["UPI", "Cash Transactions", "RTGS"],
     anomalyFlags: [
       "Large unexplained deposits",
       "Frequent cash transactions exceeding ₹50,000",
       "Minimal digital transaction history",
       "Inconsistent income patterns",
-      "High-value round-figure transactions"
+      "High-value round-figure transactions",
+      "Suspicious UPI transfers to multiple unknown accounts"
     ],
     documents: [
       {

@@ -22,7 +22,8 @@ export const indonesiaBankStatementCases: CaseItem[] = [
     email: "budi.santoso@example.com",
     phone: "+62 812 3456 7890",
     location: "Jakarta, Indonesia",
-    reasoning: "The customer shows consistent salary deposits from a verified technology company. The spending patterns align with the customer profile and include regular payments for utilities, loans, and household expenses. The account maintains appropriate balances with no unusual transaction activity.",
+    currency: "Rp (IDR)",
+    reasoning: "The customer shows consistent salary deposits from a verified technology company. The spending patterns align with the customer profile and include regular payments for utilities, loans, and household expenses. Regular QRIS and GoPay digital transactions for daily expenses show consistent spending patterns. The account maintains appropriate balances with no unusual transaction activity.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -45,6 +46,7 @@ export const indonesiaBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["QRIS", "GoPay", "Dana", "OVO", "Bank Transfer"],
     anomalyFlags: [],
     documents: [
       {
@@ -75,7 +77,8 @@ export const indonesiaBankStatementCases: CaseItem[] = [
     email: "siti.rahayu@example.com",
     phone: "+62 857 1234 5678",
     location: "Surabaya, Indonesia",
-    reasoning: "The customer has multiple income sources with both regular salary deposits and frequent business-related income from various sources. While the overall cash flow appears healthy, the diverse income sources require verification to ensure they align with the customer's declared business activities.",
+    currency: "Rp (IDR)",
+    reasoning: "The customer has multiple income sources with both regular salary deposits and frequent business-related income from various sources. High volume of GoPay and OVO transactions with unusually large transfers between e-wallet accounts. While the overall cash flow appears healthy, the diverse income sources require verification to ensure they align with the customer's declared business activities.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -98,10 +101,12 @@ export const indonesiaBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["QRIS", "GoPay", "OVO", "Bank Transfer", "ATM Withdrawal"],
     anomalyFlags: [
       "Multiple income sources requiring verification",
       "Business-related deposits from diverse sources",
-      "Mixed personal and business transactions"
+      "Mixed personal and business transactions",
+      "Frequent movements between multiple e-wallet accounts"
     ],
     documents: [
       {

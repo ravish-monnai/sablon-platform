@@ -22,7 +22,8 @@ export const usaBankStatementCases: CaseItem[] = [
     email: "james.wilson@example.com",
     phone: "+1 (415) 555-3892",
     location: "San Francisco, USA",
-    reasoning: "The customer shows consistent direct deposits from a verified employer with stable monthly income. All expenses are well categorized with regular bill payments and no suspicious transactions. The account maintains healthy reserves and shows responsible financial behavior.",
+    currency: "$ (USD)",
+    reasoning: "The customer shows consistent direct deposits from a verified employer with stable monthly income. All expenses are well categorized with regular bill payments via ACH transfers and no suspicious transactions. Zelle transfers are limited to known contacts. The account maintains healthy reserves and shows responsible financial behavior with consistent credit card payments.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -45,6 +46,7 @@ export const usaBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["ACH", "Credit Card", "Debit Card", "Zelle", "Check"],
     anomalyFlags: [],
     documents: [
       {
@@ -75,7 +77,8 @@ export const usaBankStatementCases: CaseItem[] = [
     email: "jennifer.m@example.com",
     phone: "+1 (312) 555-7261",
     location: "Chicago, USA",
-    reasoning: "The customer has normal income patterns but several large transfers to external accounts require verification. While most expenses appear regular, the recent large outflows need explanation. The overall account is in good standing but the destination of large transfers should be confirmed.",
+    currency: "$ (USD)",
+    reasoning: "The customer has normal income patterns but several large wire transfers and Zelle payments to external accounts require verification. While most expenses appear regular with typical ACH payments for bills, the recent large outflows need explanation. Venmo transfers to multiple recipients in short timeframes raise questions. The overall account is in good standing but the destination of large transfers should be confirmed.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -98,10 +101,12 @@ export const usaBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["ACH", "Zelle", "Venmo", "Wire Transfer", "Credit Card"],
     anomalyFlags: [
       "Multiple large transfers to external accounts",
       "Unusual pattern in fund movement",
-      "Recent change in transaction behavior"
+      "Recent change in transaction behavior",
+      "High volume of Zelle/Venmo transfers"
     ],
     documents: [
       {

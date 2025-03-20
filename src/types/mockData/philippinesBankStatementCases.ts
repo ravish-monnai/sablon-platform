@@ -22,7 +22,8 @@ export const philippinesBankStatementCases: CaseItem[] = [
     email: "manuel.santos@example.com",
     phone: "+63 917 123 4567",
     location: "Manila, Philippines",
-    reasoning: "The customer demonstrates stable income with regular salary credits from a verified employer. The spending pattern shows consistent bill payments and normal household expenses. The account shows good financial management with appropriate reserves and no questionable transactions.",
+    currency: "₱ (PHP)",
+    reasoning: "The customer demonstrates stable income with regular salary credits from a verified employer. The spending pattern shows consistent bill payments through InstaPay and PESONet transfers for utilities and normal household expenses. GCash and Maya digital wallet transactions match expected spending patterns. The account shows good financial management with appropriate reserves and no questionable transactions.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -45,6 +46,7 @@ export const philippinesBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["InstaPay", "PESONet", "GCash", "Maya", "QR Ph"],
     anomalyFlags: [],
     documents: [
       {
@@ -75,7 +77,8 @@ export const philippinesBankStatementCases: CaseItem[] = [
     email: "maria.reyes@example.com",
     phone: "+63 919 876 5432",
     location: "Cebu, Philippines",
-    reasoning: "The customer receives regular overseas remittances which form a significant portion of their income. While remittances are common in the Philippines, the amounts and frequency require verification against the customer's profile. Most expenses appear normal but there are occasional large withdrawals that need explanation.",
+    currency: "₱ (PHP)",
+    reasoning: "The customer receives regular overseas remittances which form a significant portion of their income. Frequent GCash cash-in and cash-out transactions of varying amounts. While remittances are common in the Philippines, the amounts and frequency require verification against the customer's profile. Most expenses appear normal but there are occasional large withdrawals and multiple transfers between e-wallets like GCash and Maya that need explanation.",
     decisionFactors: [
       {
         factor: "Income Verification",
@@ -98,10 +101,12 @@ export const philippinesBankStatementCases: CaseItem[] = [
         weight: 0.15
       }
     ],
+    paymentMethods: ["InstaPay", "GCash", "Maya", "Western Union", "Cash Withdrawals"],
     anomalyFlags: [
       "Regular overseas remittances requiring verification",
       "Occasional large cash withdrawals",
-      "Multiple conversion transactions"
+      "Multiple conversion transactions",
+      "Frequent e-wallet transfers between GCash and Maya accounts"
     ],
     documents: [
       {
