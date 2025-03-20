@@ -7,11 +7,19 @@
 export const getDefaultLabelForType = (type: string): string => {
   switch (type) {
     case 'datasource':
-      return 'Data Source';
+      return 'Input Data';
+    case 'datastore':
+      return 'Data Store';
+    case 'transformation':
+      return 'Data Transformation';
     case 'model':
       return 'ML Model';
     case 'rule':
       return 'Decision Rule';
+    case 'case':
+      return 'Case Generation';
+    case 'output':
+      return 'Output Response';
     case 'notification':
       return 'Notification';
     case 'alert':
@@ -27,11 +35,19 @@ export const getDefaultLabelForType = (type: string): string => {
 export const getDefaultDescriptionForType = (type: string): string => {
   switch (type) {
     case 'datasource':
-      return 'Source of data for the journey';
+      return 'Secure input data source';
+    case 'datastore':
+      return 'Storage for journey data';
+    case 'transformation':
+      return 'Transform data for processing';
     case 'model':
       return 'Machine learning model';
     case 'rule':
       return 'Decision rule logic';
+    case 'case':
+      return 'Generate case for review';
+    case 'output':
+      return 'Secure output response';
     case 'notification':
       return 'Send notification to user';
     case 'alert':

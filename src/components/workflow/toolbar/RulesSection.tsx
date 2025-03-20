@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GitBranch, BarChart, ArrowRightLeft, Calculator } from 'lucide-react';
+import { GitBranch, BarChart, ArrowRightLeft, Calculator, Workflow, Filter } from 'lucide-react';
 import { ToolbarSectionProps } from './types';
 
 export const getRulesSection = (): ToolbarSectionProps => {
@@ -20,7 +20,7 @@ export const getRulesSection = (): ToolbarSectionProps => {
     { 
       type: "rule", 
       label: "Conditional Rule", 
-      icon: <GitBranch className="text-blue-600" size={16} />, 
+      icon: <Filter className="text-blue-600" size={16} />, 
       data: { ruleType: "conditional_rule" } 
     },
     { 
@@ -38,8 +38,8 @@ export const getRulesSection = (): ToolbarSectionProps => {
   ];
 
   return {
-    title: "Rules",
-    icon: <GitBranch className="text-blue-600 mr-2" size={16} />,
+    title: "Rule Builder",
+    icon: <Workflow className="text-blue-600 mr-2" size={16} />,
     items: rules
   };
 };

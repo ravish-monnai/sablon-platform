@@ -51,12 +51,19 @@ const DraggableItem: React.FC<DragItemProps> = ({ type, icon, label, data = {} }
 // Helper function to get background color based on type for the drag preview
 const getBackgroundColor = (type: string): string => {
   switch(type) {
-    case 'rule':
-      return '#3b82f6'; // blue
-    case 'model':
-      return '#e879f9'; // pink
     case 'datasource':
       return '#ffcc1d'; // yellow
+    case 'datastore':
+    case 'transformation':
+      return '#10b981'; // emerald
+    case 'model':
+      return '#e879f9'; // pink
+    case 'rule':
+      return '#3b82f6'; // blue
+    case 'case':
+      return '#818cf8'; // indigo
+    case 'output':
+      return '#f97316'; // orange
     case 'notification':
       return '#22c55e'; // green
     case 'alert':
@@ -71,12 +78,19 @@ const getBackgroundColor = (type: string): string => {
 // Helper function to get icon color
 const getIconColor = (type: string): string => {
   switch(type) {
-    case 'rule':
-      return '#3b82f6'; // blue
-    case 'model':
-      return '#e879f9'; // pink
     case 'datasource':
       return '#ffcc1d'; // yellow
+    case 'datastore':
+    case 'transformation':
+      return '#10b981'; // emerald
+    case 'model':
+      return '#e879f9'; // pink
+    case 'rule':
+      return '#3b82f6'; // blue
+    case 'case':
+      return '#818cf8'; // indigo
+    case 'output':
+      return '#f97316'; // orange
     case 'notification':
       return '#22c55e'; // green
     case 'alert':
