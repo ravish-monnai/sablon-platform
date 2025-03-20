@@ -26,52 +26,65 @@ interface CaseListProps {
 }
 
 const CaseList: React.FC<CaseListProps> = ({ cases, onSelectCase }) => {
-  // Helper function to determine decision badge variant
-  const getDecisionBadgeProps = (decision?: string) => {
-    if (!decision) return { variant: "outline" as const, icon: null };
+  // Helper function to determine decision badge props based on the decision status
+  const getDecisionBadge = (decision?: string) => {
+    if (!decision) return <Badge variant="outline">Not Processed</Badge>;
     
     switch(decision) {
       case "Approved":
-        return { 
-          variant: "success" as const, 
-          icon: <CheckCircle className="h-3 w-3 mr-1" /> 
-        };
+        return (
+          <Badge variant="success" className="flex items-center gap-1">
+            <CheckCircle className="h-3 w-3" /> 
+            Approved
+          </Badge>
+        );
       case "Rejected":
-        return { 
-          variant: "destructive" as const, 
-          icon: <AlertTriangle className="h-3 w-3 mr-1" /> 
-        };
+        return (
+          <Badge variant="destructive" className="flex items-center gap-1">
+            <AlertTriangle className="h-3 w-3" /> 
+            Rejected
+          </Badge>
+        );
       case "Pending Review":
-        return { 
-          variant: "warning" as const, 
-          icon: <Clock className="h-3 w-3 mr-1" /> 
-        };
+        return (
+          <Badge variant="warning" className="flex items-center gap-1">
+            <Clock className="h-3 w-3" /> 
+            Pending Review
+          </Badge>
+        );
       default:
-        return { 
-          variant: "outline" as const, 
-          icon: null 
-        };
+        return <Badge variant="outline">{decision}</Badge>;
     }
   };
 
+  // Helper function to display risk level with appropriate styling
+  const getRiskBadge = (risk: string) => {
+    const isLowRisk = risk.toLowerCase().includes("low");
+    return (
+      <Badge className={isLowRisk ? 
+        "bg-green-100 text-green-800 hover:bg-green-100" :
+        "bg-red-100 text-red-800 hover:bg-red-100"}>
+        {risk}
+      </Badge>
+    );
+  };
+
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>Case ID</TableHead>
-          <TableHead>Customer</TableHead>
-          <TableHead>Bank</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead>Risk Level</TableHead>
-          <TableHead>Decision</TableHead>
-          <TableHead>Action</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {cases.map((caseItem) => {
-          const { variant, icon } = getDecisionBadgeProps(caseItem.decision);
-          
-          return (
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Case ID</TableHead>
+            <TableHead>Customer</TableHead>
+            <TableHead>Bank</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Risk Level</TableHead>
+            <TableHead>Decision</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {cases.map((caseItem) => (
             <TableRow key={caseItem.id}>
               <TableCell className="font-medium">{caseItem.id}</TableCell>
               <TableCell>
@@ -88,21 +101,10 @@ const CaseList: React.FC<CaseListProps> = ({ cases, onSelectCase }) => {
                 </div>
               </TableCell>
               <TableCell>
-                <Badge className={caseItem.status === "success" ? 
-                  "bg-green-100 text-green-800 hover:bg-green-100" :
-                  "bg-red-100 text-red-800 hover:bg-red-100"}>
-                  {caseItem.risk}
-                </Badge>
+                {getRiskBadge(caseItem.risk)}
               </TableCell>
               <TableCell>
-                {caseItem.decision ? (
-                  <Badge variant={variant} className="flex items-center gap-1">
-                    {icon}
-                    {caseItem.decision}
-                  </Badge>
-                ) : (
-                  <Badge variant="outline">Not Processed</Badge>
-                )}
+                {getDecisionBadge(caseItem.decision)}
               </TableCell>
               <TableCell>
                 <Button 
@@ -116,10 +118,10 @@ const CaseList: React.FC<CaseListProps> = ({ cases, onSelectCase }) => {
                 </Button>
               </TableCell>
             </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 };
 
