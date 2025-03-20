@@ -4,9 +4,9 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useMarket } from "@/contexts/MarketContext";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
-import JourneyCard, { Journey } from "./JourneyCard";
+import JourneyCard from "./JourneyCard";
 import JourneyDetail from "./JourneyDetail";
-import { journeysByMarket } from "./data/journeys";
+import { Journey, journeysByMarket } from "./data/journeys";
 import JourneyTemplateChat from "./JourneyTemplateChat";
 import { useNavigate } from "react-router-dom";
 
@@ -43,7 +43,7 @@ const LiveJourneys = () => {
   };
   
   if (activeJourney) {
-    return <JourneyDetail journey={activeJourney} onBack={handleBack} />;
+    return <JourneyDetail selectedJourney={activeJourney.id} onBackToList={handleBack} />;
   }
   
   return (
@@ -71,7 +71,7 @@ const LiveJourneys = () => {
           <JourneyCard 
             key={journey.id} 
             journey={journey} 
-            onClick={() => handleJourneyClick(journey)} 
+            onViewDetails={() => handleJourneyClick(journey)} 
           />
         ))}
         
