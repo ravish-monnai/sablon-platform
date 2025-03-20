@@ -107,7 +107,7 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
               <span className="text-blue-600 font-medium mr-1">Monnai</span> 
               <span>Journey Builder</span>
             </div>
-            <p className="text-gray-500 text-[10px] mt-1">Drag and drop nodes to create journey</p>
+            <p className="text-gray-500 text-[10px] mt-1">Double-click on nodes to configure</p>
           </div>
         </Panel>
       </ReactFlow>

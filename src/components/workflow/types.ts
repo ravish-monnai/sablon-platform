@@ -11,7 +11,16 @@ export interface NodeData {
   modelType?: string;
   color?: string;
   status?: string;
+  rules?: AnalysisRule[];
   [key: string]: unknown;
+}
+
+export interface AnalysisRule {
+  id: string;
+  condition: string;
+  operator: string;
+  value: string;
+  action: string;
 }
 
 export interface DragItemProps {

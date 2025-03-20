@@ -26,6 +26,7 @@ const WorkflowEditor: React.FC = () => {
     handleEditJourney,
     handleBackToList,
     handleUpdateNode,
+    saveJourney,
     setNodes,
     setEdges
   } = useJourneyState();
@@ -60,6 +61,7 @@ const WorkflowEditor: React.FC = () => {
       onNodeDragStart={onNodeDragStart}
       togglePreviewMode={togglePreviewMode}
       onBackToList={handleBackToList}
+      onSaveJourney={saveJourney}
       nodeTypes={nodeTypes}
       onUpdateNode={handleUpdateNode}
     />

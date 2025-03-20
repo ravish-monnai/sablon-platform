@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { GitBranch, BarChart } from 'lucide-react';
+import { GitBranch, BarChart, ArrowRightLeft, Calculator } from 'lucide-react';
 import { ToolbarSectionProps } from './types';
 
 export const getRulesSection = (): ToolbarSectionProps => {
@@ -22,6 +22,18 @@ export const getRulesSection = (): ToolbarSectionProps => {
       label: "Conditional Rule", 
       icon: <GitBranch className="text-blue-600" size={16} />, 
       data: { ruleType: "conditional_rule" } 
+    },
+    { 
+      type: "rule", 
+      label: "Comparative Rule", 
+      icon: <ArrowRightLeft className="text-blue-600" size={16} />, 
+      data: { ruleType: "comparative_rule" } 
+    },
+    { 
+      type: "rule", 
+      label: "Calculation Rule", 
+      icon: <Calculator className="text-blue-600" size={16} />, 
+      data: { ruleType: "calculation_rule" } 
     },
   ];
 

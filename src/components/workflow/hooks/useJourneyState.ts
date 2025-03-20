@@ -85,6 +85,24 @@ export function useJourneyState() {
     setIsPreviewMode(false);
   };
 
+  const saveJourney = () => {
+    if (!activeJourney) {
+      toast.error("No active journey to save");
+      return;
+    }
+
+    // In a real application, this would save to the backend
+    // For now, just show a toast
+    toast.success(`Journey saved with ${nodes.length} nodes and ${edges.length} edges`);
+    
+    // Log the full configuration for debugging
+    console.log("Journey saved:", {
+      nodes,
+      edges,
+      activeJourney
+    });
+  };
+
   // Determine journey name and description
   const journeyName = activeJourney && journeyWorkflowConfigurations[activeJourney] 
     ? journeyWorkflowConfigurations[activeJourney].name 
@@ -111,6 +129,7 @@ export function useJourneyState() {
     handleEditJourney,
     handleBackToList,
     handleUpdateNode,
+    saveJourney,
     setNodes,
     setEdges
   };

@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { NodeProps } from '@xyflow/react';
+import { Badge } from '@/components/ui/badge';
 import { NodeData } from '../types';
 import { getNodeColorByType, getStatusBorder } from '../utils/nodeStyles';
 
@@ -11,6 +12,7 @@ const CustomNode = ({ data, id, selected }: NodeProps) => {
   // Use the same styling as in the journey steps tab
   const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
   const statusBorder = getStatusBorder(nodeData.status);
+  const hasRules = nodeData.rules && nodeData.rules.length > 0;
   
   return (
     <div 
@@ -33,9 +35,21 @@ const CustomNode = ({ data, id, selected }: NodeProps) => {
         <div className="text-xs text-white opacity-80 mt-1 text-center line-clamp-2">{nodeData.description}</div>
       )}
       
+      {/* Rules indicator badge */}
+      {hasRules && (
+        <Badge className="mt-2 bg-white text-black border border-white">
+          {nodeData.rules?.length} {nodeData.rules?.length === 1 ? 'Rule' : 'Rules'}
+        </Badge>
+      )}
+      
       {/* Node identifier badge */}
       <div className="absolute -top-2 -right-2 bg-white rounded-full w-6 h-6 flex items-center justify-center border border-gray-200 shadow-sm">
         <span className="text-xs font-bold">{id && typeof id === 'string' ? id.split('-')[1] || '1' : '1'}</span>
+      </div>
+      
+      {/* Edit instruction */}
+      <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-30 text-white text-[8px] text-center py-1 rounded-b-sm">
+        Double-click to edit
       </div>
     </div>
   );

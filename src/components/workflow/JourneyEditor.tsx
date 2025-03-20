@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { List } from 'lucide-react';
+import { List, Save } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import WorkflowToolbar from './WorkflowToolbar';
 import WorkflowFlow from './WorkflowFlow';
@@ -22,6 +22,7 @@ interface JourneyEditorProps {
   onNodeDragStart: any;
   togglePreviewMode: () => void;
   onBackToList: () => void;
+  onSaveJourney?: () => void;
   nodeTypes: Record<string, React.ComponentType<any>>;
   onUpdateNode: (nodeId: string, data: NodeData) => void;
 }
@@ -41,6 +42,7 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
   onNodeDragStart,
   togglePreviewMode,
   onBackToList,
+  onSaveJourney,
   nodeTypes,
   onUpdateNode
 }) => {
@@ -66,20 +68,33 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
 
   return (
     <div className="h-full">
-      <Button 
-        variant="ghost" 
-        className="mb-4 pl-0" 
-        onClick={onBackToList}
-      >
-        <List className="mr-1 h-4 w-4" />
-        Back to Journeys
-      </Button>
+      <div className="flex justify-between items-center mb-4">
+        <Button 
+          variant="ghost" 
+          className="pl-0" 
+          onClick={onBackToList}
+        >
+          <List className="mr-1 h-4 w-4" />
+          Back to Journeys
+        </Button>
+        
+        <Button 
+          variant="outline"
+          onClick={onSaveJourney}
+          className="flex items-center gap-1"
+        >
+          <Save className="h-4 w-4" />
+          Save Journey
+        </Button>
+      </div>
+      
       <div className="flex justify-between mb-2">
         <WorkflowToolbar
           isPreviewMode={isPreviewMode}
           togglePreviewMode={togglePreviewMode}
         />
       </div>
+      
       <div className="border rounded-md p-4 bg-gray-50 mb-4">
         <h3 className="text-lg font-semibold mb-2">
           {journeyName}
@@ -88,6 +103,7 @@ const JourneyEditor: React.FC<JourneyEditorProps> = ({
           {journeyDescription}
         </p>
       </div>
+      
       <WorkflowFlow
         nodes={nodes}
         edges={edges}
