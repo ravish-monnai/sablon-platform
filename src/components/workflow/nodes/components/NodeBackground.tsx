@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { NodeData } from '../../types';
 
@@ -7,7 +6,8 @@ interface NodeBackgroundProps {
   selected: boolean;
 }
 
-const NodeBackground: React.FC<NodeBackgroundProps> = ({ data, selected }) => {
+// Instead of returning an object, we'll make this a hook that returns style values
+export const useNodeBackground = ({ data, selected }: NodeBackgroundProps): { backgroundColor: string, borderColor: string } => {
   // Determine background color based on type or explicit color
   const getBgColor = () => {
     if (data.color) return data.color;
@@ -40,6 +40,14 @@ const NodeBackground: React.FC<NodeBackgroundProps> = ({ data, selected }) => {
   };
 
   return { backgroundColor: getBgColor(), borderColor: getBorderColor() };
+};
+
+// We'll keep the component for compatibility but it's just a wrapper around the hook
+const NodeBackground: React.FC<NodeBackgroundProps> = (props) => {
+  // The component doesn't actually render anything visible
+  // It's just a helper to compute styles
+  const styles = useNodeBackground(props);
+  return null;
 };
 
 export default NodeBackground;

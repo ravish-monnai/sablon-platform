@@ -4,7 +4,7 @@ import { Handle, Position } from '@xyflow/react';
 import { NodeData } from '../types';
 import NodeHeader from './components/NodeHeader';
 import NodeDetails from './components/NodeDetails';
-import NodeBackground from './components/NodeBackground';
+import { useNodeBackground } from './components/NodeBackground';
 
 interface CustomNodeProps {
   id: string;
@@ -29,8 +29,8 @@ const CustomNode: React.FC<CustomNodeProps> = ({ id, data, selected }) => {
     setIsExpanded(!isExpanded);
   };
 
-  // Get styling from NodeBackground
-  const { backgroundColor, borderColor } = NodeBackground({ data, selected });
+  // Get styling from useNodeBackground hook
+  const { backgroundColor, borderColor } = useNodeBackground({ data, selected });
 
   return (
     <div 
