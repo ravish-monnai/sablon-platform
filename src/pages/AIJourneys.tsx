@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
 import LiveJourneys from "@/components/ai-journeys/LiveJourneys";
 import FeatureTag from "@/components/ui/feature-tag";
+import JourneyTemplateChat from "@/components/ai-journeys/JourneyTemplateChat";
 
 const AIJourneys = () => {
   const location = useLocation();
@@ -34,6 +35,14 @@ const AIJourneys = () => {
     }
   }, [location.search]);
   
+  const handleCreateTemplate = (templateType: string, description: string) => {
+    console.log(`Creating template: ${templateType} - ${description}`);
+    // Make sure we're on the workflow tab
+    if (selectedTab !== "workflow") {
+      handleTabChange("workflow");
+    }
+  };
+  
   return (
     <div className="container mx-auto">
       <h1 className="text-3xl font-bold mb-6">AI Journeys</h1>
@@ -48,6 +57,8 @@ const AIJourneys = () => {
         </TabsList>
         
         <TabsContent value="workflow" className="mt-6">
+          {/* Add the Journey Template Chat component to the Journey Builder tab */}
+          <JourneyTemplateChat onCreateTemplate={handleCreateTemplate} />
           <div className="h-[80vh]">
             <WorkflowEditor />
           </div>

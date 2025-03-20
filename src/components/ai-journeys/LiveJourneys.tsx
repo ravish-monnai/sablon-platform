@@ -7,7 +7,6 @@ import { Filter } from "lucide-react";
 import JourneyCard from "./JourneyCard";
 import JourneyDetail from "./JourneyDetail";
 import { Journey, journeysByMarket } from "./data/journeys";
-import JourneyTemplateChat from "./JourneyTemplateChat";
 import { useNavigate } from "react-router-dom";
 
 const LiveJourneys = () => {
@@ -62,9 +61,6 @@ const LiveJourneys = () => {
           Filter
         </Button>
       </div>
-      
-      {/* Add the Journey Template Chat component */}
-      <JourneyTemplateChat onCreateTemplate={handleCreateTemplate} />
       
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {journeys.map((journey) => (
