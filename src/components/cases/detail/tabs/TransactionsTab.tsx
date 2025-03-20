@@ -71,7 +71,7 @@ const TransactionsTab: React.FC<TransactionsTabProps> = ({ caseData }) => {
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="category" />
                 <YAxis />
-                <Tooltip />
+                <Tooltip formatter={(value) => [`${currencySymbol}${value.toLocaleString()}`, "Amount"]} />
                 <Bar 
                   dataKey="amount" 
                   fill="#9b87f5" 
