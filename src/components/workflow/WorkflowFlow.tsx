@@ -1,5 +1,5 @@
 
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useRef } from 'react';
 import { 
   ReactFlow, 
   Background, 
@@ -45,6 +45,8 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
 }) => {
   const [configNode, setConfigNode] = useState<Node | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isDraggingOver, setIsDraggingOver] = useState(false);
+  const reactFlowWrapper = useRef<HTMLDivElement>(null);
 
   const edgeOptions = getEdgeOptions();
 
@@ -52,6 +54,29 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
     ...nodeTypes,
     default: CustomNode
   } as NodeTypes;
+
+  const handleDragOver = (event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+    setIsDraggingOver(true);
+    if (onDragOver) onDragOver(event);
+  };
+
+  const handleDragLeave = () => {
+    setIsDraggingOver(false);
+  };
+
+  const handleDrop = (event: React.DragEvent) => {
+    setIsDraggingOver(false);
+    if (onDrop) onDrop(event);
+
+    // Show a brief success toast feedback
+    const type = event.dataTransfer.getData('application/reactflow/type');
+    if (type) {
+      const nodeLabel = type.charAt(0).toUpperCase() + type.slice(1);
+      toast.success(`Added ${nodeLabel} node to workflow`);
+    }
+  };
 
   const onNodeClick = useCallback((event: React.MouseEvent, node: Node) => {
     console.log("Node clicked:", node);
@@ -76,15 +101,28 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
   };
 
   return (
-    <div className="h-[450px] border rounded-md overflow-hidden">
+    <div 
+      className={`h-[450px] border rounded-md overflow-hidden transition-colors duration-200 ${
+        isDraggingOver ? 'bg-blue-50 border-blue-300 shadow-inner' : 'bg-white'
+      }`}
+      ref={reactFlowWrapper}
+    >
+      {isDraggingOver && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+          <div className="bg-white/90 py-2 px-4 rounded-md shadow-md">
+            <span className="text-blue-600 font-medium">Drop to add node</span>
+          </div>
+        </div>
+      )}
       <ReactFlow
         nodes={nodes}
         edges={edges}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
-        onDrop={onDrop}
-        onDragOver={onDragOver}
+        onDrop={handleDrop}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
         onNodeDragStart={onNodeDragStart}
         onNodeClick={onNodeClick}
         onNodeDoubleClick={onNodeDoubleClick}
@@ -111,7 +149,9 @@ const WorkflowFlow: React.FC<WorkflowFlowProps> = ({
               <span className="text-blue-600 font-medium mr-1">Monnai</span> 
               <span>Journey Builder</span>
             </div>
-            <p className="text-gray-500 text-[10px] mt-1">Click on nodes to configure</p>
+            <p className="text-gray-500 text-[10px] mt-1">
+              Drag items from toolbar & drop here. Click on nodes to configure.
+            </p>
           </div>
         </Panel>
       </ReactFlow>

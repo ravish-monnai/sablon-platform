@@ -20,9 +20,11 @@ export function useWorkflowDragDrop(setNodes: any) {
 
       // Get position where the element was dropped
       const reactFlowBounds = event.currentTarget.getBoundingClientRect();
+      
+      // Calculate position with offset for better visual placement
       const position = {
-        x: event.clientX - reactFlowBounds.left,
-        y: event.clientY - reactFlowBounds.top,
+        x: event.clientX - reactFlowBounds.left - 75, // Center the node horizontally
+        y: event.clientY - reactFlowBounds.top - 20,  // Adjust vertical position
       };
 
       // Get any additional data that was passed with the dragged item
@@ -36,10 +38,12 @@ export function useWorkflowDragDrop(setNodes: any) {
         console.error('Error parsing additional data:', error);
       }
 
-      // Generate a unique node ID
-      const newNodeId = `${type}-${Date.now()}`;
+      // Generate a unique node ID with more meaningful naming
+      const timestamp = Date.now();
+      const shortId = timestamp.toString().slice(-5);
+      const newNodeId = `${type}-${shortId}`;
 
-      // Create the new node
+      // Create the new node with enhanced visual feedback
       const newNode = {
         id: newNodeId,
         type: 'default',
@@ -51,13 +55,22 @@ export function useWorkflowDragDrop(setNodes: any) {
           description: getDefaultDescriptionForType(type),
           ...additionalData,
         },
+        // Add subtle animation effect for newly added nodes
+        style: { 
+          opacity: 0,
+          animation: 'fadeIn 0.3s ease-in-out forwards',
+        },
       };
 
       // Add the new node to the canvas
       setNodes((nds: any) => nds.concat(newNode));
       
-      // Show success toast
-      toast.success(`Added ${type} node to the journey`);
+      // Show detailed success toast with actionable hint
+      const nodeLabel = getDefaultLabelForType(type);
+      toast.success(`Added ${nodeLabel}`, {
+        description: "Click on the node to configure it",
+        duration: 3000,
+      });
     },
     [setNodes]
   );

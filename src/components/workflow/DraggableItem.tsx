@@ -14,31 +14,34 @@ const DraggableItem: React.FC<DragItemProps> = ({ type, icon, label, data = {} }
           event.dataTransfer.setData('application/reactflow/data', JSON.stringify(data));
         }
         
-        // Add visual feedback during drag
-        const dragImage = document.createElement('div');
-        dragImage.innerHTML = `
+        // Create a custom drag preview element
+        const previewEl = document.createElement('div');
+        previewEl.className = 'drag-preview';
+        previewEl.innerHTML = `
           <div style="
-            background-color: ${getBackgroundColor(type)};
-            color: white;
-            padding: 8px;
-            border-radius: 4px;
+            background-color: white;
+            color: #333;
+            padding: 12px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 12px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            gap: 10px;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border: 2px solid ${getNodeColor(type)};
+            min-width: 150px;
           ">
-            <span>${label}</span>
+            <div style="color: ${getNodeColor(type)};">${getIconHTML(type)}</div>
+            <span style="font-weight: 500;">${label}</span>
           </div>
         `;
-        document.body.appendChild(dragImage);
-        dragImage.style.position = 'absolute';
-        dragImage.style.top = '-1000px';
-        event.dataTransfer.setDragImage(dragImage, 20, 20);
+        
+        document.body.appendChild(previewEl);
+        event.dataTransfer.setDragImage(previewEl, 75, 25);
         
         // Remove the element after the drag operation
         setTimeout(() => {
-          document.body.removeChild(dragImage);
+          document.body.removeChild(previewEl);
         }, 0);
       }}
     >
@@ -48,8 +51,29 @@ const DraggableItem: React.FC<DragItemProps> = ({ type, icon, label, data = {} }
   );
 };
 
-// Helper function to get background color based on type for the drag preview
-const getBackgroundColor = (type: string): string => {
+// Helper function to get icon HTML for drag preview
+const getIconHTML = (type: string): string => {
+  switch(type) {
+    case 'datasource':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"></path><rect width="18" height="18" x="3" y="3" rx="2"></rect><path d="M9 9h1"></path><path d="M9 12h1"></path><path d="M9 15h1"></path></svg>';
+    case 'datastore':
+    case 'transformation':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v6a8 3 0 0 0 16 0V6"></path><path d="M4 12v6a8 3 0 0 0 16 0v-6"></path></svg>';
+    case 'model':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>';
+    case 'rule':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 14-5-5"></path><path d="m18 17-8-8"></path><path d="M8 17h9"></path><path d="M7 22h10"></path><path d="M2 12h5"></path><path d="M2 7h3"></path><path d="M2 17h3"></path></svg>';
+    case 'case':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>';
+    case 'output':
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 3 6 6m0 0-6 6"></path><path d="M12 19H3c0-4.2 3.1-8 7-8.7"></path></svg>';
+    default:
+      return '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><line x1="3.6" y1="9" x2="20.4" y2="9"></line><line x1="3.6" y1="15" x2="20.4" y2="15"></line><path d="M11.5 3a17 17 0 0 0 0 18"></path><path d="M12.5 3a17 17 0 0 1 0 18"></path></svg>';
+  }
+};
+
+// Helper function to get node color based on type
+const getNodeColor = (type: string): string => {
   switch(type) {
     case 'datasource':
       return '#ffcc1d'; // yellow

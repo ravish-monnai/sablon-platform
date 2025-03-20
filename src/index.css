@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -116,4 +115,45 @@
   .monnai-gradient-bg {
     @apply bg-gradient-to-r from-monnai-gradient-from via-monnai-gradient-via to-monnai-gradient-to;
   }
+}
+
+/* Workflow Drag & Drop Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom drag preview styling */
+.drag-preview {
+  position: absolute;
+  top: -1000px;
+  left: -1000px;
+  z-index: 9999;
+  pointer-events: none;
+}
+
+/* Visual indicator when dragging over drop zone */
+.drop-target-active {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: inset 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+/* Node highlight on hover for better discoverability */
+.react-flow__node:hover {
+  filter: brightness(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Node click animation for better feedback */
+.react-flow__node:active {
+  transform: scale(0.98);
+  filter: brightness(0.98);
 }
