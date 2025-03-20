@@ -17,8 +17,30 @@ interface NavigationProps {
   viewMode: "customer" | "internal";
 }
 
+// Define a clear interface for navigation items
+interface NavItem {
+  label: string;
+  path: string;
+  icon: React.FC<{ className?: string }>;
+  subItems?: SubItem[];
+  featureTag?: {
+    variant: "new" | "beta" | "updated" | "ai" | "premium";
+    label?: string;
+  };
+}
+
+interface SubItem {
+  label: string;
+  path: string;
+  icon?: React.FC<{ className?: string }>;
+  featureTag?: {
+    variant: "new" | "beta" | "updated" | "ai" | "premium";
+    label?: string;
+  };
+}
+
 const SidebarNavigation = ({ viewMode }: NavigationProps) => {
-  const customerNavItems = [
+  const customerNavItems: NavItem[] = [
     { label: "Dashboard", path: "/", icon: LayoutDashboard },
     { 
       label: "AI Journeys", 
@@ -28,13 +50,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         }
       ]
     },
@@ -46,13 +68,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         }
       ]
     },
@@ -62,13 +84,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
       label: "Cases", 
       path: "/cases", 
       icon: FileText,
-      featureTag: { variant: "new" as const }
+      featureTag: { variant: "new" }
     },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: Wallet },
   ];
   
-  const monnaiNavItems = [
+  const monnaiNavItems: NavItem[] = [
     { label: "Operations Dashboard", path: "/", icon: LayoutDashboard },
     { 
       label: "AI Journeys", 
@@ -78,13 +100,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         }
       ]
     },
@@ -96,13 +118,13 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
           icon: PlayCircle,
-          featureTag: { variant: "new" as const }
+          featureTag: { variant: "new" }
         }
       ]
     },
