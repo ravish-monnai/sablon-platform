@@ -35,18 +35,25 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
   onActionCase 
 }) => {
   // Helper function to get risk badge color - now using valid variant types
-  const getRiskBadgeVariant = (riskLevel?: string) => {
+  const getRiskBadgeVariant = (riskLevel?: string | null) => {
+    // Return default if riskLevel is null or undefined
     if (!riskLevel) return "outline";
     
-    switch (riskLevel.toLowerCase()) {
-      case 'low risk':
-        return "success";
-      case 'medium risk':
-        return "warning";
-      case 'high risk':
-        return "destructive";
-      default:
-        return "outline";
+    try {
+      switch (riskLevel.toLowerCase()) {
+        case 'low risk':
+          return "success";
+        case 'medium risk':
+          return "warning";
+        case 'high risk':
+          return "destructive";
+        default:
+          return "outline";
+      }
+    } catch (error) {
+      // In case of any error, return the default variant
+      console.error("Error processing risk level:", error);
+      return "outline";
     }
   };
 
@@ -83,8 +90,8 @@ const CaseListTable: React.FC<CaseListTableProps> = ({
           >
             <TableCell className="font-medium text-gray-700">{caseItem.id}</TableCell>
             <TableCell className="text-gray-700">{caseItem.customer}</TableCell>
-            <TableCell className="text-gray-700">{caseItem.bank}</TableCell>
-            <TableCell className="text-gray-700">{caseItem.date}</TableCell>
+            <TableCell className="text-gray-700">{caseItem.bank || "—"}</TableCell>
+            <TableCell className="text-gray-700">{caseItem.date || "—"}</TableCell>
             <TableCell>
               <Badge 
                 variant={getRiskBadgeVariant(caseItem.riskLevel)} 
