@@ -33,16 +33,26 @@ const Cases = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 bg-gray-50">
       <CasesHeader />
 
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="list">Case List</TabsTrigger>
-          <TabsTrigger value="manual-investigation">Manual Investigation</TabsTrigger>
+        <TabsList className="grid w-full grid-cols-2 bg-white shadow-sm border border-gray-100 rounded-lg">
+          <TabsTrigger 
+            value="list" 
+            className="data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+          >
+            Case List
+          </TabsTrigger>
+          <TabsTrigger 
+            value="manual-investigation" 
+            className="data-[state=active]:bg-[#9b87f5] data-[state=active]:text-white"
+          >
+            Manual Investigation
+          </TabsTrigger>
         </TabsList>
         
-        <TabsContent value="list" className="space-y-4">
+        <TabsContent value="list" className="space-y-4 mt-4">
           <CaseListView 
             filteredCases={filteredCases}
             filterType={filterType}
@@ -56,7 +66,7 @@ const Cases = () => {
           <BankStatementAnalyzer />
         </TabsContent>
         
-        <TabsContent value="manual-investigation">
+        <TabsContent value="manual-investigation" className="mt-4">
           <ManualInvestigationView />
         </TabsContent>
       </Tabs>

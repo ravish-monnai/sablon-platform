@@ -49,11 +49,11 @@ const CaseListView: React.FC<CaseListViewProps> = ({
 
   return (
     <Card className="bg-white shadow-sm border-gray-100">
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 bg-gray-50 rounded-t-lg">
         <FilterBar>
           <div>
-            <CardTitle className="text-xl">All Cases</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-xl text-gray-800">All Cases</CardTitle>
+            <CardDescription className="text-gray-500">
               Review and manage cases that require attention
             </CardDescription>
           </div>
@@ -64,10 +64,20 @@ const CaseListView: React.FC<CaseListViewProps> = ({
               onSearchChange={setSearchQuery}
               searchValue={searchQuery}
             />
-            <FilterButton icon={Filter} variant="outline" size="sm">
+            <FilterButton 
+              icon={Filter} 
+              variant="outline" 
+              size="sm" 
+              className="border-[#9b87f5] text-[#9b87f5] hover:bg-[#9b87f5]/10"
+            >
               Filter
             </FilterButton>
-            <FilterButton icon={Download} variant="outline" size="sm">
+            <FilterButton 
+              icon={Download} 
+              variant="outline" 
+              size="sm" 
+              className="border-[#9b87f5] text-[#9b87f5] hover:bg-[#9b87f5]/10"
+            >
               Export
             </FilterButton>
           </div>

@@ -1,30 +1,27 @@
 
 import React from "react";
-import { Link } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+import { 
+  Table, 
+  TableBody, 
+  TableCell, 
+  TableHead, 
+  TableHeader, 
+  TableRow 
 } from "@/components/ui/table";
-import {
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Eye,
-  MoreHorizontal,
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { CaseItem } from "@/types/cases";
+import { 
+  Eye, 
+  MoreHorizontal 
 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { CaseItem } from "@/types/caseTypes";
 
 interface CaseListTableProps {
   cases: CaseItem[];
@@ -32,166 +29,105 @@ interface CaseListTableProps {
   onActionCase: (caseData: CaseItem) => void;
 }
 
-const CaseListTable: React.FC<CaseListTableProps> = ({
-  cases,
+const CaseListTable: React.FC<CaseListTableProps> = ({ 
+  cases, 
   onViewCase,
-  onActionCase,
+  onActionCase 
 }) => {
-  if (cases.length === 0) {
-    return (
-      <div className="text-center py-10">
-        <p className="text-muted-foreground">No cases found matching your criteria.</p>
-      </div>
-    );
-  }
-
-  // Function to determine risk level badge variant
-  const getRiskLevelVariant = (riskLevel: string | undefined) => {
-    if (!riskLevel) return "outline";
-    
-    switch (riskLevel?.toLowerCase()) {
-      case "critical":
-      case "high":
-        return "destructive";
-      case "medium":
-        return "secondary";
-      case "low":
-        return "success";
+  // Helper function to get risk badge color
+  const getRiskBadgeVariant = (risk: string) => {
+    switch (risk.toLowerCase()) {
+      case 'low risk':
+        return 'outline-green';
+      case 'medium risk':
+        return 'outline-amber';
+      case 'high risk':
+        return 'outline-red';
       default:
-        return "outline";
+        return 'outline';
     }
   };
 
-  // Function to determine status badge color classes
-  const getStatusColorClass = (status: string) => {
+  // Helper function to get status badge color
+  const getStatusBadgeVariant = (status: string) => {
     switch (status.toLowerCase()) {
-      case "pending review":
-        return "bg-amber-100 text-amber-800";
-      case "approved":
-        return "bg-green-100 text-green-800";
-      case "rejected":
-        return "bg-red-100 text-red-800";
+      case 'success':
+        return 'success';
+      case 'failure':
+        return 'destructive';
       default:
-        return "";
+        return 'outline';
     }
-  };
-
-  // Function to get decision status icon
-  const getStatusIcon = (status: string) => {
-    switch (status.toLowerCase()) {
-      case "pending review":
-        return <Clock className="h-3 w-3 mr-1" />;
-      case "approved":
-        return <CheckCircle className="h-3 w-3 mr-1" />;
-      case "rejected":
-        return <AlertTriangle className="h-3 w-3 mr-1" />;
-      default:
-        return null;
-    }
-  };
-
-  // Function to normalize journey name display
-  const getJourneyDisplay = (journey: string | undefined): string => {
-    if (!journey) return "N/A";
-    
-    // Standardize bank statement journeys display
-    if (journey.toLowerCase().includes("bank") && 
-        journey.toLowerCase().includes("statement")) {
-      return "Bank Statement Analysis";
-    }
-    
-    return journey;
   };
 
   return (
-    <div className="rounded-md border overflow-hidden">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Case ID</TableHead>
-            <TableHead>Customer</TableHead>
-            <TableHead>Journey</TableHead>
-            <TableHead>Risk Level</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+    <Table>
+      <TableHeader>
+        <TableRow className="bg-gray-50 hover:bg-gray-100">
+          <TableHead className="w-[100px] text-gray-600">Case ID</TableHead>
+          <TableHead className="text-gray-600">Customer</TableHead>
+          <TableHead className="text-gray-600">Bank</TableHead>
+          <TableHead className="text-gray-600">Date</TableHead>
+          <TableHead className="text-gray-600">Risk</TableHead>
+          <TableHead className="text-gray-600">Status</TableHead>
+          <TableHead className="text-right text-gray-600">Actions</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {cases.map((caseItem) => (
+          <TableRow 
+            key={caseItem.id} 
+            className="hover:bg-gray-50 transition-colors"
+          >
+            <TableCell className="font-medium text-gray-700">{caseItem.id}</TableCell>
+            <TableCell className="text-gray-700">{caseItem.customer}</TableCell>
+            <TableCell className="text-gray-700">{caseItem.bank}</TableCell>
+            <TableCell className="text-gray-700">{caseItem.date}</TableCell>
+            <TableCell>
+              <Badge 
+                variant={getRiskBadgeVariant(caseItem.risk)} 
+                className="text-xs"
+              >
+                {caseItem.risk}
+              </Badge>
+            </TableCell>
+            <TableCell>
+              <Badge 
+                variant={getStatusBadgeVariant(caseItem.status)} 
+                className="text-xs"
+              >
+                {caseItem.status}
+              </Badge>
+            </TableCell>
+            <TableCell className="text-right">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="h-8 w-8 p-0">
+                    <span className="sr-only">Open menu</span>
+                    <MoreHorizontal className="h-4 w-4 text-gray-500" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                  <DropdownMenuItem 
+                    className="cursor-pointer"
+                    onSelect={() => onViewCase(caseItem.id)}
+                  >
+                    <Eye className="mr-2 h-4 w-4" /> View Details
+                  </DropdownMenuItem>
+                  <DropdownMenuItem 
+                    className="cursor-pointer"
+                    onSelect={() => onActionCase(caseItem)}
+                  >
+                    <MoreHorizontal className="mr-2 h-4 w-4" /> Case Actions
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
           </TableRow>
-        </TableHeader>
-        <TableBody>
-          {cases.map((caseItem) => {
-            // Check if this is a bank statement analysis case
-            const isBankStatementCase = caseItem.journey?.toLowerCase().includes("bank") && 
-                                       caseItem.journey?.toLowerCase().includes("statement");
-            
-            return (
-              <TableRow key={caseItem.id}>
-                <TableCell className="font-medium">{caseItem.id}</TableCell>
-                <TableCell>{caseItem.customer}</TableCell>
-                <TableCell>
-                  {caseItem.journey ? (
-                    <Badge variant="outline" className="font-normal">
-                      {getJourneyDisplay(caseItem.journey)}
-                    </Badge>
-                  ) : (
-                    "N/A"
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    variant={getRiskLevelVariant(caseItem.riskLevel)}
-                    className="flex w-fit items-center gap-1"
-                  >
-                    {caseItem.riskLevel === "Low" && <CheckCircle className="h-3 w-3" />}
-                    {(caseItem.riskLevel === "Critical" || caseItem.riskLevel === "High") && (
-                      <AlertTriangle className="h-3 w-3" />
-                    )}
-                    {caseItem.riskLevel === "Medium" && <Clock className="h-3 w-3" />}
-                    {caseItem.riskLevel || 'Unknown'}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Badge
-                    className={`${getStatusColorClass(caseItem.status)} flex w-fit items-center gap-1`}
-                  >
-                    {getStatusIcon(caseItem.status)}
-                    {isBankStatementCase && caseItem.status === "Pending Review" 
-                      ? "Agent Review" 
-                      : caseItem.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>{caseItem.date || caseItem.created}</TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onViewCase(caseItem.id)}
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => onActionCase(caseItem)}>
-                          Take Action
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/case-review/${caseItem.id}`}>View Details</Link>
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
-    </div>
+        ))}
+      </TableBody>
+    </Table>
   );
 };
 
