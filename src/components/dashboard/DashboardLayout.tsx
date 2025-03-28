@@ -50,12 +50,12 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <MarketProvider>
       <SidebarProvider>
-        <div className="flex min-h-screen w-full">
-          <Sidebar variant="sidebar" collapsible="icon">
+        <div className="flex min-h-screen w-full bg-zinc-50">
+          <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-sidebar-border">
             <SidebarHeader className="p-4">
               <SidebarHeaderContent />
             </SidebarHeader>
-            <SidebarContent>
+            <SidebarContent className="px-2">
               <SidebarNavigation viewMode={viewMode} />
             </SidebarContent>
             <SidebarFooter className="p-4">
@@ -66,7 +66,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </SidebarFooter>
           </Sidebar>
           
-          <SidebarInset>
+          <SidebarInset className="bg-background">
             <div className="p-6 w-full">
               {children}
             </div>

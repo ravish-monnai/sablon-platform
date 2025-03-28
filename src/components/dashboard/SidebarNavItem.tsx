@@ -1,14 +1,16 @@
 
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { NavItem, ViewMode } from "./types/navigation";
 import SidebarSubMenu from "./SidebarSubMenu";
+import { cn } from "@/lib/utils";
 
 interface NavItemProps extends NavItem {
   viewMode: ViewMode;
+  isActive: boolean;
 }
 
 const SidebarNavItem = ({ 
@@ -16,24 +18,11 @@ const SidebarNavItem = ({
   path, 
   icon: Icon, 
   subItems, 
-  viewMode
+  viewMode,
+  isActive: isPrimaryActive
 }: NavItemProps) => {
-  const location = useLocation();
   const navigate = useNavigate();
-  const currentPath = location.pathname;
   
-  const isActive = (itemPath: string) => {
-    if (itemPath.includes('?')) {
-      const [basePath, queryString] = itemPath.split('?');
-      const queryParams = new URLSearchParams(queryString);
-      const currentParams = new URLSearchParams(location.search);
-      
-      return currentPath === basePath && 
-             queryParams.get('tab') === currentParams.get('tab');
-    }
-    return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
-  };
-
   const handleNavigation = () => {
     const params = new URLSearchParams();
     params.set("viewMode", viewMode);
@@ -56,18 +45,24 @@ const SidebarNavItem = ({
     <SidebarMenuItem>
       <SidebarMenuButton
         tooltip={label}
-        isActive={subItems ? currentPath.startsWith(path) : isActive(path)}
+        isActive={isPrimaryActive}
         onClick={handleNavigation}
+        className="transition-all duration-200 ease-in-out"
       >
-        <Icon className="h-7 w-7" />
+        <Icon className={cn(
+          "h-8 w-8 transition-all", 
+          isPrimaryActive 
+            ? "text-sidebar-accent-foreground" 
+            : "text-sidebar-foreground"
+        )} />
       </SidebarMenuButton>
       
       {subItems && (
         <SidebarSubMenu 
           subItems={subItems} 
           parentPath={path} 
-          isActive={isActive} 
           viewMode={viewMode} 
+          isActive={isPrimaryActive}
         />
       )}
     </SidebarMenuItem>
