@@ -77,11 +77,11 @@ const ManualInvestigationView = () => {
               name: "Ravish Patel",
               email: "ravishp@gmail.com",
               phone: "+919512657393",
-              location: "Gujarat"
+              location: "Gujarat, India"
             }}
             riskScore={260}
-            riskLevel="LOW RISK"
-            recommendation="APPROVE"
+            riskLevel="MEDIUM RISK"
+            recommendation="ADDITIONAL VERIFICATION"
           />
         )}
       </CardContent>
