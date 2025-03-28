@@ -1,5 +1,3 @@
-
-import { Button } from "@/components/ui/button";
 import { LinkStatus } from "@/components/ui/link-status";
 import MonnaiLogo from "@/components/branding/MonnaiLogo";
 
@@ -8,7 +6,7 @@ const Index = () => {
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="w-full max-w-5xl px-4">
         <div className="mb-12 text-left">
-          <MonnaiLogo variant="gradient" size="lg" showSlogan={true} />
+          <MonnaiLogo variant="gradient" size="lg" />
         </div>
         
         <div className="text-center max-w-3xl mx-auto">
