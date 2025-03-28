@@ -24,7 +24,7 @@ const ReachabilitySummary: React.FC<ReachabilitySummaryProps> = ({ phoneData, ad
           <div>
             <h3 className="text-lg font-medium text-blue-800 flex items-center gap-2">
               <Phone className="h-5 w-5 text-blue-600" />
-              Reachability Analysis Summary
+              Reachability Enrichment Summary
               <FeatureTag variant="ai" className="ml-2">AI Verified</FeatureTag>
             </h3>
             <p className="text-sm text-blue-700 mt-1">

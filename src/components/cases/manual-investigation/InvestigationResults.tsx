@@ -78,6 +78,21 @@ const InvestigationResults: React.FC = () => {
         state: "Westminster",
         postalCode: "SW1A 1AA"
       }
+    },
+    enrichment: {
+      alternatePhones: [
+        { phone: "+447700900456", identityConfidence: "High", reachabilityScore: 92 },
+        { phone: "+447700900789", identityConfidence: "High", reachabilityScore: 85 },
+        { phone: "+447700900012", identityConfidence: "Medium", reachabilityScore: 78 },
+        { phone: "+447700900345", identityConfidence: "Medium", reachabilityScore: 65 },
+        { phone: "+447700900678", identityConfidence: "Low", reachabilityScore: 42 }
+      ],
+      alternateAddresses: [
+        { address: "45 Park Lane, Westminster, London, SW1A 1AA", type: "Residential", confidence: "High" },
+        { address: "67 Oxford Street, Suite 200, London, W1D 2EQ", type: "Business", confidence: "Medium" },
+        { address: "789 Kensington High Street, London, W8 5NP", type: "Previous", confidence: "Medium" },
+        { address: "321 Baker Street, London, NW1 6XE", type: "Relative", confidence: "Low" }
+      ]
     }
   };
 

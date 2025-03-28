@@ -5,6 +5,7 @@ import ReachabilitySummary from "./reachability/ReachabilitySummary";
 import SourceIndicators from "./reachability/SourceIndicators";
 import PhoneDetailsCard from "./reachability/PhoneDetailsCard";
 import AddressDetailsCard from "./reachability/AddressDetailsCard";
+import AlternateContactsSection from "./reachability/AlternateContactsSection";
 
 interface ReachabilityResultsProps {
   data: {
@@ -43,6 +44,18 @@ interface ReachabilityResultsProps {
         postalCode?: string;
       };
     };
+    enrichment?: {
+      alternatePhones?: Array<{
+        phone: string;
+        identityConfidence: "High" | "Medium" | "Low";
+        reachabilityScore: number;
+      }>;
+      alternateAddresses?: Array<{
+        address: string;
+        type: string;
+        confidence: "High" | "Medium" | "Low";
+      }>;
+    };
   };
 }
 
@@ -51,6 +64,7 @@ const ReachabilityResults: React.FC<ReachabilityResultsProps> = ({ data }) => {
   const userInput = data.userInput || {};
   const phoneData = data.phone || {};
   const addressData = data.address || {};
+  const enrichmentData = data.enrichment || {};
 
   return (
     <div className="space-y-6">
@@ -64,6 +78,12 @@ const ReachabilityResults: React.FC<ReachabilityResultsProps> = ({ data }) => {
       
       {/* Source Indicators */}
       <SourceIndicators />
+      
+      {/* Alternate Contacts Section */}
+      <AlternateContactsSection
+        alternatePhones={enrichmentData.alternatePhones}
+        alternateAddresses={enrichmentData.alternateAddresses}
+      />
       
       {/* Details Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
