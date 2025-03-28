@@ -1,26 +1,14 @@
 
-import { ReactNode } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import {
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
+import { NavItem, ViewMode } from "./types/navigation";
+import SidebarSubMenu from "./SidebarSubMenu";
 
-interface SubItem {
-  label: string;
-  path: string;
-  icon?: React.FC<{ className?: string }>;
-}
-
-interface NavItemProps {
-  label: string;
-  path: string;
-  icon: React.FC<{ className?: string }>;
-  subItems?: SubItem[];
-  viewMode: "customer" | "internal";
+interface NavItemProps extends NavItem {
+  viewMode: ViewMode;
 }
 
 const SidebarNavItem = ({ 
@@ -46,59 +34,41 @@ const SidebarNavItem = ({
     return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
   };
 
+  const handleNavigation = () => {
+    const params = new URLSearchParams();
+    params.set("viewMode", viewMode);
+
+    if (!subItems) {
+      navigate({ pathname: path, search: params.toString() });
+      return;
+    }
+
+    // If there are subitems, navigate to the first subitem
+    navigate({ 
+      pathname: path, 
+      search: subItems[0].path.includes('?') 
+        ? subItems[0].path.split('?')[1] 
+        : params.toString() 
+    });
+  };
+
   return (
     <SidebarMenuItem>
-      {!subItems ? (
-        <SidebarMenuButton
-          tooltip={label}
-          isActive={isActive(path)}
-          onClick={() => {
-            const params = new URLSearchParams();
-            params.set("viewMode", viewMode);
-            navigate({ pathname: path, search: params.toString() });
-          }}
-        >
-          <Icon className="h-6 w-6" />
-        </SidebarMenuButton>
-      ) : (
-        <>
-          <SidebarMenuButton
-            tooltip={label}
-            isActive={currentPath.startsWith(path)}
-            onClick={() => {
-              const params = new URLSearchParams();
-              params.set("viewMode", viewMode);
-              navigate({ 
-                pathname: path, 
-                search: subItems?.[0].path.includes('?') 
-                  ? subItems[0].path.split('?')[1] 
-                  : params.toString() 
-              });
-            }}
-          >
-            <Icon className="h-6 w-6" />
-          </SidebarMenuButton>
-          
-          <SidebarMenuSub>
-            {subItems.map((subItem) => (
-              <SidebarMenuSubItem key={subItem.path}>
-                <SidebarMenuSubButton
-                  isActive={isActive(subItem.path)}
-                  onClick={() => {
-                    navigate({ 
-                      pathname: path, 
-                      search: subItem.path.includes('?') 
-                        ? subItem.path.split('?')[1] 
-                        : '' 
-                    });
-                  }}
-                >
-                  {subItem.icon && <subItem.icon className="h-5 w-5" />}
-                </SidebarMenuSubButton>
-              </SidebarMenuSubItem>
-            ))}
-          </SidebarMenuSub>
-        </>
+      <SidebarMenuButton
+        tooltip={label}
+        isActive={subItems ? currentPath.startsWith(path) : isActive(path)}
+        onClick={handleNavigation}
+      >
+        <Icon className="h-7 w-7" />
+      </SidebarMenuButton>
+      
+      {subItems && (
+        <SidebarSubMenu 
+          subItems={subItems} 
+          parentPath={path} 
+          isActive={isActive} 
+          viewMode={viewMode} 
+        />
       )}
     </SidebarMenuItem>
   );
