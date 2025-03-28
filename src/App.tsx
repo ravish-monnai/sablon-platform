@@ -15,6 +15,7 @@ import Cases from "./pages/Cases";
 import CaseReview from "./pages/CaseReview";
 import Customers from "./pages/Customers";
 import Transactions from "./pages/Transactions";
+import Settings from "./pages/Settings";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
 import { MarketProvider } from "./contexts/MarketContext";
 
@@ -30,6 +31,7 @@ export const activeRoutes = {
   cases: true,
   caseReview: true,
   customers: true,
+  settings: true,
   transactions: {
     main: true,
     details: {
@@ -90,6 +92,11 @@ const App = () => (
             <Route path="/transactions" element={
               <DashboardLayout>
                 <Transactions />
+              </DashboardLayout>
+            } />
+            <Route path="/settings" element={
+              <DashboardLayout>
+                <Settings />
               </DashboardLayout>
             } />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
