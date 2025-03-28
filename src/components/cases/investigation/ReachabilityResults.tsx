@@ -3,8 +3,6 @@ import React from "react";
 import UserInputSection from "./reachability/UserInputSection";
 import ReachabilitySummary from "./reachability/ReachabilitySummary";
 import SourceIndicators from "./reachability/SourceIndicators";
-import PhoneDetailsCard from "./reachability/PhoneDetailsCard";
-import AddressDetailsCard from "./reachability/AddressDetailsCard";
 import AlternateContactsSection from "./reachability/AlternateContactsSection";
 
 interface ReachabilityResultsProps {
@@ -28,6 +26,7 @@ interface ReachabilityResultsProps {
       currentCarrierCircle?: string;
       upiStatus?: string;
       simType?: "POSTPAID" | "PREPAID";
+      whatsappStatus?: string;
     };
     address?: {
       fullAddress?: string;
@@ -49,11 +48,24 @@ interface ReachabilityResultsProps {
         phone: string;
         identityConfidence: "High" | "Medium" | "Low";
         reachabilityScore: number;
+        name?: string;
+        phoneStatus?: string;
+        whatsappStatus?: string;
+        upiStatus?: string;
+        simType?: string;
+        tenure?: string;
       }>;
       alternateAddresses?: Array<{
         address: string;
         type: string;
         confidence: "High" | "Medium" | "Low";
+        parsedAddress?: {
+          doorNumber?: string;
+          streetName?: string;
+          city?: string;
+          state?: string;
+          postalCode?: string;
+        };
       }>;
     };
   };
@@ -83,20 +95,8 @@ const ReachabilityResults: React.FC<ReachabilityResultsProps> = ({ data }) => {
       <AlternateContactsSection
         alternatePhones={enrichmentData.alternatePhones}
         alternateAddresses={enrichmentData.alternateAddresses}
+        phoneData={phoneData}
       />
-      
-      {/* Details Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {/* Phone Details Card */}
-        {Object.keys(phoneData).length > 0 && (
-          <PhoneDetailsCard phoneData={phoneData} />
-        )}
-        
-        {/* Address Details Card */}
-        {Object.keys(addressData).length > 0 && (
-          <AddressDetailsCard addressData={addressData} />
-        )}
-      </div>
     </div>
   );
 };
