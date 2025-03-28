@@ -3,7 +3,9 @@ import React from "react";
 import UserInputSection from "./reachability/UserInputSection";
 import ReachabilitySummary from "./reachability/ReachabilitySummary";
 import SourceIndicators from "./reachability/SourceIndicators";
-import AlternateContactsSection from "./reachability/AlternateContactsSection";
+import PhoneDetailsSection from "./reachability/results/PhoneDetailsSection";
+import AddressDetailsSection from "./reachability/results/AddressDetailsSection";
+import EnrichmentSection from "./reachability/results/EnrichmentSection";
 
 interface ReachabilityResultsProps {
   data: {
@@ -91,10 +93,15 @@ const ReachabilityResults: React.FC<ReachabilityResultsProps> = ({ data }) => {
       {/* Source Indicators */}
       <SourceIndicators />
       
-      {/* Alternate Contacts Section */}
-      <AlternateContactsSection
-        alternatePhones={enrichmentData.alternatePhones}
-        alternateAddresses={enrichmentData.alternateAddresses}
+      {/* Phone Details Section */}
+      <PhoneDetailsSection phoneData={phoneData} />
+      
+      {/* Address Details Section */}
+      <AddressDetailsSection addressData={addressData} />
+      
+      {/* Enrichment Section with Alternate Contacts */}
+      <EnrichmentSection 
+        enrichmentData={enrichmentData}
         phoneData={phoneData}
       />
     </div>
