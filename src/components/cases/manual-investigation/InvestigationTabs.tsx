@@ -27,7 +27,7 @@ const InvestigationTabs: React.FC = () => {
           </div>
           <div className="flex flex-col items-start text-left">
             <span className="font-medium">Risk Analysis</span>
-            <span className="text-xs text-muted-foreground hidden md:inline">Fraud & Risk Assessment</span>
+            <span className="text-xs text-muted-foreground hidden md:inline"></span>
           </div>
         </TabsTrigger>
         
@@ -41,7 +41,7 @@ const InvestigationTabs: React.FC = () => {
           </div>
           <div className="flex flex-col items-start text-left">
             <span className="font-medium">Identity</span>
-            <span className="text-xs text-muted-foreground hidden md:inline">Verify Identity</span>
+            <span className="text-xs text-muted-foreground hidden md:inline"></span>
           </div>
         </TabsTrigger>
         
@@ -55,7 +55,7 @@ const InvestigationTabs: React.FC = () => {
           </div>
           <div className="flex flex-col items-start text-left">
             <span className="font-medium">Reachability</span>
-            <span className="text-xs text-muted-foreground hidden md:inline">Contact Verification</span>
+            <span className="text-xs text-muted-foreground hidden md:inline"></span>
           </div>
         </TabsTrigger>
       </TabsList>
