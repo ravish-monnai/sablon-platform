@@ -21,3 +21,16 @@ export const Icon: React.FC<IconProps> = ({
   );
 };
 
+// Helper function to create a custom icon component without using JSX
+export const createCustomIcon = (src: string, className: string = "h-5 w-5", alt: string = "Icon") => {
+  return () => {
+    return React.createElement(
+      'img',
+      {
+        src: src,
+        alt: alt,
+        className: `${className} object-contain`
+      }
+    );
+  };
+};

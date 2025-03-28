@@ -1,3 +1,4 @@
+
 import { 
   LayoutDashboard, 
   FileText, 
@@ -7,9 +8,7 @@ import {
   Settings
 } from "lucide-react";
 import { NavItem } from "../types/navigation";
-
-// Import the custom icon
-import { Icon } from "@/components/ui/icon";
+import { createCustomIcon } from "@/components/ui/icon";
 
 export const monnaiNavItems: NavItem[] = [
   { 
@@ -30,12 +29,7 @@ export const monnaiNavItems: NavItem[] = [
   { 
     label: "Transactions", 
     path: "/transactions", 
-    icon: () => (
-      <Icon 
-        src="/lovable-uploads/19b78546-e02e-4d5e-8942-6a3d06bf5c6f.png" 
-        className="h-6 w-6"
-      />
-    )
+    icon: createCustomIcon("/lovable-uploads/19b78546-e02e-4d5e-8942-6a3d06bf5c6f.png", "h-6 w-6")
   },
   { 
     label: "AI Agents", 

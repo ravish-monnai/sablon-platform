@@ -1,5 +1,6 @@
 
 import { LucideIcon } from "lucide-react";
+import { FC } from "react";
 
 export interface SubItem {
   label: string;
@@ -10,6 +11,6 @@ export interface SubItem {
 export interface NavItem {
   label: string;
   path: string;
-  icon: LucideIcon;
+  icon: LucideIcon | FC;
   subItems?: SubItem[];
 }
