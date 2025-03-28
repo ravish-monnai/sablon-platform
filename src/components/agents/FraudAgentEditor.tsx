@@ -1,13 +1,14 @@
+
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Check, Database, Network, AlertTriangle, UserCheck, X, Mail, Phone, ShieldCheck, Save, BrainCircuit } from "lucide-react";
 import WorkflowEditor from "@/components/workflow/WorkflowEditor";
+import SOPDialog from "./SOPDialog";
 
 interface FraudAgentEditorProps {
   onClose: () => void;
@@ -16,6 +17,13 @@ interface FraudAgentEditorProps {
 const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
   const [activeTab, setActiveTab] = useState<string>("data-sources");
   const [selectedModel, setSelectedModel] = useState<string>("gpt-4o");
+  const [sopDialogOpen, setSopDialogOpen] = useState<boolean>(false);
+  const [currentSopTitle, setCurrentSopTitle] = useState<string>("");
+
+  const handleOpenSOPDialog = (title: string) => {
+    setCurrentSopTitle(title);
+    setSopDialogOpen(true);
+  };
 
   const llmModels = [
     { id: "gpt-4o", name: "GPT-4o", description: "Best model for general purpose AI tasks with vision capabilities" },
@@ -102,7 +110,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Status: <span className="font-medium text-green-600">Active</span></span>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Configure</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-xs"
+                    onClick={() => handleOpenSOPDialog("Phone Basic Data Source")}
+                  >
+                    Configure
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -120,7 +135,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Status: <span className="font-medium text-green-600">Active</span></span>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Configure</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-xs"
+                    onClick={() => handleOpenSOPDialog("Phone Social Data Source")}
+                  >
+                    Configure
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -138,7 +160,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Status: <span className="font-medium text-green-600">Active</span></span>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Configure</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-xs"
+                    onClick={() => handleOpenSOPDialog("Email Basic Data Source")}
+                  >
+                    Configure
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -156,7 +185,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Status: <span className="font-medium text-green-600">Active</span></span>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Configure</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-xs"
+                    onClick={() => handleOpenSOPDialog("Email Social Data Source")}
+                  >
+                    Configure
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -174,7 +210,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
               <CardContent>
                 <div className="flex justify-between items-center">
                   <span className="text-sm">Status: <span className="font-medium text-green-600">Active</span></span>
-                  <Button variant="outline" size="sm" className="h-7 text-xs">Configure</Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-7 text-xs"
+                    onClick={() => handleOpenSOPDialog("Network Graph Data Source")}
+                  >
+                    Configure
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -522,6 +565,14 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
           <Save className="mr-2 h-4 w-4" /> Save Configuration
         </Button>
       </div>
+
+      {/* SOP Dialog */}
+      <SOPDialog 
+        isOpen={sopDialogOpen}
+        onClose={() => setSopDialogOpen(false)}
+        title={`${currentSopTitle} - Standard Operating Procedure`}
+        description="Review the standard operating procedures and workflow for this component"
+      />
     </div>
   );
 };
