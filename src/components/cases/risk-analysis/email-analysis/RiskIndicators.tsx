@@ -9,7 +9,7 @@ interface RiskFlag {
   icon: React.ElementType;
 }
 
-interface RiskIndicatorsProps {
+export interface RiskIndicatorsProps {
   riskFlags: RiskFlag[];
   getStatusIcon: (Icon: React.ElementType, status: string) => React.ReactNode;
 }

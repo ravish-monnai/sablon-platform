@@ -8,6 +8,8 @@ import BreachHistory from "./email-analysis/BreachHistory";
 import EmailBasicInfo from "./email-analysis/EmailBasicInfo";
 import RiskIndicators from "./email-analysis/RiskIndicators";
 import DigitalCategories from "./email-analysis/DigitalCategories";
+import { getStatusIcon, mockEmailData, mockDigitalCategories } from "./email-analysis/utils";
+import { AlertCircle, ShieldAlert, AlertOctagon } from "lucide-react";
 
 interface EmailAnalysisResultsProps {
   email: string;
@@ -39,15 +41,37 @@ const EmailAnalysisResults: React.FC<EmailAnalysisResultsProps> = ({ email }) =>
     ]
   };
 
+  // Mock data for risk indicators
+  const riskFlags = [
+    {
+      id: "RF001",
+      description: "Email from free provider",
+      status: "info",
+      icon: AlertCircle
+    },
+    {
+      id: "RF002",
+      description: "Multiple data breaches detected",
+      status: "warning",
+      icon: ShieldAlert
+    },
+    {
+      id: "RF003",
+      description: "Domain age less than 1 year",
+      status: "error",
+      icon: AlertOctagon
+    }
+  ];
+
   return (
     <div className="space-y-6">
       {/* Basic Email Info Card */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-2">
-          <EmailBasicInfo email={email} />
+          <EmailBasicInfo emailBasic={mockEmailData} />
         </div>
         <div>
-          <RiskIndicators />
+          <RiskIndicators riskFlags={riskFlags} getStatusIcon={getStatusIcon} />
         </div>
       </div>
       

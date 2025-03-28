@@ -2,7 +2,7 @@
 import React from "react";
 import { Shield, Globe, Building, Calendar, ShieldCheck } from "lucide-react";
 
-interface EmailBasicInfoProps {
+export interface EmailBasicInfoProps {
   emailBasic: {
     deliverable: boolean;
     domainDetails: {
