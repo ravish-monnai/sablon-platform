@@ -58,8 +58,71 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
           </Card>
 
           <Card>
+            <CardHeader>
+              <CardTitle className="text-lg font-medium">Fraud Review Manual Process</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-slate-50 rounded-md border">
+                  <h3 className="font-medium text-sm mb-2 text-blue-700">Intake & Assessment</h3>
+                  <ul className="text-xs space-y-1.5">
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">1.</span>
+                      <span>Receive flagged transaction</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">2.</span>
+                      <span>Verify case completeness</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">3.</span>
+                      <span>Assess initial risk score</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-md border">
+                  <h3 className="font-medium text-sm mb-2 text-blue-700">Investigation</h3>
+                  <ul className="text-xs space-y-1.5">
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">4.</span>
+                      <span>Verify identity documents</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">5.</span>
+                      <span>Analyze digital footprint</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">6.</span>
+                      <span>Check customer network</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="p-4 bg-slate-50 rounded-md border">
+                  <h3 className="font-medium text-sm mb-2 text-blue-700">Decision</h3>
+                  <ul className="text-xs space-y-1.5">
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">7.</span>
+                      <span>Determine final risk level</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">8.</span>
+                      <span>Apply decision rules</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-1.5">9.</span>
+                      <span>Document justification</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
             <CardHeader className="flex flex-row items-center">
-              <CardTitle className="text-lg font-medium">Process Diagram</CardTitle>
+              <CardTitle className="text-lg font-medium">Process Workflow</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="w-full max-w-3xl bg-white p-6 rounded-lg border mx-auto">
