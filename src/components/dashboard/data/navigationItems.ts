@@ -4,7 +4,7 @@ import {
   FileText, 
   Users,
   Wallet,
-  FlagTriangleRight, 
+  Workflow, 
   Bot, 
   Database, 
   Settings
@@ -35,17 +35,17 @@ export const monnaiNavItems: NavItem[] = [
   { 
     label: "AI Journeys", 
     path: "/ai-journeys", 
-    icon: FlagTriangleRight,
+    icon: Workflow,
     subItems: [
       { 
         label: "Journey Builder", 
         path: "/ai-journeys?tab=workflow",
-        icon: FlagTriangleRight
+        icon: Workflow
       },
       { 
         label: "Live Journeys", 
         path: "/ai-journeys?tab=live", 
-        icon: FlagTriangleRight
+        icon: Workflow
       }
     ]
   },
