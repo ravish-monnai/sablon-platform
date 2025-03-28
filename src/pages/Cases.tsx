@@ -6,7 +6,6 @@ import { CaseItem } from "@/types/cases";
 import { useCaseFiltering } from "@/hooks/useCaseFiltering";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import CaseListView from "@/components/cases/CaseListView";
-import NetworkAnalysisView from "@/components/cases/NetworkAnalysisView";
 import CasesHeader from "@/components/cases/CasesHeader";
 import BankStatementAnalyzer from "@/components/cases/BankStatementAnalyzer";
 import ManualInvestigationView from "@/components/cases/ManualInvestigationView";
@@ -38,9 +37,8 @@ const Cases = () => {
       <CasesHeader />
 
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="list">Case List</TabsTrigger>
-          <TabsTrigger value="network">Network Analysis</TabsTrigger>
           <TabsTrigger value="manual-investigation">Manual Investigation</TabsTrigger>
         </TabsList>
         
@@ -56,10 +54,6 @@ const Cases = () => {
           />
           
           <BankStatementAnalyzer />
-        </TabsContent>
-        
-        <TabsContent value="network">
-          <NetworkAnalysisView />
         </TabsContent>
         
         <TabsContent value="manual-investigation">
