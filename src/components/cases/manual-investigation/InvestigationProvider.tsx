@@ -1,6 +1,12 @@
 
 import React, { useState, createContext, useContext } from "react";
 
+interface HistoryItem {
+  query: string;
+  timestamp: Date;
+  type: string;
+}
+
 interface InvestigationContextType {
   query: string;
   setQuery: (query: string) => void;
@@ -12,6 +18,7 @@ interface InvestigationContextType {
   setCurrentAnalysisStep: (currentAnalysisStep: string) => void;
   investigationType: string;
   setInvestigationType: (investigationType: string) => void;
+  queryHistory: HistoryItem[];
   handleSearch: (e: React.FormEvent) => void;
   handleStartInvestigation: (type: string) => void;
 }
@@ -32,6 +39,39 @@ export const InvestigationProvider: React.FC<{ children: React.ReactNode }> = ({
   const [showResults, setShowResults] = useState<boolean>(false);
   const [currentAnalysisStep, setCurrentAnalysisStep] = useState<string>("");
   const [investigationType, setInvestigationType] = useState<string>("risk-analysis");
+  const [queryHistory, setQueryHistory] = useState<HistoryItem[]>([
+    // Pre-populate with some sample history items for each investigation type
+    {
+      query: "Check risk score of phone +1234567890 and email user@example.com",
+      timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      type: "risk-analysis"
+    },
+    {
+      query: "Verify risk level for customer James Wilson with phone +19876543210",
+      timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
+      type: "risk-analysis"
+    },
+    {
+      query: "Verify identity of Alex Johnson with National ID 123456789",
+      timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000),
+      type: "identity-verification"
+    },
+    {
+      query: "Cross-check identity information for Lisa Chen with government sources",
+      timestamp: new Date(Date.now() - 8 * 60 * 60 * 1000),
+      type: "identity-verification"
+    },
+    {
+      query: "Verify reachability of phone +447123456789 and email reach@example.com",
+      timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000),
+      type: "reachability"
+    },
+    {
+      query: "Check address at 456 Oak Avenue and find alternative contact methods",
+      timestamp: new Date(Date.now() - 6 * 60 * 60 * 1000),
+      type: "reachability"
+    }
+  ]);
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,6 +79,15 @@ export const InvestigationProvider: React.FC<{ children: React.ReactNode }> = ({
     
     setIsAnalyzing(true);
     setShowResults(false);
+    
+    // Add the current query to history
+    const newHistoryItem: HistoryItem = {
+      query: query,
+      timestamp: new Date(),
+      type: investigationType
+    };
+    
+    setQueryHistory(prevHistory => [newHistoryItem, ...prevHistory]);
     
     import("../investigation/utils/analysisSteps").then(module => {
       module.runAnalysisAnimation(setCurrentAnalysisStep).then(() => {
@@ -84,6 +133,7 @@ export const InvestigationProvider: React.FC<{ children: React.ReactNode }> = ({
     setCurrentAnalysisStep,
     investigationType,
     setInvestigationType,
+    queryHistory,
     handleSearch,
     handleStartInvestigation
   };
