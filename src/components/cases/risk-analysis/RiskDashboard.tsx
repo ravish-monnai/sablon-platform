@@ -1,13 +1,16 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AlertTriangle, CheckCircle, Clock, AlertCircle } from "lucide-react";
 import CustomerDetailsCard from "./CustomerDetailsCard";
 import RiskScoreGauge from "./RiskScoreGauge";
 import PhoneAnalysisResults from "./PhoneAnalysisResults";
 import EmailAnalysisResults from "./EmailAnalysisResults";
 import ActivityTimeline from "./ActivityTimeline";
+import DigitalFootprintTab from "./DigitalFootprintTab";
+import BreachHistoryTab from "./BreachHistoryTab";
 
 interface CustomerData {
   name: string;
@@ -29,6 +32,8 @@ const RiskDashboard: React.FC<RiskDashboardProps> = ({
   riskLevel,
   recommendation
 }) => {
+  const [activeTab, setActiveTab] = useState("phone");
+
   // Determine the colors and indicators based on risk level
   const getRiskIndicator = () => {
     if (riskLevel.includes("LOW")) {
@@ -89,16 +94,36 @@ const RiskDashboard: React.FC<RiskDashboardProps> = ({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Phone Analysis Results */}
-        <PhoneAnalysisResults phoneNumber={customerData.phone} />
-
-        {/* Email Analysis Results */}
-        <EmailAnalysisResults email={customerData.email} />
-      </div>
-
-      {/* Activity Timeline */}
-      <ActivityTimeline email={customerData.email} />
+      {/* Analysis Tabs */}
+      <Tabs defaultValue="phone" className="w-full" onValueChange={setActiveTab}>
+        <TabsList className="grid grid-cols-5 mb-6">
+          <TabsTrigger value="phone">Phone Analysis</TabsTrigger>
+          <TabsTrigger value="email">Email Analysis</TabsTrigger>
+          <TabsTrigger value="digital">Digital Footprint</TabsTrigger>
+          <TabsTrigger value="breach">Breach History</TabsTrigger>
+          <TabsTrigger value="timeline">Activity Timeline</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="phone" className="mt-0">
+          <PhoneAnalysisResults phoneNumber={customerData.phone} />
+        </TabsContent>
+        
+        <TabsContent value="email" className="mt-0">
+          <EmailAnalysisResults email={customerData.email} />
+        </TabsContent>
+        
+        <TabsContent value="digital" className="mt-0">
+          <DigitalFootprintTab email={customerData.email} />
+        </TabsContent>
+        
+        <TabsContent value="breach" className="mt-0">
+          <BreachHistoryTab email={customerData.email} />
+        </TabsContent>
+        
+        <TabsContent value="timeline" className="mt-0">
+          <ActivityTimeline email={customerData.email} />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
