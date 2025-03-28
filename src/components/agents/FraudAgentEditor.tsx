@@ -1,13 +1,7 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Save } from "lucide-react";
-import WorkflowEditor from "@/components/workflow/WorkflowEditor";
 import SOPDialog from "./SOPDialog";
 import DataSourcesTab from "./fraud-agent/DataSourcesTab";
 import IdentityVerificationTab from "./fraud-agent/IdentityVerificationTab";
