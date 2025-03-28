@@ -103,23 +103,23 @@ const ManualInvestigationView = () => {
     phone: {
       inputAttribute: "Phone number provided",
       alternatePhoneNumber: "+447700900456",
-      confidence: "High" as "High" | "Medium" | "Low", // Fixed: explicitly typed as the union type
+      confidence: "High" as "High" | "Medium" | "Low",
       confidenceScore: 85,
       reachabilityScore: 92,
       name: "John Smith",
       type: "MOBILE",
-      active: "YES",
+      active: "YES" as "YES" | "NO" | "UNKNOWN", // Explicitly typed as the union type
       ported: false,
       phoneTenure: "24+ months",
       currentCarrierCircle: "Vodafone UK - London",
       upiStatus: "Active",
-      simType: "POSTPAID" as "POSTPAID" | "PREPAID" // Fixed: explicitly typed as the union type
+      simType: "POSTPAID" as "POSTPAID" | "PREPAID"
     },
     address: {
       fullAddress: "123 Main Street, Westminster, London, SW1A 1AA",
       addressType: "home",
       reachabilityScore: 78,
-      confidence: "Medium" as "High" | "Medium" | "Low", // Fixed: explicitly typed as the union type
+      confidence: "Medium" as "High" | "Medium" | "Low",
       parsedAddress: {
         doorNumber: "123",
         streetName: "Main Street",
