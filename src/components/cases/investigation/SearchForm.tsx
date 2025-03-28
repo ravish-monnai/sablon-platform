@@ -3,7 +3,6 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search, AlertCircle, Loader2 } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 
 interface SearchFormProps {
   query: string;
@@ -34,33 +33,12 @@ const SearchForm: React.FC<SearchFormProps> = ({
     }
   };
 
-  // Get a badge color based on investigation type
-  const getBadgeVariant = () => {
-    switch (investigationType) {
-      case "risk-analysis":
-        return "destructive";
-      case "identity-verification":
-        return "default";
-      case "reachability":
-        return "secondary";
-      default:
-        return "outline";
-    }
-  };
-
   return (
     <form onSubmit={handleSearch} className="space-y-3">
       <div className="flex flex-col space-y-2">
         <div className="flex items-center justify-between">
           <label htmlFor="investigation-query" className="text-sm font-medium flex items-center gap-2">
             <span>Enter your investigation query</span>
-            <Badge variant={getBadgeVariant()} className="ml-2 text-xs">
-              {investigationType === "risk-analysis" 
-                ? "Risk Analysis" 
-                : investigationType === "identity-verification"
-                ? "Identity Verification"
-                : "Reachability Enrichment"}
-            </Badge>
           </label>
         </div>
         <div className="relative">

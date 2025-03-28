@@ -40,7 +40,7 @@ const InvestigationTabs: React.FC = () => {
             <UserCheck className="h-4 w-4 text-blue-600" />
           </div>
           <div className="flex flex-col items-start text-left">
-            <span className="font-medium">Identity</span>
+            <span className="font-medium">Identity Verification</span>
             <span className="text-xs text-muted-foreground hidden md:inline"></span>
           </div>
         </TabsTrigger>
@@ -54,7 +54,7 @@ const InvestigationTabs: React.FC = () => {
             <Phone className="h-4 w-4 text-purple-600" />
           </div>
           <div className="flex flex-col items-start text-left">
-            <span className="font-medium">Reachability</span>
+            <span className="font-medium">Reachability Enrichment</span>
             <span className="text-xs text-muted-foreground hidden md:inline"></span>
           </div>
         </TabsTrigger>
