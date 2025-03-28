@@ -70,7 +70,6 @@ const CustomerInvestigationForm = () => {
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg">
-      <h2 className="text-3xl font-bold text-center mb-2">Let's check your customer</h2>
       <p className="text-gray-500 text-center mb-8">Enter the below details to get started</p>
       
       <Form {...form}>
@@ -198,28 +197,28 @@ const ManualInvestigationView = () => {
           </TabsList>
           
           <TabsContent value="customer-check" className="space-y-4">
-            <CustomerInvestigationForm />
-          </TabsContent>
-          
-          <TabsContent value="fraud-risk" className="space-y-4">
             <p className="text-muted-foreground mb-6">
-              Investigate potential fraud risks by analyzing customer behavior patterns, transaction anomalies,
-              and network connections.
+              Check customer details by inputting various identifiers such as phone number,
+              email, IP address, or device ID.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <InvestigationCard
-                title="Transaction Pattern Analysis"
-                description="Detect unusual patterns in transaction history that may indicate fraudulent activity"
-                icon={AlertTriangle}
-                onStart={() => handleStartInvestigation("transaction-pattern")}
+                title="Basic Customer Check"
+                description="Verify customer identity and gather basic customer information"
+                icon={Search}
+                onStart={() => handleStartInvestigation("basic-customer-check")}
               />
               <InvestigationCard
-                title="Network Analysis"
-                description="Examine network connections to identify potential fraud rings or suspicious relationships"
-                icon={AlertTriangle}
-                onStart={() => handleStartInvestigation("network-analysis")}
+                title="Advanced Customer Check"
+                description="Perform a comprehensive check with deeper analysis of customer data"
+                icon={Search}
+                onStart={() => handleStartInvestigation("advanced-customer-check")}
               />
             </div>
+          </TabsContent>
+          
+          <TabsContent value="fraud-risk" className="space-y-4">
+            <CustomerInvestigationForm />
           </TabsContent>
           
           <TabsContent value="identity-verification" className="space-y-4">
