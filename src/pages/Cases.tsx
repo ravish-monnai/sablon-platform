@@ -51,7 +51,7 @@ const Cases = () => {
             setFilterType={setFilterType}
             setSearchQuery={setSearchQuery}
             searchQuery={searchQuery}
-            onViewCase={handleViewCase}
+            onViewCase={handleCaseView}
             onActionCase={handleCaseAction}
           />
           
