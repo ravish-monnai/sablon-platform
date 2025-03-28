@@ -58,7 +58,7 @@ const SidebarSubMenu = ({
                   "h-6 w-6 transition-all duration-300", 
                   isActive 
                     ? "text-monnai-blue" 
-                    : "text-sidebar-foreground opacity-80 group-hover:text-[#9b87f5]"
+                    : "text-sidebar-foreground opacity-80"
                 )} />
               }
             </SidebarMenuSubButton>

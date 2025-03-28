@@ -46,7 +46,7 @@ const SidebarNavItem = ({
           "h-8 w-8 transition-all duration-300", 
           isPrimaryActive 
             ? "text-monnai-blue" 
-            : "text-sidebar-foreground group-hover:text-[#9b87f5]"
+            : "text-sidebar-foreground"
         )} />
       </SidebarMenuButton>
       
