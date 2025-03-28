@@ -1,15 +1,15 @@
-
 import { 
   LayoutDashboard, 
   FileText, 
   Users,
-  Wallet,
-  Workflow, 
   Bot, 
   Database, 
   Settings
 } from "lucide-react";
 import { NavItem } from "../types/navigation";
+
+// Import the custom icon
+import { Icon } from "@/components/ui/icon";
 
 export const monnaiNavItems: NavItem[] = [
   { 
@@ -30,24 +30,12 @@ export const monnaiNavItems: NavItem[] = [
   { 
     label: "Transactions", 
     path: "/transactions", 
-    icon: Wallet 
-  },
-  { 
-    label: "Journeys", 
-    path: "/ai-journeys", 
-    icon: Workflow,
-    subItems: [
-      { 
-        label: "Journey Builder", 
-        path: "/ai-journeys?tab=workflow",
-        icon: Workflow
-      },
-      { 
-        label: "Live Journeys", 
-        path: "/ai-journeys?tab=live", 
-        icon: Workflow
-      }
-    ]
+    icon: () => (
+      <Icon 
+        src="/lovable-uploads/19b78546-e02e-4d5e-8942-6a3d06bf5c6f.png" 
+        className="h-6 w-6"
+      />
+    )
   },
   { 
     label: "AI Agents", 
