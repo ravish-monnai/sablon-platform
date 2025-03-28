@@ -3,8 +3,8 @@ import MonnaiLogo from "../branding/MonnaiLogo";
 
 const SidebarHeaderContent = () => {
   return (
-    <div className="flex items-center">
-      <MonnaiLogo variant="gradient" />
+    <div className="flex items-center justify-center">
+      <MonnaiLogo size="md" />
     </div>
   );
 };

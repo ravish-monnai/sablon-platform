@@ -18,10 +18,10 @@ interface DashboardLayoutProps {
 
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full bg-zinc-50">
         <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-sidebar-border">
-          <SidebarHeader className="p-4">
+          <SidebarHeader className="p-2">
             <SidebarHeaderContent />
           </SidebarHeader>
           <SidebarContent className="px-2">

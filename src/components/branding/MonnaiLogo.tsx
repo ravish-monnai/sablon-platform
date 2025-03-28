@@ -3,7 +3,6 @@ import React from 'react';
 
 type MonnaiLogoProps = {
   className?: string;
-  variant?: 'gradient' | 'color' | 'white' | 'black';
   size?: 'sm' | 'md' | 'lg';
 }
 
@@ -12,9 +11,9 @@ const MonnaiLogo: React.FC<MonnaiLogoProps> = ({
   size = 'md'
 }) => {
   const iconSizeClasses = {
-    sm: 'h-4 w-8',
-    md: 'h-6 w-12',
-    lg: 'h-10 w-20'
+    sm: 'h-4 w-4',
+    md: 'h-6 w-6',
+    lg: 'h-8 w-8'
   };
 
   return (
