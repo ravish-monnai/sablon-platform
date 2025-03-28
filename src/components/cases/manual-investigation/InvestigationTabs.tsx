@@ -29,7 +29,7 @@ const InvestigationTabs: React.FC = () => {
         </TabsTrigger>
         <TabsTrigger value="reachability" className="flex items-center gap-1">
           <Phone className="h-4 w-4" />
-          <span className="hidden sm:inline">Reachability Check</span>
+          <span className="hidden sm:inline">Reachability Analysis</span>
           <span className="sm:hidden">Reachability</span>
         </TabsTrigger>
       </TabsList>
