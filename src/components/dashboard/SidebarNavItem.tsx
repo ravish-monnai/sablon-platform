@@ -40,13 +40,13 @@ const SidebarNavItem = ({
         tooltip={label}
         isActive={isPrimaryActive}
         onClick={handleNavigation}
-        className="transition-all duration-200 ease-in-out"
+        className="transition-all duration-200 ease-in-out group"
       >
         <Icon className={cn(
-          "h-8 w-8 transition-all", 
+          "h-8 w-8 transition-all duration-300", 
           isPrimaryActive 
-            ? "text-sidebar-accent-foreground" 
-            : "text-sidebar-foreground"
+            ? "text-monnai-blue" 
+            : "text-sidebar-foreground group-hover:text-monnai-blue"
         )} />
       </SidebarMenuButton>
       

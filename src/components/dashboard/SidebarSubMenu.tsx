@@ -51,14 +51,14 @@ const SidebarSubMenu = ({
                   : parentPath
                 );
               }}
-              className="transition-all duration-200"
+              className="transition-all duration-200 group"
             >
               {subItem.icon && 
                 <subItem.icon className={cn(
-                  "h-6 w-6 transition-all", 
+                  "h-6 w-6 transition-all duration-300", 
                   isActive 
-                    ? "text-sidebar-accent-foreground" 
-                    : "text-sidebar-foreground opacity-80"
+                    ? "text-monnai-blue" 
+                    : "text-sidebar-foreground opacity-80 group-hover:text-monnai-pink"
                 )} />
               }
             </SidebarMenuSubButton>

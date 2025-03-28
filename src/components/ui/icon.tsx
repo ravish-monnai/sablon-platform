@@ -29,7 +29,7 @@ export const createCustomIcon = (src: string, className: string = "h-5 w-5", alt
       {
         src: src,
         alt: alt,
-        className: `${className} object-contain`
+        className: `${className} object-contain transition-all duration-300 filter hover:brightness-110`
       }
     );
   };
