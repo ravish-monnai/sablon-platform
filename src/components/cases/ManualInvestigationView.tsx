@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -10,6 +9,7 @@ import ReachabilityTab from "./investigation/ReachabilityTab";
 import SearchForm from "./investigation/SearchForm";
 import AnalysisAnimation from "./investigation/AnalysisAnimation";
 import IdentityVerificationResults from "./investigation/IdentityVerificationResults";
+import ReachabilityResults from "./investigation/ReachabilityResults";
 import { runAnalysisAnimation } from "./investigation/utils/analysisSteps";
 
 const ManualInvestigationView = () => {
@@ -33,7 +33,6 @@ const ManualInvestigationView = () => {
   };
 
   const handleStartInvestigation = (type: string) => {
-    // Set a predefined query based on the investigation type
     switch (type) {
       case "basic-customer-check":
         setQuery("Check risk score of phone number +919512657393 and email ravishp@gmail.com");
@@ -58,7 +57,6 @@ const ManualInvestigationView = () => {
     }
   };
 
-  // Sample KYC data for identity verification with additional user input
   const sampleKycData = {
     data: {
       kyc: {
@@ -94,7 +92,43 @@ const ManualInvestigationView = () => {
       }
     }
   };
-  
+
+  const sampleReachabilityData = {
+    userInput: {
+      phone: "+447700900123",
+      email: "user@example.com",
+      address: "123 Main Street, London"
+    },
+    phone: {
+      inputAttribute: "Phone number provided",
+      alternatePhoneNumber: "+447700900456",
+      confidence: "High",
+      confidenceScore: 85,
+      reachabilityScore: 92,
+      name: "John Smith",
+      type: "MOBILE",
+      active: "YES",
+      ported: false,
+      phoneTenure: "24+ months",
+      currentCarrierCircle: "Vodafone UK - London",
+      upiStatus: "Active",
+      simType: "POSTPAID"
+    },
+    address: {
+      fullAddress: "123 Main Street, Westminster, London, SW1A 1AA",
+      addressType: "home",
+      reachabilityScore: 78,
+      confidence: "Medium",
+      parsedAddress: {
+        doorNumber: "123",
+        streetName: "Main Street",
+        city: "London",
+        state: "Westminster",
+        postalCode: "SW1A 1AA"
+      }
+    }
+  };
+
   return (
     <Card className="bg-white shadow-sm border-gray-100">
       <CardHeader>
@@ -162,6 +196,10 @@ const ManualInvestigationView = () => {
 
         {showResults && !isAnalyzing && investigationType === "identity-verification" && (
           <IdentityVerificationResults data={sampleKycData.data} />
+        )}
+
+        {showResults && !isAnalyzing && investigationType === "reachability" && (
+          <ReachabilityResults data={sampleReachabilityData} />
         )}
       </CardContent>
     </Card>
