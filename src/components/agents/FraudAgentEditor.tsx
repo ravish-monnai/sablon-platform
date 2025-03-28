@@ -4,10 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Save } from "lucide-react";
 import ProcessDialog from "./ProcessDialog";
 import DataSourcesTab from "./fraud-agent/DataSourcesTab";
-import IdentityVerificationTab from "./fraud-agent/IdentityVerificationTab";
 import LLMSettingsTab from "./fraud-agent/LLMSettingsTab";
-import WorkflowTab from "./fraud-agent/WorkflowTab";
-import DecisionsTab from "./fraud-agent/DecisionsTab";
 import AgentEditorTabs from "./fraud-agent/AgentEditorTabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format } from "date-fns";
@@ -140,20 +137,8 @@ const FraudAgentEditor: React.FC<FraudAgentEditorProps> = ({ onClose }) => {
         <DataSourcesTab onOpenSOPDialog={handleOpenProcessDialog} />
       )}
 
-      {activeTab === "identity-verification" && (
-        <IdentityVerificationTab />
-      )}
-
       {activeTab === "llm-settings" && (
         <LLMSettingsTab />
-      )}
-
-      {activeTab === "workflow" && (
-        <WorkflowTab />
-      )}
-
-      {activeTab === "decisions" && (
-        <DecisionsTab />
       )}
 
       <div className="flex justify-end space-x-2 pt-6 border-t">

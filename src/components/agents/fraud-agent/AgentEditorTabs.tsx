@@ -1,6 +1,6 @@
 
 import React from "react";
-import { FileText, Database, UserCheck, BrainCircuit, Workflow, AlertTriangle } from "lucide-react";
+import { FileText, Database, BrainCircuit } from "lucide-react";
 
 interface AgentEditorTabsProps {
   activeTab: string;
@@ -37,17 +37,6 @@ const AgentEditorTabs: React.FC<AgentEditorTabsProps> = ({
       </button>
       <button
         className={`pb-2 text-sm font-medium flex items-center ${
-          activeTab === "identity-verification" 
-            ? "border-b-2 border-[#9b87f5] text-[#9b87f5]" 
-            : "text-muted-foreground"
-        }`}
-        onClick={() => setActiveTab("identity-verification")}
-      >
-        <UserCheck className="h-4 w-4 mr-1.5" />
-        Identity Verification
-      </button>
-      <button
-        className={`pb-2 text-sm font-medium flex items-center ${
           activeTab === "llm-settings" 
             ? "border-b-2 border-[#9b87f5] text-[#9b87f5]" 
             : "text-muted-foreground"
@@ -56,28 +45,6 @@ const AgentEditorTabs: React.FC<AgentEditorTabsProps> = ({
       >
         <BrainCircuit className="h-4 w-4 mr-1.5" />
         LLM Settings
-      </button>
-      <button
-        className={`pb-2 text-sm font-medium flex items-center ${
-          activeTab === "workflow" 
-            ? "border-b-2 border-[#9b87f5] text-[#9b87f5]" 
-            : "text-muted-foreground"
-        }`}
-        onClick={() => setActiveTab("workflow")}
-      >
-        <Workflow className="h-4 w-4 mr-1.5" />
-        Workflow
-      </button>
-      <button
-        className={`pb-2 text-sm font-medium flex items-center ${
-          activeTab === "decisions" 
-            ? "border-b-2 border-[#9b87f5] text-[#9b87f5]" 
-            : "text-muted-foreground"
-        }`}
-        onClick={() => setActiveTab("decisions")}
-      >
-        <AlertTriangle className="h-4 w-4 mr-1.5" />
-        Decisions
       </button>
     </div>
   );
