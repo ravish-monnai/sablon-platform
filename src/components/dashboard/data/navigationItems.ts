@@ -33,7 +33,7 @@ export const monnaiNavItems: NavItem[] = [
     icon: Wallet 
   },
   { 
-    label: "AI Journeys", 
+    label: "Journeys", 
     path: "/ai-journeys", 
     icon: Workflow,
     subItems: [

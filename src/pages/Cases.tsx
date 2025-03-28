@@ -9,6 +9,7 @@ import CaseListView from "@/components/cases/CaseListView";
 import NetworkAnalysisView from "@/components/cases/NetworkAnalysisView";
 import CasesHeader from "@/components/cases/CasesHeader";
 import BankStatementAnalyzer from "@/components/cases/BankStatementAnalyzer";
+import ManualInvestigationView from "@/components/cases/ManualInvestigationView";
 
 const Cases = () => {
   const navigate = useNavigate();
@@ -37,9 +38,10 @@ const Cases = () => {
       <CasesHeader />
 
       <Tabs defaultValue="list" className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="list">Case List</TabsTrigger>
           <TabsTrigger value="network">Network Analysis</TabsTrigger>
+          <TabsTrigger value="manual-investigation">Manual Investigation</TabsTrigger>
         </TabsList>
         
         <TabsContent value="list" className="space-y-4">
@@ -49,7 +51,7 @@ const Cases = () => {
             setFilterType={setFilterType}
             setSearchQuery={setSearchQuery}
             searchQuery={searchQuery}
-            onViewCase={handleCaseView}
+            onViewCase={handleViewCase}
             onActionCase={handleCaseAction}
           />
           
@@ -58,6 +60,10 @@ const Cases = () => {
         
         <TabsContent value="network">
           <NetworkAnalysisView />
+        </TabsContent>
+        
+        <TabsContent value="manual-investigation">
+          <ManualInvestigationView />
         </TabsContent>
       </Tabs>
 
