@@ -4,6 +4,7 @@ import SearchForm from "../investigation/SearchForm";
 import AnalysisAnimation from "../investigation/AnalysisAnimation";
 import InvestigationResults from "./InvestigationResults";
 import { useInvestigation } from "./InvestigationProvider";
+import QueryHistoryPanel from "./QueryHistoryPanel";
 
 const InvestigationContent: React.FC = () => {
   const { 
@@ -24,6 +25,8 @@ const InvestigationContent: React.FC = () => {
         isAnalyzing={isAnalyzing}
         investigationType={investigationType}
       />
+      
+      <QueryHistoryPanel type={investigationType} />
       
       <AnalysisAnimation 
         isAnalyzing={isAnalyzing} 

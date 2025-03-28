@@ -1,6 +1,5 @@
 
 import React from "react";
-import QueryHistoryPanel from "../manual-investigation/QueryHistoryPanel";
 
 interface ReachabilityTabProps {
   onStartInvestigation: (type: string) => void;
@@ -20,8 +19,6 @@ const ReachabilityTab: React.FC<ReachabilityTabProps> = ({ onStartInvestigation 
       >
         Start Reachability Investigation
       </button>
-      
-      <QueryHistoryPanel type="reachability" />
     </div>
   );
 };
