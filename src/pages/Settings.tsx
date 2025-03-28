@@ -29,25 +29,25 @@ const Settings = () => {
           <TabsList className="grid grid-cols-4 w-full max-w-2xl mb-6">
             <TabsTrigger 
               value="general" 
-              className="data-[state=active]:text-monnai-blue"
+              className="text-gray-600 data-[state=active]:text-monnai-blue"
             >
               General
             </TabsTrigger>
             <TabsTrigger 
               value="users" 
-              className="data-[state=active]:text-monnai-blue"
+              className="text-gray-600 data-[state=active]:text-monnai-blue"
             >
               User Management
             </TabsTrigger>
             <TabsTrigger 
               value="notifications" 
-              className="data-[state=active]:text-monnai-blue"
+              className="text-gray-600 data-[state=active]:text-monnai-blue"
             >
               Notifications
             </TabsTrigger>
             <TabsTrigger 
               value="security" 
-              className="data-[state=active]:text-monnai-blue"
+              className="text-gray-600 data-[state=active]:text-monnai-blue"
             >
               Security
             </TabsTrigger>
