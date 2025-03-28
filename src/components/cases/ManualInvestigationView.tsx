@@ -58,7 +58,7 @@ const ManualInvestigationView = () => {
     }
   };
 
-  // Sample KYC data for identity verification
+  // Sample KYC data for identity verification with additional user input
   const sampleKycData = {
     data: {
       kyc: {
@@ -74,7 +74,23 @@ const ManualInvestigationView = () => {
           matchPostalCode: "MATCH",
           matchAddressLine1: "NOT_SUPPORTED",
           matchPhone: "MATCH"
+        },
+        mobile: {
+          matchPhone: "MATCH",
+          matchName: "MATCH"
+        },
+        consumer: {
+          matchAddress: "MATCH",
+          matchCreditHistory: "PARTIAL_MATCH"
         }
+      },
+      userInput: {
+        firstName: "Michael",
+        lastName: "Chen",
+        dateOfBirth: "05/18/1990",
+        idNumber: "ID9876543210",
+        address: "123 Main St, New York, NY 10001",
+        phone: "+14155552671"
       }
     }
   };
