@@ -8,9 +8,7 @@ interface CustomerCheckTabProps {
 const CustomerCheckTab: React.FC<CustomerCheckTabProps> = ({ onStartInvestigation }) => {
   return (
     <div className="space-y-6">
-      <p className="text-muted-foreground mb-6">
-        Risk analysis for detecting potential fraud signals.
-      </p>
+      {/* Description text removed */}
     </div>
   );
 };
