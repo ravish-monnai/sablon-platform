@@ -22,20 +22,12 @@ interface NavItem {
   path: string;
   icon: React.FC<{ className?: string }>;
   subItems?: SubItem[];
-  featureTag?: {
-    variant: "new" | "beta" | "updated" | "ai" | "premium";
-    label?: string;
-  };
 }
 
 interface SubItem {
   label: string;
   path: string;
   icon?: React.FC<{ className?: string }>;
-  featureTag?: {
-    variant: "new" | "beta" | "updated" | "ai" | "premium";
-    label?: string;
-  };
 }
 
 const SidebarNavigation = ({ viewMode }: NavigationProps) => {
@@ -49,14 +41,12 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         }
       ]
     },
@@ -68,25 +58,18 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         }
       ]
     },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { 
-      label: "Cases", 
-      path: "/cases", 
-      icon: FileText,
-      featureTag: { variant: "new" }
-    },
+    { label: "Cases", path: "/cases", icon: FileText },
     { label: "Customers", path: "/customers", icon: Users },
     { label: "Transactions", path: "/transactions", icon: Wallet },
   ];
@@ -101,14 +84,12 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         },
         { 
           label: "Live Journeys", 
           path: "/ai-journeys?tab=live", 
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         }
       ]
     },
@@ -120,24 +101,18 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         },
         { 
           label: "Live Agents", 
           path: "/ai-agents?tab=live", 
-          icon: PlayCircle,
-          featureTag: { variant: "new" }
+          icon: PlayCircle
         }
       ]
     },
     { label: "Models", path: "/models", icon: FileCode },
     { label: "Data", path: "/data", icon: Database },
-    { 
-      label: "All Transactions", 
-      path: "/transactions", 
-      icon: Wallet 
-    },
+    { label: "All Transactions", path: "/transactions", icon: Wallet },
   ];
 
   const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems;
@@ -152,7 +127,6 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
           icon={item.icon}
           subItems={item.subItems}
           viewMode={viewMode}
-          featureTag={item.featureTag}
         />
       ))}
     </SidebarMenu>
@@ -160,4 +134,3 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
 };
 
 export default SidebarNavigation;
-

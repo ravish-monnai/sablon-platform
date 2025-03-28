@@ -8,16 +8,11 @@ import {
   SidebarMenuSubItem,
   SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
-import FeatureTag from "@/components/ui/feature-tag";
 
 interface SubItem {
   label: string;
   path: string;
   icon?: React.FC<{ className?: string }>;
-  featureTag?: {
-    variant: "new" | "beta" | "updated" | "ai" | "premium";
-    label?: string;
-  };
 }
 
 interface NavItemProps {
@@ -26,10 +21,6 @@ interface NavItemProps {
   icon: React.FC<{ className?: string }>;
   subItems?: SubItem[];
   viewMode: "customer" | "internal";
-  featureTag?: {
-    variant: "new" | "beta" | "updated" | "ai" | "premium";
-    label?: string;
-  };
 }
 
 const SidebarNavItem = ({ 
@@ -37,8 +28,7 @@ const SidebarNavItem = ({
   path, 
   icon: Icon, 
   subItems, 
-  viewMode,
-  featureTag
+  viewMode
 }: NavItemProps) => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -68,15 +58,7 @@ const SidebarNavItem = ({
             navigate({ pathname: path, search: params.toString() });
           }}
         >
-          <Icon className="h-5 w-5" />
-          {featureTag && (
-            <FeatureTag 
-              variant={featureTag.variant} 
-              className="absolute top-0 right-0 scale-50"
-            >
-              {featureTag.label}
-            </FeatureTag>
-          )}
+          <Icon className="h-6 w-6" />
         </SidebarMenuButton>
       ) : (
         <>
@@ -94,15 +76,7 @@ const SidebarNavItem = ({
               });
             }}
           >
-            <Icon className="h-5 w-5" />
-            {featureTag && (
-              <FeatureTag 
-                variant={featureTag.variant} 
-                className="absolute top-0 right-0 scale-50"
-              >
-                {featureTag.label}
-              </FeatureTag>
-            )}
+            <Icon className="h-6 w-6" />
           </SidebarMenuButton>
           
           <SidebarMenuSub>
@@ -110,7 +84,6 @@ const SidebarNavItem = ({
               <SidebarMenuSubItem key={subItem.path}>
                 <SidebarMenuSubButton
                   isActive={isActive(subItem.path)}
-                  tooltip={subItem.label}
                   onClick={() => {
                     navigate({ 
                       pathname: path, 
@@ -120,15 +93,7 @@ const SidebarNavItem = ({
                     });
                   }}
                 >
-                  {subItem.icon && <subItem.icon className="h-4 w-4" />}
-                  {subItem.featureTag && (
-                    <FeatureTag 
-                      variant={subItem.featureTag.variant} 
-                      className="absolute top-0 right-0 scale-50"
-                    >
-                      {subItem.featureTag.label}
-                    </FeatureTag>
-                  )}
+                  {subItem.icon && <subItem.icon className="h-5 w-5" />}
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             ))}
@@ -140,4 +105,3 @@ const SidebarNavItem = ({
 };
 
 export default SidebarNavItem;
-
