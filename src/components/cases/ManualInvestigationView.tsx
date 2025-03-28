@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -102,7 +103,7 @@ const ManualInvestigationView = () => {
     phone: {
       inputAttribute: "Phone number provided",
       alternatePhoneNumber: "+447700900456",
-      confidence: "High",
+      confidence: "High" as "High" | "Medium" | "Low", // Fixed: explicitly typed as the union type
       confidenceScore: 85,
       reachabilityScore: 92,
       name: "John Smith",
@@ -112,13 +113,13 @@ const ManualInvestigationView = () => {
       phoneTenure: "24+ months",
       currentCarrierCircle: "Vodafone UK - London",
       upiStatus: "Active",
-      simType: "POSTPAID"
+      simType: "POSTPAID" as "POSTPAID" | "PREPAID" // Fixed: explicitly typed as the union type
     },
     address: {
       fullAddress: "123 Main Street, Westminster, London, SW1A 1AA",
       addressType: "home",
       reachabilityScore: 78,
-      confidence: "Medium",
+      confidence: "Medium" as "High" | "Medium" | "Low", // Fixed: explicitly typed as the union type
       parsedAddress: {
         doorNumber: "123",
         streetName: "Main Street",
