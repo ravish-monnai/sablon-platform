@@ -4,12 +4,11 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { NavItem, ViewMode } from "./types/navigation";
+import { NavItem } from "./types/navigation";
 import SidebarSubMenu from "./SidebarSubMenu";
 import { cn } from "@/lib/utils";
 
 interface NavItemProps extends NavItem {
-  viewMode: ViewMode;
   isActive: boolean;
 }
 
@@ -18,27 +17,21 @@ const SidebarNavItem = ({
   path, 
   icon: Icon, 
   subItems, 
-  viewMode,
   isActive: isPrimaryActive
 }: NavItemProps) => {
   const navigate = useNavigate();
   
   const handleNavigation = () => {
-    const params = new URLSearchParams();
-    params.set("viewMode", viewMode);
-
     if (!subItems) {
-      navigate({ pathname: path, search: params.toString() });
+      navigate(path);
       return;
     }
 
     // If there are subitems, navigate to the first subitem
-    navigate({ 
-      pathname: path, 
-      search: subItems[0].path.includes('?') 
-        ? subItems[0].path.split('?')[1] 
-        : params.toString() 
-    });
+    navigate(subItems[0].path.includes('?') 
+      ? `${path}?${subItems[0].path.split('?')[1]}` 
+      : path
+    );
   };
 
   return (
@@ -61,7 +54,6 @@ const SidebarNavItem = ({
         <SidebarSubMenu 
           subItems={subItems} 
           parentPath={path} 
-          viewMode={viewMode} 
           isActive={isPrimaryActive}
         />
       )}

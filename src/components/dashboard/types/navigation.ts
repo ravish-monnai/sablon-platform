@@ -1,17 +1,15 @@
 
-import { ReactNode } from "react";
+import { LucideIcon } from "lucide-react";
 
 export interface SubItem {
   label: string;
   path: string;
-  icon?: React.FC<{ className?: string }>;
+  icon?: LucideIcon;
 }
 
 export interface NavItem {
   label: string;
   path: string;
-  icon: React.FC<{ className?: string }>;
+  icon: LucideIcon;
   subItems?: SubItem[];
 }
-
-export type ViewMode = "customer" | "internal";

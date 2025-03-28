@@ -1,18 +1,13 @@
 
 import { SidebarMenu } from "@/components/ui/sidebar";
 import SidebarNavItem from "./SidebarNavItem";
-import { customerNavItems, monnaiNavItems } from "./data/navigationItems";
-import { ViewMode } from "./types/navigation";
+import { monnaiNavItems } from "./data/navigationItems";
 import { useLocation } from "react-router-dom";
 
-interface NavigationProps {
-  viewMode: ViewMode;
-}
-
-const SidebarNavigation = ({ viewMode }: NavigationProps) => {
+const SidebarNavigation = () => {
   const location = useLocation();
   const currentPath = location.pathname;
-  const navItems = viewMode === "customer" ? customerNavItems : monnaiNavItems;
+  const navItems = monnaiNavItems;
 
   return (
     <SidebarMenu className="py-2">
@@ -23,7 +18,6 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
           path={item.path}
           icon={item.icon}
           subItems={item.subItems}
-          viewMode={viewMode}
           isActive={currentPath === item.path || currentPath.startsWith(`${item.path}/`)}
         />
       ))}

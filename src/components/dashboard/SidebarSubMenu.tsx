@@ -11,14 +11,12 @@ import { cn } from "@/lib/utils";
 interface SidebarSubMenuProps {
   subItems: SubItem[];
   parentPath: string;
-  viewMode: "customer" | "internal";
   isActive: boolean;
 }
 
 const SidebarSubMenu = ({ 
   subItems, 
   parentPath, 
-  viewMode,
   isActive: isParentActive
 }: SidebarSubMenuProps) => {
   const navigate = useNavigate();
@@ -48,12 +46,10 @@ const SidebarSubMenu = ({
             <SidebarMenuSubButton
               isActive={isActive}
               onClick={() => {
-                navigate({ 
-                  pathname: parentPath, 
-                  search: subItem.path.includes('?') 
-                    ? subItem.path.split('?')[1] 
-                    : '' 
-                });
+                navigate(subItem.path.includes('?') 
+                  ? `${parentPath}?${subItem.path.split('?')[1]}` 
+                  : parentPath
+                );
               }}
               className="transition-all duration-200"
             >
