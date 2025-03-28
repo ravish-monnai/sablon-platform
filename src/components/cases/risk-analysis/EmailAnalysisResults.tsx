@@ -1,80 +1,81 @@
 
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Mail, AlertTriangle, CheckCircle, AlertCircle } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Mail, FileText, Activity } from "lucide-react";
+import CombinedTimelineTab from "./CombinedTimelineTab";
+import DigitalFootprintTab from "./DigitalFootprintTab";
+import BreachHistory from "./email-analysis/BreachHistory";
 import EmailBasicInfo from "./email-analysis/EmailBasicInfo";
 import RiskIndicators from "./email-analysis/RiskIndicators";
 import DigitalCategories from "./email-analysis/DigitalCategories";
-import BreachHistory from "./email-analysis/BreachHistory";
-import { getStatusIcon, mockEmailData, mockDigitalCategories } from "./email-analysis/utils";
 
 interface EmailAnalysisResultsProps {
   email: string;
 }
 
 const EmailAnalysisResults: React.FC<EmailAnalysisResultsProps> = ({ email }) => {
-  // Using mock data from utils
-  const emailBasic = mockEmailData;
-  const digitalCategories = mockDigitalCategories;
-
-  // Risk indicators based on email data
-  const riskFlags = [
-    emailBasic.breach.isBreached ? {
-      id: "E101",
-      description: `Email found in ${emailBasic.breach.breachCount} data breaches`,
-      status: "warning",
-      icon: AlertTriangle
-    } : null,
-    emailBasic.domainDetails.freeProvider ? {
-      id: "E102",
-      description: "Email uses free provider domain",
-      status: "info",
-      icon: AlertCircle
-    } : null,
-    emailBasic.tenure.years > 5 ? {
-      id: "E103",
-      description: `Email has ${emailBasic.tenure.years.toFixed(1)} years of history`,
-      status: "success",
-      icon: CheckCircle
-    } : null,
-    emailBasic.deliverable ? {
-      id: "E104",
-      description: "Email is deliverable",
-      status: "success",
-      icon: CheckCircle
-    } : null
-  ].filter(Boolean);
+  // Mock data for the breach history
+  const mockBreachData = {
+    isBreached: true,
+    breachCount: 3,
+    firstBreachDate: "January 15, 2021",
+    lastBreachDate: "March 24, 2023",
+    breaches: [
+      {
+        platformName: "Example Service",
+        domainName: "example.com",
+        breachDate: "March 24, 2023"
+      },
+      {
+        platformName: "Test Platform",
+        domainName: "testplatform.com",
+        breachDate: "August 12, 2022"
+      },
+      {
+        platformName: "Demo App",
+        domainName: "demoapp.io",
+        breachDate: "January 15, 2021"
+      }
+    ]
+  };
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            <Mail className="h-5 w-5 mr-2 text-[#9b87f5]" />
-            <CardTitle className="text-base">Digital Footprint</CardTitle>
-          </div>
-          <Badge variant="outline" className="bg-blue-50 text-blue-700">
-            {emailBasic.classification.type} ({emailBasic.classification.confidence}%)
-          </Badge>
+    <div className="space-y-6">
+      {/* Basic Email Info Card */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <div className="lg:col-span-2">
+          <EmailBasicInfo email={email} />
         </div>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          {/* Email Domain Information */}
-          <EmailBasicInfo emailBasic={emailBasic} />
-          
-          {/* Risk Indicators */}
-          <RiskIndicators riskFlags={riskFlags} getStatusIcon={getStatusIcon} />
-
-          {/* Digital Footprint Categories */}
-          <DigitalCategories digitalCategories={digitalCategories} />
-          
-          {/* Data Breach Information */}
-          <BreachHistory breach={emailBasic.breach} />
+        <div>
+          <RiskIndicators />
         </div>
-      </CardContent>
-    </Card>
+      </div>
+      
+      {/* Show breach history directly if present */}
+      <BreachHistory breach={mockBreachData} />
+      
+      {/* Main Tabs */}
+      <Tabs defaultValue="digital-footprint" className="w-full">
+        <TabsList className="mb-4">
+          <TabsTrigger value="digital-footprint" className="flex items-center gap-2">
+            <FileText className="h-4 w-4" />
+            <span>Digital Footprint</span>
+          </TabsTrigger>
+          <TabsTrigger value="historical-activity" className="flex items-center gap-2">
+            <Activity className="h-4 w-4" />
+            <span>Historical Activity</span>
+          </TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="digital-footprint">
+          <DigitalFootprintTab email={email} />
+        </TabsContent>
+        
+        <TabsContent value="historical-activity">
+          <CombinedTimelineTab email={email} />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 };
 

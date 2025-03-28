@@ -1,6 +1,7 @@
 
 import React from "react";
 import RiskDashboard from "../../risk-analysis/RiskDashboard";
+import EmailAnalysisResults from "../../risk-analysis/EmailAnalysisResults";
 
 interface RiskAnalysisResultsProps {
   customerData: {
@@ -13,12 +14,16 @@ interface RiskAnalysisResultsProps {
 
 const RiskAnalysisResults: React.FC<RiskAnalysisResultsProps> = ({ customerData }) => {
   return (
-    <RiskDashboard
-      customerData={customerData}
-      riskScore={260}
-      riskLevel="MEDIUM RISK"
-      recommendation="ADDITIONAL VERIFICATION"
-    />
+    <div className="space-y-6">
+      <RiskDashboard
+        customerData={customerData}
+        riskScore={260}
+        riskLevel="MEDIUM RISK"
+        recommendation="ADDITIONAL VERIFICATION"
+      />
+      
+      <EmailAnalysisResults email={customerData.email} />
+    </div>
   );
 };
 
