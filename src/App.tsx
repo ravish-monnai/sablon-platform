@@ -16,6 +16,7 @@ import CaseReview from "./pages/CaseReview";
 import Customers from "./pages/Customers";
 import Transactions from "./pages/Transactions";
 import DashboardLayout from "./components/dashboard/DashboardLayout";
+import { MarketProvider } from "./contexts/MarketContext";
 
 const queryClient = new QueryClient();
 
@@ -40,61 +41,63 @@ export const activeRoutes = {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={
-            <DashboardLayout>
-              <Dashboard />
-            </DashboardLayout>
-          } />
-          <Route path="/ai-journeys" element={
-            <DashboardLayout>
-              <AIJourneys />
-            </DashboardLayout>
-          } />
-          <Route path="/ai-agents" element={
-            <DashboardLayout>
-              <AIAgents />
-            </DashboardLayout>
-          } />
-          <Route path="/models" element={
-            <DashboardLayout>
-              <Models />
-            </DashboardLayout>
-          } />
-          <Route path="/data" element={
-            <DashboardLayout>
-              <Data />
-            </DashboardLayout>
-          } />
-          <Route path="/cases" element={
-            <DashboardLayout>
-              <Cases />
-            </DashboardLayout>
-          } />
-          <Route path="/case-review/:caseId" element={
-            <DashboardLayout>
-              <CaseReview />
-            </DashboardLayout>
-          } />
-          <Route path="/customers" element={
-            <DashboardLayout>
-              <Customers />
-            </DashboardLayout>
-          } />
-          <Route path="/transactions" element={
-            <DashboardLayout>
-              <Transactions />
-            </DashboardLayout>
-          } />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <MarketProvider>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={
+              <DashboardLayout>
+                <Dashboard />
+              </DashboardLayout>
+            } />
+            <Route path="/ai-journeys" element={
+              <DashboardLayout>
+                <AIJourneys />
+              </DashboardLayout>
+            } />
+            <Route path="/ai-agents" element={
+              <DashboardLayout>
+                <AIAgents />
+              </DashboardLayout>
+            } />
+            <Route path="/models" element={
+              <DashboardLayout>
+                <Models />
+              </DashboardLayout>
+            } />
+            <Route path="/data" element={
+              <DashboardLayout>
+                <Data />
+              </DashboardLayout>
+            } />
+            <Route path="/cases" element={
+              <DashboardLayout>
+                <Cases />
+              </DashboardLayout>
+            } />
+            <Route path="/case-review/:caseId" element={
+              <DashboardLayout>
+                <CaseReview />
+              </DashboardLayout>
+            } />
+            <Route path="/customers" element={
+              <DashboardLayout>
+                <Customers />
+              </DashboardLayout>
+            } />
+            <Route path="/transactions" element={
+              <DashboardLayout>
+                <Transactions />
+              </DashboardLayout>
+            } />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </MarketProvider>
   </QueryClientProvider>
 );
 

@@ -1,11 +1,10 @@
 
 import React from "react";
-import { useMarket } from "@/contexts/MarketContext";
 import { bankListByMarket } from "./bankListByMarket";
 
 const BanksTabContent = () => {
-  const { selectedMarket } = useMarket();
-  const banks = bankListByMarket(selectedMarket);
+  // Use a default global market for consistent display
+  const banks = bankListByMarket("Global");
   
   return (
     <div className="space-y-4 mt-4">

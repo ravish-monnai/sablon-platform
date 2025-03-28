@@ -4,7 +4,6 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { FileText, DollarSign, ArrowUpRight, History } from "lucide-react";
-import { useMarket } from "@/contexts/MarketContext";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import ExecutionHistoryTab from "@/components/ai-journeys/components/ExecutionHistoryTab";
 import SummaryTabContent from "./bank-statement/SummaryTabContent";
@@ -13,12 +12,6 @@ import BanksTabContent from "./bank-statement/BanksTabContent";
 import LogDetailDialog from "./bank-statement/LogDetailDialog";
 
 const BankStatementAnalyzer = () => {
-  const { selectedMarket } = useMarket();
-  const isCurrencyIndian = selectedMarket === 'India';
-  const CurrencyIcon = isCurrencyIndian ? 
-    () => <span className="font-bold mr-1">₹</span> : 
-    DollarSign;
-  
   const [showExecutionHistory, setShowExecutionHistory] = useState(false);
   const [selectedExecution, setSelectedExecution] = useState<string | null>(null);
   const [showLogDetails, setShowLogDetails] = useState(false);
@@ -37,7 +30,7 @@ const BankStatementAnalyzer = () => {
             <CardTitle>Bank Statement Analyzer Agent</CardTitle>
           </div>
           <CardDescription>
-            Specialized analysis for bank statements {selectedMarket !== 'Global' ? `in ${selectedMarket}` : ''}
+            Specialized analysis for bank statements
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -73,7 +66,7 @@ const BankStatementAnalyzer = () => {
               Execution History
             </Button>
             <Button variant="outline" size="sm" className="flex items-center gap-2">
-              <CurrencyIcon className="h-4 w-4" />
+              <DollarSign className="h-4 w-4" />
               View All Cases
             </Button>
           </div>
@@ -89,7 +82,7 @@ const BankStatementAnalyzer = () => {
           <DialogHeader>
             <DialogTitle>Execution History</DialogTitle>
             <DialogDescription>
-              Bank Statement Analyzer Agent execution logs {selectedMarket !== 'Global' ? `for ${selectedMarket}` : ''}
+              Bank Statement Analyzer Agent execution logs
             </DialogDescription>
           </DialogHeader>
           <ExecutionHistoryTab onViewLogs={handleViewLogs} />

@@ -45,10 +45,7 @@ export const useCaseFiltering = ({ selectedMarket }: UseCaseFilteringProps): Use
         ? allBankStatementCases
         : allCases.filter(c => c.type.toLowerCase() === filterType);
     
-    // Then filter by market
-    if (selectedMarket !== 'Global') {
-      cases = cases.filter(c => c.market === selectedMarket);
-    }
+    // No need to filter by market since we use all data now
     
     // Then filter by search query if it exists
     if (searchQuery.trim()) {
@@ -63,7 +60,7 @@ export const useCaseFiltering = ({ selectedMarket }: UseCaseFilteringProps): Use
     }
     
     return cases;
-  }, [filterType, selectedMarket, searchQuery, allBankStatementCases]);
+  }, [filterType, searchQuery, allBankStatementCases]);
 
   return {
     filterType,

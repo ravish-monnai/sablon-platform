@@ -2,18 +2,16 @@
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useNavigate } from "react-router-dom";
-import { useMarket } from "@/contexts/MarketContext";
 import { CaseItem } from "@/types/cases";
 import { useCaseFiltering } from "@/hooks/useCaseFiltering";
 import CaseActionDialog from "@/components/cases/CaseActionDialog";
 import CaseListView from "@/components/cases/CaseListView";
 import NetworkAnalysisView from "@/components/cases/NetworkAnalysisView";
 import CasesHeader from "@/components/cases/CasesHeader";
-import IndianBankStatementAnalyzer from "@/components/cases/IndianBankStatementAnalyzer";
+import BankStatementAnalyzer from "@/components/cases/BankStatementAnalyzer";
 
 const Cases = () => {
   const navigate = useNavigate();
-  const { selectedMarket } = useMarket();
   const [selectedCase, setSelectedCase] = useState<CaseItem | null>(null);
   const [isActionDialogOpen, setIsActionDialogOpen] = useState(false);
   
@@ -23,7 +21,7 @@ const Cases = () => {
     searchQuery, 
     setSearchQuery, 
     filteredCases 
-  } = useCaseFiltering({ selectedMarket });
+  } = useCaseFiltering({ selectedMarket: 'Global' });
 
   const handleCaseAction = (caseData: CaseItem) => {
     setSelectedCase(caseData);
@@ -33,9 +31,6 @@ const Cases = () => {
   const handleCaseView = (caseId: string) => {
     navigate(`/case-review/${caseId}`);
   };
-
-  // Check if we should show Indian analyzer component
-  const showIndianAnalyzer = selectedMarket === 'India' || selectedMarket === 'Global';
 
   return (
     <div className="container mx-auto p-6">
@@ -58,7 +53,7 @@ const Cases = () => {
             onActionCase={handleCaseAction}
           />
           
-          {showIndianAnalyzer && selectedMarket === 'India' && <IndianBankStatementAnalyzer />}
+          <BankStatementAnalyzer />
         </TabsContent>
         
         <TabsContent value="network">
