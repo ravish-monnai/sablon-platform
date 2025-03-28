@@ -54,23 +54,23 @@ const InvestigationResults: React.FC = () => {
     phone: {
       inputAttribute: "Phone number provided",
       alternatePhoneNumber: "+447700900456",
-      confidence: "High" as "High" | "Medium" | "Low",
+      confidence: "High" as const,
       confidenceScore: 85,
       reachabilityScore: 92,
       name: "John Smith",
       type: "MOBILE",
-      active: "YES" as "YES" | "NO" | "UNKNOWN",
+      active: "YES" as const,
       ported: false,
       phoneTenure: "24+ months",
       currentCarrierCircle: "Vodafone UK - London",
       upiStatus: "Active",
-      simType: "POSTPAID" as "POSTPAID" | "PREPAID"
+      simType: "POSTPAID" as const
     },
     address: {
       fullAddress: "123 Main Street, Westminster, London, SW1A 1AA",
       addressType: "home",
       reachabilityScore: 78,
-      confidence: "Medium" as "High" | "Medium" | "Low",
+      confidence: "Medium" as const,
       parsedAddress: {
         doorNumber: "123",
         streetName: "Main Street",
@@ -81,17 +81,17 @@ const InvestigationResults: React.FC = () => {
     },
     enrichment: {
       alternatePhones: [
-        { phone: "+447700900456", identityConfidence: "High", reachabilityScore: 92 },
-        { phone: "+447700900789", identityConfidence: "High", reachabilityScore: 85 },
-        { phone: "+447700900012", identityConfidence: "Medium", reachabilityScore: 78 },
-        { phone: "+447700900345", identityConfidence: "Medium", reachabilityScore: 65 },
-        { phone: "+447700900678", identityConfidence: "Low", reachabilityScore: 42 }
+        { phone: "+447700900456", identityConfidence: "High" as const, reachabilityScore: 92 },
+        { phone: "+447700900789", identityConfidence: "High" as const, reachabilityScore: 85 },
+        { phone: "+447700900012", identityConfidence: "Medium" as const, reachabilityScore: 78 },
+        { phone: "+447700900345", identityConfidence: "Medium" as const, reachabilityScore: 65 },
+        { phone: "+447700900678", identityConfidence: "Low" as const, reachabilityScore: 42 }
       ],
       alternateAddresses: [
-        { address: "45 Park Lane, Westminster, London, SW1A 1AA", type: "Residential", confidence: "High" },
-        { address: "67 Oxford Street, Suite 200, London, W1D 2EQ", type: "Business", confidence: "Medium" },
-        { address: "789 Kensington High Street, London, W8 5NP", type: "Previous", confidence: "Medium" },
-        { address: "321 Baker Street, London, NW1 6XE", type: "Relative", confidence: "Low" }
+        { address: "45 Park Lane, Westminster, London, SW1A 1AA", type: "Residential", confidence: "High" as const },
+        { address: "67 Oxford Street, Suite 200, London, W1D 2EQ", type: "Business", confidence: "Medium" as const },
+        { address: "789 Kensington High Street, London, W8 5NP", type: "Previous", confidence: "Medium" as const },
+        { address: "321 Baker Street, London, NW1 6XE", type: "Relative", confidence: "Low" as const }
       ]
     }
   };
