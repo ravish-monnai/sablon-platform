@@ -17,7 +17,6 @@ interface NavigationProps {
   viewMode: "customer" | "internal";
 }
 
-// Define a clear interface for navigation items
 interface NavItem {
   label: string;
   path: string;
@@ -50,6 +49,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
+          icon: PlayCircle,
           featureTag: { variant: "new" }
         },
         { 
@@ -68,6 +68,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
+          icon: PlayCircle,
           featureTag: { variant: "new" }
         },
         { 
@@ -100,6 +101,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Journey Builder", 
           path: "/ai-journeys?tab=workflow",
+          icon: PlayCircle,
           featureTag: { variant: "new" }
         },
         { 
@@ -118,6 +120,7 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
         { 
           label: "Agent Builder", 
           path: "/ai-agents?tab=builder",
+          icon: PlayCircle,
           featureTag: { variant: "new" }
         },
         { 
@@ -157,3 +160,4 @@ const SidebarNavigation = ({ viewMode }: NavigationProps) => {
 };
 
 export default SidebarNavigation;
+

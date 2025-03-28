@@ -68,18 +68,15 @@ const SidebarNavItem = ({
             navigate({ pathname: path, search: params.toString() });
           }}
         >
-          <Icon className="mr-2" />
-          <span className="flex items-center gap-1.5">
-            {label}
-            {featureTag && (
-              <FeatureTag 
-                variant={featureTag.variant} 
-                className="scale-75"
-              >
-                {featureTag.label}
-              </FeatureTag>
-            )}
-          </span>
+          <Icon className="h-5 w-5" />
+          {featureTag && (
+            <FeatureTag 
+              variant={featureTag.variant} 
+              className="absolute top-0 right-0 scale-50"
+            >
+              {featureTag.label}
+            </FeatureTag>
+          )}
         </SidebarMenuButton>
       ) : (
         <>
@@ -97,18 +94,15 @@ const SidebarNavItem = ({
               });
             }}
           >
-            <Icon className="mr-2" />
-            <span className="flex items-center gap-1.5">
-              {label}
-              {featureTag && (
-                <FeatureTag 
-                  variant={featureTag.variant} 
-                  className="scale-75"
-                >
-                  {featureTag.label}
-                </FeatureTag>
-              )}
-            </span>
+            <Icon className="h-5 w-5" />
+            {featureTag && (
+              <FeatureTag 
+                variant={featureTag.variant} 
+                className="absolute top-0 right-0 scale-50"
+              >
+                {featureTag.label}
+              </FeatureTag>
+            )}
           </SidebarMenuButton>
           
           <SidebarMenuSub>
@@ -116,6 +110,7 @@ const SidebarNavItem = ({
               <SidebarMenuSubItem key={subItem.path}>
                 <SidebarMenuSubButton
                   isActive={isActive(subItem.path)}
+                  tooltip={subItem.label}
                   onClick={() => {
                     navigate({ 
                       pathname: path, 
@@ -125,18 +120,15 @@ const SidebarNavItem = ({
                     });
                   }}
                 >
-                  {subItem.icon && <subItem.icon className="mr-2 h-4 w-4" />}
-                  <span className="flex items-center gap-1.5">
-                    {subItem.label}
-                    {subItem.featureTag && (
-                      <FeatureTag 
-                        variant={subItem.featureTag.variant} 
-                        className="scale-75"
-                      >
-                        {subItem.featureTag.label}
-                      </FeatureTag>
-                    )}
-                  </span>
+                  {subItem.icon && <subItem.icon className="h-4 w-4" />}
+                  {subItem.featureTag && (
+                    <FeatureTag 
+                      variant={subItem.featureTag.variant} 
+                      className="absolute top-0 right-0 scale-50"
+                    >
+                      {subItem.featureTag.label}
+                    </FeatureTag>
+                  )}
                 </SidebarMenuSubButton>
               </SidebarMenuSubItem>
             ))}
@@ -148,3 +140,4 @@ const SidebarNavItem = ({
 };
 
 export default SidebarNavItem;
+
