@@ -3,25 +3,43 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, AlertCircle } from "lucide-react";
+import { Search, AlertCircle, Phone, Mail, Globe, BarChart2 } from "lucide-react";
 import RiskDashboard from "./risk-analysis/RiskDashboard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const ManualInvestigationView = () => {
   const [query, setQuery] = useState<string>("");
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [showResults, setShowResults] = useState<boolean>(false);
+  const [currentAnalysisStep, setCurrentAnalysisStep] = useState<string>("");
   
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (!query.trim()) return;
     
     setIsAnalyzing(true);
+    setShowResults(false);
     
-    // Simulate API call with timeout
-    setTimeout(() => {
+    // Run through animation steps
+    runAnalysisAnimation().then(() => {
       setIsAnalyzing(false);
       setShowResults(true);
-    }, 1500);
+    });
+  };
+  
+  const runAnalysisAnimation = async () => {
+    const steps = [
+      { message: "Querying telecom data sources...", icon: Phone, duration: 800 },
+      { message: "Analyzing email information...", icon: Mail, duration: 800 },
+      { message: "Gathering digital footprint data...", icon: Globe, duration: 800 },
+      { message: "Running risk assessment algorithms...", icon: BarChart2, duration: 800 }
+    ];
+    
+    for (const step of steps) {
+      setCurrentAnalysisStep(step.message);
+      // Wait for the specified duration
+      await new Promise(resolve => setTimeout(resolve, step.duration));
+    }
   };
   
   return (
@@ -63,10 +81,32 @@ const ManualInvestigationView = () => {
         </form>
         
         {isAnalyzing && (
-          <div className="flex items-center justify-center py-8">
-            <div className="flex flex-col items-center space-y-3">
-              <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-[#9b87f5]"></div>
-              <p className="text-sm text-muted-foreground">Analyzing risk factors...</p>
+          <div className="space-y-4 py-4">
+            {/* Loading animation with current step */}
+            <div className="flex items-center space-x-4 p-4 border border-blue-100 bg-blue-50 rounded-md animate-pulse">
+              <div className="h-10 w-10 rounded-full bg-blue-200 flex items-center justify-center">
+                {currentAnalysisStep.includes("telecom") && <Phone className="h-6 w-6 text-blue-600" />}
+                {currentAnalysisStep.includes("email") && <Mail className="h-6 w-6 text-blue-600" />}
+                {currentAnalysisStep.includes("digital") && <Globe className="h-6 w-6 text-blue-600" />}
+                {currentAnalysisStep.includes("risk") && <BarChart2 className="h-6 w-6 text-blue-600" />}
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium text-blue-800">{currentAnalysisStep}</p>
+                <div className="w-full h-2 bg-blue-100 rounded-full mt-2 overflow-hidden">
+                  <div className="h-full bg-blue-500 rounded-full animate-pulse" style={{ width: "60%" }}></div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Placeholder skeleton loaders for results */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+              <div className="lg:col-span-1">
+                <Skeleton className="h-72 w-full rounded-md" />
+              </div>
+              <div className="lg:col-span-2">
+                <Skeleton className="h-24 w-full rounded-md mb-4" />
+                <Skeleton className="h-44 w-full rounded-md" />
+              </div>
             </div>
           </div>
         )}
