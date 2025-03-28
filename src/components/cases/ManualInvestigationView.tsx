@@ -9,6 +9,7 @@ import IdentityVerificationTab from "./investigation/IdentityVerificationTab";
 import ReachabilityTab from "./investigation/ReachabilityTab";
 import SearchForm from "./investigation/SearchForm";
 import AnalysisAnimation from "./investigation/AnalysisAnimation";
+import IdentityVerificationResults from "./investigation/IdentityVerificationResults";
 import { runAnalysisAnimation } from "./investigation/utils/analysisSteps";
 
 const ManualInvestigationView = () => {
@@ -54,6 +55,27 @@ const ManualInvestigationView = () => {
         break;
       default:
         setQuery("");
+    }
+  };
+
+  // Sample KYC data for identity verification
+  const sampleKycData = {
+    data: {
+      kyc: {
+        government: {
+          matchFirstName: "PARTIAL_MATCH",
+          matchLastName: "MATCH",
+          matchDateOfBirth: "MATCH",
+          matchId1: "NO_MATCH",
+          matchStreetName: "MATCH",
+          matchStreetNumber: "MATCH",
+          matchCity: "MATCH",
+          matchState: "MATCH",
+          matchPostalCode: "MATCH",
+          matchAddressLine1: "NOT_SUPPORTED",
+          matchPhone: "MATCH"
+        }
+      }
     }
   };
   
@@ -108,7 +130,7 @@ const ManualInvestigationView = () => {
           currentAnalysisStep={currentAnalysisStep} 
         />
         
-        {showResults && !isAnalyzing && (
+        {showResults && !isAnalyzing && investigationType === "risk-analysis" && (
           <RiskDashboard 
             customerData={{
               name: "Ravish Patel",
@@ -120,6 +142,10 @@ const ManualInvestigationView = () => {
             riskLevel="MEDIUM RISK"
             recommendation="ADDITIONAL VERIFICATION"
           />
+        )}
+
+        {showResults && !isAnalyzing && investigationType === "identity-verification" && (
+          <IdentityVerificationResults data={sampleKycData.data} />
         )}
       </CardContent>
     </Card>
