@@ -20,7 +20,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   return (
     <SidebarProvider defaultOpen={false}>
       <div className="flex min-h-screen w-full bg-zinc-50">
-        <Sidebar variant="sidebar" collapsible="icon" defaultCollapsed={true} className="bg-sidebar border-r border-sidebar-border">
+        <Sidebar variant="sidebar" collapsible="icon" className="bg-sidebar border-r border-sidebar-border">
           <SidebarHeader className="p-2">
             <SidebarHeaderContent />
           </SidebarHeader>
