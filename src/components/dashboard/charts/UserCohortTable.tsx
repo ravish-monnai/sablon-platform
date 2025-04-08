@@ -22,7 +22,6 @@ interface UserCohortTableProps {
 }
 
 const UserCohortTable: React.FC<UserCohortTableProps> = ({ data }) => {
-  // Calculate trend indicators
   const getTrendIndicator = (index: number, field: 'newUsers' | 'returningUsers') => {
     if (index === 0) return null;
     
@@ -74,4 +73,4 @@ const UserCohortTable: React.FC<UserCohortTableProps> = ({ data }) => {
   );
 };
 
-export default UserCohortTable;
+export default React.memo(UserCohortTable);

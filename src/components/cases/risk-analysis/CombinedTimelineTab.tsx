@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { memo } from "react";
 import BreachHistoryTab from "./BreachHistoryTab";
 import ActivityTimeline from "./ActivityTimeline";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -38,4 +38,4 @@ const CombinedTimelineTab: React.FC<CombinedTimelineTabProps> = ({ email }) => {
   );
 };
 
-export default CombinedTimelineTab;
+export default memo(CombinedTimelineTab);

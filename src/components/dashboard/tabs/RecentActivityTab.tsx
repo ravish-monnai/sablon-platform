@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -14,17 +14,50 @@ import { BarChart, Activity, Users, TrendingUp } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import TransactionsTrendChart from "../charts/TransactionsTrendChart";
 import UserCohortTable from "../charts/UserCohortTable";
+import { 
+  ActivityMetric, 
+  calculateTotals,
+  generateWeeklyComparison,
+  formatNumber
+} from "../util/dashboardUtils";
 
-interface ActivityMetric {
-  name: string;
-  statements: number;
-  cases: number;
-  transactions: number;
-  users: number;
-}
+const MetricCard: React.FC<{
+  bgColor: string;
+  textColor: string;
+  title: string;
+  value: number;
+  subtitle: string;
+}> = ({ bgColor, textColor, title, value, subtitle }) => (
+  <div className={`${bgColor} p-4 rounded-lg`}>
+    <p className={`text-sm ${textColor}`}>{title}</p>
+    <p className={`text-2xl font-bold ${textColor}`}>{formatNumber(value)}</p>
+    <p className={`text-xs ${textColor} opacity-75`}>{subtitle}</p>
+  </div>
+);
+
+const ComparisonPanel: React.FC<{
+  title: string;
+  current: number;
+  previous: number;
+  change: string;
+  className?: string;
+}> = ({ title, current, previous, change, className = "" }) => (
+  <div className={`p-2 bg-gray-50 rounded-md ${className}`}>
+    <div className="font-medium mb-2">{title}</div>
+    <div className="flex items-center gap-2">
+      <span className="text-2xl font-bold">{formatNumber(current)}</span>
+      <Badge variant="outline" className="bg-green-100 text-green-800">
+        {change}
+      </Badge>
+    </div>
+    <p className="text-xs text-muted-foreground">
+      vs {Math.floor(previous).toLocaleString()} previous week
+    </p>
+  </div>
+);
 
 const RecentActivityTab: React.FC = () => {
-  const activityData: ActivityMetric[] = [
+  const activityData: ActivityMetric[] = useMemo(() => [
     { name: "Mon", statements: 87, cases: 32, transactions: 213, users: 64 },
     { name: "Tue", statements: 96, cases: 41, transactions: 245, users: 72 },
     { name: "Wed", statements: 105, cases: 37, transactions: 278, users: 83 },
@@ -32,48 +65,56 @@ const RecentActivityTab: React.FC = () => {
     { name: "Fri", statements: 99, cases: 49, transactions: 287, users: 76 },
     { name: "Sat", statements: 68, cases: 22, transactions: 164, users: 41 },
     { name: "Sun", statements: 54, cases: 19, transactions: 122, users: 35 },
-  ];
+  ], []);
 
-  const totalStatements = activityData.reduce((sum, day) => sum + day.statements, 0);
-  const totalCases = activityData.reduce((sum, day) => sum + day.cases, 0);
-  const totalTransactions = activityData.reduce((sum, day) => sum + day.transactions, 0);
-  const totalUsers = activityData.reduce((sum, day) => sum + day.users, 0);
+  const { totalStatements, totalCases, totalTransactions, totalUsers } = useMemo(
+    () => calculateTotals(activityData), 
+    [activityData]
+  );
 
-  const weeklyComparison = {
-    transactions: { current: totalTransactions, previous: totalTransactions * 0.85, change: '+17.6%' },
-    users: { current: totalUsers, previous: totalUsers * 0.92, change: '+8.7%' }
-  };
+  const weeklyComparison = useMemo(
+    () => generateWeeklyComparison(totalTransactions, totalUsers),
+    [totalTransactions, totalUsers]
+  );
 
-  const userCohorts = [
+  const userCohorts = useMemo(() => [
     { period: "Last 7 days", newUsers: 259, returningUsers: 146, conversionRate: "18.4%" },
     { period: "7-14 days ago", newUsers: 231, returningUsers: 137, conversionRate: "16.8%" },
     { period: "14-21 days ago", newUsers: 205, returningUsers: 119, conversionRate: "15.2%" },
     { period: "21-28 days ago", newUsers: 189, returningUsers: 108, conversionRate: "14.7%" },
-  ];
+  ], []);
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div className="bg-[#E0F2FE] p-4 rounded-lg">
-          <p className="text-sm text-[#4DA3FF]">Statements</p>
-          <p className="text-2xl font-bold text-[#4DA3FF]">{totalStatements.toLocaleString()}</p>
-          <p className="text-xs text-[#4DA3FF] opacity-75">analyzed</p>
-        </div>
-        <div className="bg-[#FFF1E0] p-4 rounded-lg">
-          <p className="text-sm text-[#F97316]">Cases</p>
-          <p className="text-2xl font-bold text-[#F97316]">{totalCases.toLocaleString()}</p>
-          <p className="text-xs text-[#F97316] opacity-75">generated</p>
-        </div>
-        <div className="bg-[#E0F7EE] p-4 rounded-lg">
-          <p className="text-sm text-[#10B981]">Transactions</p>
-          <p className="text-2xl font-bold text-[#10B981]">{totalTransactions.toLocaleString()}</p>
-          <p className="text-xs text-[#10B981] opacity-75">processed</p>
-        </div>
-        <div className="bg-[#EEE0FE] p-4 rounded-lg">
-          <p className="text-sm text-[#8B5CF6]">Users</p>
-          <p className="text-2xl font-bold text-[#8B5CF6]">{totalUsers.toLocaleString()}</p>
-          <p className="text-xs text-[#8B5CF6] opacity-75">active</p>
-        </div>
+        <MetricCard
+          bgColor="bg-[#E0F2FE]"
+          textColor="text-[#4DA3FF]"
+          title="Statements"
+          value={totalStatements}
+          subtitle="analyzed"
+        />
+        <MetricCard
+          bgColor="bg-[#FFF1E0]"
+          textColor="text-[#F97316]"
+          title="Cases"
+          value={totalCases}
+          subtitle="generated"
+        />
+        <MetricCard
+          bgColor="bg-[#E0F7EE]"
+          textColor="text-[#10B981]"
+          title="Transactions"
+          value={totalTransactions}
+          subtitle="processed"
+        />
+        <MetricCard
+          bgColor="bg-[#EEE0FE]"
+          textColor="text-[#8B5CF6]"
+          title="Users"
+          value={totalUsers}
+          subtitle="active"
+        />
       </div>
       
       <Tabs defaultValue="activity-summary" className="w-full">
@@ -146,16 +187,13 @@ const RecentActivityTab: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="md:col-span-3 p-2 bg-gray-50 rounded-md">
-                  <div className="font-medium mb-2">Weekly Comparison</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold">{totalTransactions.toLocaleString()}</span>
-                    <Badge variant="outline" className="bg-green-100 text-green-800">
-                      {weeklyComparison.transactions.change}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">vs {Math.floor(weeklyComparison.transactions.previous).toLocaleString()} previous week</p>
-                </div>
+                <ComparisonPanel
+                  className="md:col-span-3"
+                  title="Weekly Comparison"
+                  current={weeklyComparison.transactions.current}
+                  previous={weeklyComparison.transactions.previous}
+                  change={weeklyComparison.transactions.change}
+                />
                 <div className="p-2 bg-gray-50 rounded-md">
                   <div className="font-medium mb-2">Avg. Processing Time</div>
                   <div className="text-2xl font-bold">1.7s</div>
@@ -177,16 +215,13 @@ const RecentActivityTab: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-                <div className="md:col-span-3 p-2 bg-gray-50 rounded-md">
-                  <div className="font-medium mb-2">Weekly User Count</div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold">{totalUsers.toLocaleString()}</span>
-                    <Badge variant="outline" className="bg-green-100 text-green-800">
-                      {weeklyComparison.users.change}
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground">vs {Math.floor(weeklyComparison.users.previous).toLocaleString()} previous week</p>
-                </div>
+                <ComparisonPanel
+                  className="md:col-span-3"
+                  title="Weekly User Count"
+                  current={weeklyComparison.users.current}
+                  previous={weeklyComparison.users.previous}
+                  change={weeklyComparison.users.change}
+                />
                 <div className="p-2 bg-gray-50 rounded-md">
                   <div className="font-medium mb-2">Retention Rate</div>
                   <div className="text-2xl font-bold">73.4%</div>
@@ -202,4 +237,4 @@ const RecentActivityTab: React.FC = () => {
   );
 };
 
-export default RecentActivityTab;
+export default React.memo(RecentActivityTab);

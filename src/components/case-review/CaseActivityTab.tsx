@@ -1,4 +1,5 @@
 
+import React, { memo } from "react";
 import { 
   Card, CardContent, CardHeader, CardTitle 
 } from "@/components/ui/card";
@@ -9,11 +10,71 @@ import {
   Check, AlertTriangle 
 } from "lucide-react";
 
+interface ActivityItemProps {
+  icon: React.ReactNode;
+  title: string;
+  time: string;
+  isSuspicious?: boolean;
+}
+
+const ActivityItem = memo(({ icon, title, time, isSuspicious }: ActivityItemProps) => (
+  <div className="flex items-start p-3 rounded-md bg-gray-50">
+    <div className="mr-3 mt-0.5 bg-white p-1.5 rounded-full">
+      {icon}
+    </div>
+    <div className="flex-1">
+      <div className="flex justify-between items-start">
+        <p className="font-medium">{title}</p>
+        <Badge variant={isSuspicious ? "destructive" : "outline"} className="text-xs">
+          {isSuspicious ? (
+            <><AlertTriangle className="h-3 w-3 mr-1" /> Suspicious</>
+          ) : (
+            <><Check className="h-3 w-3 mr-1" /> Normal</>
+          )}
+        </Badge>
+      </div>
+      <p className="text-sm text-muted-foreground mt-1">{time}</p>
+    </div>
+  </div>
+));
+
 interface CaseActivityTabProps {
   caseData: any;
 }
 
 const CaseActivityTab = ({ caseData }: CaseActivityTabProps) => {
+  const activityItems = [
+    {
+      title: "Login attempt",
+      isSuspicious: caseData.riskScore > 70
+    },
+    {
+      title: "Updated profile",
+      isSuspicious: false
+    },
+    {
+      title: "Initiated transaction",
+      isSuspicious: false
+    },
+    {
+      title: "Uploaded document",
+      isSuspicious: false
+    },
+    {
+      title: "Password change",
+      isSuspicious: false
+    }
+  ];
+
+  const getRandomDate = () => {
+    return new Date(2023, 
+      Math.floor(Math.random() * 12), 
+      Math.floor(Math.random() * 28) + 1, 
+      Math.floor(Math.random() * 24),
+      Math.floor(Math.random() * 60)
+    ).toLocaleString();
+  };
+
   return (
     <Card>
       <CardHeader className="pb-2">
@@ -44,39 +105,21 @@ const CaseActivityTab = ({ caseData }: CaseActivityTabProps) => {
 
         <div className="space-y-3">
           <h3 className="font-medium">Recent Activity</h3>
-          {[...Array(5)].map((_, idx) => (
-            <div key={idx} className="flex items-start p-3 rounded-md bg-gray-50">
-              <div className="mr-3 mt-0.5 bg-white p-1.5 rounded-full">
-                <Clock className="h-4 w-4 text-muted-foreground" />
-              </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-start">
-                  <p className="font-medium">
-                    {["Login attempt", "Updated profile", "Initiated transaction", "Uploaded document", "Password change"][idx]}
-                  </p>
-                  <Badge variant={idx === 0 && caseData.riskScore > 70 ? "destructive" : "outline"} className="text-xs">
-                    {idx === 0 && caseData.riskScore > 70 ? (
-                      <><AlertTriangle className="h-3 w-3 mr-1" /> Suspicious</>
-                    ) : (
-                      <><Check className="h-3 w-3 mr-1" /> Normal</>
-                    )}
-                  </Badge>
-                </div>
-                <p className="text-sm text-muted-foreground mt-1">
-                  {new Date(2023, 
-                    Math.floor(Math.random() * 12), 
-                    Math.floor(Math.random() * 28) + 1, 
-                    Math.floor(Math.random() * 24),
-                    Math.floor(Math.random() * 60)
-                  ).toLocaleString()}
-                </p>
-              </div>
-            </div>
-          ))}
+          <div className="space-y-3">
+            {activityItems.map((item, idx) => (
+              <ActivityItem 
+                key={`activity-${idx}`}
+                icon={<Clock className="h-4 w-4 text-muted-foreground" />}
+                title={item.title}
+                time={getRandomDate()}
+                isSuspicious={item.isSuspicious}
+              />
+            ))}
+          </div>
         </div>
       </CardContent>
     </Card>
   );
 };
 
-export default CaseActivityTab;
+export default memo(CaseActivityTab);
