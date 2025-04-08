@@ -2,7 +2,6 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Bot, Database } from "lucide-react";
-import { Button } from "@/components/ui/button";
 
 interface QuickAnalyticsCardProps {
   className?: string;
@@ -12,16 +11,12 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle>Quick Analytics</CardTitle>
-        <CardDescription>Key metrics overview</CardDescription>
+        <CardTitle>Live Engines</CardTitle>
+        <CardDescription>Active AI systems overview</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
           <div className="space-y-2">
-            <div className="flex justify-between">
-              <span>Active Models</span>
-              <span className="font-bold">8</span>
-            </div>
             <div className="flex justify-between">
               <span>AI Journeys</span>
               <span className="font-bold">5</span>
@@ -29,10 +24,6 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
             <div className="flex justify-between">
               <span>Agents</span>
               <span className="font-bold">12</span>
-            </div>
-            <div className="flex justify-between">
-              <span>Transactions</span>
-              <span className="font-bold">7,409</span>
             </div>
           </div>
           
