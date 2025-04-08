@@ -11,20 +11,19 @@ import {
 
 interface ActivityMetric {
   name: string;
-  onboarding: number;
   statements: number;
   cases: number;
 }
 
 const RecentActivityTab: React.FC = () => {
   const activityData: ActivityMetric[] = [
-    { name: "Mon", onboarding: 124, statements: 87, cases: 32 },
-    { name: "Tue", onboarding: 145, statements: 96, cases: 41 },
-    { name: "Wed", onboarding: 132, statements: 105, cases: 37 },
-    { name: "Thu", onboarding: 167, statements: 117, cases: 45 },
-    { name: "Fri", onboarding: 158, statements: 99, cases: 49 },
-    { name: "Sat", onboarding: 95, statements: 68, cases: 22 },
-    { name: "Sun", onboarding: 87, statements: 54, cases: 19 },
+    { name: "Mon", statements: 87, cases: 32 },
+    { name: "Tue", statements: 96, cases: 41 },
+    { name: "Wed", statements: 105, cases: 37 },
+    { name: "Thu", statements: 117, cases: 45 },
+    { name: "Fri", statements: 99, cases: 49 },
+    { name: "Sat", statements: 68, cases: 22 },
+    { name: "Sun", statements: 54, cases: 19 },
   ];
 
   const totalStatements = activityData.reduce((sum, day) => sum + day.statements, 0);

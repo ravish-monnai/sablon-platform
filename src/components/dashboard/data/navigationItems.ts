@@ -62,6 +62,23 @@ export const monnaiNavItems: NavItem[] = [
     ]
   },
   { 
+    label: "AI Journeys", 
+    path: "/ai-journeys", 
+    icon: FileText,
+    subItems: [
+      { 
+        label: "Journey Builder", 
+        path: "/ai-journeys?tab=workflow",
+        icon: FileText
+      },
+      { 
+        label: "Live Journeys", 
+        path: "/ai-journeys?tab=live", 
+        icon: createCustomIcon("/lovable-uploads/19b78546-e02e-4d5e-8942-6a3d06bf5c6f.png", "h-6 w-6")
+      }
+    ]
+  },
+  { 
     label: "Data", 
     path: "/data", 
     icon: Database 
