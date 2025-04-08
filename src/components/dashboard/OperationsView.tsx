@@ -9,6 +9,7 @@ import OperationalAgentsTab from "./tabs/OperationalAgentsTab";
 import ModelsTab from "./tabs/ModelsTab";
 import DataSourcesTab from "./tabs/DataSourcesTab";
 import SystemHealthTab from "./tabs/SystemHealthTab";
+import RecentActivityTab from "./tabs/RecentActivityTab";
 
 const OperationsView: React.FC = () => {
   return (
@@ -21,6 +22,10 @@ const OperationsView: React.FC = () => {
           <TabsTrigger value="global-traffic" className="flex items-center">
             <LayoutDashboard className="mr-2 h-4 w-4" />
             Global Traffic
+          </TabsTrigger>
+          <TabsTrigger value="recent-activity" className="flex items-center">
+            <Activity className="mr-2 h-4 w-4" />
+            Recent Activity
           </TabsTrigger>
           <TabsTrigger value="operational-agents" className="flex items-center">
             <Bot className="mr-2 h-4 w-4" />
@@ -42,6 +47,10 @@ const OperationsView: React.FC = () => {
 
         <TabsContent value="global-traffic" className="w-full">
           <GlobalTrafficTab />
+        </TabsContent>
+
+        <TabsContent value="recent-activity" className="w-full">
+          <RecentActivityTab />
         </TabsContent>
 
         <TabsContent value="operational-agents" className="w-full">
