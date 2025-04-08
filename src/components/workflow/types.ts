@@ -5,7 +5,12 @@ import { Node } from '@xyflow/react';
 export interface NodeData {
   label: string;
   type: string;
-  icon?: ReactNode;
+  icon?: ReactNode; // Legacy field - keep for compatibility
+  iconConfig?: { // New field for serializable icon configuration
+    name: string;
+    className?: string;
+    size?: number;
+  };
   description?: string;
   modelType?: string;
   color?: string;

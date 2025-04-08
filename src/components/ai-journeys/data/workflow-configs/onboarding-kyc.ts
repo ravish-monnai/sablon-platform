@@ -1,7 +1,11 @@
 
-import React from 'react';
 import { Database, Brain, Shield, CheckCircle, FileCheck, UserCheck } from 'lucide-react';
 import { JourneyWorkflowConfig } from './types';
+
+// Create serializable icon references that will be resolved at render time
+const createIconReference = (iconName: string, className: string, size: number) => {
+  return { iconName, className, size };
+};
 
 export const onboardingKycWorkflow: JourneyWorkflowConfig = {
   name: "Customer Onboarding with KYC",
@@ -18,7 +22,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'User Registration',
         description: 'Initial user registration data',
-        icon: <Database className="text-yellow-500" size={20} />,
+        iconConfig: { name: 'Database', className: "text-yellow-500", size: 20 },
         type: 'datasource',
         featureTag: 'new'
       }
@@ -30,7 +34,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Risk Scoring',
         description: 'Initial risk assessment',
-        icon: <Brain className="text-pink-600" size={20} />,
+        iconConfig: { name: 'Brain', className: "text-pink-600", size: 20 },
         type: 'model',
         modelType: 'multiclass'
       }
@@ -42,7 +46,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'ID Verification',
         description: 'Document verification and facial matching',
-        icon: <Shield className="text-blue-600" size={20} />,
+        iconConfig: { name: 'Shield', className: "text-blue-600", size: 20 },
         type: 'process',
         featureTag: 'ai'
       }
@@ -54,7 +58,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'KYC Decision',
         description: 'Automated KYC approval or manual review',
-        icon: <CheckCircle className="text-green-600" size={20} />,
+        iconConfig: { name: 'CheckCircle', className: "text-green-600", size: 20 },
         type: 'decision',
         decisions: [
           { condition: 'low_risk', outcome: 'approve', nextNode: 'approve-1' },
@@ -70,7 +74,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Enhanced Due Diligence',
         description: 'Additional verification for medium-risk customers',
-        icon: <FileCheck className="text-purple-600" size={20} />,
+        iconConfig: { name: 'FileCheck', className: "text-purple-600", size: 20 },
         type: 'process'
       }
     },
@@ -81,7 +85,7 @@ export const onboardingKycWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Account Creation',
         description: 'Finalize account setup after approval',
-        icon: <UserCheck className="text-blue-600" size={20} />,
+        iconConfig: { name: 'UserCheck', className: "text-blue-600", size: 20 },
         type: 'endpoint'
       }
     }

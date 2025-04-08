@@ -1,7 +1,11 @@
 
-import React from 'react';
 import { Database, Brain, Shield, CheckCircle, AlertTriangle, UserCheck } from 'lucide-react';
 import { JourneyWorkflowConfig } from './types';
+
+// Create serializable icon references that will be resolved at render time
+const createIconReference = (iconName: string, className: string, size: number) => {
+  return { iconName, className, size };
+};
 
 export const kycVerificationWorkflow: JourneyWorkflowConfig = {
   name: "KYC Verification",
@@ -18,7 +22,7 @@ export const kycVerificationWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Identity Documents',
         description: 'ID, passport, or driving license',
-        icon: <Database className="text-yellow-500" size={20} />,
+        iconConfig: { name: 'Database', className: "text-yellow-500", size: 20 },
         type: 'datasource'
       }
     },
@@ -29,7 +33,7 @@ export const kycVerificationWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Document Authentication',
         description: 'Verify document authenticity',
-        icon: <Shield className="text-blue-600" size={20} />,
+        iconConfig: { name: 'Shield', className: "text-blue-600", size: 20 },
         type: 'process',
         featureTag: 'ai'
       }
@@ -41,7 +45,7 @@ export const kycVerificationWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Biometric Matching',
         description: 'Facial recognition and liveness check',
-        icon: <Brain className="text-pink-600" size={20} />,
+        iconConfig: { name: 'Brain', className: "text-pink-600", size: 20 },
         type: 'model',
         modelType: 'binary'
       }
@@ -53,7 +57,7 @@ export const kycVerificationWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'Sanctions Screening',
         description: 'Check against global watchlists',
-        icon: <AlertTriangle className="text-red-500" size={20} />,
+        iconConfig: { name: 'AlertTriangle', className: "text-red-500", size: 20 },
         type: 'process'
       }
     },
@@ -64,7 +68,7 @@ export const kycVerificationWorkflow: JourneyWorkflowConfig = {
       data: { 
         label: 'KYC Outcome',
         description: 'Final verification result',
-        icon: <CheckCircle className="text-green-600" size={20} />,
+        iconConfig: { name: 'CheckCircle', className: "text-green-600", size: 20 },
         type: 'decision',
         featureTag: 'new'
       }

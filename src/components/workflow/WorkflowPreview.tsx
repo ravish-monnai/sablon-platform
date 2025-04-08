@@ -4,6 +4,7 @@ import { ReactFlow, Background, Controls, Node, Edge, NodeProps } from '@xyflow/
 import '@xyflow/react/dist/style.css';
 import { NodeData } from './types';
 import { getNodeColorByType, getStatusBorder, getEdgeOptions } from './utils/nodeStyles';
+import { renderIcon } from './utils/iconResolver';
 
 // Custom Node component to display the icon in preview mode
 const PreviewNode = ({ data, id }: NodeProps) => {
@@ -13,6 +14,9 @@ const PreviewNode = ({ data, id }: NodeProps) => {
   // Default color if not specified
   const backgroundColor = nodeData.color || getNodeColorByType(nodeData.type);
   const statusBorder = getStatusBorder(nodeData.status);
+  
+  // Render the icon using our utility
+  const renderedIcon = renderIcon(nodeData.iconConfig);
   
   return (
     <div 
@@ -24,9 +28,9 @@ const PreviewNode = ({ data, id }: NodeProps) => {
         minHeight: '90px'
       }}
     >
-      {nodeData.icon && (
+      {renderedIcon && (
         <div className="rounded-full bg-white p-2 mb-2 shadow-sm">
-          {nodeData.icon}
+          {renderedIcon}
         </div>
       )}
       <div className="text-sm font-medium text-white">{nodeData.label}</div>
