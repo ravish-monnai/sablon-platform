@@ -28,14 +28,37 @@ import {
   Clock,
   AlertCircle,
   Globe,
-  Shield
+  Shield,
+  MessageSquare,
+  Bulb
 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useState } from "react";
 
 const Dashboard = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const viewMode = searchParams.get("viewMode") === "internal" ? "internal" : "customer";
+  const [trafficChatMessage, setTrafficChatMessage] = useState("");
+  const [chatMessages, setChatMessages] = useState<{type: 'user' | 'assistant', content: string}[]>([]);
+
+  const handleChatSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!trafficChatMessage.trim()) return;
+    
+    // Add user message
+    setChatMessages(prev => [...prev, {type: 'user', content: trafficChatMessage}]);
+    
+    // Simulate AI response
+    setTimeout(() => {
+      let response = "I've analyzed the traffic data. There's a 12% increase in API calls from the North America region compared to last week. The system health is stable with only minor issues reported in the Credit Bureau API.";
+      setChatMessages(prev => [...prev, {type: 'assistant', content: response}]);
+    }, 1000);
+    
+    setTrafficChatMessage("");
+  };
 
   const riskData = [
     { name: "Very Low", value: 10.79, color: "#10b981" },
@@ -158,22 +181,44 @@ const Dashboard = () => {
               <CardDescription>Key metrics overview</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Active Models</span>
-                  <span className="font-bold">8</span>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span>Active Models</span>
+                    <span className="font-bold">8</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>AI Journeys</span>
+                    <span className="font-bold">5</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Agents</span>
+                    <span className="font-bold">12</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Transactions</span>
+                    <span className="font-bold">7,409</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>AI Journeys</span>
-                  <span className="font-bold">5</span>
+                
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Live AI Journeys</h4>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Bulb className="h-4 w-4 text-green-500" />
+                    <span>Onboarding Journey</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span>Agents</span>
-                  <span className="font-bold">12</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Transactions</span>
-                  <span className="font-bold">7,409</span>
+                
+                <div className="space-y-2">
+                  <h4 className="font-medium text-sm">Live AI Agents</h4>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Bulb className="h-4 w-4 text-green-500" />
+                    <span>Bank Statement Analyser Agent</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm">
+                    <Bulb className="h-4 w-4 text-green-500" />
+                    <span>Fraud Review Agent</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -185,12 +230,26 @@ const Dashboard = () => {
               <CardDescription>Resources to help you get started</CardDescription>
             </CardHeader>
             <CardContent>
-              <ul className="list-disc pl-5 space-y-2">
-                <li>Create your first AI Journey</li>
-                <li>Deploy an AI Agent</li>
-                <li>Connect your data sources</li>
+              <ul className="list-disc pl-5 space-y-3">
+                <li>Create a new AI Journey</li>
+                <li>Deploy a new agent</li>
+                <li>Integrate new data sources</li>
                 <li>Review risk models</li>
               </ul>
+              <div className="mt-4 space-y-3">
+                <Button variant="outline" size="sm" className="w-full flex items-center justify-start gap-2">
+                  <Bot className="h-4 w-4" />
+                  Create a new AI Journey
+                </Button>
+                <Button variant="outline" size="sm" className="w-full flex items-center justify-start gap-2">
+                  <Bot className="h-4 w-4" />
+                  Deploy a new agent
+                </Button>
+                <Button variant="outline" size="sm" className="w-full flex items-center justify-start gap-2">
+                  <Database className="h-4 w-4" />
+                  Integrate new data sources
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -359,9 +418,97 @@ const Dashboard = () => {
               </CardContent>
             </Card>
           </div>
+
+          <div className="mt-8">
+            <Tabs defaultValue="charts" className="w-full">
+              <TabsList>
+                <TabsTrigger value="charts">Traffic Charts</TabsTrigger>
+                <TabsTrigger value="ai-chat" className="flex items-center">
+                  <MessageSquare className="mr-2 h-4 w-4" />
+                  AI Traffic Assistant
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="charts" className="pt-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-sm">Request Volume Trend</CardTitle>
+                    </CardHeader>
+                    <CardContent className="h-60 flex items-center justify-center bg-slate-50">
+                      <div className="text-center text-muted-foreground">
+                        Traffic volume visualization
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="text-sm">Response Time Analysis</CardTitle>
+                    </CardHeader>
+                    <CardContent className="h-60 flex items-center justify-center bg-slate-50">
+                      <div className="text-center text-muted-foreground">
+                        Response time visualization
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="ai-chat" className="pt-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-sm flex items-center">
+                      <Bot className="mr-2 h-4 w-4" />
+                      Ask about traffic data
+                    </CardTitle>
+                    <CardDescription>
+                      Get insights about current traffic patterns, performance issues, and recommendations
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col h-[320px]">
+                      <div className="flex-1 overflow-y-auto mb-4 space-y-4">
+                        {chatMessages.length === 0 ? (
+                          <div className="text-center text-muted-foreground py-12">
+                            No messages yet. Ask a question about traffic data.
+                          </div>
+                        ) : (
+                          chatMessages.map((msg, idx) => (
+                            <div 
+                              key={idx} 
+                              className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div 
+                                className={`max-w-[80%] p-3 rounded-lg ${
+                                  msg.type === 'user' 
+                                    ? 'bg-primary text-primary-foreground' 
+                                    : 'bg-muted'
+                                }`}
+                              >
+                                {msg.content}
+                              </div>
+                            </div>
+                          ))
+                        )}
+                      </div>
+                      <form onSubmit={handleChatSubmit} className="flex gap-2">
+                        <Input 
+                          placeholder="Ask about traffic data..." 
+                          value={trafficChatMessage}
+                          onChange={(e) => setTrafficChatMessage(e.target.value)}
+                          className="flex-1"
+                        />
+                        <Button type="submit">Send</Button>
+                      </form>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
         </TabsContent>
 
-        
         <TabsContent value="operational-agents" className="w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card>
@@ -939,4 +1086,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-
