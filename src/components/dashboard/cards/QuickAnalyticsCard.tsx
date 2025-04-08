@@ -1,7 +1,18 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
-import { Bot, FileText, Shield, UserCheck, ChevronRight } from "lucide-react";
+import { Bot, FileText, Shield, UserCheck, ChevronRight, BarChart4, Activity, Table } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { ChartContainer } from "@/components/ui/chart";
+import { ResponsiveBar } from "recharts";
+import {
+  Table as UITable,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell
+} from "@/components/ui/table";
 
 interface QuickAnalyticsCardProps {
   className?: string;
@@ -15,6 +26,13 @@ interface AgentJourneyMetrics {
   successRate: number;
   avgResponseTime: string;
   color: string;
+}
+
+interface ActivityMetric {
+  name: string;
+  onboarding: number;
+  statements: number;
+  cases: number;
 }
 
 const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) => {
@@ -57,6 +75,22 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
     }
   ];
 
+  // Activity metrics for the last 7 days
+  const activityData: ActivityMetric[] = [
+    { name: "Mon", onboarding: 124, statements: 87, cases: 32 },
+    { name: "Tue", onboarding: 145, statements: 96, cases: 41 },
+    { name: "Wed", onboarding: 132, statements: 105, cases: 37 },
+    { name: "Thu", onboarding: 167, statements: 117, cases: 45 },
+    { name: "Fri", onboarding: 158, statements: 99, cases: 49 },
+    { name: "Sat", onboarding: 95, statements: 68, cases: 22 },
+    { name: "Sun", onboarding: 87, statements: 54, cases: 19 },
+  ];
+
+  // Summary totals
+  const totalOnboarding = activityData.reduce((sum, day) => sum + day.onboarding, 0);
+  const totalStatements = activityData.reduce((sum, day) => sum + day.statements, 0);
+  const totalCases = activityData.reduce((sum, day) => sum + day.cases, 0);
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -64,41 +98,166 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
         <CardDescription>Active AI systems overview</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {agentsAndJourneys.map((item, index) => (
-            <div 
-              key={index} 
-              className={`rounded-md p-3 hover:bg-muted/50 transition-colors ${index < agentsAndJourneys.length - 1 ? "border-b pb-4" : ""}`}
-            >
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center">
-                  {item.icon}
-                  <span className="text-sm font-medium">{item.name}</span>
+        <Tabs defaultValue="agents">
+          <TabsList className="mb-4">
+            <TabsTrigger value="agents" className="flex items-center gap-1">
+              <Shield className="h-4 w-4" />
+              <span>Active Systems</span>
+            </TabsTrigger>
+            <TabsTrigger value="activity" className="flex items-center gap-1">
+              <Activity className="h-4 w-4" />
+              <span>Recent Activity</span>
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="agents">
+            <div className="space-y-4">
+              {agentsAndJourneys.map((item, index) => (
+                <div 
+                  key={index} 
+                  className={`rounded-md p-3 hover:bg-muted/50 transition-colors ${index < agentsAndJourneys.length - 1 ? "border-b pb-4" : ""}`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center">
+                      {item.icon}
+                      <span className="text-sm font-medium">{item.name}</span>
+                    </div>
+                    <span className={`text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full`}>
+                      {item.status === "active" ? "Active" : item.status === "maintenance" ? "Maintenance" : "Offline"}
+                    </span>
+                  </div>
+                  
+                  <div className="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                      <p className="text-muted-foreground">Executions</p>
+                      <p className={`font-medium ${item.color}`}>{item.executions.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Success Rate</p>
+                      <p className={`font-medium ${item.successRate >= 98 ? "text-green-600" : item.successRate >= 95 ? "text-amber-600" : "text-red-600"}`}>
+                        {item.successRate}%
+                      </p>
+                    </div>
+                    <div>
+                      <p className="text-muted-foreground">Avg. Response</p>
+                      <p className="font-medium">{item.avgResponseTime}</p>
+                    </div>
+                  </div>
                 </div>
-                <span className={`text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full`}>
-                  {item.status === "active" ? "Active" : item.status === "maintenance" ? "Maintenance" : "Offline"}
-                </span>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="activity">
+            <div className="space-y-4">
+              {/* Summary metrics */}
+              <div className="grid grid-cols-3 gap-3 mb-4">
+                <div className="bg-[#E5DEFF] p-3 rounded-md">
+                  <p className="text-xs text-[#7E69AB]">Onboarding</p>
+                  <p className="text-xl font-bold text-[#7E69AB]">{totalOnboarding.toLocaleString()}</p>
+                  <p className="text-xs text-[#7E69AB] opacity-75">transactions</p>
+                </div>
+                <div className="bg-[#E0F2FE] p-3 rounded-md">
+                  <p className="text-xs text-[#4DA3FF]">Statements</p>
+                  <p className="text-xl font-bold text-[#4DA3FF]">{totalStatements.toLocaleString()}</p>
+                  <p className="text-xs text-[#4DA3FF] opacity-75">analyzed</p>
+                </div>
+                <div className="bg-[#FFF1E0] p-3 rounded-md">
+                  <p className="text-xs text-[#F97316]">Cases</p>
+                  <p className="text-xl font-bold text-[#F97316]">{totalCases.toLocaleString()}</p>
+                  <p className="text-xs text-[#F97316] opacity-75">generated</p>
+                </div>
               </div>
               
-              <div className="grid grid-cols-3 gap-2 text-xs">
-                <div>
-                  <p className="text-muted-foreground">Executions</p>
-                  <p className={`font-medium ${item.color}`}>{item.executions.toLocaleString()}</p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Success Rate</p>
-                  <p className={`font-medium ${item.successRate >= 98 ? "text-green-600" : item.successRate >= 95 ? "text-amber-600" : "text-red-600"}`}>
-                    {item.successRate}%
-                  </p>
-                </div>
-                <div>
-                  <p className="text-muted-foreground">Avg. Response</p>
-                  <p className="font-medium">{item.avgResponseTime}</p>
-                </div>
+              {/* Chart visualization */}
+              <div className="h-40 w-full my-4">
+                <ChartContainer
+                  config={{
+                    onboarding: {
+                      label: "Onboarding",
+                      color: "#9b87f5"
+                    },
+                    statements: {
+                      label: "Statements",
+                      color: "#4DA3FF"
+                    },
+                    cases: {
+                      label: "Cases",
+                      color: "#F97316"
+                    }
+                  }}
+                >
+                  <ResponsiveBar
+                    data={activityData}
+                    keys={["onboarding", "statements", "cases"]}
+                    indexBy="name"
+                    margin={{ top: 10, right: 10, bottom: 20, left: 30 }}
+                    padding={0.3}
+                    valueScale={{ type: "linear" }}
+                    indexScale={{ type: "band", round: true }}
+                    colors={({ id }) => {
+                      switch (id) {
+                        case "onboarding": return "#9b87f5";
+                        case "statements": return "#4DA3FF";
+                        case "cases": return "#F97316";
+                        default: return "#99AAB5";
+                      }
+                    }}
+                    borderColor={{
+                      from: "color",
+                      modifiers: [["darker", 1.6]]
+                    }}
+                    axisTop={null}
+                    axisRight={null}
+                    axisBottom={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: 0
+                    }}
+                    axisLeft={{
+                      tickSize: 5,
+                      tickPadding: 5,
+                      tickRotation: 0
+                    }}
+                    enableLabel={false}
+                    role="application"
+                    barAriaLabel={e => `${e.id}: ${e.formattedValue} on day: ${e.indexValue}`}
+                  />
+                </ChartContainer>
+              </div>
+
+              {/* Data table */}
+              <div className="overflow-x-auto">
+                <UITable>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Day</TableHead>
+                      <TableHead className="text-[#9b87f5]">Onboarding</TableHead>
+                      <TableHead className="text-[#4DA3FF]">Statements</TableHead>
+                      <TableHead className="text-[#F97316]">Cases</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {activityData.map((day, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="font-medium">{day.name}</TableCell>
+                        <TableCell>{day.onboarding}</TableCell>
+                        <TableCell>{day.statements}</TableCell>
+                        <TableCell>{day.cases}</TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow className="bg-muted/50">
+                      <TableCell className="font-bold">Total</TableCell>
+                      <TableCell className="font-bold">{totalOnboarding}</TableCell>
+                      <TableCell className="font-bold">{totalStatements}</TableCell>
+                      <TableCell className="font-bold">{totalCases}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </UITable>
               </div>
             </div>
-          ))}
-        </div>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
