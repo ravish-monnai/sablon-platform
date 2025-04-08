@@ -10,8 +10,8 @@ interface NodeDetailsProps {
 
 const NodeDetails: React.FC<NodeDetailsProps> = ({ label, description, data }) => {
   // Use the passed label/description or get from data
-  const displayLabel = label || data?.label;
-  const displayDescription = description || data?.description;
+  const displayLabel = label || data?.label || '';
+  const displayDescription = description || data?.description || '';
   
   // Helper to render object properties in a readable format
   const renderObjectProperties = (obj: Record<string, any>, depth = 0): JSX.Element => {

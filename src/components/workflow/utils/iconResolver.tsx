@@ -13,8 +13,8 @@ export const renderIcon = (iconConfig: IconConfig | undefined) => {
   if (!iconConfig || !iconConfig.name) return null;
   
   // Get the icon component from Lucide
-  // Use 'as unknown as' to properly cast the LucideIcons to the desired type
-  const LucideIconsRecord = LucideIcons as unknown as Record<string, React.FC<any>>;
+  // Cast with unknown first to avoid TypeScript errors
+  const LucideIconsRecord = LucideIcons as unknown as Record<string, React.ComponentType<any>>;
   const IconComponent = LucideIconsRecord[iconConfig.name];
   
   if (!IconComponent) {

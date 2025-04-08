@@ -10,12 +10,19 @@ import { NodeData } from '../types';
 
 // Node component that renders a custom node with icon, label, and description
 const CustomNode = memo(({ id, data, selected }: NodeProps) => {
-  // Ensure data is not undefined and cast it to NodeData
-  const nodeData = data as NodeData || {};
+  // Ensure data is not undefined and properly cast to NodeData with defaults
+  const nodeData: NodeData = data as NodeData || {
+    label: 'Untitled',
+    type: 'process',
+    description: '',
+    iconConfig: undefined,
+    status: undefined,
+    featureTag: undefined
+  };
   
-  // Destructure the node data with default values
+  // Destructure the node data
   const { 
-    label = '', 
+    label = 'Untitled', 
     description = '', 
     type = 'process', 
     iconConfig,
