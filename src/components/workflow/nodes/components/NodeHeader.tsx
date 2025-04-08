@@ -5,33 +5,39 @@ import { NodeData } from '../../types';
 import FeatureTag from '@/components/ui/feature-tag';
 
 interface NodeHeaderProps {
-  data: NodeData;
-  isExpanded: boolean;
-  toggleExpand: () => void;
-  hasExpandableContent: boolean;
+  icon?: React.ReactNode;
+  type?: string;
+  featureTag?: 'new' | 'beta' | 'updated' | 'ai' | 'premium';
+  isExpanded?: boolean;
+  toggleExpand?: () => void;
+  hasExpandableContent?: boolean;
+  data?: NodeData;
 }
 
 const NodeHeader: React.FC<NodeHeaderProps> = ({ 
-  data, 
+  icon, 
+  type, 
+  featureTag,
   isExpanded, 
   toggleExpand,
-  hasExpandableContent
+  hasExpandableContent,
+  data
 }) => {
   return (
     <div className="flex items-center">
-      {data.icon && <div className="mr-2">{data.icon}</div>}
+      {icon && <div className="mr-2">{icon}</div>}
       <div className="flex-1">
         <div className="font-medium text-gray-800 text-sm flex items-center gap-1.5">
-          {data.label}
-          {data.featureTag && (
-            <FeatureTag variant={data.featureTag as any} />
+          {data?.label || ''}
+          {featureTag && (
+            <FeatureTag variant={featureTag} />
           )}
         </div>
-        <div className="text-xs text-gray-600">{data.description}</div>
+        <div className="text-xs text-gray-600">{data?.description || ''}</div>
       </div>
       
       {/* Show expand button only if we have additional details */}
-      {hasExpandableContent && (
+      {hasExpandableContent && toggleExpand && (
         <button 
           className="ml-1 text-gray-500 hover:text-gray-700"
           onClick={toggleExpand}

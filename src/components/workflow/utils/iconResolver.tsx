@@ -13,7 +13,9 @@ export const renderIcon = (iconConfig: IconConfig | undefined) => {
   if (!iconConfig || !iconConfig.name) return null;
   
   // Get the icon component from Lucide
-  const IconComponent = (LucideIcons as Record<string, React.FC<any>>)[iconConfig.name];
+  // Use 'as unknown as' to properly cast the LucideIcons to the desired type
+  const LucideIconsRecord = LucideIcons as unknown as Record<string, React.FC<any>>;
+  const IconComponent = LucideIconsRecord[iconConfig.name];
   
   if (!IconComponent) {
     console.warn(`Icon "${iconConfig.name}" not found in Lucide icons`);

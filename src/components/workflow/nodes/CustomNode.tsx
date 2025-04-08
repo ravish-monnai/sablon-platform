@@ -1,13 +1,18 @@
 
 import React, { memo } from 'react';
 import { Handle, Position } from '@xyflow/react';
-import { NodeBackground, NodeDetails, NodeHeader } from './components';
+import { NodeBackground } from './components';
+import { NodeHeader } from './components';
+import { NodeDetails } from './components';
 import { renderIcon } from '../utils/iconResolver';
 import { NodeProps } from '@xyflow/react';
 import { NodeData } from '../types';
 
 // Node component that renders a custom node with icon, label, and description
-const CustomNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
+const CustomNode = memo(({ id, data, selected }: NodeProps) => {
+  // Ensure data is not undefined and cast it to NodeData
+  const nodeData = data as NodeData || {};
+  
   // Destructure the node data with default values
   const { 
     label = '', 
@@ -16,22 +21,28 @@ const CustomNode = memo(({ id, data, selected }: NodeProps<NodeData>) => {
     iconConfig,
     status,
     featureTag
-  } = data || {};
+  } = nodeData;
   
   // Render the icon using our utility
   const renderedIcon = renderIcon(iconConfig);
 
   return (
     <div className="relative">
-      <NodeBackground type={type} selected={selected} status={status}>
+      <NodeBackground 
+        type={type} 
+        selected={!!selected} 
+        status={status}
+      >
         <NodeHeader 
           icon={renderedIcon} 
           type={type} 
           featureTag={featureTag}
+          data={nodeData}
         />
         <NodeDetails 
           label={label} 
           description={description} 
+          data={nodeData}
         />
       </NodeBackground>
       

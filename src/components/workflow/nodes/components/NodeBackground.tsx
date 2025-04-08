@@ -1,18 +1,75 @@
+
 import React from 'react';
 import { NodeData } from '../../types';
 
 interface NodeBackgroundProps {
-  data: NodeData;
-  selected: boolean;
+  children?: React.ReactNode;
+  type?: string;
+  selected?: boolean;
+  status?: string;
 }
 
-// Instead of returning an object, we'll make this a hook that returns style values
-export const useNodeBackground = ({ data, selected }: NodeBackgroundProps): { backgroundColor: string, borderColor: string } => {
-  // Determine background color based on type or explicit color
+// Export as a standalone component
+const NodeBackground: React.FC<NodeBackgroundProps> = ({ 
+  children, 
+  type = 'process', 
+  selected = false, 
+  status 
+}) => {
+  // Determine background color based on type
   const getBgColor = () => {
-    if (data.color) return data.color;
-    
-    switch (data.type) {
+    switch (type) {
+      case 'datasource':
+        return 'bg-yellow-50';
+      case 'model':
+        return 'bg-purple-50';
+      case 'rule':
+        return 'bg-blue-50';
+      case 'notification':
+        return 'bg-green-50';
+      case 'agent':
+        return 'bg-indigo-50';
+      case 'alert':
+        return 'bg-red-50';
+      case 'decision':
+        return 'bg-emerald-50';
+      default:
+        return 'bg-slate-50';
+    }
+  };
+
+  // Determine border color based on selection and status
+  const getBorderColor = () => {
+    if (selected) return 'border-blue-500';
+    if (status === 'error') return 'border-red-500';
+    if (status === 'warning') return 'border-yellow-500';
+    if (status === 'success') return 'border-green-500';
+    return 'border-gray-200';
+  };
+
+  return (
+    <div className={`p-3 rounded-md border-2 ${getBgColor()} ${getBorderColor()} transition-colors`}>
+      {children}
+    </div>
+  );
+};
+
+// Return utility style hook for other components
+export const useNodeBackground = ({ 
+  type = 'process', 
+  selected = false, 
+  status 
+}: { 
+  type?: string, 
+  selected?: boolean, 
+  status?: string 
+}): { 
+  backgroundColor: string, 
+  borderColor: string 
+} => {
+  // Same logic as the component but returns style values
+  const getBgColor = () => {
+    switch (type) {
       case 'datasource':
         return '#FEF9C3'; // Yellow
       case 'model':
@@ -33,21 +90,13 @@ export const useNodeBackground = ({ data, selected }: NodeBackgroundProps): { ba
   // Determine border color based on selection and status
   const getBorderColor = () => {
     if (selected) return 'border-blue-500';
-    if (data.status === 'error') return 'border-red-500';
-    if (data.status === 'warning') return 'border-yellow-500';
-    if (data.status === 'success') return 'border-green-500';
+    if (status === 'error') return 'border-red-500';
+    if (status === 'warning') return 'border-yellow-500';
+    if (status === 'success') return 'border-green-500';
     return 'border-gray-200';
   };
 
   return { backgroundColor: getBgColor(), borderColor: getBorderColor() };
-};
-
-// We'll keep the component for compatibility but it's just a wrapper around the hook
-const NodeBackground: React.FC<NodeBackgroundProps> = (props) => {
-  // The component doesn't actually render anything visible
-  // It's just a helper to compute styles
-  const styles = useNodeBackground(props);
-  return null;
 };
 
 export default NodeBackground;

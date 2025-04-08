@@ -3,10 +3,16 @@ import React from 'react';
 import { NodeData, AnalysisRule } from '../../types';
 
 interface NodeDetailsProps {
-  data: NodeData;
+  label?: string;
+  description?: string;
+  data?: NodeData;
 }
 
-const NodeDetails: React.FC<NodeDetailsProps> = ({ data }) => {
+const NodeDetails: React.FC<NodeDetailsProps> = ({ label, description, data }) => {
+  // Use the passed label/description or get from data
+  const displayLabel = label || data?.label;
+  const displayDescription = description || data?.description;
+  
   // Helper to render object properties in a readable format
   const renderObjectProperties = (obj: Record<string, any>, depth = 0): JSX.Element => {
     if (!obj) return <></>;
@@ -53,64 +59,74 @@ const NodeDetails: React.FC<NodeDetailsProps> = ({ data }) => {
     );
   };
 
-  // API Specifications
-  if (data.apiSpecs) {
-    return (
-      <div className="mt-2 text-xs">
-        <div className="font-semibold">API Specifications:</div>
-        {renderObjectProperties(data.apiSpecs)}
-      </div>
-    );
+  // If we have data, check for specific properties
+  if (data) {
+    // API Specifications
+    if (data.apiSpecs) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">API Specifications:</div>
+          {renderObjectProperties(data.apiSpecs)}
+        </div>
+      );
+    }
+    
+    // Feature Extraction
+    if (data.featureExtraction) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Feature Extraction:</div>
+          {renderObjectProperties(data.featureExtraction)}
+        </div>
+      );
+    }
+    
+    // Risk Assessment
+    if (data.riskAssessment) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Risk Assessment:</div>
+          {renderObjectProperties(data.riskAssessment)}
+        </div>
+      );
+    }
+    
+    // Case Configuration
+    if (data.caseConfiguration) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Case Configuration:</div>
+          {renderObjectProperties(data.caseConfiguration)}
+        </div>
+      );
+    }
+    
+    // Rules
+    if (data.rules && data.rules.length > 0) {
+      return (
+        <div className="mt-2 text-xs">
+          <div className="font-semibold">Rules:</div>
+          <ul className="pl-4 list-disc">
+            {data.rules.map((rule: AnalysisRule, idx: number) => (
+              <li key={idx}>{rule.condition} {rule.operator} {rule.value} → {rule.action}</li>
+            ))}
+          </ul>
+        </div>
+      );
+    }
   }
   
-  // Feature Extraction
-  if (data.featureExtraction) {
-    return (
-      <div className="mt-2 text-xs">
-        <div className="font-semibold">Feature Extraction:</div>
-        {renderObjectProperties(data.featureExtraction)}
-      </div>
-    );
-  }
-  
-  // Risk Assessment
-  if (data.riskAssessment) {
-    return (
-      <div className="mt-2 text-xs">
-        <div className="font-semibold">Risk Assessment:</div>
-        {renderObjectProperties(data.riskAssessment)}
-      </div>
-    );
-  }
-  
-  // Case Configuration
-  if (data.caseConfiguration) {
-    return (
-      <div className="mt-2 text-xs">
-        <div className="font-semibold">Case Configuration:</div>
-        {renderObjectProperties(data.caseConfiguration)}
-      </div>
-    );
-  }
-  
-  // Rules
-  if (data.rules && data.rules.length > 0) {
-    return (
-      <div className="mt-2 text-xs">
-        <div className="font-semibold">Rules:</div>
-        <ul className="pl-4 list-disc">
-          {data.rules.map((rule: AnalysisRule, idx: number) => (
-            <li key={idx}>{rule.condition} {rule.operator} {rule.value} → {rule.action}</li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-  
+  // Default view - simple display of label/description
   return (
-    <div className="text-xs text-gray-500 mt-2">
-      No additional configuration details available
-    </div>
+    <>
+      {displayLabel && <div className="font-medium">{displayLabel}</div>}
+      {displayDescription && <div className="text-xs text-gray-600">{displayDescription}</div>}
+      {!displayLabel && !displayDescription && (
+        <div className="text-xs text-gray-500 mt-2">
+          No additional configuration details available
+        </div>
+      )}
+    </>
   );
 };
 
