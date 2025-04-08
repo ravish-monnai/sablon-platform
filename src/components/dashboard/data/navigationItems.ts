@@ -6,7 +6,7 @@ import {
   Bot, 
   Database, 
   Settings,
-  Coins  // New import for a more finance-related icon
+  Coins
 } from "lucide-react";
 import { NavItem } from "../types/navigation";
 import { createCustomIcon } from "@/components/ui/icon";
@@ -30,7 +30,7 @@ export const monnaiNavItems: NavItem[] = [
   { 
     label: "Transactions", 
     path: "/transactions", 
-    icon: Coins,  // Replace with Coins icon for a finance-related look
+    icon: Coins,
     subItems: [
       { 
         label: "Transaction List", 
