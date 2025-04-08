@@ -1,10 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Bot, FileText, Shield, UserCheck, ChevronRight, BarChart4, Activity, Table } from "lucide-react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ChartContainer } from "@/components/ui/chart";
-import { ResponsiveBar } from "recharts";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import {
   Table as UITable,
   TableHeader,
@@ -75,7 +74,6 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
     }
   ];
 
-  // Activity metrics for the last 7 days
   const activityData: ActivityMetric[] = [
     { name: "Mon", onboarding: 124, statements: 87, cases: 32 },
     { name: "Tue", onboarding: 145, statements: 96, cases: 41 },
@@ -86,7 +84,6 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
     { name: "Sun", onboarding: 87, statements: 54, cases: 19 },
   ];
 
-  // Summary totals
   const totalOnboarding = activityData.reduce((sum, day) => sum + day.onboarding, 0);
   const totalStatements = activityData.reduce((sum, day) => sum + day.statements, 0);
   const totalCases = activityData.reduce((sum, day) => sum + day.cases, 0);
@@ -150,7 +147,6 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
 
           <TabsContent value="activity">
             <div className="space-y-4">
-              {/* Summary metrics */}
               <div className="grid grid-cols-3 gap-3 mb-4">
                 <div className="bg-[#E5DEFF] p-3 rounded-md">
                   <p className="text-xs text-[#7E69AB]">Onboarding</p>
@@ -169,64 +165,22 @@ const QuickAnalyticsCard: React.FC<QuickAnalyticsCardProps> = ({ className }) =>
                 </div>
               </div>
               
-              {/* Chart visualization */}
               <div className="h-40 w-full my-4">
-                <ChartContainer
-                  config={{
-                    onboarding: {
-                      label: "Onboarding",
-                      color: "#9b87f5"
-                    },
-                    statements: {
-                      label: "Statements",
-                      color: "#4DA3FF"
-                    },
-                    cases: {
-                      label: "Cases",
-                      color: "#F97316"
-                    }
-                  }}
-                >
-                  <ResponsiveBar
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
                     data={activityData}
-                    keys={["onboarding", "statements", "cases"]}
-                    indexBy="name"
                     margin={{ top: 10, right: 10, bottom: 20, left: 30 }}
-                    padding={0.3}
-                    valueScale={{ type: "linear" }}
-                    indexScale={{ type: "band", round: true }}
-                    colors={({ id }) => {
-                      switch (id) {
-                        case "onboarding": return "#9b87f5";
-                        case "statements": return "#4DA3FF";
-                        case "cases": return "#F97316";
-                        default: return "#99AAB5";
-                      }
-                    }}
-                    borderColor={{
-                      from: "color",
-                      modifiers: [["darker", 1.6]]
-                    }}
-                    axisTop={null}
-                    axisRight={null}
-                    axisBottom={{
-                      tickSize: 5,
-                      tickPadding: 5,
-                      tickRotation: 0
-                    }}
-                    axisLeft={{
-                      tickSize: 5,
-                      tickPadding: 5,
-                      tickRotation: 0
-                    }}
-                    enableLabel={false}
-                    role="application"
-                    barAriaLabel={e => `${e.id}: ${e.formattedValue} on day: ${e.indexValue}`}
-                  />
-                </ChartContainer>
+                  >
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Bar dataKey="onboarding" fill="#9b87f5" name="Onboarding" />
+                    <Bar dataKey="statements" fill="#4DA3FF" name="Statements" />
+                    <Bar dataKey="cases" fill="#F97316" name="Cases" />
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
 
-              {/* Data table */}
               <div className="overflow-x-auto">
                 <UITable>
                   <TableHeader>
