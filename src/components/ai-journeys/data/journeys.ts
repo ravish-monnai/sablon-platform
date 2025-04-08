@@ -28,6 +28,30 @@ export const journeysByMarket: Record<string, Journey[]> = {
       featureTag: "new"
     },
     {
+      id: "onboarding-kyc",
+      name: "Customer Onboarding with KYC",
+      description: "End-to-end customer onboarding process with comprehensive KYC verification.",
+      status: "active",
+      lastRun: "3 minutes ago",
+      apiIntegration: "REST API",
+      totalAnalyzed: 95,
+      alerts: 7,
+      fraudCases: 2,
+      featureTag: "new"
+    },
+    {
+      id: "kyc-verification",
+      name: "KYC Verification",
+      description: "Standalone KYC verification process with global compliance checks.",
+      status: "active",
+      lastRun: "4 minutes ago",
+      apiIntegration: "REST API",
+      totalAnalyzed: 78,
+      alerts: 5,
+      fraudCases: 1,
+      featureTag: "new"
+    },
+    {
       id: "loan-underwriting",
       name: "Loan Underwriting",
       description: "AI-powered loan underwriting process with credit analysis and risk assessment.",
@@ -51,6 +75,18 @@ export const journeysByMarket: Record<string, Journey[]> = {
       totalAnalyzed: 167,
       alerts: 23,
       fraudCases: 8,
+      featureTag: "new"
+    },
+    {
+      id: "india-kyc-verification",
+      name: "India KYC Verification",
+      description: "KYC verification process with India-specific compliance requirements.",
+      status: "active",
+      lastRun: "2 minutes ago",
+      apiIntegration: "REST API",
+      totalAnalyzed: 52,
+      alerts: 3,
+      fraudCases: 1,
       featureTag: "new"
     }
   ]
