@@ -2,7 +2,7 @@
 import React from "react";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { LayoutDashboard, Bot, FileCode, Database, Activity } from "lucide-react";
+import { LayoutDashboard, Bot, FileText, Database, Activity } from "lucide-react";
 
 import GlobalTrafficTab from "./tabs/GlobalTrafficTab";
 import OperationalAgentsTab from "./tabs/OperationalAgentsTab";
@@ -32,7 +32,7 @@ const OperationsView: React.FC = () => {
             Operational Agents
           </TabsTrigger>
           <TabsTrigger value="models" className="flex items-center">
-            <FileCode className="mr-2 h-4 w-4" />
+            <FileText className="mr-2 h-4 w-4" />
             Models
           </TabsTrigger>
           <TabsTrigger value="data-sources" className="flex items-center">
