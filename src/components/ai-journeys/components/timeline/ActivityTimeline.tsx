@@ -11,7 +11,8 @@ import {
   BarChart4,
   ShieldAlert,
   CheckCircle,
-  AlertTriangle
+  AlertTriangle,
+  Users
 } from "lucide-react";
 
 const ActivityTimeline: React.FC = () => {
@@ -24,7 +25,8 @@ const ActivityTimeline: React.FC = () => {
       features: [
         { icon: <IndianRupee className="h-3 w-3" />, label: "UPI Transactions" },
         { icon: <RefreshCw className="h-3 w-3" />, label: "Recurring Payments" },
-        { icon: <BarChart4 className="h-3 w-3" />, label: "Income Verification" }
+        { icon: <BarChart4 className="h-3 w-3" />, label: "Income Verification" },
+        { icon: <Users className="h-3 w-3" />, label: "12 Users Processed" }
       ]
     },
     {
@@ -39,7 +41,8 @@ const ActivityTimeline: React.FC = () => {
           variant: "warning" as const
         },
         { icon: <IndianRupee className="h-3 w-3" />, label: "UPI Transactions" },
-        { icon: <CreditCard className="h-3 w-3" />, label: "Cash Flow Analysis" }
+        { icon: <CreditCard className="h-3 w-3" />, label: "Cash Flow Analysis" },
+        { icon: <Users className="h-3 w-3" />, label: "8 Users Processed" }
       ]
     },
     {
@@ -58,7 +61,8 @@ const ActivityTimeline: React.FC = () => {
           label: "Regulatory Compliance", 
           variant: "warning" as const
         },
-        { icon: <FileText className="h-3 w-3" />, label: "Document Verification" }
+        { icon: <FileText className="h-3 w-3" />, label: "Document Verification" },
+        { icon: <Users className="h-3 w-3" />, label: "15 Users Processed" }
       ]
     },
     {
@@ -69,7 +73,8 @@ const ActivityTimeline: React.FC = () => {
       features: [
         { icon: <CheckCircle className="h-3 w-3" />, label: "Income Consistency" },
         { icon: <Smartphone className="h-3 w-3" />, label: "Mobile Banking" },
-        { icon: <BarChart4 className="h-3 w-3" />, label: "Cash Flow Patterns" }
+        { icon: <BarChart4 className="h-3 w-3" />, label: "Cash Flow Patterns" },
+        { icon: <Users className="h-3 w-3" />, label: "9 Users Processed" }
       ],
       isLast: true
     }
