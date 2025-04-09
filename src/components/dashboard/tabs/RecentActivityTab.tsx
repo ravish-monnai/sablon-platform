@@ -1,14 +1,14 @@
 
 import React, { useMemo } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Activity, TrendingUp, Users } from "lucide-react";
+import { Activity, TrendingUp, Users, FileText, BarChart, Clock, CreditCard } from "lucide-react";
 import { 
   ActivityMetric, 
   calculateTotals,
   generateWeeklyComparison,
 } from "../util/dashboardUtils";
 
-// Import our new components
+// Import our components
 import MetricCard from "./activity/MetricCard";
 import ActivitySummaryTab from "./activity/ActivitySummaryTab";
 import TransactionsTrendTab from "./activity/TransactionsTrendTab";
@@ -51,6 +51,8 @@ const RecentActivityTab: React.FC = () => {
           title="Statements"
           value={totalStatements}
           subtitle="analyzed"
+          trend={12}
+          icon={<FileText className="h-4 w-4" />}
         />
         <MetricCard
           bgColor="bg-[#FFF1E0]"
@@ -58,6 +60,8 @@ const RecentActivityTab: React.FC = () => {
           title="Cases"
           value={totalCases}
           subtitle="generated"
+          trend={8}
+          icon={<BarChart className="h-4 w-4" />}
         />
         <MetricCard
           bgColor="bg-[#E0F7EE]"
@@ -65,6 +69,8 @@ const RecentActivityTab: React.FC = () => {
           title="Transactions"
           value={totalTransactions}
           subtitle="processed"
+          trend={17}
+          icon={<CreditCard className="h-4 w-4" />}
         />
         <MetricCard
           bgColor="bg-[#EEE0FE]"
@@ -72,6 +78,8 @@ const RecentActivityTab: React.FC = () => {
           title="Users"
           value={totalUsers}
           subtitle="active"
+          trend={9}
+          icon={<Users className="h-4 w-4" />}
         />
       </div>
       
