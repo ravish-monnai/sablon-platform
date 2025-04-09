@@ -1,12 +1,13 @@
 
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { Activity, TrendingUp, Users, FileText, BarChart, Clock, CreditCard } from "lucide-react";
+import { Activity, TrendingUp, Users, FileText, BarChart, Clock, CreditCard, RefreshCw } from "lucide-react";
 import { 
   ActivityMetric, 
   calculateTotals,
   generateWeeklyComparison,
 } from "../util/dashboardUtils";
+import { Button } from "@/components/ui/button";
 
 // Import our components
 import MetricCard from "./activity/MetricCard";
@@ -15,7 +16,11 @@ import TransactionsTrendTab from "./activity/TransactionsTrendTab";
 import UserCohortsTab from "./activity/UserCohortsTab";
 
 const RecentActivityTab: React.FC = () => {
-  const activityData: ActivityMetric[] = useMemo(() => [
+  const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+
+  // Base activity data
+  const baseActivityData: ActivityMetric[] = useMemo(() => [
     { name: "Mon", statements: 87, cases: 32, transactions: 213, users: 64 },
     { name: "Tue", statements: 96, cases: 41, transactions: 245, users: 72 },
     { name: "Wed", statements: 105, cases: 37, transactions: 278, users: 83 },
@@ -24,7 +29,11 @@ const RecentActivityTab: React.FC = () => {
     { name: "Sat", statements: 68, cases: 22, transactions: 164, users: 41 },
     { name: "Sun", statements: 54, cases: 19, transactions: 122, users: 35 },
   ], []);
+  
+  // State for activity data that can be refreshed
+  const [activityData, setActivityData] = useState<ActivityMetric[]>(baseActivityData);
 
+  // Calculate totals based on the current activity data
   const { totalStatements, totalCases, totalTransactions, totalUsers } = useMemo(
     () => calculateTotals(activityData), 
     [activityData]
@@ -42,8 +51,53 @@ const RecentActivityTab: React.FC = () => {
     { period: "21-28 days ago", newUsers: 189, returningUsers: 108, conversionRate: "14.7%" },
   ], []);
 
+  // Function to refresh data with random variations
+  const refreshData = () => {
+    setIsRefreshing(true);
+    // Simulate API call delay
+    setTimeout(() => {
+      const updatedData = baseActivityData.map(day => ({
+        ...day,
+        statements: Math.round(day.statements * (0.95 + Math.random() * 0.2)),
+        cases: Math.round(day.cases * (0.9 + Math.random() * 0.3)),
+        transactions: Math.round(day.transactions * (0.92 + Math.random() * 0.25)),
+        users: Math.round(day.users * (0.93 + Math.random() * 0.22)),
+      }));
+      
+      setActivityData(updatedData);
+      setLastUpdated(new Date());
+      setIsRefreshing(false);
+    }, 800);
+  };
+
+  // Auto-refresh every 30 seconds (for demo purposes)
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshData();
+    }, 30000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-semibold">Recent Activity</h2>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <span>Last updated: {lastUpdated.toLocaleTimeString()}</span>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="flex items-center gap-1" 
+            onClick={refreshData}
+            disabled={isRefreshing}
+          >
+            <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
+            <span>Refresh</span>
+          </Button>
+        </div>
+      </div>
+      
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <MetricCard
           bgColor="bg-[#E0F2FE]"
